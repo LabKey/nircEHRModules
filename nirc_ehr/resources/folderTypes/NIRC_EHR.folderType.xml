@@ -1,6 +1,6 @@
 <folderType xmlns="http://labkey.org/data/xml/folderType">
     <name>NIRC EHR</name>
-    <description>Folder type used for Tulane National Primate Center's EHR</description>
+    <description>Folder type used for New Iberia Research Center's EHR</description>
 
     <requiredWebParts>
     </requiredWebParts>
