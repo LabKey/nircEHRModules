@@ -27,11 +27,7 @@
                 <propertyURI>urn:ehr.labkey.org/#Remark</propertyURI>
             </column>
         </columns>
-        <indices>
-            <index type="non-unique">
-                <column>objectid</column>
-            </index>
-        </indices>
+
     </sharedConfig>
     <table tableName="demographics" tableDbType="TABLE">
         <columns>
@@ -63,31 +59,26 @@
                 <datatype>varchar</datatype>
                 <columnTitle>Species code (3 char)</columnTitle>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-            </column>
             <column columnName="project">
                 <datatype>integer</datatype>
                 <propertyURI>urn:ehr.labkey.org/#Project</propertyURI>
             </column>
-            <column columnName="enddate">
+            <column columnName="weanedDate">
                 <datatype>timestamp</datatype>
-                <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
             </column>
-            <column columnName="calculated_status">
+            <column columnName="disposition">
+                <datatype>integer</datatype>
+            </column>
+            <column columnName="termination">
+                <datatype>integer</datatype>
+            </column>
+            <column columnName="implantNumber">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="sire">
+            <column columnName="vendorNumber">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="dam">
-                <datatype>varchar</datatype>
-            </column>
-            <column columnName="origin">
-                <datatype>varchar</datatype>
-            </column>
-            <column columnName="spf">
+            <column columnName="status">
                 <datatype>varchar</datatype>
             </column>
         </columns>
