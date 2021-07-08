@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>EHR Lookups</name>
+    <description>EHR Lookups data</description>
+    <transforms>
+        <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to gender codes target</description>
+            <source schemaName="dbo" queryName="q_gender_codes"/>
+            <destination schemaName="ehr_lookups" queryName="gender_codes"
+                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                <alternateKeys>
+                    <column name="code"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+        <transform id="step2" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to species code target</description>
+            <source schemaName="dbo" queryName="q_species_codes"/>
+            <destination schemaName="ehr_lookups" queryName="species_codes"
+                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                <alternateKeys>
+                    <column name="code"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+    </transforms>
+</etl>
