@@ -4,20 +4,22 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
     // if born at center acq date and birth date is same (row.description contains ACQ date)
     // if brought from outside aqc date and birth date may differ
 
-    if (row.source === 'Alternate' && row.acqDateText) {
-        let acqDateText = row.acqDateText.split(':')[1]; // format - ACQ: 24 Sep 2008
-        if (!acqDateText) {
-            acqDateText = row.acqDateText.split(';')[1]; // at least one value is there with ';'
-        }
-        if (acqDateText) {
-            let acqDate = new Date(acqDateText.trim());
-            if (acqDate !== row.birth) {
-                row.date = acqDate;
+    if (row.source === 'Alternate' ) {
+        if (row.acqDateText) {
+            let acqDateText = row.acqDateText.split(':')[1]; // format - ACQ: 24 Sep 2008
+            if (!acqDateText) {
+                acqDateText = row.acqDateText.split(';')[1]; // at least one value is there with ';'
             }
-            else {
-                // investigate to see if any row exists
-                console.log("born at center - ", row.Id);
-                row.date = row.birth;
+            if (acqDateText) {
+                let acqDate = new Date(acqDateText.trim());
+                if (acqDate !== row.birth) {
+                    row.date = acqDate;
+                }
+                else {
+                    // investigate to see if any row exists
+                    console.log("born at center - ", row.Id);
+                    row.date = row.birth;
+                }
             }
         }
 
