@@ -39,9 +39,6 @@
                     <importAlias>ptid</importAlias>
                 </importAliases>
             </column>
-            <column columnName="prev_Id">
-                <datatype>varchar</datatype>
-            </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
@@ -55,12 +52,6 @@
                 <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
                 <isKeyField>true</isKeyField>
             </column>
-            <column columnName="entry_cat_code">
-                <datatype>integer</datatype>
-            </column>
-            <column columnName="vendor_code">
-                <datatype>integer</datatype>
-            </column>
             <column columnName="dam">
                 <datatype>varchar</datatype>
             </column>
@@ -68,9 +59,6 @@
                 <datatype>varchar</datatype>
             </column>
             <column columnName="gender">
-                <datatype>varchar</datatype>
-            </column>
-            <column columnName="geographic_origin">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="species">
