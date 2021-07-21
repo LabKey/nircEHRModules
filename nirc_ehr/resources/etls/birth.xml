@@ -16,6 +16,6 @@
     </transforms>
 
     <schedule>
-        <poll interval="1d"/>
+        <cron expression="0 15 7 * * ?" />
     </schedule>
 </etl>
