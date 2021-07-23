@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <etl xmlns="http://labkey.org/etl/xml">
-    <name>Births</name>
-    <description>Births data</description>
+    <name>Weights</name>
+    <description>Weights data</description>
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
-            <description>Copy to births target</description>
-            <source schemaName="dbo" queryName="q_births"/>
-            <destination schemaName="study" queryName="birth"
+            <description>Copy to weights target</description>
+            <source schemaName="dbo" queryName="q_weight"/>
+            <destination schemaName="study" queryName="weight"
                          bulkLoad="true" batchSize="5000" targetOption="merge">
                 <columnTransforms>
-                    <column source="birthDate" target="date"/>
+                    <column source="weightDate" target="date"/>
                 </columnTransforms>
             </destination>
         </transform>
