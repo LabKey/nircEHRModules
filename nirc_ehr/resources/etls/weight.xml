@@ -16,6 +16,6 @@
     </transforms>
 
     <schedule>
-        <cron expression="0 15 7 * * ?" /> <!--Run at 7.15AM every day-->
+        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
     </schedule>
 </etl>

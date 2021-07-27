@@ -264,16 +264,19 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
-            <column columnName="cage">
+            <column columnName="location">
+                <datatype>integer</datatype>
+            </column>
+            <column columnName="room">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="housingType">
-                <datatype>integer</datatype>
+            <column columnName="cage">
+                <datatype>varchar</datatype>
             </column>
             <column columnName="reason">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="room">
+            <column columnName="comment">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="enddate">
