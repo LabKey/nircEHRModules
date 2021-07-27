@@ -20,8 +20,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ldk.ExtendedSimpleModule;
+import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
+import org.labkey.api.query.DefaultSchema;
+import org.labkey.api.query.QuerySchema;
 import org.labkey.api.view.WebPartFactory;
+import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -39,13 +43,13 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return null;
+        return 21.001;
     }
 
     @Override
     public boolean hasScripts()
     {
-        return false;
+        return true;
     }
 
     @Override
@@ -66,5 +70,24 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     {
         EHRService ehrService = EHRService.get();
         ehrService.registerModule(this);
+    }
+
+    @Override
+    protected void registerSchemas()
+    {
+        DefaultSchema.registerProvider(NIRC_EHRSchema.NAME, new DefaultSchema.SchemaProvider(this)
+        {
+            @Override
+            public @Nullable QuerySchema createSchema(DefaultSchema schema, Module module)
+            {
+                return new NIRC_EHRUserSchema(NIRC_EHRSchema.NAME, null, schema.getUser(), schema.getContainer(), NIRC_EHRSchema.get_instance().getSchema());
+            }
+        });
+    }
+
+    @Override
+    public @NotNull Collection<String> getSchemaNames()
+    {
+        return Collections.singleton(NIRC_EHRSchema.NAME);
     }
 }
