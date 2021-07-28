@@ -29,7 +29,7 @@
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>disposition_codes</fkTable>
-                            <fkColumnName>vale</fkColumnName>
+                            <fkColumnName>value</fkColumnName>
                             <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
                     </column>

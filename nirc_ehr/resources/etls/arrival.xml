@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>Arrival</name>
+    <description>Arrival data</description>
+    <transforms>
+        <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to arrival target</description>
+            <source schemaName="dbo" queryName="q_arrival"/>
+            <destination schemaName="study" queryName="arrival"
+                         bulkLoad="true" batchSize="5000" targetOption="merge">
+            </destination>
+        </transform>
+    </transforms>
+
+    <schedule>
+        <poll interval="1d"/>
+    </schedule>
+</etl>

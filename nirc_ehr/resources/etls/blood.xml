@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>Blood Draws</name>
+    <description>Blood Draw data</description>
+    <transforms>
+        <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to blood target</description>
+            <source schemaName="dbo" queryName="q_blood"/>
+            <destination schemaName="study" queryName="blood"
+                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                <columnTransforms>
+                    <column source="bloodDate" target="date"/>
+                </columnTransforms>
+            </destination>
+        </transform>
+    </transforms>
+
+    <schedule>
+        <cron expression="0 15 7 * * ?" /> <!--Run at 7.15AM every day-->
+    </schedule>
+</etl>

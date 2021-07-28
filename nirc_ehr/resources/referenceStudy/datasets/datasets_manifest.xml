@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <datasets metaDataFile="datasets_metadata.xml" xmlns="http://labkey.org/study/xml">
     <categories>
+        <category>Clinical</category>
         <category>Colony Management</category>
+        <category>Pathology</category>
     </categories>
     <datasets>
         <dataset name="arrival" id="1001" category="Colony Management" type="Standard"/>
+        <dataset name="assignment" id="1002" category="Colony Management" type="Standard"/>
+        <dataset name="blood" id="1005" category="Clinical" type="Standard"/>
+        <dataset name="birth" id="1007" category="Colony Management" demographicData="true" type="Standard"/>
+        <dataset name="deaths" id="1011" category="Pathology" demographicData="true" type="Standard"/>
         <dataset name="demographics" id="1012" category="Colony Management" demographicData="true" type="Standard"/>
         <dataset name="departure" id="1013" category="Colony Management" type="Standard"/>
+        <dataset name="housing" id="1018" category="Colony Management" type="Standard"/>
+        <dataset name="problem" id="1030" category="Clinical" type="Standard"/>
+        <dataset name="treatment_order" id="1014" category="Clinical" type="Standard"/>
+        <dataset name="weight" id="1015" category="Clinical" type="Standard"/>
     </datasets>
 </datasets>
