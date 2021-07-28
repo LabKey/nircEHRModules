@@ -7,7 +7,10 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         if (row.locationTransferText) {
             // replaceAll doesn't work
             let locationTransferText = row.locationTransferText.replace(';',':').replace(';',':').split(':');
-            // [0] = From Location, [1] =  UL Lafayette - NIRC, [1] =  To Location, [2] = 28 - F2/CW - Rm 205 - B03
+            // [0] = From Location,
+            // [1] =  UL Lafayette - NIRC,
+            // [2] =  To Location,
+            // [3] = 28 - F2/CW - Rm 205 - B03
             // translate [3] to locationId
             LABKEY.Query.selectRows({
                 schemaName: 'nirc_ehr',
