@@ -10,7 +10,7 @@
                 header: 'Admin',
                 items: [
                     {name: 'Manage EHR Study', url: '<%=contextPath%><%=containerPath%>/study-manageStudy.view?'},
-                    {name: 'Populate Reports / Templates', url: '<%=contextPath%><%=containerPath%>/nirc_ehr-populateData.view?'},
+                    {name: 'Populate Reports', url: '<%=contextPath%><%=containerPath%>/nirc_ehr-populateData.view?'},
                     {name: 'Set EHR Properties', url: '<%=contextPath%><%=containerPath%>/core-modulePropertyAdmin.view?moduleName=EHR'}
                 ]
             },{
@@ -18,11 +18,6 @@
                 items: [
                     {name: 'Labkey.log', url: '<%=contextPath%>/admin/showPrimaryLog.view'},
                     {name: 'Labkey-errors.log', url: '<%=contextPath%>/admin/showAllErrors.view'}
-                ]
-            },{
-                header: 'Notifications',
-                items: [
-                    {name: 'Notification Admin', url: '<%=contextPath%><%=containerPath%>/ldk-notificationAdmin.view?'}
                 ]
             }]
         });

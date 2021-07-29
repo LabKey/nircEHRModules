@@ -1,5 +1,26 @@
 require("ehr/triggers").initScript(this);
 
+var locationsData = {};
+
+function onInit (event, helper){
+
+    LABKEY.Query.selectRows({
+        schemaName: 'nirc_ehr',
+        queryName: 'locations',
+        columns: ['locationId', 'Name'],
+        scope: this,
+        success: function (data) {
+            if (data && data.rows.length > 0) {
+                for (let i = 0; i < data.rows.length; i++) {
+                    let rec = data.rows[i];
+                    locationsData[rec.Name] = rec.LocationId;
+                }
+            }
+        }
+    });
+
+}
+
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'housing', function (helper, scriptErrors, row, oldRow) {
 
     if (helper.isETL()) {
@@ -12,21 +33,16 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             // [2] =  To Location,
             // [3] = 28 - F2/CW - Rm 205 - B03
             // translate [3] to locationId
-            LABKEY.Query.selectRows({
-                schemaName: 'nirc_ehr',
-                queryName: 'locations',
-                columns: ['locationId'],
-                filterArray: [
-                    LABKEY.Filter.create('Name', locationTransferText[3].trim())
-                ],
-                scope: this,
-                success: function (data) {
-                    if (data && data.rows.length > 0) {
-                        let rec = data.rows[0];
-                        row.location = rec.LocationId;
-                    }
-                }
-            });
+            var location;
+            if (locationsData) {
+                location = locationsData[locationTransferText[3].trim()];
+            }
+            if (location) {
+                row.location = location;
+            }
+            else {
+                console.log("location not found for animal - " + row.Id);
+            }
         }
     }
 });
