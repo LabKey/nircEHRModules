@@ -1,0 +1,99 @@
+<script type="text/javascript">
+
+    Ext4.onReady(createNavMenu);
+
+    function createNavMenu(){
+        var webpart = <%=webpartContext%>;
+        var ctx = EHR.Utils.getEHRContext(webpart.wrapperDivId);
+
+        if (!ctx) {
+            return;
+        }         
+
+        Ext4.get(webpart.wrapperDivId).update(
+            '<table>' +
+            '  <tr style="vertical-align:top">' +
+            '    <td style="width:300px">' +
+            '        <div id="ehrMenu1_'+webpart.wrapperDivId+'"></div>' +
+            '    </td>' +
+            '    <td style="width:300px;vertical-align:top">' +
+            '        <div id="ehrMenu2_'+webpart.wrapperDivId+'"></div>' +
+            '    </td>' +
+            '    <td style="width:300px;vertical-align:top">' +
+            '        <div id="ehrMenu3_'+webpart.wrapperDivId+'"></div>' +
+            '    </td>' +
+            '    <td style="width:300px;vertical-align:top">' +
+            '        <div id="ehrMenu4_'+webpart.wrapperDivId+'"></div>' +
+            '    </td>' +
+            '  </tr>' +
+            '</table>'
+        );
+
+        var byDatasetItems = [];
+        byDatasetItems.push({name: 'Browse All Datasets', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-datasets.view?'});
+        byDatasetItems.push({name: 'Housing Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-housingQueries.view?'});
+        // uncomment after protocol setup
+        // byDatasetItems.push({name: 'Protocol and Project Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-projectQueries.view?'});
+
+        Ext4.create('EHR.NavMenu', {
+            width: 270,
+            renderTo: 'ehrMenu1_'+webpart.wrapperDivId,
+            sections: [
+                {header: 'By Animal',
+                    items: [
+                        {name: 'Animal History', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view?'},
+                        {name: 'Animal Search', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalSearch.view?'}
+                ]},
+                {header: 'By Dataset',
+                    items: byDatasetItems},
+
+            ]
+        });
+
+        var menuTwo = {
+            width: 270,
+            renderTo: 'ehrMenu2_'+webpart.wrapperDivId,
+            sections: []
+        };
+
+        if (isDataAdmin()) {
+            menuTwo.sections.push( {header: 'Entire Colony',
+                items: [
+                    {name: 'Population Summary', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-populationOverview.view?'},
+                    {name: 'Colony Population By Age', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=study&query.queryName=colonyPopulationByAge'}
+                ]});
+        }
+
+
+        Ext4.create('EHR.NavMenu', menuTwo);
+
+        var menuThree = {
+            width: 270,
+            renderTo: 'ehrMenu3_'+webpart.wrapperDivId,
+            sections: []
+        };
+
+        if (LABKEY.Security.currentUser.isAdmin){
+            menuThree.sections.push({
+                header: 'Admin',
+                items: [
+                    {name: 'EHR Admin Page', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/nirc_ehr-ehrAdmin.view'},
+                    {name: 'Manage EHR Study', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/study-manageStudy.view?'},
+                ]
+            });
+        }
+
+
+        Ext4.create('EHR.NavMenu', menuThree);
+
+    }
+
+    function isDataAdmin(){
+        var ctx = EHR.Utils.getEHRContext();
+        if (!ctx || !ctx.EHRStudyContainerInfo)
+            return false;
+
+        return ctx.EHRStudyContainerInfo.effectivePermissions.indexOf(EHR.Security.Permissions.DATA_ADMIN) > -1;
+    }
+
+</script>

@@ -15,6 +15,6 @@
         </transform>
     </transforms>
     <schedule>
-        <poll interval="1d"/>
+        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
     </schedule>
 </etl>

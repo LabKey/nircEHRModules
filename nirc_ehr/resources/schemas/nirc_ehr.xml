@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables xsi:schemaLocation="http://labkey.org/data/xml ..\..\..\..\..\schemas\tableInfo.xsd"
+        xmlns="http://labkey.org/data/xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <table tableName="LocationTypes" tableDbType="TABLE">
+        <tableTitle>Location Types</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="RowId"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+            <column columnName="Container"/>
+            <column columnName="Name"/>
+        </columns>
+    </table>
+
+    <table tableName="Locations" tableDbType="TABLE">
+        <tableTitle>Locations</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="RowId"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+            <column columnName="Container"/>
+            <column columnName="Name"/>
+            <column columnName="LocationType"/>
+            <column columnName="LocationId"/>
+        </columns>
+    </table>
+
+    <table tableName="LocationsMapping" tableDbType="TABLE">
+        <tableTitle>Locations Mapping</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="RowId"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+            <column columnName="Container"/>
+            <column columnName="Name"/>
+            <column columnName="ParentLocation"/>
+            <column columnName="ChildLocation"/>
+        </columns>
+    </table>
+
+</tables>
