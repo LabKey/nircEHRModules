@@ -276,7 +276,7 @@
             <column columnName="reason">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="comment">
+            <column columnName="remark">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="enddate">
