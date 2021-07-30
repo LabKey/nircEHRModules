@@ -19,6 +19,7 @@ package org.labkey.nirc_ehr;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.ehr.EHRService;
+import org.labkey.api.ehr.SharedEHRUpgradeCode;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
@@ -89,5 +90,11 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     public @NotNull Collection<String> getSchemaNames()
     {
         return Collections.singleton(NIRC_EHRSchema.NAME);
+    }
+
+    @Override
+    public @NotNull SharedEHRUpgradeCode getUpgradeCode()
+    {
+        return new SharedEHRUpgradeCode(this);
     }
 }
