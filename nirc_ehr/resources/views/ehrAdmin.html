@@ -1,0 +1,26 @@
+<script type="text/javascript">
+
+    Ext4.onReady(function (){
+        var webpart = <%=webpartContext%>;
+
+        Ext4.create('LDK.panel.NavPanel', {
+            renderTo: webpart.wrapperDivId,
+            width: '100%',
+            sections: [{
+                header: 'Admin',
+                items: [
+                    {name: 'Manage EHR Study', url: '<%=contextPath%><%=containerPath%>/study-manageStudy.view?'},
+                    {name: 'Populate Reports', url: '<%=contextPath%><%=containerPath%>/nirc_ehr-populateData.view?'},
+                    {name: 'Set EHR Properties', url: '<%=contextPath%><%=containerPath%>/core-modulePropertyAdmin.view?moduleName=EHR'}
+                ]
+            },{
+                header: 'Logs',
+                items: [
+                    {name: 'Labkey.log', url: '<%=contextPath%>/admin/showPrimaryLog.view'},
+                    {name: 'Labkey-errors.log', url: '<%=contextPath%>/admin/showAllErrors.view'}
+                ]
+            }]
+        });
+    });
+
+</script>
