@@ -109,4 +109,17 @@
         </table>
     </template>
 
+    <template xsi:type="EHRTemplateType">
+        <table tableName="project" tableDbType="TABLE">
+            <dat:columns>
+                <dat:column columnName="isActive">
+                    <dat:rangeURI>boolean</dat:rangeURI>
+                </dat:column>
+                <dat:column columnName="projectCategory">
+                    <dat:rangeURI>string</dat:rangeURI>
+                </dat:column>
+            </dat:columns>
+        </table>
+    </template>
+
 </templates>
