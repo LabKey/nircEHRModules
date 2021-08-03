@@ -43,3 +43,19 @@ SELECT 'protocol_category' AS setname,
        'value' AS keyField,
        'title'AS titleColumn,
        CAST('2021-07-30' AS TIMESTAMP) AS updated_at
+
+UNION
+
+SELECT 'protocol_state' AS setname,
+       'Protocol State' AS label,
+       'value' AS keyField,
+       'title'AS titleColumn,
+       CAST('2021-07-30' AS TIMESTAMP) AS updated_at
+
+UNION
+
+SELECT 'questionnaire' AS setname,
+       'Questionnaire' AS label,
+       'value' AS keyField,
+       'title'AS titleColumn,
+       CAST('2021-07-30' AS TIMESTAMP) AS updated_at

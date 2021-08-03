@@ -79,3 +79,30 @@ WHEN 'N' THEN '1/1/1970'
 END AS date_disabled,
 NULL AS category,
 FROM PROTOCOL_CATEGORY
+
+UNION
+
+SELECT 'PROTOCOL_STATE_' || STATE_ID AS objectid,
+'protocol_state' AS set_name,
+STATE_ID AS "value",
+STATE_NAME AS description,
+STATE_NAME AS title,
+STATE_ID AS sort_order,
+NULL AS date_disabled,
+NULL AS category,
+FROM PROTOCOL_CATEGORY
+
+UNION
+
+SELECT 'QUESTIONNAIRE' || QUESTIONNAIRE_ID AS objectid,
+'questionnaire' AS set_name,
+QUESTIONNAIRE_ID AS "value",
+QUESTIONNAIRE_NAME AS description,
+QUESTIONNAIRE_NAME AS title,
+QUESTIONNAIRE_ID AS sort_order,
+CASE QUESTIONNAIRE_ACTIVE_YN
+WHEN 'Y' THEN NULL
+WHEN 'N' THEN '1/1/1970'
+END AS date_disabled,
+NULL AS category,
+FROM QUESTIONNAIRE
