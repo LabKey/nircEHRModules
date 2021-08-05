@@ -65,11 +65,6 @@
     <table tableName="assignment" tableDbType="TABLE">
         <tableTitle>Project Assignments</tableTitle>
         <columns>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="Id">
                 <datatype>varchar</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
@@ -90,11 +85,6 @@
     <table tableName="protocolAssignment" tableDbType="TABLE">
         <tableTitle>Protocol Assignments</tableTitle>
         <columns>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="Id">
                 <datatype>varchar</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
