@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>Project</name>
+    <description>Project data</description>
+    <transforms>
+        <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to project target</description>
+            <source schemaName="dbo" queryName="q_project"/>
+            <destination schemaName="ehr" queryName="project"
+                         bulkLoad="true" targetOption="merge">
+
+            </destination>
+        </transform>
+    </transforms>
+</etl>

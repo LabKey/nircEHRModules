@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>Assignment</name>
+    <description>Assignment data</description>
+    <transforms>
+        <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to assignment target</description>
+            <source schemaName="dbo" queryName="q_assignment"/>
+            <destination schemaName="study" queryName="assignment"
+                         bulkLoad="true" batchSize="5000" targetOption="merge">
+
+            </destination>
+        </transform>
+    </transforms>
+
+    <schedule>
+        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
+    </schedule>
+</etl>
