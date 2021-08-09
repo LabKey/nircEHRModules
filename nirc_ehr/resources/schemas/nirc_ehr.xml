@@ -13,6 +13,7 @@
             <column columnName="ModifiedBy"/>
             <column columnName="Container"/>
             <column columnName="Name"/>
+            <column columnName="LocationTypeId"/>
         </columns>
     </table>
 
