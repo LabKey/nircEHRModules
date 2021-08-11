@@ -2,17 +2,13 @@
 <tables xmlns="http://labkey.org/data/xml">
     <sharedConfig>
         <columns>
-            <column columnName="taskid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#TaskId</propertyURI>
+            <column columnName="project">
+                <datatype>integer</datatype>
+                <propertyURI>urn:ehr.labkey.org/#Project</propertyURI>
             </column>
             <column columnName="parentid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#ParentId</propertyURI>
-            </column>
-            <column columnName="requestid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#RequestId</propertyURI>
             </column>
             <column columnName="performedby">
                 <datatype>varchar</datatype>
@@ -67,7 +63,7 @@
         </columns>
     </table>
     <table tableName="assignment" tableDbType="TABLE">
-        <tableTitle>Assignment</tableTitle>
+        <tableTitle>Project Assignments</tableTitle>
         <columns>
             <column columnName="Id">
                 <datatype>varchar</datatype>
@@ -83,6 +79,29 @@
             </column>
             <column columnName="enddate">
                 <datatype>timestamp</datatype>
+            </column>
+        </columns>
+    </table>
+    <table tableName="protocolAssignment" tableDbType="TABLE">
+        <tableTitle>Protocol Assignments</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+            </column>
+            <column columnName="protocol">
+                <datatype>integer</datatype>
             </column>
         </columns>
     </table>

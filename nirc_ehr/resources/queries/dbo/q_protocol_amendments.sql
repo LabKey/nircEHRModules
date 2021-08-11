@@ -1,0 +1,8 @@
+SELECT PROTOCOL_ID AS "protocolId",
+       CASE WHEN PROTOCOL_NUMBER IS NULL THEN 'missing'
+            ELSE PROTOCOL_NUMBER END AS "protocol",
+       RENEWAL_DATE AS "amendmentDate",
+       SUBMISSION_DATE AS "submitted",
+       APPROVAL_DATE AS "approved"
+FROM PROTOCOL
+WHERE PROTOCOL_TYPE_ID IN (2,3,4)
