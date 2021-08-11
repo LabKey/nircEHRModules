@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>Protocol Assignment</name>
+    <description>Assignment data</description>
+    <transforms>
+        <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to assignment target</description>
+            <source schemaName="dbo" queryName="q_protocolAssignment"/>
+            <destination schemaName="study" queryName="protocolAssignment"
+                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                <columnTransforms>
+                    <column source="transferDate" target="date"/>
+                </columnTransforms>
+            </destination>
+        </transform>
+    </transforms>
+
+    <schedule>
+        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
+    </schedule>
+</etl>
