@@ -5,22 +5,29 @@
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
             <description>Copy to location types target</description>
-            <source schemaName="dbo" queryName="q_locationTypes"/>
-            <destination schemaName="nirc_ehr" queryName="locationTypes"
+            <source schemaName="dbo" queryName="q_areas"/>
+            <destination schemaName="ehr_lookups" queryName="areas"
                          bulkLoad="true" targetOption="truncate">
             </destination>
         </transform>
         <transform id="step2" type="org.labkey.di.pipeline.TransformTask">
             <description>Copy to locations target</description>
-            <source schemaName="dbo" queryName="q_locations"/>
-            <destination schemaName="nirc_ehr" queryName="locations"
+            <source schemaName="dbo" queryName="q_buildings"/>
+            <destination schemaName="ehr_lookups" queryName="buildings"
                          bulkLoad="true" batchSize="5000" targetOption="truncate">
             </destination>
         </transform>
         <transform id="step3" type="org.labkey.di.pipeline.TransformTask">
             <description>Copy to locations mapping target</description>
-            <source schemaName="dbo" queryName="q_locationsMapping"/>
-            <destination schemaName="nirc_ehr" queryName="locationsMapping"
+            <source schemaName="dbo" queryName="q_rooms"/>
+            <destination schemaName="ehr_lookups" queryName="rooms"
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
+            </destination>
+        </transform>
+        <transform id="step4" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to locations mapping target</description>
+            <source schemaName="dbo" queryName="q_cages"/>
+            <destination schemaName="ehr_lookups" queryName="cage"
                          bulkLoad="true" batchSize="5000" targetOption="truncate">
             </destination>
         </transform>
