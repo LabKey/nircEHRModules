@@ -1,12 +1,10 @@
 
 SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
        anm.ANIMAL_ID_NUMBER AS Id,
-       CAST(COALESCE (adt.CHANGE_DATETIME,anmEvt.EVENT_DATETIME) AS TIMESTAMP) AS bloodDate,
+       CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS bloodDate,
        CAST(COALESCE (adt.CHANGE_DATETIME,anmEvt.EVENT_DATETIME) AS TIMESTAMP) AS modified,
        anmEvt.RESULT AS quantity,
-       anmCmt.TEXT AS remark,
-       CASE WHEN adt.AUDIT_ID IS NULL THEN 'N'
-        ELSE 'Y' END AS isChanged
+       anmCmt.TEXT AS remark
 FROM ANIMAL_EVENT anmEvt
 LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
 LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
