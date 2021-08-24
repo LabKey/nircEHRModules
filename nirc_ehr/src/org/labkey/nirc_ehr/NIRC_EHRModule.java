@@ -26,6 +26,7 @@ import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.DefaultSchema;
 import org.labkey.api.query.QuerySchema;
 import org.labkey.api.view.WebPartFactory;
+import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
 
 import java.util.Collection;
@@ -44,7 +45,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 21.005;
+        return 21.006;
     }
 
     @Override
@@ -64,6 +65,10 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     protected void init()
     {
         addController(NIRC_EHRController.NAME, NIRC_EHRController.class);
+
+        EHRService ehrService = EHRService.get();
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nircReports.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SnapshotPanel.js"), this);
     }
 
     @Override
