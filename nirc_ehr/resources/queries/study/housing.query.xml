@@ -1,21 +1,15 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="housing" tableDbType="TABLE" useColumnOrder="true">
+            <table tableName="housing" tableDbType="TABLE">
                 <columns>
-                    <column columnName="Id">
-
-                    </column>
-                    <column columnName="date">
-                        <columnTitle>Date</columnTitle>
-                    </column>
                     <column columnName="location">
                         <columnTitle>Location</columnTitle>
                         <fk>
-                            <fkDbSchema>nirc_ehr</fkDbSchema>
-                            <fkTable>locations</fkTable>
-                            <fkColumnName>locationId</fkColumnName>
-                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>cage</fkTable>
+                            <fkColumnName>location</fkColumnName>
+                            <fkDisplayColumnName>cage</fkDisplayColumnName>
                         </fk>
                     </column>
                 </columns>
