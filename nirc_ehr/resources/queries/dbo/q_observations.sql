@@ -13,3 +13,4 @@ LEFT JOIN AUDIT_TRAIL adt ON anmEvt.ANIMAL_EVENT_ID = substring(adt.PRIMARY_KEY_
     AND adt.PRIMARY_KEY_VALUES LIKE '%ANIMAL_EVENT_ID%'
 WHERE evtEvtGrp.EVENT_GROUP_ID = 30 -- Observations
 AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
+ORDER BY adt.AUDIT_ID ASC
