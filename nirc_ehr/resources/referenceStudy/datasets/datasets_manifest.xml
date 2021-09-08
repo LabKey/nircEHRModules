@@ -16,6 +16,7 @@
         <dataset name="departure" id="1013" category="Colony Management" type="Standard"/>
         <dataset name="housing" id="1018" category="Colony Management" type="Standard"/>
         <dataset name="obs" id="1025" category="Clinical" type="Standard"/>
+        <dataset name="pairings" id="1028" category="Colony Management" demographicData="false" type="Standard"/>
         <dataset name="problem" id="1030" category="Clinical" type="Standard"/>
         <dataset name="protocolAssignment" id="1031" category="Colony Management" type="Standard"/>
         <dataset name="serology" id="1032" category="ClinPath" type="Standard"/>
