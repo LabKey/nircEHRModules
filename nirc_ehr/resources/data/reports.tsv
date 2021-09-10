@@ -9,3 +9,5 @@ snapshot	General	js	Snapshot	TRUE		study	snapshot				FALSE	FALSE		qcstate/public
 death	Colony Management	query	Death Records	true		study	deaths			date	false	false		qcstate/publicdata	Death records
 currentBlood	Clinical	js	Current Blood	true		study	currentBlood			date	false	false		qcstate/publicdata	This report contains a summary of the current available blood for each animal
 bloodDraws	Clinical	query	Blood Draws	TRUE		study	blood			date	FALSE	FALSE		qcstate/publicdata	This report displays blood draw data for the selected animal
+obs	Clinical	query	Observations	TRUE		study	obs			date	FALSE	FALSE		qcstate/publicdata	This report displays observations for the selected animal
+pairings	Colony Management	query	Pairings	TRUE		study	pairings			date	FALSE	FALSE		qcstate/publicdata	This report displays pairings for the selected animal
