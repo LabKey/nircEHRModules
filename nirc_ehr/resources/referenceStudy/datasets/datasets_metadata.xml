@@ -444,6 +444,40 @@
             </column>
         </columns>
     </table>
+    <table tableName="drug" tableDbType="TABLE">
+        <tableTitle>Drug Administration</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="objectid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>true</isKeyField>
+            </column>
+            <column columnName="type">
+                <columnTitle>Type</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="amount">
+                <columnTitle>Amount</columnTitle>
+                <datatype>double</datatype>
+            </column>
+            <column columnName="attachmentFile">
+                <columnTitle>Attachment File</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+        </columns>
+    </table>
     <table tableName="treatment_order" tableDbType="TABLE">
         <tableTitle>Treatment Orders</tableTitle>
         <columns>
@@ -487,18 +521,23 @@
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
             <column columnName="bloodPressure">
+                <columnTitle>Blood Pressure</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="temp">
+                <columnTitle>Temperature</columnTitle>
                 <datatype>double</datatype>
             </column>
             <column columnName="heartRate">
+                <columnTitle>Heart Rate</columnTitle>
                 <datatype>double</datatype>
             </column>
             <column columnName="respRate">
+                <columnTitle>Respiration Rate</columnTitle>
                 <datatype>double</datatype>
             </column>
             <column columnName="pulseRate">
+                <columnTitle>Pulse Rate</columnTitle>
                 <datatype>double</datatype>
             </column>
             <column columnName="objectid">
@@ -507,6 +546,7 @@
                 <isKeyField>true</isKeyField>
             </column>
             <column columnName="type">
+                <columnTitle>Type</columnTitle>
                 <datatype>varchar</datatype>
             </column>
         </columns>
