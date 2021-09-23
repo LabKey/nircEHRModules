@@ -1,0 +1,15 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="Id"/>
+        <column name="date">
+            <properties>
+                <property name="columnTitle" value="Administration Date"/>
+            </properties>
+        </column>
+        <column name="type"/>
+        <column name="performedby"/>
+        <column name="amount"/>
+        <column name="remark"/>
+        <column name="attachmentFIle"/>
+    </columns>
+</customView>
