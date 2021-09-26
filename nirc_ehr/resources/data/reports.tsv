@@ -14,3 +14,4 @@ pairings	Colony Management	query	Pairings	TRUE		study	pairings			date	FALSE	FALS
 serology	ClinPath	query	Serology	TRUE		study	serology			date	FALSE	FALSE		qcstate/publicdata	This report displays serology data for the selected animal
 vitals	Clinical	query	Vital Signs	TRUE		study	vitals			date	FALSE	FALSE		qcstate/publicdata	This report displays vitals data for the selected animal
 physicalExam	Clinical	query	Physical Exam	TRUE		study	physicalExam			date	FALSE	FALSE		qcstate/publicdata	This report displays physical exam data for the selected animal
+procedures	Clinical	query	Procedures	TRUE		study	prc			date	FALSE	FALSE		qcstate/publicdata	This report displays procedures data for the selected animal

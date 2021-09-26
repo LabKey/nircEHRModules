@@ -390,7 +390,7 @@
             </column>
         </columns>
     </table>
-    <table tableName="procedures" tableDbType="TABLE">
+    <table tableName="prc" tableDbType="TABLE">
         <tableTitle>Procedures</tableTitle>
         <columns>
             <column columnName="Id">
