@@ -4,7 +4,7 @@ SELECT substring(adt.PRIMARY_KEY_VALUES, length('ANIMAL_EVENT_ID = ')) AS object
 FROM AUDIT_TRAIL adt
 WHERE adt.PRIMARY_KEY_VALUES LIKE '%ANIMAL_EVENT_ID%' AND
       adt.REFERENCE NOT LIKE '%Blood Sample Collection%' AND
-    (adt.REFERENCE LIKE '%Procedures%' OR
+    (
      adt.REFERENCE LIKE '%Procedure%' OR
      adt.REFERENCE LIKE '%Radiology%' OR
      adt.REFERENCE LIKE '%Ultrasonography%' OR
@@ -60,7 +60,6 @@ WHERE adt.PRIMARY_KEY_VALUES LIKE '%ANIMAL_EVENT_ID%' AND
      adt.REFERENCE LIKE '%Disqualified from chair study%' OR
      adt.REFERENCE LIKE '%Urine Collection (Cystocentesis)%' OR
      adt.REFERENCE LIKE '%Sample Collection%' OR
-     adt.REFERENCE LIKE '%Specimen Collection%' OR
      adt.REFERENCE LIKE '%Specimen Collection%' OR
      adt.REFERENCE LIKE '%Biopsy Collection%' OR
      adt.REFERENCE LIKE '%Bronchial Lavage Sample Collection%' OR

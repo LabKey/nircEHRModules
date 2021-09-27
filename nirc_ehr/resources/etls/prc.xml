@@ -4,7 +4,7 @@
     <description>Procedures data</description>
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
-            <description>Copy to observations target</description>
+            <description>Copy to procedures target</description>
             <source schemaName="dbo" queryName="q_prc"/>
             <destination schemaName="study" queryName="prc"
                          bulkLoad="true" batchSize="5000" targetOption="merge">
