@@ -10,16 +10,20 @@
                          bulkLoad="true" batchSize="5000" targetOption="merge">
                 <columnTransforms>
                     <column source="administrationDate" target="date"/>
+                    <column source="performedby" target="performedby" transformClass="org.labkey.di.columnTransforms.UserCreateTransform"/>
                 </columnTransforms>
             </destination>
         </transform>
     </transforms>
 
-<!--    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified" >-->
-<!--        <deletedRowsSource schemaName="dbo" queryName="q_drug_delete" timestampColumnName="modified"-->
-<!--                           deletedSourceKeyColumnName="objectid" targetKeyColumnName="objectid"/>-->
-<!--    </incrementalFilter>-->
+    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified" >
+        <deletedRowsSource schemaName="dbo" queryName="q_drug_delete" timestampColumnName="modified"
+                           deletedSourceKeyColumnName="objectid" targetKeyColumnName="objectid"/>
+    </incrementalFilter>
 
+    <constants>
+        <column type="varchar" name="transformEmailDomain" value="louisiana.edu"/>
+    </constants>
     <schedule>
         <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
     </schedule>
