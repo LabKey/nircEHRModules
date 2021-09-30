@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>Procedures</name>
+    <description>Procedures data</description>
+    <transforms>
+        <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to procedures target</description>
+            <source schemaName="dbo" queryName="q_prc"/>
+            <destination schemaName="study" queryName="prc"
+                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                <columnTransforms>
+                    <column source="prcDate" target="date"/>
+                </columnTransforms>
+            </destination>
+        </transform>
+    </transforms>
+
+    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified" >
+        <deletedRowsSource schemaName="dbo" queryName="q_prc_delete" timestampColumnName="modified"
+                           deletedSourceKeyColumnName="objectid" targetKeyColumnName="objectid"/>
+    </incrementalFilter>
+
+    <schedule>
+        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
+    </schedule>
+</etl>
