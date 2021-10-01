@@ -23,6 +23,7 @@
 
     <constants>
         <column type="varchar" name="transformEmailDomain" value="louisiana.edu"/>
+        <column type="varchar" name="userGroupName" value="NIRC ETL USERS"/>
     </constants>
     <schedule>
         <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
