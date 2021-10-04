@@ -7,5 +7,7 @@ WHERE adt.PRIMARY_KEY_VALUES LIKE '%ANIMAL_EVENT_ID%' AND
      adt.REFERENCE LIKE '%Heart Rate%' OR
      adt.REFERENCE LIKE '%Respiration Rate%' OR
      adt.REFERENCE LIKE '%Temperature%' OR
+     adt.REFERENCE LIKE '%Pulse Oximetry%' OR
+     adt.REFERENCE LIKE '%EKG%' OR
      adt.REFERENCE LIKE '%Pulse Rate%' ) AND
     adt.COLUMN_NAME = 'DELETE'
