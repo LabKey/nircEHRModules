@@ -1,2 +1,2 @@
 SELECT core.executeJavaUpgradeCode('reloadStudy');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/drug');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/exemptions');
