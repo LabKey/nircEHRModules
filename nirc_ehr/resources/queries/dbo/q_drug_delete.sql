@@ -2,7 +2,6 @@ SELECT auditSubQueryOuter.objectid,
        auditSubQueryOuter.modified,
        auditSubQueryOuter.REFERENCE,
        drugEvents.event_id,
-       drugEvents.event_group_id,
        auditSubQueryOuter.event_name
 FROM
     (SELECT
@@ -32,3 +31,10 @@ LEFT JOIN -- on drug events
       GROUP BY eeg.event_group_id, e.event_id, e.name) drugEvents
 
 ON auditSubQueryOuter.event_name = drugEvents.name WHERE drugEvents.name IS NOT NULL
+
+GROUP BY
+    auditSubQueryOuter.objectid,
+    auditSubQueryOuter.modified,
+    auditSubQueryOuter.REFERENCE,
+    drugEvents.event_id,
+    auditSubQueryOuter.event_name

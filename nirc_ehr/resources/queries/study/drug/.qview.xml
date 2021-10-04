@@ -12,4 +12,7 @@
         <column name="remark"/>
         <column name="attachmentFIle"/>
     </columns>
+    <sorts>
+        <sort column="date" descending="true"/>
+    </sorts>
 </customView>
