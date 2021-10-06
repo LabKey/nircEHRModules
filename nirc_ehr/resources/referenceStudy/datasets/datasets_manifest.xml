@@ -14,6 +14,8 @@
         <dataset name="deaths" id="1011" category="Pathology" demographicData="true" type="Standard"/>
         <dataset name="demographics" id="1012" category="Colony Management" demographicData="true" type="Standard"/>
         <dataset name="departure" id="1013" category="Colony Management" type="Standard"/>
+        <dataset name="exemptions" id="1016" category="Colony Management" type="Standard"/>
+        <dataset name="drug" id="1017" category="Clinical" type="Standard"/>
         <dataset name="housing" id="1018" category="Colony Management" type="Standard"/>
         <dataset name="obs" id="1025" category="Clinical" type="Standard"/>
         <dataset name="pairings" id="1028" category="Colony Management" demographicData="false" type="Standard"/>
