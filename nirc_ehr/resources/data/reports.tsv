@@ -6,7 +6,7 @@ roommateHistory	Colony Management	query	Cagemate History	TRUE		study	housingRoom
 weight	Colony Management	js	Weights	TRUE		study	weightGraph			date	FALSE	FALSE		qcstate/publicdata	This report contains a summary of the animal\'s weight, including a graph
 demographics	General	query	Demographics	TRUE		study	demographics				FALSE	FALSE		qcstate/publicdata	This report displays the demographics data about each animal including species, sex and birth
 snapshot	General	js	Snapshot	TRUE		study	snapshot				FALSE	FALSE		qcstate/publicdata	This report contains a summary of the animal, including demographics, assignments and weight
-death	Colony Management	query	Death Records	true		study	deaths			date	false	false		qcstate/publicdata	Death records
+death	Pathology	query	Death Records	true		study	deaths			date	false	false		qcstate/publicdata	Death records
 currentBlood	Clinical	js	Current Blood	true		study	currentBlood			date	false	false		qcstate/publicdata	This report contains a summary of the current available blood for each animal
 bloodDraws	Clinical	query	Blood Draws	TRUE		study	blood			date	FALSE	FALSE		qcstate/publicdata	This report displays blood draw data for the selected animal
 obs	Clinical	query	Observations	TRUE		study	obs			date	FALSE	FALSE		qcstate/publicdata	This report displays observations for the selected animal
@@ -17,3 +17,4 @@ physicalExam	Clinical	query	Physical Exam	TRUE		study	physicalExam			date	FALSE	
 procedures	Clinical	query	Procedures	TRUE		study	prc			date	FALSE	FALSE		qcstate/publicdata	This report displays procedures data for the selected animal
 exemptions	Colony Management	query	Exemptions	TRUE		study	exemptions			date	FALSE	FALSE		qcstate/publicdata	This report displays exemptions data for the selected animal
 drugAdministration	Clinical	query	Drug Administration	TRUE		study	drug			date	FALSE	FALSE		qcstate/publicdata	This report displays drug administration data for the selected animal
+necropsy	Pathology	query	Necropsy	TRUE		study	necropsy			date	FALSE	FALSE		qcstate/publicdata	This report displays necropsy data for the selected animal
