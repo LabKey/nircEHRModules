@@ -12,6 +12,7 @@ bloodDraws	Clinical	query	Blood Draws	TRUE		study	blood			date	FALSE	FALSE		qcst
 obs	Clinical	query	Observations	TRUE		study	obs			date	FALSE	FALSE		qcstate/publicdata	This report displays observations for the selected animal
 pairings	Colony Management	query	Pairings	TRUE		study	pairings			date	FALSE	FALSE		qcstate/publicdata	This report displays pairings for the selected animal
 breeder	Colony Management	query	Breeder	TRUE		study	breeder			date	FALSE	FALSE		qcstate/publicdata	This report displays breeding data for the selected animal
+clinremarks	Clinical	query	Clinical Remarks	true		study	Clinical Remarks			date	false	false		qcstate/publicdata	This report contains the clinical remarks entered about each animal
 serology	ClinPath	query	Serology	TRUE		study	serology			date	FALSE	FALSE		qcstate/publicdata	This report displays serology data for the selected animal
 vitals	Clinical	query	Vital Signs	TRUE		study	vitals			date	FALSE	FALSE		qcstate/publicdata	This report displays vitals data for the selected animal
 physicalExam	Clinical	query	Physical Exam	TRUE		study	physicalExam			date	FALSE	FALSE		qcstate/publicdata	This report displays physical exam data for the selected animal

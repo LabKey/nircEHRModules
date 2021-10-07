@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
+import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
@@ -76,6 +77,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     {
         EHRService ehrService = EHRService.get();
         ehrService.registerModule(this);
+
+        EHRService.get().registerHistoryDataSource(new DefaultClinicalRemarksDataSource(this));
     }
 
     @Override
