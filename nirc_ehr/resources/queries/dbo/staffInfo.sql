@@ -1,6 +1,6 @@
 -- subquery to get staff info
--- email_prefix (used for display name) and transformEmailDomain '@louisiana.edu' (defined in etl xml) for user column transform
--- together creates a deactivated labkey user during an ETL run
+-- email_prefix below (used for display name) and transformEmailDomain '@louisiana.edu' (defined in etl xml)
+-- during user column transform creates a deactivated labkey user during an ETL run
 SELECT
 s.staff_id,
 (s.staff_last_name ||', '|| s.staff_first_name) as staffName,
