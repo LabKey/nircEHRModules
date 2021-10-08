@@ -19,14 +19,3 @@ FROM ANIMAL_EVENT anmEvt
 
 WHERE evtEvtGrp.EVENT_GROUP_ID = 56
 --     56 Breeder
-
-GROUP BY anmEvt.ANIMAL_EVENT_ID,
-         anmEvt.ANIMAL_ID,
-         anmEvt.EVENT_DATETIME,
-         anmEvt.STAFF_ID.EMAIL_ADDRESS,
-         anmEvt.EVENT_ID.NAME,
-         anmEvt.TEXT_RESULT,
-         anmEvt.ATTACHMENT_PATH,
-         anmCmt.TEXT,
-         adt.CHANGE_DATETIME,
-         anmEvt.CREATED_DATETIME

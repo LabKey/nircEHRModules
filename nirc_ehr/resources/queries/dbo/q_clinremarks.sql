@@ -18,13 +18,3 @@ FROM ANIMAL_EVENT anmEvt
 
 WHERE evtEvtGrp.EVENT_GROUP_ID = 53
 --     53 Comments
-
-GROUP BY anmEvt.ANIMAL_EVENT_ID,
-         anmEvt.ANIMAL_ID,
-         anmEvt.EVENT_DATETIME,
-         anmEvt.STAFF_ID.EMAIL_ADDRESS,
-         anmEvt.EVENT_ID.EVENT_ID,
-         anmEvt.DIAGNOSIS,
-         anmCmt.TEXT,
-         adt.CHANGE_DATETIME,
-         anmEvt.CREATED_DATETIME
