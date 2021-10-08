@@ -59,3 +59,11 @@ SELECT 'questionnaire' AS setname,
        'value' AS keyField,
        'title'AS titleColumn,
        CAST('2021-07-30' AS TIMESTAMP) AS updated_at
+
+UNION
+
+SELECT 'clinremarks_category' AS setname,
+       'Clinical Remarks Category' AS label,
+       'value' AS keyField,
+       'title'AS titleColumn,
+       CAST('2021-07-30' AS TIMESTAMP) AS updated_at
