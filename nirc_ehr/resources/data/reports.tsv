@@ -15,3 +15,5 @@ serology	ClinPath	query	Serology	TRUE		study	serology			date	FALSE	FALSE		qcstat
 vitals	Clinical	query	Vital Signs	TRUE		study	vitals			date	FALSE	FALSE		qcstate/publicdata	This report displays vitals data for the selected animal
 physicalExam	Clinical	query	Physical Exam	TRUE		study	physicalExam			date	FALSE	FALSE		qcstate/publicdata	This report displays physical exam data for the selected animal
 procedures	Clinical	query	Procedures	TRUE		study	prc			date	FALSE	FALSE		qcstate/publicdata	This report displays procedures data for the selected animal
+exemptions	Colony Management	query	Exemptions	TRUE		study	exemptions			date	FALSE	FALSE		qcstate/publicdata	This report displays exemptions data for the selected animal
+drugAdministration	Clinical	query	Drug Administration	TRUE		study	drug			date	FALSE	FALSE		qcstate/publicdata	This report displays drug administration data for the selected animal
