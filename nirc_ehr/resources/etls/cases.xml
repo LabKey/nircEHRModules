@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <etl xmlns="http://labkey.org/etl/xml">
-    <name>Drug</name>
-    <description>Drug Administration</description>
+    <name>Cases</name>
+    <description>Clinical Treatment Cases</description>
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
-            <description>Copy to drug target</description>
+            <description>Copy to cases target</description>
             <source schemaName="dbo" queryName="q_cases"/>
             <destination schemaName="study" queryName="cases"
                          bulkLoad="true" batchSize="5000" targetOption="merge">
