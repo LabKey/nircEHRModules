@@ -11,6 +11,8 @@
         <dataset name="assignment" id="1002" category="Colony Management" type="Standard"/>
         <dataset name="blood" id="1005" category="Clinical" type="Standard"/>
         <dataset name="birth" id="1007" category="Colony Management" demographicData="true" type="Standard"/>
+        <dataset name="breeder" id="1008" category="Colony Management" type="Standard"/>
+        <dataset name="clinremarks" id="1009" category="Colony Management" type="Standard"/>
         <dataset name="cases" id="1023" category="Clinical" demographicData="true" type="Standard"/>
         <dataset name="deaths" id="1011" category="Pathology" demographicData="true" type="Standard"/>
         <dataset name="demographics" id="1012" category="Colony Management" demographicData="true" type="Standard"/>
