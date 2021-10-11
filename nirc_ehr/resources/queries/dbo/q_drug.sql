@@ -6,7 +6,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        anmEvt.RESULT                                                             AS amount,
        anmEvt.ATTACHMENT_PATH                                                    AS attachmentFile,
        anmCmt.TEXT                                                               AS remark,
-       CAST(COALESCE(adt.CHANGE_DATETIME, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
+       CAST(COALESCE(max(adt.CHANGE_DATETIME), anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN staffInfo staff ON staff.staff_id = anmEvt.STAFF_ID
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
@@ -35,5 +35,4 @@ GROUP BY anmEvt.ANIMAL_EVENT_ID,
          anmEvt.RESULT,
          anmEvt.ATTACHMENT_PATH,
          anmCmt.TEXT,
-         adt.CHANGE_DATETIME,
          anmEvt.CREATED_DATETIME
