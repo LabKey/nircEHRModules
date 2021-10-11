@@ -1,9 +1,9 @@
-SELECT ae.objectid,
-       ae.modified,
-       ae.REFERENCE,
+SELECT ade.objectid,
+       ade.modified,
+       ade.REFERENCE,
        drugEvents.event_id,
-       ae.event_name
-FROM auditEvent ae
+       ade.event_name
+FROM auditDeleteEvent ade
 
 LEFT JOIN -- on drug events
 
@@ -13,11 +13,11 @@ LEFT JOIN -- on drug events
             OR eeg.EVENT_GROUP_ID IN (3, 25, 34, 39, 51, 54, 65)
       GROUP BY eeg.event_group_id, e.event_id, e.name) drugEvents
 
-ON ae.event_name = drugEvents.name WHERE drugEvents.name IS NOT NULL
+ON ade.event_name = drugEvents.name WHERE drugEvents.name IS NOT NULL
 
 GROUP BY
-    ae.objectid,
-    ae.modified,
-    ae.REFERENCE,
+    ade.objectid,
+    ade.modified,
+    ade.REFERENCE,
     drugEvents.event_id,
-    ae.event_name
+    ade.event_name

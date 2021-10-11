@@ -1,7 +1,7 @@
 SELECT anmEvt.ANIMAL_EVENT_ID                                                    as objectid,
        anm.ANIMAL_ID_NUMBER                                                      AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS caseDate,
-       CAST(COALESCE(adt.CHANGE_DATETIME, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified,
+       CAST(COALESCE(max(adt.CHANGE_DATETIME), anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified,
        anmCmt.TEXT                                                               AS remark,
        anmEvt.DIAGNOSIS                                                          AS diagnosis,
        anmEvt.EVENT_ID.NAME                                                      AS category,
@@ -19,13 +19,12 @@ WHERE evtEvtGrp.EVENT_GROUP_ID = 37   -- 37 Clinical Treatment
 
   AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
 
--- Joining with audit_trail generates duplicate rows (ex. having multiple audit records for a given ANIMAL_EVENT_ID), hence the 'group by'
+-- Joining with audit_trail generates duplicate rows (ex. having multiple audit records for a given ANIMAL_EVENT_ID with the same CHANGE_DATETIME), hence the 'group by'
 GROUP BY
      anmEvt.ANIMAL_EVENT_ID,
      anm.ANIMAL_ID_NUMBER,
      anmEvt.EVENT_DATETIME,
      staff.email_prefix,
-     adt.CHANGE_DATETIME,
      anmEvt.CREATED_DATETIME,
      anmCmt.TEXT,
      anmEvt.DIAGNOSIS,

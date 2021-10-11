@@ -1,4 +1,4 @@
--- subquery to extract an animal event from AUDIT_TRAIL.REFERENCE
+-- subquery to extract an animal event from AUDIT_TRAIL.REFERENCE to identify delete event
 SELECT
     auditSubQuery.objectid,
     auditSubQuery.modified,
