@@ -82,12 +82,12 @@ FROM PROTOCOL_CATEGORY
 
 UNION
 
-SELECT 'PROTOCOL_STATE_' || STATE_ID AS objectid,
+SELECT 'PROTOCOL_STATE_' || ID AS objectid,
 'protocol_state' AS set_name,
-STATE_ID AS "value",
-STATE_NAME AS description,
-STATE_NAME AS title,
-STATE_ID AS sort_order,
+ID AS "value",
+DESCRIPTION AS description,
+NAME AS title,
+ID AS sort_order,
 NULL AS date_disabled,
 NULL AS category,
 FROM PROTOCOL_CATEGORY
@@ -106,3 +106,20 @@ WHEN 'N' THEN '1/1/1970'
 END AS date_disabled,
 NULL AS category,
 FROM QUESTIONNAIRE
+
+UNION
+
+SELECT
+'CLINREMARKS_CATEGORY' || EVENT_ID.EVENT_ID as objectid,
+'clinremarks_category' AS set_name,
+EVENT_ID.EVENT_ID AS "value",
+EVENT_ID.DESCRIPTION AS description,
+EVENT_ID.NAME AS title,
+EVENT_ID.EVENT_ID AS sort_order,
+CASE
+    WHEN EVENT_ID.ACTIVE_YN = 'Y' AND EVENT_GROUP_ID.ACTIVE_YN = 'Y' THEN NULL
+    ELSE '1/1/1970'
+    END AS date_disabled,
+NULL AS category,
+FROM EVENT_EVENT_GROUP
+WHERE EVENT_GROUP_ID.EVENT_GROUP_ID = 53
