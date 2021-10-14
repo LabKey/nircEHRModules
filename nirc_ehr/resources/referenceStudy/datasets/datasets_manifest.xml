@@ -9,6 +9,7 @@
     <datasets>
         <dataset name="arrival" id="1001" category="Colony Management" type="Standard"/>
         <dataset name="assignment" id="1002" category="Colony Management" type="Standard"/>
+        <dataset name="alopecia" id="1003" category="Colony Management" type="Standard"/>
         <dataset name="blood" id="1005" category="Clinical" type="Standard"/>
         <dataset name="birth" id="1007" category="Colony Management" demographicData="true" type="Standard"/>
         <dataset name="breeder" id="1008" category="Colony Management" type="Standard"/>

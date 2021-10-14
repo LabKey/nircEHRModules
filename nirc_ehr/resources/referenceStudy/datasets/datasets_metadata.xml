@@ -83,6 +83,36 @@
             </column>
         </columns>
     </table>
+    <table tableName="alopecia" tableDbType="TABLE">
+        <tableTitle>Alopecia</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="objectid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>true</isKeyField>
+            </column>
+            <column columnName="score">
+                <columnTitle>Score</columnTitle>
+                <datatype>integer</datatype>
+            </column>
+            <column columnName="diagnosis">
+                <columnTitle>Diagnosis</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+        </columns>
+    </table>
     <table tableName="protocolAssignment" tableDbType="TABLE">
         <tableTitle>Protocol Assignments</tableTitle>
         <columns>
@@ -655,6 +685,7 @@
                 <datatype>varchar</datatype>
             </column>
             <column columnName="diagnosis">
+                <columnTitle>Diagnosis</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="attachmentFile">
