@@ -21,3 +21,4 @@ exemptions	Colony Management	query	Exemptions	TRUE		study	exemptions			date	FALS
 drugAdministration	Clinical	query	Drug Administration	TRUE		study	drug			date	FALSE	FALSE		qcstate/publicdata	This report displays drug administration data for the selected animal
 necropsy	Pathology	query	Necropsy	TRUE		study	necropsy			date	FALSE	FALSE		qcstate/publicdata	This report displays necropsy data for the selected animal
 cases	Clinical	query	Cases	TRUE		study	cases			date	FALSE	FALSE		qcstate/publicdata	This report displays clinical treatment cases for the selected animal
+pregnancy	Reproductive Management	query	Pregnancy Outcomes	TRUE		study	pregnancy			date	FALSE	FALSE		qcstate/publicdata	This report displays pregnancy outcomes
