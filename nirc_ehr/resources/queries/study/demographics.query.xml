@@ -33,6 +33,24 @@
                             <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
                     </column>
+                    <column columnName="species">
+                        <columnTitle>Species</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>species_codes</fkTable>
+                            <fkColumnName>code</fkColumnName>
+                            <fkDisplayColumnName>scientific_name</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="gender">
+                        <columnTitle>Gender</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>gender_codes</fkTable>
+                            <fkColumnName>code</fkColumnName>
+                            <fkDisplayColumnName>Meaning</fkDisplayColumnName>
+                        </fk>
+                    </column>
                 </columns>
             </table>
         </tables>
