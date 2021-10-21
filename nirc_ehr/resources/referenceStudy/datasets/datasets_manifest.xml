@@ -9,6 +9,7 @@
     <datasets>
         <dataset name="arrival" id="1001" category="Colony Management" type="Standard"/>
         <dataset name="assignment" id="1002" category="Colony Management" type="Standard"/>
+        <dataset name="alopecia" id="1003" category="Colony Management" type="Standard"/>
         <dataset name="blood" id="1005" category="Clinical" type="Standard"/>
         <dataset name="birth" id="1007" category="Colony Management" demographicData="true" type="Standard"/>
         <dataset name="breeder" id="1008" category="Colony Management" type="Standard"/>
@@ -28,6 +29,7 @@
         <dataset name="prc" id="1034" category="Clinical" type="Standard"/>
         <dataset name="protocolAssignment" id="1031" category="Colony Management" type="Standard"/>
         <dataset name="serology" id="1032" category="ClinPath" type="Standard"/>
+        <dataset name="pregnancy" id="1035" category="Reproductive Management" type="Standard"/>
         <dataset name="treatment_order" id="1014" category="Clinical" type="Standard"/>
         <dataset name="vitals" id="1033" category="Clinical" type="Standard"/>
         <dataset name="weight" id="1015" category="Clinical" type="Standard"/>

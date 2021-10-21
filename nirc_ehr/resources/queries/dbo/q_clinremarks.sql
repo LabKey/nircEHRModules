@@ -18,3 +18,14 @@ FROM ANIMAL_EVENT anmEvt
 
 WHERE evtEvtGrp.EVENT_GROUP_ID = 53
 --     53 Comments
+
+-- Joining with event_event_group & audit_trail generates duplicate rows, hence the 'group by'
+GROUP BY anmEvt.ANIMAL_EVENT_ID,
+         anmEvt.ANIMAL_ID,
+         anmEvt.EVENT_DATETIME,
+         anmEvt.STAFF_ID.EMAIL_ADDRESS,
+         anmEvt.EVENT_ID.EVENT_ID,
+         anmEvt.DIAGNOSIS,
+         anmCmt.TEXT,
+         anmEvt.CREATED_DATETIME,
+         adt.CHANGE_DATETIME
