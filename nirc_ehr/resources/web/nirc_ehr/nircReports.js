@@ -69,3 +69,45 @@ EHR.reports.snapshot = function(panel, tab, showActionsBtn){
             tab.add(toAdd);
     }
 };
+
+EHR.reports.currentBlood = function(panel, tab){
+    var filterArray = panel.getFilterArray(tab);
+    var title = panel.getTitleSuffix();
+
+    tab.add({
+        html: 'This report summarizes the blood available for the animals below.  ' +
+                '<br><br>If there have been recent blood draws for the animal, a graph will show the available blood over time.  On the graph, dots indicate dates when either blood was drawn or a previous blood draw fell off.  The horizontal lines indicate the maximum allowable blood that can be drawn on that date.',
+        border: false,
+        style: 'padding-bottom: 20px;'
+    });
+
+    tab.add({
+        xtype: 'ldk-querycmp',
+        style: 'margin-bottom: 10px;',
+        queryConfig: panel.getQWPConfig({
+            title: 'Summary',
+            schemaName: 'study',
+            queryName: 'Demographics',
+            viewName: 'Blood Draws',
+            filterArray: filterArray.removable.concat(filterArray.nonRemovable)
+        })
+    });
+
+    var subjects = tab.filters.subjects || [];
+
+    if (subjects.length){
+        tab.add({
+            xtype: 'nirc-bloodsummarypanel',
+            subjects: subjects
+        });
+    }
+    else
+    {
+        panel.resolveSubjectsFromHousing(tab, function(subjects, tab){
+            tab.add({
+                xtype: 'nirc-bloodsummarypanel',
+                subjects: subjects
+            });
+        }, this);
+    }
+};

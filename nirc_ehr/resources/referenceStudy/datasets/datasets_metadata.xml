@@ -189,16 +189,17 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
-            <column columnName="objectId">
+            <column columnName="objectid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
                 <isKeyField>true</isKeyField>
             </column>
+            <column columnName="type">
+                <columnTitle>Type</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="quantity">
                 <datatype>double</datatype>
-            </column>
-            <column columnName="remark">
-                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>

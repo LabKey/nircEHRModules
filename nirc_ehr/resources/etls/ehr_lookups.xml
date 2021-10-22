@@ -43,5 +43,13 @@
                 </alternateKeys>
             </destination>
         </transform>
+        <transform id="step5" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to project target</description>
+            <source schemaName="dbo" queryName="q_species"/>
+            <destination schemaName="ehr_lookups" queryName="species"
+                         bulkLoad="true" targetOption="merge">
+
+            </destination>
+        </transform>
     </transforms>
 </etl>
