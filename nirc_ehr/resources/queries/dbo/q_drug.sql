@@ -23,3 +23,14 @@ WHERE (evtEvtGrp.EVENT_GROUP_ID = 31 AND evtEvtGrp.EVENT_ID = 2261) -- Sedation 
 --     51	Oral Dose Administration - Alert
 --     54	Fluid Administration
 --     65	Sedation
+
+GROUP BY anmEvt.ANIMAL_EVENT_ID,
+         anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER,
+         anmEvt.EVENT_DATETIME,
+         staff.email_prefix,
+         anmEvt.EVENT_ID.NAME,
+         anmEvt.RESULT,
+         anmEvt.ATTACHMENT_PATH,
+         anmCmt.TEXT,
+         anmEvt.CREATED_DATETIME,
+         adt.modified
