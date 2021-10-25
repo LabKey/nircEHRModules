@@ -1,8 +1,8 @@
 
 SELECT
     SPECIES_ID AS code,
-    SPEC_NAME AS scientific_name,
-    SPEC_DESC AS description,
+    SPEC_NAME AS common_name,
+    SPEC_DESC AS scientific_name,
     SPECIES_GROUP_ID as species,
     CASE ACTIVE_YN
         WHEN 'Y' THEN NULL
