@@ -46,7 +46,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 21.018;
+        return 21.019;
     }
 
     @Override
@@ -70,6 +70,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService ehrService = EHRService.get();
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nircReports.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SnapshotPanel.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/BloodSummaryPanel.js"), this);
     }
 
     @Override
@@ -79,6 +80,9 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerModule(this);
 
         EHRService.get().registerHistoryDataSource(new DefaultClinicalRemarksDataSource(this));
+
+        ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
+        ehrService.registerActionOverride("participantView", this, "views/participantView.html");
     }
 
     @Override

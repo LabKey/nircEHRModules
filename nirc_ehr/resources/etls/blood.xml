@@ -10,6 +10,7 @@
                          bulkLoad="true" batchSize="5000" targetOption="merge">
                 <columnTransforms>
                     <column source="bloodDate" target="date"/>
+                    <column source="performedby" target="performedby" transformClass="org.labkey.di.columnTransforms.UserCreateTransform"/>
                 </columnTransforms>
             </destination>
         </transform>
@@ -20,6 +21,10 @@
                            deletedSourceKeyColumnName="objectid" targetKeyColumnName="objectid"/>
     </incrementalFilter>
 
+    <constants>
+        <column type="varchar" name="transformEmailDomain" value="louisiana.edu"/>
+        <column type="varchar" name="userGroupName" value="NIRC ETL USERS"/>
+    </constants>
     <schedule>
         <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
     </schedule>

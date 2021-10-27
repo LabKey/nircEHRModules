@@ -1,19 +1,19 @@
-
-SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
-       anm.ANIMAL_ID_NUMBER AS Id,
-       CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS bloodDate,
-       CAST(COALESCE (adt.CHANGE_DATETIME, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified,
-       anmEvt.RESULT AS quantity,
-       anmEvt.TEXT_RESULT,
-       anmCmt.TEXT AS remark
+SELECT anmEvt.ANIMAL_EVENT_ID                                                    AS objectid,
+       anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER                                         AS Id,
+       CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS bloodDate,
+       (CASE
+            WHEN anmEvt.STAFF_ID.EMAIL_ADDRESS IS NULL THEN 'unknown'
+            ELSE substr(anmEvt.STAFF_ID.EMAIL_ADDRESS, 1,
+                        instr(anmEvt.STAFF_ID.EMAIL_ADDRESS, '@') - 1) END)      AS performedby,
+       anmEvt.EVENT_ID.NAME                                                      AS type,
+       anmEvt.RESULT                                                             AS quantity,
+       anmCmt.TEXT                                                               AS remark,
+       CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
 FROM ANIMAL_EVENT anmEvt
-LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
-LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
-LEFT JOIN EVENT_EVENT_GROUP evtEvtGrp ON evtEvtGrp.EVENT_ID = anmEvt.EVENT_ID
-LEFT JOIN AUDIT_TRAIL adt ON anmEvt.ANIMAL_EVENT_ID = substring(adt.PRIMARY_KEY_VALUES, 18) -- ANIMAL_EVENT_ID =xxxxxx
-AND adt.PRIMARY_KEY_VALUES LIKE '%ANIMAL_EVENT_ID%'
-WHERE anmEvt.EVENT_ID = 1864 --Blood Sample Collection (with Volume)
-  OR evtEvtGrp.EVENT_ID = 1581 -- Blood Sample Collection
-AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
-GROUP BY anmEvt.ANIMAL_EVENT_ID, anm.ANIMAL_ID_NUMBER, anmEvt.EVENT_DATETIME, adt.CHANGE_DATETIME, anmEvt.CREATED_DATETIME,
-         anmCmt.TEXT,anmEvt.RESULT,anmEvt.TEXT_RESULT
+         LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
+         LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
+
+WHERE anmEvt.EVENT_ID.EVENT_ID IN (1864, 1581)
+  AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
+--     1864 Blood Sample Collection (with Volume)
+--     1581 Blood Sample Collection
