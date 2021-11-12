@@ -19,7 +19,7 @@ SELECT anm.ANIMAL_ID_NUMBER  AS Id,
        anm.BIRTH_DATE        AS birth,
        anm.GENDER_ID         AS gender,
        anm.SSB_ID            AS species,
-       CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS eventDate,
+       anmEvt.EVENT_DATETIME AS eventDate,
        NULL                  AS damSire,
        NULL                  AS acqDateText,
        'Animal Event'        AS source
@@ -27,5 +27,3 @@ FROM ANIMAL_EVENT anmEvt
 LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
 WHERE EVENT_ID IN (SELECT EVENT_ID FROM EVENT WHERE NAME LIKE 'Lab Transfer Fr%')
   AND anm.ANIMAL_ID NOT IN (SELECT ANIMAL_ID FROM ALTERNATE WHERE ALTERNATE_TYPE_ID = 7)
-
-
