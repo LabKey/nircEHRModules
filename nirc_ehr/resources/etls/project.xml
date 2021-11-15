@@ -7,7 +7,7 @@
             <description>Copy to project target</description>
             <source schemaName="dbo" queryName="q_project"/>
             <destination schemaName="ehr" queryName="project"
-                         bulkLoad="true" targetOption="merge">
+                         bulkLoad="true">
 
             </destination>
         </transform>
