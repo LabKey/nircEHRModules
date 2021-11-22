@@ -1,0 +1,16 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <sorts>
+        <sort column="date" descending="true"/>
+    </sorts>
+    <columns>
+        <column name="Id"/>
+        <column name="date"/>
+        <column name="gender"/>
+        <column name="species"/>
+        <column name="dam"/>
+        <column name="sire"/>
+        <column name="birth"/>
+        <column name="performedBy"/>
+        <column name="history"/>
+    </columns>
+</customView>

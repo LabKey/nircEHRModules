@@ -3,8 +3,8 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS administrationDate,
        (CASE
             WHEN anmEvt.STAFF_ID.EMAIL_ADDRESS IS NULL THEN 'unknown'
-            ELSE substr(anmEvt.STAFF_ID.EMAIL_ADDRESS, 1,
-                        instr(anmEvt.STAFF_ID.EMAIL_ADDRESS, '@') - 1) END)      AS performedby,
+            ELSE substring(anmEvt.STAFF_ID.EMAIL_ADDRESS, 1,
+                        locate('@', anmEvt.STAFF_ID.EMAIL_ADDRESS) - 1) END)      AS performedby,
        anmEvt.RESULT                                                             AS score,
        anmEvt.DIAGNOSIS                                                          AS diagnosis,
        anmCmt.TEXT                                                               AS remark,

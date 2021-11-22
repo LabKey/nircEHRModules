@@ -14,6 +14,10 @@
             </destination>
         </transform>
     </transforms>
+    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified" >
+        <deletedRowsSource schemaName="dbo" queryName="q_demographics_delete" timestampColumnName="modified"
+                           deletedSourceKeyColumnName="Id" targetKeyColumnName="Id"/>
+    </incrementalFilter>
     <schedule>
         <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
     </schedule>

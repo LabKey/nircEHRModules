@@ -1,0 +1,19 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <sorts>
+        <sort column="date" descending="true"/>
+    </sorts>
+    <columns>
+        <column name="Id"/>
+        <column name="gender"/>
+        <column name="birth"/>
+        <column name="death"/>
+        <column name="species"/>
+        <column name="dateWeaned"/>
+        <column name="disposition"/>
+        <column name="termination"/>
+        <column name="implantNumber"/>
+        <column name="vendorNumber"/>
+        <column name="activeStatus"/>
+        <column name="calculated_status"/>
+    </columns>
+</customView>

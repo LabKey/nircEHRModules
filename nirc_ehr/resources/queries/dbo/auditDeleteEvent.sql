@@ -3,16 +3,16 @@ SELECT
     auditSubQuery.objectid,
     auditSubQuery.modified,
     auditSubQuery.REFERENCE,
-    trim(substr(auditSubQuery.event_partial, 1, (length(auditSubQuery.event_partial) -
+    trim(substring(auditSubQuery.event_partial, 1, (length(auditSubQuery.event_partial) -
                                                       (length('Event Datetime:') + length(event_datetime))))) as event_name --extract event name from REFERENCE
 FROM (
          SELECT substring(adt.PRIMARY_KEY_VALUES, length('ANIMAL_EVENT_ID = '))             AS objectid,
                 CAST(adt.CHANGE_DATETIME AS TIMESTAMP)                                      AS modified,
                 adt.REFERENCE,
-                SUBSTR(adt.reference,
-                       instr(adt.reference, 'Event:') + length('Event:'))                   AS event_partial,
-                SUBSTR(adt.reference,
-                       instr(adt.reference, 'Event Datetime:') + length('Event Datetime:')) AS event_datetime
+                substring(adt.reference,
+                       locate('Event:', adt.reference) + length('Event:'))                   AS event_partial,
+                substring(adt.reference,
+                       locate('Event Datetime:', adt.reference) + length('Event Datetime:')) AS event_datetime
          FROM AUDIT_TRAIL adt
          WHERE adt.PRIMARY_KEY_VALUES LIKE '%ANIMAL_EVENT_ID%'
            AND adt.COLUMN_NAME = 'DELETE') auditSubQuery

@@ -29,6 +29,7 @@ import org.labkey.api.query.QuerySchema;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
+import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -79,6 +80,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService ehrService = EHRService.get();
         ehrService.registerModule(this);
 
+        EHRService.get().registerTableCustomizer(this, NIRC_EHRCustomizer.class);
         EHRService.get().registerHistoryDataSource(new DefaultClinicalRemarksDataSource(this));
 
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
