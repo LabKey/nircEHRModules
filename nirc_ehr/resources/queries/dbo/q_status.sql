@@ -1,3 +1,4 @@
+-- Used in q_demographics
 SELECT anm.ANIMAL_ID_NUMBER AS Id,
        anm.ANIMAL_DISPOSITION_ID.NAME,
        CASE WHEN anm.ANIMAL_DISPOSITION_ID IS NULL THEN 'Alive'

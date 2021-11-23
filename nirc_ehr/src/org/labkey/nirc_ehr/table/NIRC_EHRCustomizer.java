@@ -1,12 +1,23 @@
 package org.labkey.nirc_ehr.table;
 
 import org.labkey.api.data.AbstractTableInfo;
+import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
+import org.labkey.api.data.JdbcType;
+import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
+import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ehr.EHRService;
+import org.labkey.api.exp.api.StorageProvisioner;
+import org.labkey.api.exp.property.Domain;
 import org.labkey.api.ldk.table.AbstractTableCustomizer;
+import org.labkey.api.query.ExprColumn;
+import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
 import org.labkey.api.query.UserSchema;
+import org.labkey.api.study.DatasetTable;
+
+import java.util.Calendar;
 
 public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 {
@@ -27,6 +38,15 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (table instanceof AbstractTableInfo)
         {
             doSharedCustomization((AbstractTableInfo) table);
+            doTableSpecificCustomizations((AbstractTableInfo) table);
+        }
+    }
+
+    public void doTableSpecificCustomizations(AbstractTableInfo ti)
+    {
+        if (matches(ti, "study", "housing"))
+        {
+            customizeHousingTable(ti);
         }
     }
 
@@ -52,6 +72,73 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 col.setLabel("Gender");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "gender_codes", "code", "meaning"));
             }
+            if ("remark".equalsIgnoreCase(col.getName()) && null == col.getFk())
+            {
+                col.setLabel("Remark");
+            }
+            if ("description".equalsIgnoreCase(col.getName()) && null == col.getFk())
+            {
+                col.setLabel("Description");
+            }
         }
+    }
+
+    private void customizeHousingTable(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("daysInRoom") == null)
+        {
+            TableInfo realTable = getRealTable(ti);
+            if (realTable != null && realTable.getColumn("participantid") != null && realTable.getColumn("date") != null && realTable.getColumn("enddate") != null)
+            {
+                SQLFragment roomSql = new SQLFragment(realTable.getSqlDialect().getDateDiff(Calendar.DATE, "{fn curdate()}", "(SELECT max(h2.enddate) as d FROM " + realTable.getSelectName() + " h2 WHERE h2.enddate IS NOT NULL AND h2.enddate <= " + ExprColumn.STR_TABLE_ALIAS + ".date AND h2.participantid = " + ExprColumn.STR_TABLE_ALIAS + ".participantid and h2.room != " + ExprColumn.STR_TABLE_ALIAS + ".room)"));
+                ExprColumn roomCol = new ExprColumn(ti, "daysInRoom", roomSql, JdbcType.INTEGER, realTable.getColumn("participantid"), realTable.getColumn("date"), realTable.getColumn("enddate"));
+                roomCol.setLabel("Days In Room");
+                ti.addColumn(roomCol);
+
+//                SQLFragment sql = new SQLFragment(realTable.getSqlDialect().getDateDiff(Calendar.DATE, "{fn curdate()}", "(SELECT max(h2.enddate) as d FROM " + realTable.getSelectName() + " h2 LEFT JOIN ehr_lookups.rooms r1 ON (r1.room = h2.room) WHERE h2.enddate IS NOT NULL AND h2.enddate <= " + ExprColumn.STR_TABLE_ALIAS + ".date AND h2.participantid = " + ExprColumn.STR_TABLE_ALIAS + ".participantid and r1.area != (select area FROM ehr_lookups.rooms r WHERE r.room = " + ExprColumn.STR_TABLE_ALIAS + ".room))"));
+//                ExprColumn areaCol = new ExprColumn(ti, "daysInArea", sql, JdbcType.INTEGER, realTable.getColumn("participantid"), realTable.getColumn("date"), realTable.getColumn("enddate"));
+//                areaCol.setLabel("Days In Area");
+//                ti.addColumn(areaCol);
+
+            }
+        }
+
+        if (ti.getColumn("previousLocation") == null)
+        {
+            UserSchema us = getUserSchema(ti, "study");
+            if (us != null)
+            {
+                ColumnInfo lsidCol = ti.getColumn("lsid");
+                var col = ti.addColumn(new WrappedColumn(lsidCol, "previousLocation"));
+                col.setLabel("Previous Location");
+                col.setUserEditable(false);
+                col.setIsUnselectable(true);
+                col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                        .table("housingPreviousLocation")
+                        .key("lsid")
+                        .display("location")));
+            }
+        }
+    }
+
+    private TableInfo getRealTable(TableInfo targetTable)
+    {
+        TableInfo realTable = null;
+        if (targetTable instanceof FilteredTable)
+        {
+            if (targetTable instanceof DatasetTable)
+            {
+                Domain domain = targetTable.getDomain();
+                if (domain != null)
+                {
+                    realTable = StorageProvisioner.createTableInfo(domain);
+                }
+            }
+            else if (targetTable.getSchema() != null)
+            {
+                realTable = targetTable.getSchema().getTable(targetTable.getName());
+            }
+        }
+        return realTable;
     }
 }

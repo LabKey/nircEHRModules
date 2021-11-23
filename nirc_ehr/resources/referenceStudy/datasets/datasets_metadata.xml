@@ -283,6 +283,12 @@
             <column columnName="gender">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="sire">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="dam">
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="birth">
                 <datatype>timestamp</datatype>
             </column>
@@ -402,6 +408,11 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="objectid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>true</isKeyField>
             </column>
             <column columnName="location">
                 <datatype>varchar</datatype>

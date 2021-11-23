@@ -3,14 +3,25 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="housing" tableDbType="TABLE">
                 <columns>
-                    <column columnName="location">
-                        <columnTitle>Location</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>cage</fkTable>
-                            <fkColumnName>location</fkColumnName>
-                            <fkDisplayColumnName>cage</fkDisplayColumnName>
-                        </fk>
+                    <column columnName="date">
+                        <columnTitle>In Date</columnTitle>
+                    </column>
+                    <column columnName="enddate">
+                        <nullable>true</nullable>
+                        <isHidden>false</isHidden>
+                        <shownInInsertView>true</shownInInsertView>
+                        <shownInDetailsView>true</shownInDetailsView>
+                        <columnTitle>Out Date</columnTitle>
+                    </column>
+                    <column columnName="room">
+<!--                        <nullable>false</nullable>-->
+                        <columnTitle>Room</columnTitle>
+                        <url>/EHR/cageDetails.view?room=${room}&amp;</url>
+                    </column>
+                    <column columnName="cage">
+                        <!--<nullable>false</nullable>-->
+                        <columnTitle>Cage</columnTitle>
+                        <url>/EHR/cageDetails.view?room=${room}&amp;cage=${cage}&amp;</url>
                     </column>
                 </columns>
             </table>

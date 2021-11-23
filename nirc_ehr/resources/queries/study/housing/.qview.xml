@@ -6,7 +6,8 @@
         <column name="Id"/>
         <column name="date"/>
         <column name="enddate"/>
-        <column name="location"/>
+        <column name="room" />
+        <column name="cage" />
         <column name="remark"/>
     </columns>
 </customView>
