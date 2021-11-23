@@ -14,7 +14,6 @@
         LEFT JOIN ANIMAL anm ON alt.ANIMAL_ID = anm.ANIMAL_ID
         LEFT JOIN AUDIT_TRAIL adt ON alt.ALTERNATE_ID = CAST(substring(PRIMARY_KEY_VALUES, length('Alternate_ID = ')) AS INTEGER)
             AND adt.TABLE_NAME = 'ALTERNATE'
-            AND adt.COLUMN_NAME != 'DELETE'
         WHERE alt.ALTERNATE_TYPE_ID = 7 -- 'Dam/Sire/Acq'
         AND anm.ANIMAL_ID_NUMBER NOT LIKE 'A%' -- Animal born in centers are pre-appended with A's (in animal Id)
         AND alt.DESCRIPTION IS NOT NULL
