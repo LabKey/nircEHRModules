@@ -18,6 +18,7 @@ package org.labkey.nirc_ehr;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
@@ -37,6 +38,8 @@ import java.util.Collections;
 public class NIRC_EHRModule extends ExtendedSimpleModule
 {
     public static final String NAME = "NIRC_EHR";
+
+    private UpgradeCode _upgradeCode;
 
     @Override
     public String getName()
@@ -107,8 +110,13 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     }
 
     @Override
-    public @NotNull SharedEHRUpgradeCode getUpgradeCode()
+    public @NotNull UpgradeCode getUpgradeCode()
     {
-        return new SharedEHRUpgradeCode(this);
+        // Create a single instance so that we can collapse study reloads and sequence the work across scripts correctly
+        if (_upgradeCode == null)
+        {
+            _upgradeCode = new SharedEHRUpgradeCode(this);
+        }
+        return _upgradeCode;
     }
 }
