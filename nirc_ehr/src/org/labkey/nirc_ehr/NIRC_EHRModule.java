@@ -39,8 +39,6 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 {
     public static final String NAME = "NIRC_EHR";
 
-    private UpgradeCode _upgradeCode;
-
     @Override
     public String getName()
     {
@@ -112,11 +110,6 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @NotNull UpgradeCode getUpgradeCode()
     {
-        // Create a single instance so that we can collapse study reloads and sequence the work across scripts correctly
-        if (_upgradeCode == null)
-        {
-            _upgradeCode = new SharedEHRUpgradeCode(this);
-        }
-        return _upgradeCode;
+        return SharedEHRUpgradeCode.getInstance(this);
     }
 }
