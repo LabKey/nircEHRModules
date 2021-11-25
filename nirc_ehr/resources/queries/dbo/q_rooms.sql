@@ -1,4 +1,4 @@
-SELECT LOC1.LOCATION_ID || ' - ' || LOC1.LOCATION_NAME     AS room,
+SELECT LOC1.LOCATION_ID      AS room,
        LOC1.LOCATION_NAME    AS name,
        LOC2.LOCATION_NAME    AS floor,
        LOC3.Name             AS building,

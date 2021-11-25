@@ -72,6 +72,12 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 col.setLabel("Gender");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "gender_codes", "code", "meaning"));
             }
+            if ("room".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("rooms"))
+            {
+                UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                col.setLabel("Room");
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "rooms", "room", "name"));
+            }
             if ("remark".equalsIgnoreCase(col.getName()) && null == col.getFk())
             {
                 col.setLabel("Remark");
