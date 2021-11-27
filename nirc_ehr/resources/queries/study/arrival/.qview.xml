@@ -5,9 +5,12 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="enddate"/>
-        <column name="room" />
-        <column name="cage" />
-        <column name="remark"/>
+        <column name="gender"/>
+        <column name="species"/>
+        <column name="dam"/>
+        <column name="sire"/>
+        <column name="birth"/>
+        <column name="performedBy"/>
+        <column name="history"/>
     </columns>
 </customView>

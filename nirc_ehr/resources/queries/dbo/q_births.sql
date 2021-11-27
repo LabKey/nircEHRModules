@@ -1,7 +1,7 @@
 SELECT anm.ANIMAL_ID_NUMBER AS Id,
        anm.BIRTH_DATE       AS birthDate,
        anm.GENDER_ID        AS gender,
-       anm.SSB_ID           AS species,
+       anm.SSB_ID.SPECIES_ID           AS species,
        alt.NAME AS damSire
 FROM Animal anm
 LEFT JOIN ALTERNATE alt ON alt.ANIMAL_ID = anm.ANIMAL_ID

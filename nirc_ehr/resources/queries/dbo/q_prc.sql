@@ -21,10 +21,10 @@ WHERE evtEvtGrp.EVENT_GROUP_ID IN (6,10,21,27,28,29,35,50,52)
    -- 52  Protocol Associated Events
 
 OR -- Procedures from Diagnostic sample collection event group
-(evtEvtGrp.EVENT_GROUP_ID = 36 AND evtEvtGrp.EVENT_ID != 1581)
+(evtEvtGrp.EVENT_GROUP_ID = 36 AND (evtEvtGrp.EVENT_ID != 1581 AND evtEvtGrp.EVENT_ID != 1864))
 
 OR -- Procedures from Timed sample collection event group
-    (evtEvtGrp.EVENT_GROUP_ID = 32 AND evtEvtGrp.EVENT_ID != 1581)
+    (evtEvtGrp.EVENT_GROUP_ID = 32 AND (evtEvtGrp.EVENT_ID != 1581 AND  evtEvtGrp.EVENT_ID != 1864))
 
 OR -- Procedures from Quarantine Period
     (evtEvtGrp.EVENT_GROUP_ID = 26 AND evtEvtGrp.EVENT_ID = 1806)

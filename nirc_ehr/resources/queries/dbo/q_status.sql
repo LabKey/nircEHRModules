@@ -1,0 +1,8 @@
+-- Used in q_demographics
+SELECT anm.ANIMAL_ID_NUMBER AS Id,
+       anm.ANIMAL_DISPOSITION_ID.NAME,
+       CASE WHEN anm.ANIMAL_DISPOSITION_ID IS NULL THEN 'Alive'
+       WHEN anm.ANIMAL_DISPOSITION_ID IN (2, 3, 4) THEN 'Dead'  -- Died, Project Sacrifice, Moribund Sacrifice
+       WHEN anm.ANIMAL_DISPOSITION_ID IN (5, 6) THEN 'Other'   -- Escaped, Misc
+       ELSE 'Shipped' END AS status
+FROM Animal anm
