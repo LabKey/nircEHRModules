@@ -18,6 +18,7 @@ package org.labkey.nirc_ehr;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
@@ -29,6 +30,7 @@ import org.labkey.api.query.QuerySchema;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
+import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -46,7 +48,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 21.019;
+        return 21.020;
     }
 
     @Override
@@ -79,6 +81,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService ehrService = EHRService.get();
         ehrService.registerModule(this);
 
+        EHRService.get().registerTableCustomizer(this, NIRC_EHRCustomizer.class);
         EHRService.get().registerHistoryDataSource(new DefaultClinicalRemarksDataSource(this));
 
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
@@ -105,8 +108,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     }
 
     @Override
-    public @NotNull SharedEHRUpgradeCode getUpgradeCode()
+    public @NotNull UpgradeCode getUpgradeCode()
     {
-        return new SharedEHRUpgradeCode(this);
+        return SharedEHRUpgradeCode.getInstance(this);
     }
 }

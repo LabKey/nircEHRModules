@@ -30,6 +30,12 @@
             schemaName: 'ehr',
             queryName: 'reports',
             pk: 'rowid'
+        }, {
+            label: 'Age Class',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'ageclass',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {

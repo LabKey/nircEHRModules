@@ -1,7 +1,7 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="Demographicss" tableDbType="TABLE">
+            <table tableName="Demographics" tableDbType="TABLE">
                 <columns>
                     <column columnName="date">
                         <isHidden>true</isHidden>
@@ -24,6 +24,24 @@
                             query.Id~eq=${Id}
                         </url>
                     </column>
+                    <column columnName="dam">
+                        <columnTitle>Dam</columnTitle>
+                        <fk>
+                            <fkDbSchema>study</fkDbSchema>
+                            <fkTable>animal</fkTable>
+                            <fkColumnName>id</fkColumnName>
+                        </fk>
+                        <url>/ehr/participantView.view?participantId=${dam}</url>
+                    </column>
+                    <column columnName="sire">
+                        <columnTitle>Sire</columnTitle>
+                        <fk>
+                            <fkDbSchema>study</fkDbSchema>
+                            <fkTable>animal</fkTable>
+                            <fkColumnName>id</fkColumnName>
+                        </fk>
+                        <url>/ehr/participantView.view?participantId=${sire}</url>
+                    </column>
                     <column columnName="disposition">
                         <columnTitle>Disposition</columnTitle>
                         <fk>
@@ -33,23 +51,30 @@
                             <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
                     </column>
-                    <column columnName="species">
-                        <columnTitle>Species</columnTitle>
+                    <column columnName="termination">
+                        <columnTitle>Termination</columnTitle>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>species_codes</fkTable>
-                            <fkColumnName>code</fkColumnName>
-                            <fkDisplayColumnName>scientific_name</fkDisplayColumnName>
+                            <fkTable>termination_reason_codes</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                            <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
                     </column>
-                    <column columnName="gender">
-                        <columnTitle>Gender</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>gender_codes</fkTable>
-                            <fkColumnName>code</fkColumnName>
-                            <fkDisplayColumnName>Meaning</fkDisplayColumnName>
-                        </fk>
+                    <column columnName="weanedDate">
+                        <columnTitle>Date Weaned</columnTitle>
+                        <formatString>Date</formatString>
+                    </column>
+                    <column columnName="implantNumber">
+                        <columnTitle>Implant Number</columnTitle>
+                    </column>
+                    <column columnName="vendorNumber">
+                        <columnTitle>Vendor Number</columnTitle>
+                    </column>
+                    <column columnName="activeStatus">
+                        <columnTitle>Active Status</columnTitle>
+                    </column>
+                    <column columnName="calculated_status">
+                        <columnTitle>Animal Status</columnTitle>
                     </column>
                 </columns>
             </table>

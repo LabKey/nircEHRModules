@@ -7,6 +7,8 @@
 
         <dependency path="ehr/panel/MultiAnimalFilterType.js"/>
         <dependency path="ehr/panel/LocationFilterType.js"/>
+        <dependency path="nirc_ehr/panel/LocationFilterType.js"/>
+        <dependency path="nirc_ehr/form/field/RoomField.js"/>
 
         <dependency path="ehr/panel/AnimalHistoryPanel.js"/>
         <dependency path="nirc_ehr/panel/utils.js"/>

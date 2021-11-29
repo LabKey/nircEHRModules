@@ -104,7 +104,7 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
                 }
             },
         },{
-            xtype: 'ehr-locationfiltertype',
+            xtype: 'nirc_ehr-locationfiltertype',
             inputValue: EHR.panel.LocationFilterType.filterName,
             label: EHR.panel.LocationFilterType.label
         },{

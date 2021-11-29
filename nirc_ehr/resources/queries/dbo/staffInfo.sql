@@ -7,6 +7,6 @@ s.staff_id,
 s.email_address,
 (CASE
     WHEN s.email_address IS NULL THEN 'unknown'
-    ELSE substr(s.email_address, 1,
-                instr(s.email_address, '@') - 1) END) as email_prefix
+    ELSE substring(s.email_address, 1,
+                locate('@', s.email_address) - 1) END) as email_prefix
 FROM STAFF s

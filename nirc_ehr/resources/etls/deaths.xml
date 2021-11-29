@@ -7,7 +7,7 @@
             <description>Copy to deaths target</description>
             <source schemaName="dbo" queryName="q_deaths"/>
             <destination schemaName="study" queryName="deaths"
-                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                         bulkLoad="true" batchSize="100" targetOption="merge">
                 <columnTransforms>
                     <column source="deathDate" target="date"/>
                 </columnTransforms>
