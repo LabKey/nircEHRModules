@@ -7,7 +7,10 @@
             <description>Copy to protocol target</description>
             <source schemaName="dbo" queryName="q_protocol"/>
             <destination schemaName="ehr" queryName="protocol"
-                         bulkLoad="true">
+                         bulkLoad="true" targetOption="merge">
+                <alternateKeys>
+                    <column name="protocol"/>
+                </alternateKeys>
             </destination>
         </transform>
         <transform id="step2" type="org.labkey.di.pipeline.TransformTask">

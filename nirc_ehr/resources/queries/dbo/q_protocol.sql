@@ -1,4 +1,6 @@
-SELECT PROTOCOL_NUMBER AS "title",
+SELECT 'PROTOCOL-' || PROTOCOL_ID AS "objectid",
+       PROTOCOL_NUMBER AS "title",
+       PROTOCOL_NUMBER AS "external_id",
        PROTOCOL_ID AS "protocol",
        DEPARTMENT_ID AS "departmentId",
        PROTOCOL_ID_PREFIX AS "prefix",
@@ -34,3 +36,4 @@ SELECT PROTOCOL_NUMBER AS "title",
        REVIEW_COMPLETION_DATE AS "reviewCompletionDate",
        HONOR_RESET_YN AS "isHonorReset"
 FROM PROTOCOL
+WHERE PROTOCOL_NUMBER IS NOT NULL

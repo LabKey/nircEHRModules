@@ -7,8 +7,10 @@
             <description>Copy to project target</description>
             <source schemaName="dbo" queryName="q_project"/>
             <destination schemaName="ehr" queryName="project"
-                         bulkLoad="true">
-
+                         bulkLoad="true" targetOption="merge">
+                <alternateKeys>
+                    <column name="project"/>
+                </alternateKeys>
             </destination>
         </transform>
     </transforms>
