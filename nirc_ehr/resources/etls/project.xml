@@ -8,7 +8,9 @@
             <source schemaName="dbo" queryName="q_project"/>
             <destination schemaName="ehr" queryName="project"
                          bulkLoad="true" targetOption="merge">
-
+                <alternateKeys>
+                    <column name="project"/>
+                </alternateKeys>
             </destination>
         </transform>
     </transforms>
