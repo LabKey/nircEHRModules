@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
+import org.labkey.nirc_ehr.history.DefaultBiopsyDataSource;
+import org.labkey.nirc_ehr.history.DefaultBloodDrawDataSource;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.module.Module;
@@ -83,6 +85,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         EHRService.get().registerTableCustomizer(this, NIRC_EHRCustomizer.class);
         EHRService.get().registerHistoryDataSource(new DefaultClinicalRemarksDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DefaultBiopsyDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DefaultBloodDrawDataSource(this));
 
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");
