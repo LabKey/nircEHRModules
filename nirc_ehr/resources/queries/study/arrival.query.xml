@@ -1,0 +1,30 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="Arrival" tableDbType="TABLE" useColumnOrder="true">
+                <tableUrl />
+                <insertUrl />
+                <importUrl />
+                <updateUrl />
+                <deleteUrl />
+                <columns>
+                    <column columnName="date">
+                        <columnTitle>Arrival Date</columnTitle>
+                    </column>
+                    <column columnName="dam">
+                        <columnTitle>Dam</columnTitle>
+                        <url>/ehr/participantView.view?participantId=${dam}</url>
+                    </column>
+                    <column columnName="sire">
+                        <columnTitle>Sire</columnTitle>
+                        <url>/ehr/participantView.view?participantId=${sire}</url>
+                    </column>
+                    <column columnName="birth">
+                        <columnTitle>Birth</columnTitle>
+                        <formatString>Date</formatString>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>

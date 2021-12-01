@@ -1,12 +1,13 @@
-SELECT PROTOCOL_ID AS "objectId",
+SELECT 'PROTOCOL-' || PROTOCOL_ID AS "objectid",
+       PROTOCOL_NUMBER AS "title",
+       PROTOCOL_NUMBER AS "external_id",
+       PROTOCOL_ID AS "protocol",
        DEPARTMENT_ID AS "departmentId",
        PROTOCOL_ID_PREFIX AS "prefix",
        PROTOCOL_ID_SUFFIX AS "suffix",
-       PROTOCOL_SHORT_TITLE AS "title",
-       CASE WHEN PROTOCOL_NUMBER IS NULL THEN 'missing'
-           ELSE PROTOCOL_NUMBER END AS "protocol",
+       PROTOCOL_SHORT_TITLE AS "description",
        APPROVAL_DATE AS "approve",
-       EXPIRATION_DATE AS "expirationDate",
+       EXPIRATION_DATE AS "enddate",
        RENEWAL_DATE AS "renewalDate",
        EMERGENCY_PHONE_NUM AS "emergencyPhoneNumber",
        INACTIVE_DATE AS "inactiveDate",
@@ -35,3 +36,4 @@ SELECT PROTOCOL_ID AS "objectId",
        REVIEW_COMPLETION_DATE AS "reviewCompletionDate",
        HONOR_RESET_YN AS "isHonorReset"
 FROM PROTOCOL
+WHERE PROTOCOL_NUMBER IS NOT NULL

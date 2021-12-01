@@ -5,9 +5,9 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="enddate"/>
-        <column name="room" />
-        <column name="cage" />
-        <column name="remark"/>
+        <column name="destination"/>
+        <column name="description"/>
+        <column name="performedBy"/>
+        <column name="history"/>
     </columns>
 </customView>
