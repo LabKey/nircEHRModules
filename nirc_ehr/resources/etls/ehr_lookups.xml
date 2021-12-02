@@ -47,7 +47,21 @@
             <description>Copy to species target</description>
             <source schemaName="dbo" queryName="q_species"/>
             <destination schemaName="ehr_lookups" queryName="species"
-                         bulkLoad="true" targetOption="merge">
+                         bulkLoad="true" targetOption="truncate">
+            </destination>
+        </transform>
+        <transform id="step6" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to flag values target</description>
+            <source schemaName="dbo" queryName="q_flag_categories"/>
+            <destination schemaName="ehr_lookups" queryName="flag_categories"
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
+            </destination>
+        </transform>
+        <transform id="step7" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to flag values target</description>
+            <source schemaName="dbo" queryName="q_flag_values"/>
+            <destination schemaName="ehr_lookups" queryName="flag_values"
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
             </destination>
         </transform>
     </transforms>
