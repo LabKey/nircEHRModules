@@ -23,13 +23,17 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             }
         }
 
-        let damSire = row.damSire.split(' '); // format - DAM: UNK SIRE: UNK
-        if (damSire[1] && damSire[1] !== 'UNK') {
-            row.dam = damSire[1];
+        if (helper.isETL() && row.damSire) {
+            let damSire = row.damSire.split('DAM:');
 
-        }
-        if (damSire[3] && damSire[3] !== 'UNK') {
-            row.sire = damSire[3];
+            if (damSire.length > 1) {
+                let damAndSire = damSire[1].split("SIRE:")
+                if (damAndSire[0].trim() !== 'UNK' && damAndSire[0].trim() !== row.Id)
+                    row.dam = damAndSire[0].trim();
+
+                if (damAndSire.length > 1 && damAndSire[1].trim() !== 'UNK' && damAndSire[1].trim() !== row.Id)
+                    row.sire = damAndSire[1].trim();
+            }
         }
     }
     else if (row.source === 'Animal Event' && row.eventDate) {
