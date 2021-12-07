@@ -17,7 +17,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         toSet['calculated_status'] = '<span ' + (status.toLowerCase() !== 'alive' ? 'style="background-color:yellow"' : '') + '>'
                 + LABKEY.Utils.encodeHtml(status) + '</span>';
 
-        toSet['species'] = LABKEY.Utils.encodeHtml(row.getSpecies());
+        toSet['species'] = LABKEY.Utils.encodeHtml(row.getSpeciesCommonName());
         toSet['geographic_origin'] = LABKEY.Utils.encodeHtml(row.getGeographicOrigin());
         toSet['gender'] = LABKEY.Utils.encodeHtml(row.getGender());
         toSet['age'] = LABKEY.Utils.encodeHtml(row.getAgeInYearsAndDays());
@@ -40,5 +40,40 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
 
         toSet['location'] = location || 'No active housing';
     },
+
+    appendFlags: function(toSet, results){
+        var values = [];
+        if (results){
+            Ext4.each(results, function(row){
+                var category = row['flag/category'];
+                var highlight = row['flag/category/doHighlight'];
+                var omit = row['flag/category/omitFromOverview'];
+
+                //skip
+                if (omit === true)
+                    return;
+
+                if (category)
+                    category = Ext4.String.trim(category);
+
+                var val = LABKEY.Utils.encodeHtml(this.getFlagDisplayValue(row));
+                var text = val;
+                if (category)
+                    text = LABKEY.Utils.encodeHtml(category) + ': ' + val;
+
+                if (text && highlight)
+                    text = '<span style="background-color:yellow">' + text + '</span>';
+
+                if (text)
+                    values.push(text);
+            }, this);
+
+            if (values.length) {
+                values = Ext4.unique(values);
+            }
+        }
+
+        toSet['flags'] = values.length ? '<a onclick="NIRC_EHR.Utils.showFlagPopup(\'' + LABKEY.Utils.encodeHtml(this.subjectId) + '\', this);">' + values.join('<br>') + '</div>' : null;
+    }
 
 });

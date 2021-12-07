@@ -7,7 +7,6 @@
                anm.GENDER_ID        AS gender,
                anm.SSB_ID.SPECIES_ID           AS species,
                NULL                 AS eventDate,
-               alt.NAME             AS damSire,
                alt.DESCRIPTION      AS acqDateText,
                'Alternate'          AS source
         FROM  ALTERNATE alt
@@ -40,7 +39,6 @@ SELECT '' || anmEvt.ANIMAL_EVENT_ID   AS objectid,
        anm.GENDER_ID         AS gender,
        anm.SSB_ID.SPECIES_ID            AS species,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS eventDate,
-       NULL                  AS damSire,
        NULL                  AS acqDateText,
        'Animal Event'        AS source
 FROM ANIMAL_EVENT anmEvt
