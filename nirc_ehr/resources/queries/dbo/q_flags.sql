@@ -19,10 +19,11 @@ FROM ANIMAL_EVENT anmEvt
 
 WHERE anmEvt.EVENT_ID.EVENT_ID = 1673
   AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
-
+-- 1673 Quarantine - arrival
+-- 1674 Quarantine - release
 UNION
 
-
+-- Other flags
 SELECT anmEvt.ANIMAL_EVENT_ID                                                    AS objectid,
        anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER                                         AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS startdate,

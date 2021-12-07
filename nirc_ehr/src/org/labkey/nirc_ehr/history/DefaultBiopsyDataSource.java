@@ -19,7 +19,6 @@ public class DefaultBiopsyDataSource extends AbstractDataSource
     protected String getHtml(Container c, Results rs, boolean redacted) throws SQLException
     {
         StringBuilder sb = new StringBuilder();
-//        sb.append(safeAppend(rs, "Cause", "cause"));
 
         if (rs.hasColumn(FieldKey.fromString("type")) && rs.getObject("type") != null)
         {
