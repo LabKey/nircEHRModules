@@ -4,13 +4,13 @@ SELECT PROTOCOL_ID AS "protocolId",
        RENEWAL_DATE AS "amendmentDate",
        SUBMISSION_DATE AS "submitted",
        APPROVAL_DATE AS "approved",
-       COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
+       X.modified
 FROM PROTOCOL p
-LEFT JOIN AUDIT_TRAIL adt ON p.PROTOCOL_ID = substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = '))
-AND adt.TABLE_NAME = 'PROTOCOL'
+         LEFT JOIN (
+    SELECT substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = ')) AS protocolId,
+           COALESCE(MAX(CAST(CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
+    FROM AUDIT_TRAIL
+    WHERE TABLE_NAME = 'PROTOCOL'
+    GROUP BY substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = '))
+) X ON X.protocolId = p.PROTOCOL_ID
 WHERE PROTOCOL_TYPE_ID IN (2,3,4)
-GROUP BY PROTOCOL_ID,
-         PROTOCOL_NUMBER,
-         RENEWAL_DATE,
-         SUBMISSION_DATE,
-         APPROVAL_DATE
