@@ -7,8 +7,8 @@
         <column name="date"/>
         <column name="gender"/>
         <column name="species"/>
-        <column name="dam"/>
-        <column name="sire"/>
+        <column name="Id/Demographics/dam"/>
+        <column name="Id/Demographics/sire"/>
         <column name="birth"/>
         <column name="performedBy"/>
         <column name="history"/>
