@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
  */
 
-LABKEY.Utils.requiresScript("nirc_ehr/panel/utils.js", function () {});
+LABKEY.Utils.requiresScript("nirc_ehr/utils.js", function () {});
 
 Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
     extend: 'EHR.panel.AnimalHistoryPanel',
@@ -29,7 +29,7 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
                     idColumn: 'Id',
                     aliasColumn: 'alias'
                 },
-                loadReport: singleSubjectLoadReport
+                loadReport: NIRC_EHR.Utils.singleSubjectLoadReport
             }]
         }
 
@@ -45,10 +45,10 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
                 idColumn: 'Id',
                 aliasColumn: 'alias'
             },
-            loadReport: singleSubjectLoadReport,
+            loadReport: NIRC_EHR.Utils.singleSubjectLoadReport,
             handleFilters: function (tab, filters) {
                 var filterArray = {
-                    subjects: splitIds(this.down('#subjArea').getValue()),
+                    subjects: NIRC_EHR.Utils.splitIds(this.down('#subjArea').getValue()),
                     removable: [],
                     nonRemovable: []
                 };
@@ -85,7 +85,7 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
                 aliasColumn: 'alias'
             },
             addId: function (callback, panel) {
-                var subjectArray = splitIds(this.down('#subjArea').getValue()); // Don't lowercase Ids
+                var subjectArray = NIRC_EHR.Utils.splitIds(this.down('#subjArea').getValue()); // Don't lowercase Ids
 
                 if (subjectArray.length > 0) {
                     subjectArray = Ext4.unique(subjectArray);

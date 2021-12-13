@@ -4,6 +4,7 @@ import org.labkey.api.data.AbstractTableInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.JdbcType;
+import org.labkey.api.data.MutableColumnInfo;
 import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
@@ -47,6 +48,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (matches(ti, "study", "housing"))
         {
             customizeHousingTable(ti);
+        }
+        if (matches(ti, "study", "Animal"))
+        {
+            customizeAnimalTable(ti);
         }
     }
 
@@ -101,11 +106,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 roomCol.setLabel("Days In Room");
                 ti.addColumn(roomCol);
 
-//                SQLFragment sql = new SQLFragment(realTable.getSqlDialect().getDateDiff(Calendar.DATE, "{fn curdate()}", "(SELECT max(h2.enddate) as d FROM " + realTable.getSelectName() + " h2 LEFT JOIN ehr_lookups.rooms r1 ON (r1.room = h2.room) WHERE h2.enddate IS NOT NULL AND h2.enddate <= " + ExprColumn.STR_TABLE_ALIAS + ".date AND h2.participantid = " + ExprColumn.STR_TABLE_ALIAS + ".participantid and r1.area != (select area FROM ehr_lookups.rooms r WHERE r.room = " + ExprColumn.STR_TABLE_ALIAS + ".room))"));
-//                ExprColumn areaCol = new ExprColumn(ti, "daysInArea", sql, JdbcType.INTEGER, realTable.getColumn("participantid"), realTable.getColumn("date"), realTable.getColumn("enddate"));
-//                areaCol.setLabel("Days In Area");
-//                ti.addColumn(areaCol);
-
             }
         }
 
@@ -125,6 +125,45 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         .display("location")));
             }
         }
+    }
+
+    private void customizeAnimalTable(AbstractTableInfo ds)
+    {
+        UserSchema us = getUserSchema(ds, "study");
+
+        if (us == null)
+        {
+            return;
+        }
+
+        if (ds.getColumn("parents") == null)
+        {
+            var col = getWrappedCol(us, ds, "parents", "demographicsParents", "Id", "Id");
+            col.setLabel("Parents");
+            ds.addColumn(col);
+        }
+        if (ds.getColumn("totalOffspring") == null)
+        {
+            var col15 = getWrappedCol(us, ds, "totalOffspring", "demographicsTotalOffspring", "Id", "Id");
+            col15.setLabel("Number of Offspring");
+            col15.setDescription("Shows the total offspring of each animal");
+            ds.addColumn(col15);
+        }
+    }
+
+    private MutableColumnInfo getWrappedCol(UserSchema us, AbstractTableInfo ds, String name, String queryName, String colName, String targetCol)
+    {
+
+        WrappedColumn col = new WrappedColumn(ds.getColumn(colName), name);
+        col.setReadOnly(true);
+        col.setIsUnselectable(true);
+        col.setUserEditable(false);
+        col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ds.getContainerFilter())
+                .table(queryName)
+                .key(targetCol)
+                .display(targetCol)));
+
+        return col;
     }
 
     private TableInfo getRealTable(TableInfo targetTable)

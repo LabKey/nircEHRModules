@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
+import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.module.Module;
@@ -29,6 +30,8 @@ import org.labkey.api.query.DefaultSchema;
 import org.labkey.api.query.QuerySchema;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
+import org.labkey.nirc_ehr.history.DefaultBiopsyDataSource;
+import org.labkey.nirc_ehr.history.DefaultBloodDrawDataSource;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 
@@ -48,7 +51,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 21.021;
+        return 21.023;
     }
 
     @Override
@@ -82,7 +85,12 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerModule(this);
 
         EHRService.get().registerTableCustomizer(this, NIRC_EHRCustomizer.class);
+
+        EHRService.get().registerDemographicsProvider(new ActiveFlagsDemographicsProvider(this));
+
         EHRService.get().registerHistoryDataSource(new DefaultClinicalRemarksDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DefaultBiopsyDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DefaultBloodDrawDataSource(this));
 
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");
