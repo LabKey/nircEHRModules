@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<etl xmlns="http://labkey.org/etl/xml">
+<etl xmlns="http://labkey.org/etl/xml" standalone="false">
     <name>Protocol Assignment</name>
     <description>Assignment data</description>
     <transforms>
@@ -14,8 +14,4 @@
             </destination>
         </transform>
     </transforms>
-
-    <schedule>
-        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
-    </schedule>
 </etl>
