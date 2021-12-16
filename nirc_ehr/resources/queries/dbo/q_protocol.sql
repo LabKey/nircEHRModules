@@ -34,6 +34,14 @@ SELECT 'PROTOCOL-' || PROTOCOL_ID AS "objectid",
        STOCK_YN AS "isStock",
        SUBMISSION_DATE AS "submissionDate",
        REVIEW_COMPLETION_DATE AS "reviewCompletionDate",
-       HONOR_RESET_YN AS "isHonorReset"
-FROM PROTOCOL
+       HONOR_RESET_YN AS "isHonorReset",
+       X.modified
+FROM PROTOCOL p
+LEFT JOIN (
+    SELECT substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = ')) AS protocolId,
+           COALESCE(MAX(CAST(CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
+    FROM AUDIT_TRAIL
+    WHERE TABLE_NAME = 'PROTOCOL'
+    GROUP BY substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = '))
+    ) X ON X.protocolId = p.PROTOCOL_ID
 WHERE PROTOCOL_NUMBER IS NOT NULL

@@ -22,15 +22,6 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 }
             }
         }
-
-        let damSire = row.damSire.split(' '); // format - DAM: UNK SIRE: UNK
-        if (damSire[1] && damSire[1] !== 'UNK') {
-            row.dam = damSire[1];
-
-        }
-        if (damSire[3] && damSire[3] !== 'UNK') {
-            row.sire = damSire[3];
-        }
     }
     else if (row.source === 'Animal Event' && row.eventDate) {
         row.date = row.eventDate;

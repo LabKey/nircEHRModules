@@ -2,7 +2,7 @@
     <dependencies>
         <dependency path="ehr.context" />
 
-        <dependency path="nirc_ehr/panel/utils.js"/>
+        <dependency path="nirc_ehr/utils.js"/>
         <dependency path="ehr/form/field/RoomField.js"/>
         <dependency path="ehr/form/field/CageField.js"/>
 

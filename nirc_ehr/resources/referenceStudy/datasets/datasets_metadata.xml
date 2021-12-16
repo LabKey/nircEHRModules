@@ -24,7 +24,6 @@
                 <propertyURI>urn:ehr.labkey.org/#Remark</propertyURI>
             </column>
         </columns>
-
     </sharedConfig>
     <table tableName="arrival" tableDbType="TABLE">
         <tableTitle>Arrival</tableTitle>
@@ -48,12 +47,6 @@
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
                 <isKeyField>true</isKeyField>
-            </column>
-            <column columnName="dam">
-                <datatype>varchar</datatype>
-            </column>
-            <column columnName="sire">
-                <datatype>varchar</datatype>
             </column>
             <column columnName="gender">
                 <datatype>varchar</datatype>
@@ -113,6 +106,36 @@
             </column>
         </columns>
     </table>
+    <table tableName="biopsy" tableDbType="TABLE">
+        <tableTitle>Biopsy</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="objectid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>true</isKeyField>
+            </column>
+            <column columnName="type">
+                <columnTitle>Type</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="attachmentFile">
+                <columnTitle>Attachment File</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+        </columns>
+    </table>
     <table tableName="protocolAssignment" tableDbType="TABLE">
         <tableTitle>Protocol Assignments</tableTitle>
         <columns>
@@ -150,12 +173,6 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="dam">
-                <datatype>varchar</datatype>
-            </column>
-            <column columnName="sire">
-                <datatype>varchar</datatype>
             </column>
             <column columnName="gender">
                 <datatype>varchar</datatype>
@@ -394,6 +411,35 @@
             </column>
         </columns>
     </table>
+    <table tableName="flags" tableDbType="TABLE">
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="objectid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>true</isKeyField>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="flag">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+                <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
+            </column>
+        </columns>
+        <tableTitle>Animal Record Flags</tableTitle>
+    </table>
     <table tableName="housing" tableDbType="TABLE">
         <tableTitle>Housing</tableTitle>
         <columns>
@@ -433,6 +479,34 @@
                 <datatype>timestamp</datatype>
             </column>
         </columns>
+    </table>
+    <table tableName="inbreeding" tableDbType="TABLE">
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="coefficient">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="project">
+                <datatype>integer</datatype>
+                <propertyURI>urn:ehr.labkey.org/#Project</propertyURI>
+            </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+                <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
+            </column>
+        </columns>
+        <tableTitle>Inbreeding Coefficients</tableTitle>
     </table>
     <table tableName="obs" tableDbType="TABLE">
         <tableTitle>Observations</tableTitle>
