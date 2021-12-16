@@ -531,7 +531,7 @@
             <column columnName="category">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="remark">
+            <column columnName="diagnosis">
                 <datatype>varchar</datatype>
             </column>
         </columns>
