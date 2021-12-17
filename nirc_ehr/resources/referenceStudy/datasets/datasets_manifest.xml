@@ -23,6 +23,7 @@
         <dataset name="drug" id="1017" category="Clinical" type="Standard"/>
         <dataset name="exemptions" id="1016" category="Colony Management" type="Standard"/>
         <dataset name="flags" id="1020" category="Colony Management" type="Standard"/>
+        <dataset name="foster" id="1010" category="Colony Management" type="Standard"/>
         <dataset name="housing" id="1018" category="Colony Management" type="Standard"/>
         <dataset name="inbreeding" id="1021" category="Colony Management" type="Standard"/>
         <dataset name="necropsy" id="1019" category="Pathology" type="Standard"/>
