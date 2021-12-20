@@ -1,7 +1,10 @@
 SELECT anmEvt.ANIMAL_EVENT_ID                                                    AS objectid,
        anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER                                         AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS administrationDate,
-       staff.email_prefix                                                        AS performedby,
+       (CASE
+            WHEN anmEvt.STAFF_ID.EMAIL_ADDRESS IS NULL THEN 'unknown'
+            ELSE substring(anmEvt.STAFF_ID.EMAIL_ADDRESS, 1,
+                           locate('@', anmEvt.STAFF_ID.EMAIL_ADDRESS) - 1) END)  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS type,
        anmEvt.RESULT                                                             AS amount,
        anmEvt.ATTACHMENT_PATH                                                    AS attachmentFile,

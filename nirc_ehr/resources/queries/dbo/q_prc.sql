@@ -3,6 +3,10 @@ SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS prcDate,
        CAST(COALESCE (adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified,
        anmCmt.TEXT AS remark,
+       (CASE
+            WHEN anmEvt.STAFF_ID.EMAIL_ADDRESS IS NULL THEN 'unknown'
+            ELSE substring(anmEvt.STAFF_ID.EMAIL_ADDRESS, 1,
+                           locate('@', anmEvt.STAFF_ID.EMAIL_ADDRESS) - 1) END)  AS performedby,
        anmEvt.EVENT_ID.NAME AS type
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
