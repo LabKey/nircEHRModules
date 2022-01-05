@@ -15,36 +15,16 @@
  */
 SELECT
     d.id,
-    coalesce(p2.parent, d.dam) as dam,
+    d.dam as dam,
+    'Observed' as damType,
+    d.sire as sire,
+    'Observed' as sireType,
     CASE
-        WHEN p2.parent IS NOT NULL THEN p2.method
-        WHEN d.dam IS NOT NULL THEN 'Observed'
-        ELSE null
-        END as damType,
-
-    coalesce(p1.parent, d.sire) as sire,
-    CASE
-        WHEN p1.parent IS NOT NULL THEN p1.method
-        WHEN d.sire IS NOT NULL THEN 'Observed'
-        ELSE null
-        END as sireType,
-    CASE
-        WHEN (coalesce(p2.parent, d.dam) IS NOT NULL AND coalesce(p1.parent, d.sire) IS NOT NULL) THEN 2
-        WHEN (coalesce(p2.parent, d.dam) IS NOT NULL OR coalesce(p1.parent, d.sire) IS NOT NULL) THEN 1
+        WHEN d.dam IS NOT NULL AND d.sire IS NOT NULL THEN 2
+        WHEN d.dam IS NOT NULL OR d.sire IS NOT NULL THEN 1
         ELSE 0
         END as numParents
 FROM study.demographics d
 
-         LEFT JOIN (
-    select p1.id, min(p1.method) as method, max(p1.parent) as parent
-    FROM study.parentage p1
-    WHERE (p1.method = 'Genetic' OR p1.method = 'Provisional Genetic') AND p1.relationship = 'Sire' --AND p1.enddate IS NULL
-    GROUP BY p1.Id
-) p1 ON (d.Id = p1.id)
-         LEFT JOIN (
-    select p2.id, min(p2.method) as method, max(p2.parent) as parent
-    FROM study.parentage p2
-    WHERE (p2.method = 'Genetic' OR p2.method = 'Provisional Genetic') AND p2.relationship = 'Dam' --AND p2.enddate IS NULL
-    GROUP BY p2.Id
-) p2 ON (d.Id = p2.id)
+-- TODO: Incorporate fostering? Genetic testing?
 
