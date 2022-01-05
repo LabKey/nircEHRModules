@@ -2,9 +2,9 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER                                         AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS obsDate,
        (CASE
-            WHEN anmEvt.STAFF_ID.EMAIL_ADDRESS IS NULL THEN 'unknown'
-            ELSE substring(anmEvt.STAFF_ID.EMAIL_ADDRESS, 1,
-                           locate('@', anmEvt.STAFF_ID.EMAIL_ADDRESS) - 1) END)      AS performedby,
+            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
+            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
+                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS category,
        anmCmt.TEXT                                                               AS remark,
        anmEvt.DIAGNOSIS                                                          AS diagnosis,

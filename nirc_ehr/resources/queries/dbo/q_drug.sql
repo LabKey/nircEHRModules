@@ -2,16 +2,15 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER                                         AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS administrationDate,
        (CASE
-            WHEN anmEvt.STAFF_ID.EMAIL_ADDRESS IS NULL THEN 'unknown'
-            ELSE substring(anmEvt.STAFF_ID.EMAIL_ADDRESS, 1,
-                           locate('@', anmEvt.STAFF_ID.EMAIL_ADDRESS) - 1) END)  AS performedby,
+            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
+            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
+                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS type,
        anmEvt.RESULT                                                             AS amount,
        anmEvt.ATTACHMENT_PATH                                                    AS attachmentFile,
        anmCmt.TEXT                                                               AS remark,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
 FROM ANIMAL_EVENT anmEvt
-         LEFT JOIN staffInfo staff ON staff.staff_id = anmEvt.STAFF_ID
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
          LEFT JOIN EVENT_EVENT_GROUP evtEvtGrp ON evtEvtGrp.EVENT_ID = anmEvt.EVENT_ID
          LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
@@ -30,7 +29,8 @@ WHERE (evtEvtGrp.EVENT_GROUP_ID = 31 AND evtEvtGrp.EVENT_ID = 2261) -- Sedation 
 GROUP BY anmEvt.ANIMAL_EVENT_ID,
          anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER,
          anmEvt.EVENT_DATETIME,
-         staff.email_prefix,
+         anmEvt.STAFF_ID.STAFF_FIRST_NAME,
+         anmEvt.STAFF_ID.STAFF_LAST_NAME,
          anmEvt.EVENT_ID.NAME,
          anmEvt.RESULT,
          anmEvt.ATTACHMENT_PATH,
