@@ -25,7 +25,7 @@ public class NIRCUserCreateTransform extends ColumnTransform
     private transient Map<String, Integer> _sourceUserNameMap = new HashMap<>();
 
     /**
-     * Search for the user by the email prefix (ie. jdoe@labkey.com matches jdoe).
+     * Search for the user by the first|last name (ex. john|doe)
      * Return null if user not found.
      */
     private Integer getUserByFirstLastName(String name)
@@ -64,8 +64,8 @@ public class NIRCUserCreateTransform extends ColumnTransform
             }
             else
             {
-                String EMAIl_PATTERN = "[^a-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+";
-                displayName = (nameParts[0] + nameParts[1]).replaceAll(EMAIl_PATTERN, "");
+                String EMAIL_PATTERN = "[^a-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+";
+                displayName = (nameParts[0] + nameParts[1]).replaceAll(EMAIL_PATTERN, "");
             }
 
             newUser.setFirstName(nameParts[0]);

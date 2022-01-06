@@ -14,6 +14,5 @@ FROM ANIMAL_EVENT anmEvt
          LEFT JOIN EVENT_EVENT_GROUP evtEvtGrp ON evtEvtGrp.EVENT_ID = anmEvt.EVENT_ID
          LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
 
-WHERE evtEvtGrp.EVENT_GROUP_ID = 64
+WHERE evtEvtGrp.EVENT_GROUP_ID = 64   -- 64 Hormones
   AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
---     64 Hormones
