@@ -64,7 +64,7 @@ public class NIRCUserCreateTransform extends ColumnTransform
             }
             else
             {
-                String EMAIL_PATTERN = "[^a-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+";
+                String EMAIL_PATTERN = "[^a-zA-Z0-9!#$%&@'*+{-}/=?^_`{|}~.]+";
                 displayName = (nameParts[0] + nameParts[1]).replaceAll(EMAIL_PATTERN, "");
             }
 
@@ -140,6 +140,7 @@ public class NIRCUserCreateTransform extends ColumnTransform
                     user.setCreatedBy(savedUser.getCreatedBy());
                     user.setUserId(savedUser.getUserId());
                     user.setEntityId(savedUser.getEntityId());
+                    user.setActive(savedUser.isActive());
 
                     UserManager.updateUser(getContainerUser().getUser(), user);
                     UserManager.setUserActive(getContainerUser().getUser(), user, false);
