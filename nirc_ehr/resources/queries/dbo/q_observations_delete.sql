@@ -13,5 +13,6 @@ WHERE adt.PRIMARY_KEY_VALUES LIKE '%ANIMAL_EVENT_ID%' AND
          adt.REFERENCE LIKE '%Abnormal attitude%' OR
          adt.REFERENCE LIKE '%No appetite%' OR
          adt.REFERENCE LIKE '%No Stool%' OR
-         adt.REFERENCE LIKE '%Cage Appendage Entrapment%' ) AND
+         adt.REFERENCE LIKE '%Cage Appendage Entrapment%' OR
+         adt.REFERENCE LIKE '%Behav Assess%') AND
         adt.COLUMN_NAME = 'DELETE'

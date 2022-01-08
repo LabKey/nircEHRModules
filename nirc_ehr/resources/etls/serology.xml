@@ -10,6 +10,7 @@
                          bulkLoad="true" batchSize="5000" targetOption="merge">
                 <columnTransforms>
                     <column source="serologyDate" target="date"/>
+                    <column source="performedby" target="performedby" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
                 </columnTransforms>
             </destination>
         </transform>

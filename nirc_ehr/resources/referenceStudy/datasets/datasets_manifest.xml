@@ -16,16 +16,19 @@
         <dataset name="breeder" id="1008" category="Colony Management" type="Standard"/>
         <dataset name="clinremarks" id="1009" category="Colony Management" type="Standard"/>
         <dataset name="cases" id="1023" category="Clinical" type="Standard"/>
+        <dataset name="chemistryResults" id="1024" category="ClinPath" type="Standard"/>
         <dataset name="deaths" id="1011" category="Pathology" demographicData="true" type="Standard"/>
         <dataset name="demographics" id="1012" category="Colony Management" demographicData="true" type="Standard"/>
         <dataset name="departure" id="1013" category="Colony Management" type="Standard"/>
         <dataset name="drug" id="1017" category="Clinical" type="Standard"/>
         <dataset name="exemptions" id="1016" category="Colony Management" type="Standard"/>
         <dataset name="flags" id="1020" category="Colony Management" type="Standard"/>
+        <dataset name="foster" id="1010" category="Colony Management" type="Standard"/>
         <dataset name="housing" id="1018" category="Colony Management" type="Standard"/>
         <dataset name="inbreeding" id="1021" category="Colony Management" type="Standard"/>
         <dataset name="necropsy" id="1019" category="Pathology" type="Standard"/>
         <dataset name="obs" id="1025" category="Clinical" type="Standard"/>
+        <dataset name="notes" id="1027" category="Colony Management" type="Standard"/>
         <dataset name="pairings" id="1028" category="Colony Management" type="Standard"/>
         <dataset name="physicalExam" id="1029" category="Clinical" type="Standard"/>
         <dataset name="problem" id="1030" category="Clinical" type="Standard"/>
