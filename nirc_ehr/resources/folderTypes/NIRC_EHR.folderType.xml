@@ -29,7 +29,7 @@
             </selectors>
             <preferredWebParts>
                 <webPart>
-                    <name>Animal History</name>
+                    <name>NIRC Animal History</name>
                     <location>body</location>
                 </webPart>
             </preferredWebParts>
