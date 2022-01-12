@@ -9,6 +9,8 @@ import org.labkey.api.security.permissions.ReadPermission;
 
 public class NIRC_EHRUserSchema extends SimpleUserSchema
 {
+    public static String SCHEMA_NAME = "nirc_ehr";
+
     public NIRC_EHRUserSchema(String name, @Nullable String description, User user, Container container, DbSchema dbschema)
     {
         super(name, description, user, container, dbschema);

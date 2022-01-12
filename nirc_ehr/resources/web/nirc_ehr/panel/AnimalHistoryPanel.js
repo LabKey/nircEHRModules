@@ -18,6 +18,35 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
 
     },
 
+    handleFiltersNIRC: function (tab, filters) {
+        var filterArray = {
+            subjects: NIRC_EHR.Utils.splitIds(this.down('#subjArea').getValue()),
+            removable: [],
+            nonRemovable: []
+        };
+
+        var subjectFieldName;
+        if(tab.report) {
+            subjectFieldName = tab.report.subjectFieldName;
+        }
+        else if(tab.items[0].report) {
+            subjectFieldName = tab.items[0].report.subjectFieldName;
+        }
+        if (!subjectFieldName) {
+            return filterArray;
+        }
+
+        if (filters && filters.length) {
+            filterArray.subjects = Ext4.unique(filterArray.subjects.concat(filters)).sort();
+            if (filters.length == 1)
+                filterArray.nonRemovable.push(LABKEY.Filter.create(subjectFieldName, filters[0], LABKEY.Filter.Types.EQUAL));
+            else
+                filterArray.nonRemovable.push(LABKEY.Filter.create(subjectFieldName, filters.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF));
+        }
+
+        return filterArray;
+    },
+
     getAllowedFilterTypes: function(){
         if (this.filterTypes && this.filterTypes.length > 0 && this.filterTypes[0].xtype === "ehr-hiddensinglesubjectfiltertype") {
             return [{
@@ -29,7 +58,8 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
                     idColumn: 'Id',
                     aliasColumn: 'alias'
                 },
-                loadReport: NIRC_EHR.Utils.singleSubjectLoadReport
+                loadReport: NIRC_EHR.Utils.singleSubjectLoadReport,
+                handleFilters: this.handleFiltersNIRC
             }]
         }
 
@@ -46,34 +76,7 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
                 aliasColumn: 'alias'
             },
             loadReport: NIRC_EHR.Utils.singleSubjectLoadReport,
-            handleFilters: function (tab, filters) {
-                var filterArray = {
-                    subjects: NIRC_EHR.Utils.splitIds(this.down('#subjArea').getValue()),
-                    removable: [],
-                    nonRemovable: []
-                };
-
-                var subjectFieldName;
-                if(tab.report) {
-                    subjectFieldName = tab.report.subjectFieldName;
-                }
-                else if(tab.items[0].report) {
-                    subjectFieldName = tab.items[0].report.subjectFieldName;
-                }
-                if (!subjectFieldName) {
-                    return filterArray;
-                }
-
-                if (filters && filters.length) {
-                    filterArray.subjects = Ext4.unique(filterArray.subjects.concat(filters)).sort();
-                    if (filters.length == 1)
-                        filterArray.nonRemovable.push(LABKEY.Filter.create(subjectFieldName, filters[0], LABKEY.Filter.Types.EQUAL));
-                    else
-                        filterArray.nonRemovable.push(LABKEY.Filter.create(subjectFieldName, filters.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF));
-                }
-
-                return filterArray;
-            },
+            handleFilters: this.handleFiltersNIRC
         },{
             xtype: 'ehr-multianimalfiltertype',
             inputValue: EHR.panel.MultiAnimalFilterType.filterName,

@@ -1,6 +1,10 @@
 SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
        anm.ANIMAL_ID_NUMBER AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS vitalDate,
+       (CASE
+            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
+            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
+                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        CAST(COALESCE (adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified,
        CASE WHEN anmEvt.EVENT_ID.NAME LIKE '%Blood Pressure%' THEN anmEvt.TEXT_RESULT END AS bloodPressure,
        CASE WHEN anmEvt.EVENT_ID.NAME LIKE '%Heart Rate%' THEN anmEvt.RESULT END AS heartRate,

@@ -23,17 +23,15 @@ GROUP BY alt.ALTERNATE_ID,
          anm.SSB_ID.SPECIES_ID,
          alt.NAME,
          alt.DESCRIPTION
---     )
--- GROUP BY objectid, Id, performedby, birth, gender, species, eventDate, remark, description, source
 
 UNION
 
 SELECT '' || anmEvt.ANIMAL_EVENT_ID   AS objectid,
        anm.ANIMAL_ID_NUMBER  AS Id,
        (CASE
-            WHEN anmEvt.STAFF_ID.EMAIL_ADDRESS IS NULL THEN 'unknown'
-            ELSE substring(anmEvt.STAFF_ID.EMAIL_ADDRESS, 1,
-                        locate('@', anmEvt.STAFF_ID.EMAIL_ADDRESS) - 1) END)      AS performedby,
+            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
+            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
+                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified,
        anm.BIRTH_DATE        AS birth,
        anm.GENDER_ID         AS gender,

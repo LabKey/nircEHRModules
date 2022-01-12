@@ -1,4 +1,4 @@
-SELECT 'PROTOCOL-' || PROTOCOL_ID AS "objectid",
+SELECT PROTOCOL_ID AS "objectid",
        PROTOCOL_NUMBER AS "title",
        PROTOCOL_NUMBER AS "external_id",
        PROTOCOL_ID AS "protocol",

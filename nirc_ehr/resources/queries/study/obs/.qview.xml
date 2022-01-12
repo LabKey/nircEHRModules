@@ -6,6 +6,7 @@
         <column name="Id"/>
         <column name="date"/>
         <column name="category"/>
+        <column name="diagnosis"/>
         <column name="remark"/>
     </columns>
 </customView>
