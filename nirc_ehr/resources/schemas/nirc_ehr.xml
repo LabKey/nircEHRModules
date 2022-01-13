@@ -49,4 +49,52 @@
         </columns>
     </table>
 
+    <table tableName="Staff" tableDbType="TABLE">
+        <tableTitle>Staff</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="Container"/>
+            <column columnName="staffId"/>
+            <column columnName="email"/>
+            <column columnName="firstName"/>
+            <column columnName="lastName"/>
+            <column columnName="middleName"/>
+            <column columnName="displayName"/>
+            <column columnName="hireDate"/>
+            <column columnName="lastEmployDate"/>
+            <column columnName="officePhone"/>
+            <column columnName="officePhoneExt"/>
+            <column columnName="officeFax"/>
+            <column columnName="homePhone"/>
+            <column columnName="beeperPhone"/>
+            <column columnName="cellPhone"/>
+            <column columnName="emergencyContact"/>
+            <column columnName="emergencyPhone"/>
+            <column columnName="homeAddress1"/>
+            <column columnName="homeAddress2"/>
+            <column columnName="homeCity"/>
+            <column columnName="homeState"/>
+            <column columnName="homeZip"/>
+            <column columnName="homeZipExt"/>
+            <column columnName="homeCountry"/>
+            <column columnName="officeAddress1"/>
+            <column columnName="officeAddress2"/>
+            <column columnName="officeCity"/>
+            <column columnName="officeState"/>
+            <column columnName="officeZip"/>
+            <column columnName="officeZipExt"/>
+            <column columnName="officeCountry"/>
+            <column columnName="birthDate"/>
+            <column columnName="hsName"/>
+            <column columnName="collegeGradDate"/>
+            <column columnName="collegeDegree"/>
+            <column columnName="collegeMajor"/>
+            <column columnName="collegeName"/>
+            <column columnName="supervisor"/>
+            <column columnName="positionName"/>
+            <column columnName="positionDesc"/>
+            <column columnName="active"/>
+        </columns>
+    </table>
+
 </tables>

@@ -3,6 +3,10 @@ SELECT anm.ANIMAL_ID AS "objectId",
        anmEvt.ANIMAL_EVENT_ID AS "animalEventId",
        anm.ANIMAL_ID_NUMBER AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS transferDate,
+       (CASE
+            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
+            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
+                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        REPLACE(anmCmt.TEXT, ';', ':') AS remark,
        anmEvt.LOCATION_ID AS location
 FROM ANIMAL_EVENT anmEvt
