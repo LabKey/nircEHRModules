@@ -46,7 +46,7 @@ CREATE TABLE nirc_ehr.Staff
 );
 CREATE INDEX IX_nirc_ehr_Staff_Container ON nirc_ehr.Staff (Container);
 
-SELECT core.executeJavaUpgradeCode('reloadStudy');
+SELECT core.executeJavaUpgradeCode('reloadFolder');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/staff;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/alopecia;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/arrival;truncate');
