@@ -36,10 +36,31 @@
             schemaName: 'ehr_lookups',
             queryName: 'ageclass',
             pk: 'value'
+        }, {
+            label: 'Country',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'country',
+            pk: 'value'
+        }, {
+            label: 'Country Category',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'country_category',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {
             return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : 1;
+        });
+
+        // Keep lookup sets as the first item
+        tables.splice(0, 0, {
+            label: 'Lookup Sets',
+            doSkip: true,
+            populateFn: 'populateLookupSets',
+            schemaName: 'ehr_lookups',
+            queryName: 'lookup_sets'
         });
 
         var webpart = <%=webpartContext%>;
@@ -229,7 +250,27 @@
                 if (this.pendingInserts==0){
                     document.getElementById('msgbox').innerHTML += '<div>Populate Complete</div>';
                 }
-            }
+            },
+
+            populateLookupSets: function () {
+                this.pendingInserts++;
+
+                //records for reports:
+                var config = {
+                    schemaName: 'ehr_lookups',
+                    queryName: 'lookup_sets',
+                    moduleResource: '/data/lookup_sets.tsv',
+                    success: this.onSuccess,
+                    failure: this.onError,
+                    scope: this
+                };
+
+                config.success = function (results, xhr, c) {
+                    console.log('lookup set records inserted');
+                };
+
+                importFile(config);
+            },
         });
 
         Ext4.create('NIRC_EHR.panel.PopulateDataPanel').render(webpart.wrapperDivId);
