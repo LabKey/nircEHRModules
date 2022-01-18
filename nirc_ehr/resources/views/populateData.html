@@ -265,25 +265,8 @@
                     scope: this
                 };
 
-                var origSuccess = config.success;
                 config.success = function (results, xhr, c) {
                     console.log('lookup set records inserted');
-
-                    LABKEY.Ajax.request({
-                        url: LABKEY.ActionURL.buildURL('admin', 'caches', '/'),
-                        method: 'post',
-                        params: {
-                            clearCaches: 1
-                        },
-                        scope: this,
-                        success: function () {
-                            console.log('cleared caches');
-                            origSuccess.call(config.scope, results, xhr, c);
-                        },
-                        failure: function () {
-                            console.error(arguments);
-                        }
-                    });
                 };
 
                 importFile(config);
