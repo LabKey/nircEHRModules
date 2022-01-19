@@ -1,0 +1,26 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="Lot" tableDbType="TABLE">
+                <tableTitle>Animal Lot</tableTitle>
+                <columns>
+                    <column columnName="LotId">
+                        <columnTitle>Lot Id</columnTitle>
+                    </column>
+                    <column columnName="AnimalShipment">
+                        <columnTitle>Animal Shipment</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>AnimalShipment</fkTable>
+                            <fkColumnName>AnimalShipmentId</fkColumnName>
+                            <fkDisplayColumnName>AnimalShipmentId</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="LotSequence">
+                        <columnTitle>Lot Sequence</columnTitle>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>
