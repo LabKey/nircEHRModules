@@ -4,7 +4,7 @@
     <description>Shipment lot data</description>
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
-            <description>Copy to user target</description>
+            <description>Copy to lot number target</description>
             <source schemaName="dbo" queryName="q_lot_number"/>
             <destination schemaName="nirc_ehr" queryName="Lot"
                          bulkLoad="true" targetOption="truncate">
