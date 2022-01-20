@@ -147,3 +147,30 @@ CREATE TABLE nirc_ehr.AnimalReqOrderEsig
     CONSTRAINT FK_ANIMALREQORDERESIG_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Req_Order_Esig_Container ON nirc_ehr.AnimalReqOrderEsig (Container);
+
+
+CREATE TABLE nirc_ehr.AnimalVendor
+(
+    AnimalVendorId          INTEGER,
+    VendorApprovalCode      INTEGER,
+    VendorName              TEXT,
+    StreetAddress1          TEXT,
+    StreetAddress2          TEXT,
+    City                    TEXT,
+    StateProv               TEXT,
+    Country                 TEXT,
+    Zip                     TEXT,
+    ZipExt                  TEXT,
+    PhoneNumber             TEXT,
+    FaxNumber               TEXT,
+    Comments                TEXT,
+    InternalVendor          TEXT,
+    Container               entityId NOT NULL,
+    Created                 TIMESTAMP,
+    CreatedBy               USERID,
+    Modified                TIMESTAMP,
+    ModifiedBy              USERID,
+    CONSTRAINT PK_ANIMALVENDOR PRIMARY KEY (AnimalVendorId),
+    CONSTRAINT FK_ANIMALVENDOR_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
+);
+CREATE INDEX IX_Nirc_Ehr_Animal_Vendor_Container ON nirc_ehr.AnimalVendor (Container);

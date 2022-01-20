@@ -5,3 +5,4 @@ delivery_state	Delivery State	value	title
 esig_events	ESig Events	value	title
 req_order_state	Req Order State	value	title
 req_order_type	Req Order Type	value	title
+vendor_approval_code	Vendor Approval Code	value	title

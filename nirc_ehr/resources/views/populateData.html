@@ -72,6 +72,12 @@
             schemaName: 'ehr_lookups',
             queryName: 'req_order_type',
             pk: 'value'
+        }, {
+            label: 'Vendor Approval Code',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'vendor_approval_code',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {
