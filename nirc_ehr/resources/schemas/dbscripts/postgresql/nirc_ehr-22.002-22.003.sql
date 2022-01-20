@@ -91,3 +91,59 @@ CREATE TABLE nirc_ehr.AnimalDeliveryEsig
     CONSTRAINT FK_ANIMALDELIVERESIG_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Delivery_Esig_Container ON nirc_ehr.AnimalDeliveryEsig (Container);
+
+
+CREATE TABLE nirc_ehr.AnimalReqOrder
+(
+    AnimalReqOrderId        INTEGER,
+    AnimalVendor            INTEGER,
+    RequisitionerStaff      USERID,
+    RequestNumber           TEXT,
+    RequisitionNumber       TEXT,
+    Bill                    BOOLEAN,
+    ShippingContact         TEXT,
+    CreateDate              TIMESTAMP,
+    ReqOrderType            INTEGER,
+    ReqOrderState           INTEGER,
+    BillToAccount           INTEGER,
+    BillToStaff             USERID,
+    PerDiemAccount          INTEGER,
+    PerDiemStaff            USERID,
+    SubmittedByStaff        USERID,
+    ApprovedByStaff         USERID,
+    SubmittedDate           TIMESTAMP,
+    ApprovedDate            TIMESTAMP,
+    Segment                 INTEGER,
+    Project                 INTEGER,
+    SiteCage                TEXT,
+    SiteRoom                TEXT,
+    SiteBuilding            TEXT,
+    SiteArea                TEXT,
+    CreatedByStaff          USERID,
+    Container               entityId NOT NULL,
+    Created                 TIMESTAMP,
+    CreatedBy               USERID,
+    Modified                TIMESTAMP,
+    ModifiedBy              USERID,
+    CONSTRAINT PK_ANIMALREQORDER PRIMARY KEY (AnimalReqOrderId),
+    CONSTRAINT FK_ANIMALREQORDER_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
+);
+CREATE INDEX IX_Nirc_Ehr_Animal_Req_Order_Container ON nirc_ehr.AnimalReqOrder (Container);
+
+
+CREATE TABLE nirc_ehr.AnimalReqOrderEsig
+(
+    EsigId                  INTEGER,
+    AnimalReqOrder          INTEGER,
+    EsigEvent               INTEGER,
+    UserProfile             USERID,
+    EsigDateTime            TIMESTAMP,
+    Container               entityId NOT NULL,
+    Created                 TIMESTAMP,
+    CreatedBy               USERID,
+    Modified                TIMESTAMP,
+    ModifiedBy              USERID,
+    CONSTRAINT PK_ANIMALREQORDERESIG PRIMARY KEY (EsigId),
+    CONSTRAINT FK_ANIMALREQORDERESIG_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
+);
+CREATE INDEX IX_Nirc_Ehr_Animal_Req_Order_Esig_Container ON nirc_ehr.AnimalReqOrderEsig (Container);

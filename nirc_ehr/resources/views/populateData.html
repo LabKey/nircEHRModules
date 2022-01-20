@@ -60,6 +60,18 @@
             schemaName: 'ehr_lookups',
             queryName: 'esig_events',
             pk: 'value'
+        }, {
+            label: 'Req Order State',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'req_order_state',
+            pk: 'value'
+        }, {
+            label: 'Req Order Type',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'req_order_type',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {

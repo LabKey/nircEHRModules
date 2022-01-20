@@ -1,19 +1,19 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="AnimalDeliveryEsig" tableDbType="TABLE">
-                <tableTitle>Animal Delivery ESignature</tableTitle>
+            <table tableName="AnimalReqOrderEsig" tableDbType="TABLE">
+                <tableTitle>Animal Req Order ESignature</tableTitle>
                 <columns>
                     <column columnName="EsigId">
                         <columnTitle>Esig Id</columnTitle>
                     </column>
-                    <column columnName="AnimalDelivery">
-                        <columnTitle>Animal Delivery</columnTitle>
+                    <column columnName="AnimalReqOrder">
+                        <columnTitle>Animal Req Order</columnTitle>
                         <fk>
                             <fkDbSchema>nirc_ehr</fkDbSchema>
-                            <fkTable>AnimalDelivery</fkTable>
-                            <fkColumnName>AnimalDeliveryId</fkColumnName>
-                            <fkDisplayColumnName>AnimalDeliveryId</fkDisplayColumnName>
+                            <fkTable>AnimalReqOrder</fkTable>
+                            <fkColumnName>AnimalReqOrderId</fkColumnName>
+                            <fkDisplayColumnName>AnimalReqOrderId</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="EsigEvent">

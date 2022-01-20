@@ -18,7 +18,7 @@ SELECT
     ad.PER_DIEM_STAFF_ID.STAFF_FIRST_NAME
         || '|' || ad.PER_DIEM_STAFF_ID.STAFF_LAST_NAME as PerDiemStaff,
 FROM ANIMAL_DELIVERY ad
-         LEFT JOIN q_cages cg ON cg.location = ad.LOCATION_ID
-         LEFT JOIN q_rooms rm ON rm.room = ad.LOCATION_ID
-         LEFT JOIN q_areas ar ON ar.LOCATION_ID = ad.LOCATION_ID
-         LEFT JOIN q_buildings bu ON bu.BuildingId = ad.LOCATION_ID
+    LEFT JOIN q_cages cg ON cg.location = ad.LOCATION_ID
+    LEFT JOIN q_rooms rm ON rm.room = ad.LOCATION_ID
+    LEFT JOIN q_areas ar ON ar.LOCATION_ID = ad.LOCATION_ID
+    LEFT JOIN q_buildings bu ON bu.BuildingId = ad.LOCATION_ID

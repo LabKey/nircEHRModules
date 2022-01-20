@@ -3,3 +3,5 @@ country	Country	value	title
 country_category	Country Category	value	title
 delivery_state	Delivery State	value	title
 esig_events	ESig Events	value	title
+req_order_state	Req Order State	value	title
+req_order_type	Req Order Type	value	title
