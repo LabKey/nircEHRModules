@@ -18,6 +18,12 @@
                     </column>
                     <column columnName="ShipTo">
                         <columnTitle>Ship To</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>ShipTo</fkTable>
+                            <fkColumnName>ShipToId</fkColumnName>
+                            <fkDisplayColumnName>Name</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="cage">
                         <columnTitle>Cage</columnTitle>

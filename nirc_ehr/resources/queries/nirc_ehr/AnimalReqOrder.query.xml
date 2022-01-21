@@ -9,6 +9,12 @@
                     </column>
                     <column columnName="AnimalVendor">
                         <columnTitle>Animal Vendor</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>AnimalVendor</fkTable>
+                            <fkColumnName>AnimalVendorId</fkColumnName>
+                            <fkDisplayColumnName>VendorName</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="RequisitionerStaff">
                         <columnTitle>Requisitioner Staff</columnTitle>

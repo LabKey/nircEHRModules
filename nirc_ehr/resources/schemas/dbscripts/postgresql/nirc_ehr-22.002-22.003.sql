@@ -174,3 +174,42 @@ CREATE TABLE nirc_ehr.AnimalVendor
     CONSTRAINT FK_ANIMALVENDOR_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Vendor_Container ON nirc_ehr.AnimalVendor (Container);
+
+
+CREATE TABLE nirc_ehr.ShipTo
+(
+    ShipToId                INTEGER,
+    Name                    TEXT,
+    Country                 TEXT,
+    City                    TEXT,
+    StreetAddress1          TEXT,
+    StreetAddress2          TEXT,
+    StateProv               TEXT,
+    Zip                     TEXT,
+    ZipExt                  TEXT,
+    Container               entityId NOT NULL,
+    Created                 TIMESTAMP,
+    CreatedBy               USERID,
+    Modified                TIMESTAMP,
+    ModifiedBy              USERID,
+    CONSTRAINT PK_SHIPTO PRIMARY KEY (ShipToId),
+    CONSTRAINT FK_SHIPTO_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
+);
+CREATE INDEX IX_Nirc_Ehr_Ship_To_Container ON nirc_ehr.ShipTo (Container);
+
+
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;country;/data/country.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;country_category;/data/country_category.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;delivery_state;/data/delivery_state.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;esig_events;/data/esig_events.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;req_order_state;/data/req_order_state.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;req_order_type;/data/req_order_type.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;vendor_approval_code;/data/vendor_approval_code.tsv');
+
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalDelivery');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalReqOrder');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalShipment');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalVendor');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/lotNumber');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/shipTo');
