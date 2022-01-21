@@ -97,4 +97,197 @@
         </columns>
     </table>
 
+    <table tableName="Lot" tableDbType="TABLE">
+        <tableTitle>Lot</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="LotId"/>
+            <column columnName="AnimalShipment"/>
+            <column columnName="Date"/>
+            <column columnName="LotSequence"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="AnimalShipment" tableDbType="TABLE">
+        <tableTitle>Animal Shipment</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="AnimalShipmentId"/>
+            <column columnName="ReceivedByStaff"/>
+            <column columnName="Cage"/>
+            <column columnName="Room"/>
+            <column columnName="Building"/>
+            <column columnName="Area"/>
+            <column columnName="AnimalDelivery"/>
+            <column columnName="LotNumber"/>
+            <column columnName="ReceivedDate"/>
+            <column columnName="BirthDate"/>
+            <column columnName="MalesReceived"/>
+            <column columnName="FemalesReceived"/>
+            <column columnName="EitherReceived"/>
+            <column columnName="CanUnreceive"/>
+            <column columnName="CostCenter"/>
+            <column columnName="Dam"/>
+            <column columnName="Sire"/>
+            <column columnName="RecordedDate"/>
+            <column columnName="RecordedBy"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="AnimalDelivery" tableDbType="TABLE">
+        <tableTitle>Animal Delivery</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="AnimalDeliveryId"/>
+            <column columnName="AnimalShipment"/>
+            <column columnName="ShipTo"/>
+            <column columnName="cage"/>
+            <column columnName="room"/>
+            <column columnName="building"/>
+            <column columnName="area"/>
+            <column columnName="AnimalReqOrder"/>
+            <column columnName="DeliveryState"/>
+            <column columnName="DeliveryNumber"/>
+            <column columnName="ExpectedDate"/>
+            <column columnName="Project"/>
+            <column columnName="BillToAccount"/>
+            <column columnName="BillToStaff"/>
+            <column columnName="PerDiemAccount"/>
+            <column columnName="PerDiemStaff"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="AnimalDeliveryEsig" tableDbType="TABLE">
+        <tableTitle>Animal Delivery ESignature</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="EsigId"/>
+            <column columnName="AnimalDelivery"/>
+            <column columnName="EsigEvent"/>
+            <column columnName="UserProfile"/>
+            <column columnName="EsigDateTime"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="AnimalReqOrder" tableDbType="TABLE">
+        <tableTitle>Animal Req Order</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="AnimalReqOrderId"/>
+            <column columnName="AnimalVendor"/>
+            <column columnName="RequisitionerStaff"/>
+            <column columnName="RequestNumber"/>
+            <column columnName="RequisitionNumber"/>
+            <column columnName="Bill"/>
+            <column columnName="ShippingContact"/>
+            <column columnName="CreateDate"/>
+            <column columnName="ReqOrderType"/>
+            <column columnName="ReqOrderState"/>
+            <column columnName="BillToAccount"/>
+            <column columnName="BillToStaff"/>
+            <column columnName="PerDiemAccount"/>
+            <column columnName="PerDiemStaff"/>
+            <column columnName="SubmittedByStaff"/>
+            <column columnName="ApprovedByStaff"/>
+            <column columnName="SubmittedDate"/>
+            <column columnName="ApprovedDate"/>
+            <column columnName="Segment"/>
+            <column columnName="Project"/>
+            <column columnName="SiteCage"/>
+            <column columnName="SiteRoom"/>
+            <column columnName="SiteBuilding"/>
+            <column columnName="SiteArea"/>
+            <column columnName="CreatedByStaff"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="AnimalReqOrderEsig" tableDbType="TABLE">
+        <tableTitle>Animal Req Order ESignature</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="EsigId"/>
+            <column columnName="AnimalReqOrder"/>
+            <column columnName="EsigEvent"/>
+            <column columnName="UserProfile"/>
+            <column columnName="EsigDateTime"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="AnimalVendor" tableDbType="TABLE">
+        <tableTitle>Animal Vendor</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="AnimalVendorId"/>
+            <column columnName="VendorApprovalCode"/>
+            <column columnName="VendorName"/>
+            <column columnName="StreetAddress1"/>
+            <column columnName="StreetAddress2"/>
+            <column columnName="City"/>
+            <column columnName="StateProv"/>
+            <column columnName="Country"/>
+            <column columnName="Zip"/>
+            <column columnName="ZipExt"/>
+            <column columnName="PhoneNumber"/>
+            <column columnName="FaxNumber"/>
+            <column columnName="Comments"/>
+            <column columnName="InternalVendor"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="ShipTo" tableDbType="TABLE">
+        <tableTitle>Ship To</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="ShipToId"/>
+            <column columnName="Name"/>
+            <column columnName="Country"/>
+            <column columnName="City"/>
+            <column columnName="StreetAddress1"/>
+            <column columnName="StreetAddress2"/>
+            <column columnName="StateProv"/>
+            <column columnName="Zip"/>
+            <column columnName="ZipExt"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
 </tables>
