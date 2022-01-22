@@ -76,6 +76,14 @@
                     <column columnName="calculated_status">
                         <columnTitle>Animal Status</columnTitle>
                     </column>
+                    <column columnName="lotId">
+                        <columnTitle>Lot</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>Lot</fkTable>
+                            <fkColumnName>LotId</fkColumnName>
+                        </fk>
+                    </column>
                 </columns>
             </table>
         </tables>

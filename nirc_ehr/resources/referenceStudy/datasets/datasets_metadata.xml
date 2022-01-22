@@ -346,6 +346,9 @@
             <column columnName="calculated_status">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="lotId">
+                <datatype>integer</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="departure" tableDbType="TABLE">
