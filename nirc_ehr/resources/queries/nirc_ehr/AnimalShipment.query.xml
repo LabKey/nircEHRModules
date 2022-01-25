@@ -50,6 +50,12 @@
                     </column>
                     <column columnName="AnimalDelivery">
                         <columnTitle>Animal Delivery</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>AnimalDelivery</fkTable>
+                            <fkColumnName>AnimalDeliveryId</fkColumnName>
+                            <fkDisplayColumnName>AnimalDeliveryId</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="LotNumber">
                         <columnTitle>Lot Id</columnTitle>

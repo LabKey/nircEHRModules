@@ -115,7 +115,7 @@
                             <fkDbSchema>ehr</fkDbSchema>
                             <fkTable>project</fkTable>
                             <fkColumnName>project</fkColumnName>
-                            <fkDisplayColumnName>title</fkDisplayColumnName>
+                            <fkDisplayColumnName>displayName</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="SiteCage">
