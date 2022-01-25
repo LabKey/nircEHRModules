@@ -32,7 +32,7 @@ function onUpsert(helper, scriptErrors, row, oldRow){
             if (damAndSire.length === 1) {
                 row.damSire.split('SIRE');
             }
-            if(damAndSire[0].trim() === row.Id)
+            if (damAndSire[0].trim() === row.Id)
             {
                 console.log(row.Id + " listed as it's own dam")
             }
