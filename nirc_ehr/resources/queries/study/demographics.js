@@ -39,7 +39,7 @@ function onUpsert(helper, scriptErrors, row, oldRow){
             if (damAndSire[0].trim() !== 'UNK' && damAndSire[0].trim() !== row.Id)
                 row.dam = damAndSire[0].trim();
 
-            if(damAndSire.length > 1 &&damAndSire[1].trim() === row.Id)
+            if (damAndSire.length > 1 && damAndSire[1].trim() === row.Id)
             {
                 console.log(row.Id + " listed as it's own sire")
             }
