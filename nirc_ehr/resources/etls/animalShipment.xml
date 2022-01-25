@@ -14,4 +14,8 @@
             </destination>
         </transform>
     </transforms>
+
+    <schedule>
+        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
+    </schedule>
 </etl>
