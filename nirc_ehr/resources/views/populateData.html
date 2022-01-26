@@ -48,6 +48,36 @@
             schemaName: 'ehr_lookups',
             queryName: 'country_category',
             pk: 'value'
+        }, {
+            label: 'Delivery State',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'delivery_state',
+            pk: 'value'
+        }, {
+            label: 'ESig Events',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'esig_events',
+            pk: 'value'
+        }, {
+            label: 'Req Order State',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'req_order_state',
+            pk: 'value'
+        }, {
+            label: 'Req Order Type',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'req_order_type',
+            pk: 'value'
+        }, {
+            label: 'Vendor Approval Code',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'vendor_approval_code',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {
@@ -270,7 +300,7 @@
                 };
 
                 importFile(config);
-            },
+            }
         });
 
         Ext4.create('NIRC_EHR.panel.PopulateDataPanel').render(webpart.wrapperDivId);

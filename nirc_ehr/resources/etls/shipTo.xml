@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <etl xmlns="http://labkey.org/etl/xml">
-    <name>Staff</name>
-    <description>Staff data</description>
+    <name>Ship To</name>
+    <description>Ship To data</description>
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
-            <description>Copy to user target</description>
-            <source schemaName="dbo" queryName="q_staff"/>
-            <destination schemaName="nirc_ehr" queryName="staff"
+            <description>Copy to ship to target</description>
+            <source schemaName="dbo" queryName="q_ship_to"/>
+            <destination schemaName="nirc_ehr" queryName="ShipTo"
                          bulkLoad="true" targetOption="truncate">
             </destination>
         </transform>

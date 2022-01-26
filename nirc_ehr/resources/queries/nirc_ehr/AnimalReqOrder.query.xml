@@ -1,0 +1,166 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="AnimalReqOrder" tableDbType="TABLE">
+                <tableTitle>Animal Req Order</tableTitle>
+                <columns>
+                    <column columnName="AnimalReqOrderId">
+                        <columnTitle>Animal Req Order Id</columnTitle>
+                    </column>
+                    <column columnName="AnimalVendor">
+                        <columnTitle>Animal Vendor</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>AnimalVendor</fkTable>
+                            <fkColumnName>AnimalVendorId</fkColumnName>
+                            <fkDisplayColumnName>VendorName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="RequisitionerStaff">
+                        <columnTitle>Requisitioner Staff</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="RequestNumber">
+                        <columnTitle>Request Number</columnTitle>
+                    </column>
+                    <column columnName="RequisitionNumber">
+                        <columnTitle>Requisition Number</columnTitle>
+                    </column>
+                    <column columnName="Bill">
+                        <columnTitle>Bill</columnTitle>
+                    </column>
+                    <column columnName="ShippingContact">
+                        <columnTitle>Shipping Contact</columnTitle>
+                    </column>
+                    <column columnName="CreateDate">
+                        <columnTitle>Create Date</columnTitle>
+                    </column>
+                    <column columnName="ReqOrderType">
+                        <columnTitle>Req Order Type</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>req_order_type</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                            <fkDisplayColumnName>title</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="ReqOrderState">
+                        <columnTitle>Req Order State</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>req_order_state</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                            <fkDisplayColumnName>title</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="BillToAccount">
+                        <columnTitle>Bill To Account</columnTitle>
+                    </column>
+                    <column columnName="BillToStaff">
+                        <columnTitle>Bill To Staff</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="PerDiemAccount">
+                        <columnTitle>Per Diem Account</columnTitle>
+                    </column>
+                    <column columnName="PerDiemStaff">
+                        <columnTitle>Per Diem Staff</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="SubmittedByStaff">
+                        <columnTitle>Submitted By Staff</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="ApprovedByStaff">
+                        <columnTitle>Approved By Staff</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="SubmittedDate">
+                        <columnTitle>Submitted Date</columnTitle>
+                    </column>
+                    <column columnName="ApprovedDate">
+                        <columnTitle>Approved Date</columnTitle>
+                    </column>
+                    <column columnName="Segment">
+                        <columnTitle>Segment</columnTitle>
+                    </column>
+                    <column columnName="Project">
+                        <columnTitle>Project</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr</fkDbSchema>
+                            <fkTable>project</fkTable>
+                            <fkColumnName>project</fkColumnName>
+                            <fkDisplayColumnName>displayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="SiteCage">
+                        <columnTitle>Site Cage</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>cage</fkTable>
+                            <fkColumnName>cage</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="SiteRoom">
+                        <columnTitle>Site Room</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>rooms</fkTable>
+                            <fkColumnName>room</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="SiteBuilding">
+                        <columnTitle>Site Building</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>buildings</fkTable>
+                            <fkColumnName>name</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="SiteArea">
+                        <columnTitle>Site Area</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>areas</fkTable>
+                            <fkColumnName>area</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="CreatedByStaff">
+                        <columnTitle>Created By Staff</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>

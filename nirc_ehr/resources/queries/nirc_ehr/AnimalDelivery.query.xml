@@ -1,0 +1,115 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="AnimalDelivery" tableDbType="TABLE">
+                <tableTitle>Animal Delivery</tableTitle>
+                <columns>
+                    <column columnName="AnimalDeliveryId">
+                        <columnTitle>Animal Delivery Id</columnTitle>
+                    </column>
+                    <column columnName="AnimalShipment">
+                        <columnTitle>Animal Shipment</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>AnimalShipment</fkTable>
+                            <fkColumnName>AnimalShipmentId</fkColumnName>
+                            <fkDisplayColumnName>AnimalShipmentId</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="ShipTo">
+                        <columnTitle>Ship To</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>ShipTo</fkTable>
+                            <fkColumnName>ShipToId</fkColumnName>
+                            <fkDisplayColumnName>Name</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="cage">
+                        <columnTitle>Cage</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>cage</fkTable>
+                            <fkColumnName>cage</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="room">
+                        <columnTitle>Room</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>rooms</fkTable>
+                            <fkColumnName>room</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="building">
+                        <columnTitle>Building</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>buildings</fkTable>
+                            <fkColumnName>name</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="area">
+                        <columnTitle>Area</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>areas</fkTable>
+                            <fkColumnName>area</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="AnimalReqOrder">
+                        <columnTitle>Animal Req Order</columnTitle>
+                    </column>
+                    <column columnName="DeliveryState">
+                        <columnTitle>Delivery State</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>delivery_state</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                            <fkDisplayColumnName>title</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="DeliveryNumber">
+                        <columnTitle>Delivery Number</columnTitle>
+                    </column>
+                    <column columnName="ExpectedDate">
+                        <columnTitle>Expected Date</columnTitle>
+                    </column>
+                    <column columnName="Project">
+                        <columnTitle>Project</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr</fkDbSchema>
+                            <fkTable>project</fkTable>
+                            <fkColumnName>project</fkColumnName>
+                            <fkDisplayColumnName>displayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="BillToAccount">
+                        <columnTitle>Bill To Account</columnTitle>
+                    </column>
+                    <column columnName="BillToStaff">
+                        <columnTitle>Bill To Staff</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="PerDiemAccount">
+                        <columnTitle>Per Diem Account</columnTitle>
+                    </column>
+                    <column columnName="PerDiemStaff">
+                        <columnTitle>Per Diem Staff</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>
