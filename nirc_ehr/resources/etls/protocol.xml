@@ -11,6 +11,11 @@
                 <alternateKeys>
                     <column name="protocol"/>
                 </alternateKeys>
+                <columnTransforms>
+                    <column source="investigatorId" target="InvestigatorId" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
+                    <column source="authorId" target="AuthorId" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
+                    <column source="ownerId" target="OwnerId" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
+                </columnTransforms>
             </destination>
         </transform>
         <transform id="step2" type="org.labkey.di.pipeline.TransformTask">

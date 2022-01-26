@@ -6,3 +6,7 @@ esig_events	ESig Events	value	title
 req_order_state	Req Order State	value	title
 req_order_type	Req Order Type	value	title
 vendor_approval_code	Vendor Approval Code	value	title
+protocol_category	Protocol Category	value	title
+protocol_state	Protocol State	value	title
+protocol_type	Protocol Type	value	title
+questionnaire	Questionnaire	value	title
