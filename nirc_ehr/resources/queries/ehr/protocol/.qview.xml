@@ -2,6 +2,7 @@
     <columns>
         <column name="protocol"/>
         <column name="title"/>
+        <column name="shortDescription"/>
         <column name="description"/>
         <column name="prefix"/>
         <column name="suffix"/>

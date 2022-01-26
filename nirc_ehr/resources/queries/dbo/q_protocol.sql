@@ -12,7 +12,7 @@ SELECT
        p.DEPARTMENT_ID          AS departmentId,
        p.PROTOCOL_ID_PREFIX     AS prefix,
        p.PROTOCOL_ID_SUFFIX     AS suffix,
-       p.PROTOCOL_SHORT_TITLE   AS description,
+       p.PROTOCOL_SHORT_TITLE   AS shortDescription,
        p.APPROVAL_DATE          AS approve,
        p.EXPIRATION_DATE        AS endDate,
        p.RENEWAL_DATE           AS renewalDate,
@@ -45,6 +45,7 @@ SELECT
        rm.name                  AS room,
        bu.Name                  AS building,
        area.area                AS area,
+       pd.text                  AS description,
        X.modified
 FROM PROTOCOL p
     LEFT JOIN (
@@ -58,4 +59,5 @@ FROM PROTOCOL p
     LEFT JOIN q_rooms rm ON rm.room = p.LOCATION_ID
     LEFT JOIN q_areas area ON area.LOCATION_ID = p.LOCATION_ID
     LEFT JOIN q_buildings bu ON bu.BuildingId = p.LOCATION_ID
+    LEFT JOIN PROTOCOL_DESCRIPTION pd ON pd.PROTOCOL_ID = p.PROTOCOL_ID
 WHERE p.PROTOCOL_NUMBER IS NOT NULL

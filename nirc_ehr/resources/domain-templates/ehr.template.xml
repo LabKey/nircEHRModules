@@ -18,6 +18,9 @@
                 <dat:column columnName="suffix">
                     <dat:rangeURI>string</dat:rangeURI>
                 </dat:column>
+                <dat:column columnName="shortDescription">
+                    <dat:rangeURI>string</dat:rangeURI>
+                </dat:column>
                 <dat:column columnName="expirationDate">
                     <dat:rangeURI>dateTime</dat:rangeURI>
                 </dat:column>
