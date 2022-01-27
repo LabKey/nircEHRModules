@@ -102,6 +102,18 @@
             schemaName: 'ehr_lookups',
             queryName: 'questionnaire',
             pk: 'value'
+        }, {
+            label: 'Cost Type',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'cost_type',
+            pk: 'value'
+        }, {
+            label: 'Expense Class',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'expense_class',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {

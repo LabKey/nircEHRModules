@@ -94,6 +94,10 @@
             <column columnName="positionName"/>
             <column columnName="positionDesc"/>
             <column columnName="active"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
         </columns>
     </table>
 
@@ -328,6 +332,47 @@
             <column columnName="AvailableAmt"/>
             <column columnName="PercentLeft"/>
             <column columnName="SegmentId"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="Account" tableDbType="TABLE">
+        <tableTitle>Account</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="AccountId"/>
+            <column columnName="AccountNumber"/>
+            <column columnName="Department"/>
+            <column columnName="CostType"/>
+            <column columnName="ExpenseClass"/>
+            <column columnName="ProjectCode"/>
+            <column columnName="Description"/>
+            <column columnName="Active"/>
+            <column columnName="Cage"/>
+            <column columnName="Room"/>
+            <column columnName="Building"/>
+            <column columnName="Area"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="Department" tableDbType="TABLE">
+        <tableTitle>Department</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="DepartmentId"/>
+            <column columnName="Name"/>
+            <column columnName="Description"/>
+            <column columnName="ParentDepartment"/>
+            <column columnName="Staff"/>
             <column columnName="Container"/>
             <column columnName="Created"/>
             <column columnName="CreatedBy"/>

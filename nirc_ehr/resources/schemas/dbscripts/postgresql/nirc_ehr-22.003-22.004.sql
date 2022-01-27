@@ -1,4 +1,11 @@
 
+ALTER TABLE nirc_ehr.Staff
+ADD COLUMN Created TIMESTAMP,
+ADD COLUMN CreatedBy USERID,
+ADD COLUMN Modified TIMESTAMP,
+ADD COLUMN CreatedBy USERID;
+
+
 CREATE TABLE nirc_ehr.ProtocolEsig
 (
     EsigId                  INTEGER,
@@ -43,3 +50,45 @@ CREATE TABLE nirc_ehr.ProtocolUsage
     CONSTRAINT FK_PROTOCOLUSAGE_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Protocol_Usage_Container ON nirc_ehr.ProtocolUsage (Container);
+
+CREATE TABLE nirc_ehr.Account
+(
+    AccountId               INTEGER,
+    AccountNumber           TEXT,
+    Department              INTEGER,
+    CostType                INTEGER,
+    ExpenseClass            INTEGER,
+    ProjectCode             INTEGER,
+    Description             TEXT,
+    Active                  BOOLEAN,
+    Cage                    TEXT,
+    Room                    TEXT,
+    Building                TEXT,
+    Area                    TEXT,
+    Container               entityId NOT NULL,
+    Created                 TIMESTAMP,
+    CreatedBy               USERID,
+    Modified                TIMESTAMP,
+    ModifiedBy              USERID,
+    CONSTRAINT PK_ACCOUNT PRIMARY KEY (AccountId),
+    CONSTRAINT FK_ACCOUNT_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
+);
+CREATE INDEX IX_Nirc_Ehr_Account_Container ON nirc_ehr.Account (Container);
+
+
+CREATE TABLE nirc_ehr.Department
+(
+    DepartmentId            INTEGER,
+    Name                    TEXT,
+    Description             TEXT,
+    ParentDepartment        INTEGER,
+    Staff                   USERID,
+    Container               entityId NOT NULL,
+    Created                 TIMESTAMP,
+    CreatedBy               USERID,
+    Modified                TIMESTAMP,
+    ModifiedBy              USERID,
+    CONSTRAINT PK_DEPARTMENT PRIMARY KEY (DepartmentId),
+    CONSTRAINT FK_DEPARTMENT_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
+);
+CREATE INDEX IX_Nirc_Ehr_Department_Container ON nirc_ehr.Department (Container);
