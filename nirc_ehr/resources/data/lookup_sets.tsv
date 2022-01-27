@@ -12,3 +12,4 @@ protocol_type	Protocol Type	value	title
 questionnaire	Questionnaire	value	title
 cost_type	Cost Type	value	title
 expense_class	Expense Class	value	description
+cost_center	Cost Center	value	title

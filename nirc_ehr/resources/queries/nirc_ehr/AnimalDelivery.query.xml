@@ -59,6 +59,12 @@
                     </column>
                     <column columnName="AnimalReqOrder">
                         <columnTitle>Animal Req Order</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>AnimalReqOrder</fkTable>
+                            <fkColumnName>AnimalReqOrderId</fkColumnName>
+                            <fkDisplayColumnName>AnimalReqOrder</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="DeliveryState">
                         <columnTitle>Delivery State</columnTitle>
@@ -86,6 +92,12 @@
                     </column>
                     <column columnName="BillToAccount">
                         <columnTitle>Bill To Account</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>Account</fkTable>
+                            <fkColumnName>AccountId</fkColumnName>
+                            <fkDisplayColumnName>AccountNumber</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="BillToStaff">
                         <columnTitle>Bill To Staff</columnTitle>
@@ -98,6 +110,12 @@
                     </column>
                     <column columnName="PerDiemAccount">
                         <columnTitle>Per Diem Account</columnTitle>
+                        <fk>
+                            <fkDbSchema>nirc_ehr</fkDbSchema>
+                            <fkTable>Account</fkTable>
+                            <fkColumnName>AccountId</fkColumnName>
+                            <fkDisplayColumnName>AccountNumber</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="PerDiemStaff">
                         <columnTitle>Per Diem Staff</columnTitle>

@@ -114,6 +114,12 @@
             schemaName: 'ehr_lookups',
             queryName: 'expense_class',
             pk: 'value'
+        }, {
+            label: 'Cost Center',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'cost_center',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {
