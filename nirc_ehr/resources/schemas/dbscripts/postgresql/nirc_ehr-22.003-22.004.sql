@@ -3,7 +3,7 @@ ALTER TABLE nirc_ehr.Staff
 ADD COLUMN Created TIMESTAMP,
 ADD COLUMN CreatedBy USERID,
 ADD COLUMN Modified TIMESTAMP,
-ADD COLUMN CreatedBy USERID;
+ADD COLUMN ModifiedBy USERID;
 
 
 CREATE TABLE nirc_ehr.ProtocolEsig
@@ -92,3 +92,20 @@ CREATE TABLE nirc_ehr.Department
     CONSTRAINT FK_DEPARTMENT_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Department_Container ON nirc_ehr.Department (Container);
+
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;cost_center;/data/cost_center.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;cost_type;/data/cost_type.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;expense_class;/data/expense_class.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_category;/data/protocol_category.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_state;/data/protocol_state.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_type;/data/protocol_type.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;questionnaire;/data/questionnaire.tsv');
+
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/staff;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolEsig');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolUsage');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/procedure');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/account');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/department');
