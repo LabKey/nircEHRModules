@@ -13,3 +13,7 @@ questionnaire	Questionnaire	value	title
 cost_type	Cost Type	value	title
 expense_class	Expense Class	value	description
 cost_center	Cost Center	value	title
+disposition_codes	Disposition Codes	value	title
+termination_reason_codes	Termination Reason Codes Codes	value	title
+keyword	Keyword	value	title
+clinremarks_category	Clinremarks Category	value	title

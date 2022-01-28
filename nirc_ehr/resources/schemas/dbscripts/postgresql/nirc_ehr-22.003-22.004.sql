@@ -94,14 +94,15 @@ CREATE TABLE nirc_ehr.Department
 CREATE INDEX IX_Nirc_Ehr_Department_Container ON nirc_ehr.Department (Container);
 
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;cost_center;/data/cost_center.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;cost_type;/data/cost_type.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;expense_class;/data/expense_class.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_category;/data/protocol_category.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_state;/data/protocol_state.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_type;/data/protocol_type.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;questionnaire;/data/questionnaire.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;gender_codes;/data/gender_codes.tsv');
 
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ehr_lookups');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/staff;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolEsig');
