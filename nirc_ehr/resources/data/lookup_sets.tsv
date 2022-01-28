@@ -6,3 +6,14 @@ esig_events	ESig Events	value	title
 req_order_state	Req Order State	value	title
 req_order_type	Req Order Type	value	title
 vendor_approval_code	Vendor Approval Code	value	title
+protocol_category	Protocol Category	value	title
+protocol_state	Protocol State	value	title
+protocol_type	Protocol Type	value	title
+questionnaire	Questionnaire	value	title
+cost_type	Cost Type	value	title
+expense_class	Expense Class	value	description
+cost_center	Cost Center	value	title
+disposition_codes	Disposition Codes	value	title
+termination_reason_codes	Termination Reason Codes Codes	value	title
+keyword	Keyword	value	title
+clinremarks_category	Clinremarks Category	value	title

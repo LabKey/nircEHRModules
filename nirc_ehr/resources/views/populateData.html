@@ -78,6 +78,48 @@
             schemaName: 'ehr_lookups',
             queryName: 'vendor_approval_code',
             pk: 'value'
+        }, {
+            label: 'Protocol State',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'protocol_state',
+            pk: 'value'
+        }, {
+            label: 'Protocol Type',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'protocol_type',
+            pk: 'value'
+        }, {
+            label: 'Protocol Category',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'protocol_category',
+            pk: 'value'
+        }, {
+            label: 'Questionnaire',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'questionnaire',
+            pk: 'value'
+        }, {
+            label: 'Cost Type',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'cost_type',
+            pk: 'value'
+        }, {
+            label: 'Expense Class',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'expense_class',
+            pk: 'value'
+        }, {
+            label: 'Gender Codes',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'gender_codes',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {
