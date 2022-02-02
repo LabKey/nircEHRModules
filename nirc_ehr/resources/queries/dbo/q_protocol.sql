@@ -1,47 +1,63 @@
-SELECT PROTOCOL_ID AS "objectid",
-       PROTOCOL_NUMBER AS "title",
-       PROTOCOL_NUMBER AS "external_id",
-       PROTOCOL_ID AS "protocol",
-       DEPARTMENT_ID AS "departmentId",
-       PROTOCOL_ID_PREFIX AS "prefix",
-       PROTOCOL_ID_SUFFIX AS "suffix",
-       PROTOCOL_SHORT_TITLE AS "description",
-       APPROVAL_DATE AS "approve",
-       EXPIRATION_DATE AS "enddate",
-       RENEWAL_DATE AS "renewalDate",
-       EMERGENCY_PHONE_NUM AS "emergencyPhoneNumber",
-       INACTIVE_DATE AS "inactiveDate",
-       NEXT_REVIEW_DATE AS "nextReviewDate",
-       LOCATION_ID AS "locationId",
-       EFFECTIVE_DATE AS "effectiveDate",
-       CURRENT_STATE AS "currentState",
-       USER_REFERENCE_NUMBER AS "userReferenceNumber",
-       UNRESTRICTED_VIEW_YN AS "isUnrestrictedView",
-       AUDIT_YN AS "isAudit",
-       AUDIT_YN_MODIFIED_YN AS "isAuditModified",
-       PROTOCOL_TYPE_ID AS "protocolTypeId",
-       PARENT_PROTOCOL_ID AS "parentProtocolId",
-       QUESTIONNAIRE_ID AS "questionnaireId",
-       AMENDMENT_REASON AS "amendmentReason",
-       REQUESTED_EFFECTIVE_DATE AS "requestedEffectiveDate",
-       PROTOCOL_CATEGORY_ID AS "protocolCategoryId",
-       OBJECTIVE AS "objective",
-       RATIONALE AS "rationale",
-       TISSUE_HARVEST_YN AS "isTissueHarvest",
-       ORDER_TRACKING_YN AS "isOrderTracking",
-       LONG_TERM_YN AS "isLongTerm",
-       IN_VIVO_YN AS "isInVivo",
-       STOCK_YN AS "isStock",
-       SUBMISSION_DATE AS "submissionDate",
-       REVIEW_COMPLETION_DATE AS "reviewCompletionDate",
-       HONOR_RESET_YN AS "isHonorReset",
+SELECT
+       p.PROTOCOL_ID            AS objectid,
+       p.PROTOCOL_NUMBER        AS title,
+       p.PI_ID.STAFF_FIRST_NAME
+           || '|' || p.PI_ID.STAFF_LAST_NAME as investigatorId,
+       p.AUTHOR_ID.STAFF_FIRST_NAME
+           || '|' || p.AUTHOR_ID.STAFF_LAST_NAME as authorId,
+       p.OWNER_ID.STAFF_FIRST_NAME
+           || '|' || p.OWNER_ID.STAFF_LAST_NAME as ownerId,
+       p.PROTOCOL_NUMBER        AS external_id,
+       p.PROTOCOL_ID            AS protocol,
+       p.DEPARTMENT_ID          AS departmentId,
+       p.PROTOCOL_ID_PREFIX     AS prefix,
+       p.PROTOCOL_ID_SUFFIX     AS suffix,
+       p.PROTOCOL_SHORT_TITLE   AS shortDescription,
+       p.APPROVAL_DATE          AS approve,
+       p.EXPIRATION_DATE        AS endDate,
+       p.RENEWAL_DATE           AS renewalDate,
+       p.EMERGENCY_PHONE_NUM    AS emergencyPhoneNumber,
+       p.INACTIVE_DATE          AS inactiveDate,
+       p.NEXT_REVIEW_DATE       AS nextReviewDate,
+       p.EFFECTIVE_DATE         AS effectiveDate,
+       p.CURRENT_STATE          AS currentState,
+       p.USER_REFERENCE_NUMBER  AS userReferenceNumber,
+       p.UNRESTRICTED_VIEW_YN   AS isUnrestrictedView,
+       p.AUDIT_YN               AS isAudit,
+       p.AUDIT_YN_MODIFIED_YN   AS isAuditModified,
+       p.PROTOCOL_TYPE_ID       AS protocolTypeId,
+       p.PARENT_PROTOCOL_ID     AS parentProtocolId,
+       p.QUESTIONNAIRE_ID       AS questionnaireId,
+       p.AMENDMENT_REASON       AS amendmentReason,
+       p.REQUESTED_EFFECTIVE_DATE AS requestedEffectiveDate,
+       p.PROTOCOL_CATEGORY_ID   AS protocolCategoryId,
+       p.OBJECTIVE              AS objective,
+       p.RATIONALE              AS rationale,
+       p.TISSUE_HARVEST_YN      AS isTissueHarvest,
+       p.ORDER_TRACKING_YN      AS isOrderTracking,
+       p.LONG_TERM_YN           AS isLongTerm,
+       p.IN_VIVO_YN             AS isInVivo,
+       p.STOCK_YN               AS isStock,
+       p.SUBMISSION_DATE        AS submissionDate,
+       p.REVIEW_COMPLETION_DATE AS reviewCompletionDate,
+       p.HONOR_RESET_YN         AS isHonorReset,
+       cg.cage                  AS cage,
+       rm.name                  AS room,
+       bu.Name                  AS building,
+       area.area                AS area,
+       pd.text                  AS description,
        X.modified
 FROM PROTOCOL p
-LEFT JOIN (
-    SELECT substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = ')) AS protocolId,
-           COALESCE(MAX(CAST(CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
-    FROM AUDIT_TRAIL
-    WHERE TABLE_NAME = 'PROTOCOL'
-    GROUP BY substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = '))
-    ) X ON X.protocolId = p.PROTOCOL_ID
-WHERE PROTOCOL_NUMBER IS NOT NULL
+    LEFT JOIN (
+        SELECT substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = ')) AS protocolId,
+               COALESCE(MAX(CAST(CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
+        FROM AUDIT_TRAIL
+        WHERE TABLE_NAME = 'PROTOCOL'
+        GROUP BY substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = '))
+        ) X ON X.protocolId = p.PROTOCOL_ID
+    LEFT JOIN q_cages cg ON cg.location = p.LOCATION_ID
+    LEFT JOIN q_rooms rm ON rm.room = p.LOCATION_ID
+    LEFT JOIN q_areas area ON area.LOCATION_ID = p.LOCATION_ID
+    LEFT JOIN q_buildings bu ON bu.BuildingId = p.LOCATION_ID
+    LEFT JOIN PROTOCOL_DESCRIPTION pd ON pd.PROTOCOL_ID = p.PROTOCOL_ID
+WHERE p.PROTOCOL_NUMBER IS NOT NULL

@@ -3,6 +3,7 @@ package org.labkey.nirc_ehr.table;
 import org.labkey.api.data.AbstractTableInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
+import org.labkey.api.data.HtmlDisplayColumnFactory;
 import org.labkey.api.data.JdbcType;
 import org.labkey.api.data.MutableColumnInfo;
 import org.labkey.api.data.SQLFragment;
@@ -52,6 +53,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (matches(ti, "study", "Animal"))
         {
             customizeAnimalTable(ti);
+        }
+        if (matches(ti, "ehr", "protocol"))
+        {
+            customizeProtocolTable(ti);
         }
     }
 
@@ -149,6 +154,13 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             col15.setDescription("Shows the total offspring of each animal");
             ds.addColumn(col15);
         }
+    }
+
+    private void customizeProtocolTable(AbstractTableInfo ti)
+    {
+        var descriptionCol = ti.getMutableColumn("description");
+        if (null != descriptionCol)
+            descriptionCol.setDisplayColumnFactory(new HtmlDisplayColumnFactory());
     }
 
     private MutableColumnInfo getWrappedCol(UserSchema us, AbstractTableInfo ds, String name, String queryName, String colName, String targetCol)

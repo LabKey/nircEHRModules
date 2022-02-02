@@ -1,5 +1,0 @@
-
-SELECT
-    GENDER_ID AS code,
-    NAME AS meaning
-FROM GENDER
