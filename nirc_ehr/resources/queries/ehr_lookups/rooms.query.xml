@@ -1,0 +1,20 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="rooms" tableDbType="TABLE">
+                <tableTitle>Rooms</tableTitle>
+                <columns>
+                    <column columnName="floor">
+                        <columnTitle>Floor</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>floors</fkTable>
+                            <fkColumnName>floor</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>

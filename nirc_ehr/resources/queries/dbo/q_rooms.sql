@@ -1,9 +1,11 @@
-SELECT LOC1.LOCATION_ID      AS room,
-       LOC1.LOCATION_NAME    AS name,
-       LOC2.LOCATION_NAME    AS floor,
-       LOC3.Name             AS building,
-       LOC3.Area             AS area,
-FROM LOCATION LOC1
-JOIN LOCATION LOC2 ON LOC1.PARENT_LOCATION_ID = LOC2.LOCATION_ID
-JOIN q_buildings LOC3 ON LOC3.BuildingId = LOC2.PARENT_LOCATION_ID
-WHERE LOC1.LOCATION_TYPE_ID = 4 -- Room
+SELECT
+    room.LOCATION_ID        AS room,
+    room.LOCATION_NAME      AS name,
+    floor.LOCATION_ID       AS floor,
+    building.LOCATION_ID    AS building,
+    area.LOCATION_ID        AS area
+FROM LOCATION room
+JOIN LOCATION floor ON room.PARENT_LOCATION_ID = floor.LOCATION_ID
+JOIN LOCATION building ON floor.PARENT_LOCATION_ID = building.LOCATION_ID
+JOIN LOCATION area ON building.PARENT_LOCATION_ID = area.LOCATION_ID
+WHERE room.LOCATION_TYPE_ID = 4 -- Room

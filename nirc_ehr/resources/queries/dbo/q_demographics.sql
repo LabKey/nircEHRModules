@@ -15,12 +15,18 @@ SELECT anm.ANIMAL_ID_NUMBER AS Id,
        anm.LOT_NUMBER_ID AS lotId,
        st.status AS calculated_status,
        alt.NAME AS damSire,
+       altOrigin.Name AS geographic_origin,
+       altSrc.Name AS source,
+       altCites.Name AS CITES,
        COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
 FROM Animal anm
 LEFT JOIN AUDIT_TRAIL adt ON anm.ANIMAL_ID_NUMBER = substring(PRIMARY_KEY_VALUES, length('ANIMAL_ID = '))
 AND adt.TABLE_NAME = 'ANIMAL'
 LEFT JOIN q_status st ON st.Id = anm.ANIMAL_ID_NUMBER
 LEFT JOIN ALTERNATE alt ON alt.ANIMAL_ID = anm.ANIMAL_ID AND alt.ALTERNATE_TYPE_ID = 7
+LEFT JOIN ALTERNATE altOrigin ON altOrigin.ANIMAL_ID = anm.ANIMAL_ID AND altOrigin.ALTERNATE_TYPE_ID = 10
+LEFT JOIN ALTERNATE altSrc ON altSrc.ANIMAL_ID = anm.ANIMAL_ID AND altSrc.ALTERNATE_TYPE_ID = 11
+LEFT JOIN ALTERNATE altCites ON altCites.ANIMAL_ID = anm.ANIMAL_ID AND altCites.ALTERNATE_TYPE_ID = 3
 GROUP BY anm.ANIMAL_ID_NUMBER,
     anm.BIRTH_DATE,
     anm.GENDER_ID,
@@ -36,4 +42,7 @@ GROUP BY anm.ANIMAL_ID_NUMBER,
     anm.ACTIVE_YN,
     anm.LOT_NUMBER_ID,
     st.status,
-    alt.NAME
+    alt.NAME,
+    altOrigin.Name,
+    altSrc.Name,
+    altCites.Name

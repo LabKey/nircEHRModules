@@ -1,5 +1,0 @@
-
-SELECT LOCATION_ID AS childLocation,
-       PARENT_LOCATION_ID AS parentLocation
-FROM    Location
-WHERE  PARENT_LOCATION_ID != 0

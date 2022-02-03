@@ -105,6 +105,9 @@
                 <dat:column columnName="isHonorReset">
                     <dat:rangeURI>boolean</dat:rangeURI>
                 </dat:column>
+                <dat:column columnName="area">
+                    <dat:rangeURI>string</dat:rangeURI>
+                </dat:column>
             </dat:columns>
         </table>
     </template>

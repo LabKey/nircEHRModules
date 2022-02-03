@@ -381,4 +381,19 @@
         </columns>
     </table>
 
+    <table tableName="IdHistory" tableDbType="TABLE">
+        <tableTitle>Id History</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="Id"/>
+            <column columnName="Name"/>
+            <column columnName="Type"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
 </tables>
