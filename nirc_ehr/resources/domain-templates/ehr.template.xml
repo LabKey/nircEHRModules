@@ -9,10 +9,16 @@
                 <dat:column columnName="departmentId">
                     <dat:rangeURI>string</dat:rangeURI>
                 </dat:column>
+                <dat:column columnName="authorId">
+                    <dat:rangeURI>int</dat:rangeURI>
+                </dat:column>
                 <dat:column columnName="prefix">
                     <dat:rangeURI>string</dat:rangeURI>
                 </dat:column>
                 <dat:column columnName="suffix">
+                    <dat:rangeURI>string</dat:rangeURI>
+                </dat:column>
+                <dat:column columnName="shortDescription">
                     <dat:rangeURI>string</dat:rangeURI>
                 </dat:column>
                 <dat:column columnName="expirationDate">
@@ -38,12 +44,6 @@
                 </dat:column>
                 <dat:column columnName="effectiveDate">
                     <dat:rangeURI>dateTime</dat:rangeURI>
-                </dat:column>
-                <dat:column columnName="locationId">
-                    <dat:rangeURI>int</dat:rangeURI>
-                </dat:column>
-                <dat:column columnName="descriptionLength">
-                    <dat:rangeURI>int</dat:rangeURI>
                 </dat:column>
                 <dat:column columnName="emergencyPhoneNumber">
                     <dat:rangeURI>string</dat:rangeURI>
