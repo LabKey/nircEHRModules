@@ -19,6 +19,7 @@ CREATE INDEX IX_Nirc_Ehr_ID_History_Container ON nirc_ehr.IdHistory (Container);
 
 
 SELECT core.executeJavaUpgradeCode('importTemplate;nirc_ehr;ehr_lookups');
+SELECT core.executeJavaUpgradeCode('importTemplate;nirc_ehr;ehr');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;id_history_type;/data/id_history_type.tsv');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/locations;truncate');
