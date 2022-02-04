@@ -84,6 +84,15 @@
                             <fkColumnName>LotId</fkColumnName>
                         </fk>
                     </column>
+                    <column columnName="geographic_origin">
+                        <columnTitle>Geographic Origin</columnTitle>
+                    </column>
+                    <column columnName="source">
+                        <columnTitle>Source</columnTitle>
+                    </column>
+                    <column columnName="cites">
+                        <columnTitle>CITES</columnTitle>
+                    </column>
                 </columns>
             </table>
         </tables>

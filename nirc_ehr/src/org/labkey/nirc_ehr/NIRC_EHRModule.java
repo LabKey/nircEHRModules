@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
+import org.labkey.api.resource.Resource;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ldk.ExtendedSimpleModule;
@@ -51,7 +52,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 22.004;
+        return 22.005;
     }
 
     @Override
@@ -83,6 +84,10 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     {
         EHRService ehrService = EHRService.get();
         ehrService.registerModule(this);
+
+        Resource r = getModuleResource("/scripts/nirc_triggers.js");
+        assert r != null;
+        EHRService.get().registerTriggerScript(this, r);
 
         EHRService.get().registerTableCustomizer(this, NIRC_EHRCustomizer.class);
 

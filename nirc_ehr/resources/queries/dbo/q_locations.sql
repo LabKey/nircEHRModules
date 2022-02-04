@@ -1,4 +1,0 @@
-SELECT LOCATION_TYPE_ID AS LocationType,
-       LOCATION_NAME    AS Name,
-       LOCATION_ID      AS LocationId
-FROM LOCATION
