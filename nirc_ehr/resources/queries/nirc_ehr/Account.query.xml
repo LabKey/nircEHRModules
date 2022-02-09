@@ -42,14 +42,17 @@
                     </column>
                     <column columnName="cage">
                         <columnTitle>Cage</columnTitle>
+                        <url>/nirc_ehr/cageDetails.view?room=${cage/room}&amp;cage=${cage}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>cage</fkTable>
                             <fkColumnName>cage</fkColumnName>
+                            <fkDisplayColumnName>cage</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="room">
                         <columnTitle>Room</columnTitle>
+                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>rooms</fkTable>

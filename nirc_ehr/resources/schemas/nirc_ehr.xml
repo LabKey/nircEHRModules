@@ -125,6 +125,7 @@
             <column columnName="ReceivedByStaff"/>
             <column columnName="Cage"/>
             <column columnName="Room"/>
+            <column columnName="Floor"/>
             <column columnName="Building"/>
             <column columnName="Area"/>
             <column columnName="AnimalDelivery"/>
@@ -157,6 +158,7 @@
             <column columnName="ShipTo"/>
             <column columnName="cage"/>
             <column columnName="room"/>
+            <column columnName="floor"/>
             <column columnName="building"/>
             <column columnName="area"/>
             <column columnName="AnimalReqOrder"/>
@@ -373,6 +375,21 @@
             <column columnName="Description"/>
             <column columnName="ParentDepartment"/>
             <column columnName="Staff"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="IdHistory" tableDbType="TABLE">
+        <tableTitle>Id History</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="Id"/>
+            <column columnName="Name"/>
+            <column columnName="Type"/>
             <column columnName="Container"/>
             <column columnName="Created"/>
             <column columnName="CreatedBy"/>

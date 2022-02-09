@@ -1,5 +1,4 @@
-SELECT LOCATION_NAME    AS area,
-       LOCATION_DESC    AS description,
-       LOCATION_ID
+SELECT LOCATION_ID      AS area,
+       LOCATION_NAME    AS description,
 FROM LOCATION
 WHERE LOCATION_TYPE_ID = 1 -- SITE

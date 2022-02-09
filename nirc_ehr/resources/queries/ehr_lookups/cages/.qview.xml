@@ -1,9 +1,0 @@
-<customView xmlns="http://labkey.org/data/xml/queryCustomView">
-    <columns>
-        <column name="cage"/>
-        <column name="room/name"/>
-        <column name="room/floor"/>
-        <column name="room/building"/>
-        <column name="room/area"/>
-    </columns>
-</customView>

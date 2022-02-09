@@ -41,9 +41,6 @@ SELECT
        p.SUBMISSION_DATE        AS submissionDate,
        p.REVIEW_COMPLETION_DATE AS reviewCompletionDate,
        p.HONOR_RESET_YN         AS isHonorReset,
-       cg.cage                  AS cage,
-       rm.name                  AS room,
-       bu.Name                  AS building,
        area.area                AS area,
        pd.text                  AS description,
        X.modified
@@ -55,9 +52,6 @@ FROM PROTOCOL p
         WHERE TABLE_NAME = 'PROTOCOL'
         GROUP BY substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = '))
         ) X ON X.protocolId = p.PROTOCOL_ID
-    LEFT JOIN q_cages cg ON cg.location = p.LOCATION_ID
-    LEFT JOIN q_rooms rm ON rm.room = p.LOCATION_ID
-    LEFT JOIN q_areas area ON area.LOCATION_ID = p.LOCATION_ID
-    LEFT JOIN q_buildings bu ON bu.BuildingId = p.LOCATION_ID
+    LEFT JOIN q_areas area ON area.area = p.LOCATION_ID
     LEFT JOIN PROTOCOL_DESCRIPTION pd ON pd.PROTOCOL_ID = p.PROTOCOL_ID
 WHERE p.PROTOCOL_NUMBER IS NOT NULL
