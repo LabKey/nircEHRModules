@@ -52,6 +52,7 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
             return [{
                 xtype: 'ehr-hiddensinglesubjectfiltertype',
                 inputValue: LDK.panel.SingleSubjectFilterType.filterName,
+                caseInsensitive: true,
                 aliasTable: {
                     schemaName: 'study',
                     queryName: 'alias',
@@ -69,6 +70,7 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
             inputValue: LDK.panel.SingleSubjectFilterType.filterName,
             label: 'Single Animal',
             nounSingular: 'Animal',
+            caseInsensitive: false,
             aliasTable: {
                 schemaName: 'study',
                 queryName: 'alias',
@@ -81,6 +83,7 @@ Ext4.define('NIRC_EHR.panel.AnimalHistoryPanel', {
             xtype: 'ehr-multianimalfiltertype',
             inputValue: EHR.panel.MultiAnimalFilterType.filterName,
             label: EHR.panel.MultiAnimalFilterType.label,
+            caseInsensitive: true,
             aliasTable: {
                 schemaName: 'study',
                 queryName: 'alias',
