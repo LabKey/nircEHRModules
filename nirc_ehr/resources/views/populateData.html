@@ -120,6 +120,12 @@
             schemaName: 'ehr_lookups',
             queryName: 'gender_codes',
             pk: 'value'
+        }, {
+            label: 'Id History Type',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'id_history_type',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {

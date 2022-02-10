@@ -2,8 +2,12 @@
 
 SELECT Id,
        lower(Id) as alias
-FROM Animal
+FROM study.Animal
 UNION
 SELECT Id,
        Id as alias
-FROM Animal
+FROM study.Animal
+UNION
+SELECT Id,
+    Name as alias
+FROM nirc_ehr.IdHistory

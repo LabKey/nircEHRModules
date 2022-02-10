@@ -27,18 +27,31 @@
                     </column>
                     <column columnName="cage">
                         <columnTitle>Cage</columnTitle>
+                        <url>/nirc_ehr/cageDetails.view?room=${cage/room}&amp;cage=${cage}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>cage</fkTable>
-                            <fkColumnName>cage</fkColumnName>
+                            <fkColumnName>location</fkColumnName>
+                            <fkDisplayColumnName>cage</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="room">
                         <columnTitle>Room</columnTitle>
+                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>rooms</fkTable>
                             <fkColumnName>room</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="floor">
+                        <columnTitle>Floor</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>floors</fkTable>
+                            <fkColumnName>floor</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="building">
@@ -47,6 +60,7 @@
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>buildings</fkTable>
                             <fkColumnName>name</fkColumnName>
+                            <fkDisplayColumnName>description</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="area">
@@ -55,6 +69,7 @@
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>areas</fkTable>
                             <fkColumnName>area</fkColumnName>
+                            <fkDisplayColumnName>description</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="AnimalReqOrder">

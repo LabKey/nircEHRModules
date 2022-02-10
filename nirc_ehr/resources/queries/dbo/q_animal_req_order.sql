@@ -24,14 +24,16 @@ SELECT
     ar.APPROVED_DATE                   as ApprovedDate,
     ar.SEGMENT_ID                      as Segment,
     ar.PROJECT_CODE_ID                 as Project,
-    cg.cage                            as SiteCage,
-    rm.name                            as SiteRoom,
-    bu.Name                            as SiteBuilding,
-    area.area                          as SiteArea,
+    cg.location                        as SiteCage,
+    COALESCE(rm.room, cg.room)         as SiteRoom,
+    COALESCE(fl.floor, cg.floor, rm.floor)                      as SiteFloor,
+    COALESCE(bu.Name, cg.building, rm.building, fl.building)    as SiteBuilding,
+    COALESCE(area.area, cg.area, rm.area, fl.area, bu.area)       as SiteArea,
     ar.CREATED_BY_STAFF_ID.STAFF_FIRST_NAME
         || '|' || ar.CREATED_BY_STAFF_ID.STAFF_LAST_NAME as CreatedByStaff
 FROM ANIMAL_REQ_ORDER ar
     LEFT JOIN q_cages cg ON cg.location = ar.SITE_LOCATION_ID
     LEFT JOIN q_rooms rm ON rm.room = ar.SITE_LOCATION_ID
-    LEFT JOIN q_areas area ON area.LOCATION_ID = ar.SITE_LOCATION_ID
-    LEFT JOIN q_buildings bu ON bu.BuildingId = ar.SITE_LOCATION_ID
+    LEFT JOIN q_floors fl ON fl.floor = ar.SITE_LOCATION_ID
+    LEFT JOIN q_areas area ON area.area = ar.SITE_LOCATION_ID
+    LEFT JOIN q_buildings bu ON bu.name = ar.SITE_LOCATION_ID

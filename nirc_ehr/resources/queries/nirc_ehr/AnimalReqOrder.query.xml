@@ -132,18 +132,31 @@
                     </column>
                     <column columnName="SiteCage">
                         <columnTitle>Site Cage</columnTitle>
+                        <url>/nirc_ehr/cageDetails.view?room=${SiteCage/room}&amp;cage=${SiteCage}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>cage</fkTable>
-                            <fkColumnName>cage</fkColumnName>
+                            <fkColumnName>location</fkColumnName>
+                            <fkDisplayColumnName>cage</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="SiteRoom">
                         <columnTitle>Site Room</columnTitle>
+                        <url>/nirc_ehr/cageDetails.view?room=${SiteRoom}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>rooms</fkTable>
                             <fkColumnName>room</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="SiteFloor">
+                        <columnTitle>Site Floor</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>floors</fkTable>
+                            <fkColumnName>floor</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="SiteBuilding">
