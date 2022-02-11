@@ -418,4 +418,38 @@
         </columns>
     </table>
 
+    <table tableName="Question" tableDbType="TABLE">
+        <tableTitle>Question</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="QuestionId"/>
+            <column columnName="Type"/>
+            <column columnName="Text"/>
+            <column columnName="CreationDate"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="QuestionResponse" tableDbType="TABLE">
+        <tableTitle>Question Response</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="QuestionResponseId"/>
+            <column columnName="Protocol"/>
+            <column columnName="Response"/>
+            <column columnName="Question"/>
+            <column columnName="Questionnaire"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+
 </tables>

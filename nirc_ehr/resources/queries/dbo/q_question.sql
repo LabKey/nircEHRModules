@@ -1,0 +1,6 @@
+SELECT
+    QUESTION_ID             AS QuestionId,
+    QUESTION_TYPE_ID.QUESTION_TYPE_NAME AS Type,
+    QUESTION_TEXT           AS Text,
+    QUESTION_CREATION_DATE  as CreationDate
+FROM QUESTION
