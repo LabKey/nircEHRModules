@@ -109,6 +109,10 @@
                 <columnTitle>Diagnosis</columnTitle>
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="units">
+                <columnTitle>Units</columnTitle>
+                <datatype>integer</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="biopsy" tableDbType="TABLE">
@@ -227,6 +231,10 @@
             </column>
             <column columnName="quantity">
                 <datatype>double</datatype>
+            </column>
+            <column columnName="units">
+                <columnTitle>Units</columnTitle>
+                <datatype>integer</datatype>
             </column>
         </columns>
     </table>
@@ -640,6 +648,10 @@
             <column columnName="result">
                 <datatype>double</datatype>
             </column>
+            <column columnName="units">
+                <columnTitle>Units</columnTitle>
+                <datatype>integer</datatype>
+            </column>
             <column columnName="remark">
                 <datatype>varchar</datatype>
             </column>
@@ -871,6 +883,10 @@
                 <columnTitle>Type</columnTitle>
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="units">
+                <columnTitle>Units</columnTitle>
+                <datatype>integer</datatype>
+            </column>
         </columns>
         <tableTitle>Vital Signs</tableTitle>
     </table>
@@ -896,6 +912,10 @@
             </column>
             <column columnName="weight">
                 <datatype>double</datatype>
+            </column>
+            <column columnName="units">
+                <columnTitle>Units</columnTitle>
+                <datatype>integer</datatype>
             </column>
         </columns>
     </table>

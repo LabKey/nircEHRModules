@@ -8,12 +8,14 @@ SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
                 || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        anmCmt.TEXT AS remark,
        anmEvt.EVENT_ID.NAME AS exam,
-       anmEvt.RESULT
+       anmEvt.RESULT,
+       ev.NUMERIC_UNIT_ID                                                        AS Units
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
          LEFT JOIN EVENT_EVENT_GROUP evtEvtGrp ON evtEvtGrp.EVENT_ID = anmEvt.EVENT_ID
          LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
+         LEFT JOIN EVENT ev on anmEvt.EVENT_ID = ev.EVENT_ID
 WHERE evtEvtGrp.EVENT_GROUP_ID = 60 -- Physical Exam
   -- filter out vital signs events
   AND evtEvtGrp.EVENT_ID NOT IN (1349, 2165, 2166, 2167, 2168, 2169, 55, 56, 1643, 1647, 1652, 1653)
