@@ -126,6 +126,24 @@
             schemaName: 'ehr_lookups',
             queryName: 'id_history_type',
             pk: 'value'
+        }, {
+            label: 'Numeric Units',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'numeric_unit',
+            pk: 'value'
+        }, {
+            label: 'Vendor Production Location',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'vendor_production_location',
+            pk: 'value'
+        }, {
+            label: 'Qualifier',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'qualifier',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {

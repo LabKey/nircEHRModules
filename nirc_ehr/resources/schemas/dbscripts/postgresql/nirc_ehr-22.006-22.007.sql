@@ -1,0 +1,1 @@
+ALTER TABLE nirc_ehr.AnimalVendor ADD COLUMN VendorProductionLocation INTEGER;
