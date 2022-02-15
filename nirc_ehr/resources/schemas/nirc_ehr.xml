@@ -267,6 +267,7 @@
             <column columnName="FaxNumber"/>
             <column columnName="Comments"/>
             <column columnName="InternalVendor"/>
+            <column columnName="VendorProductionLocation"/>
             <column columnName="Container"/>
             <column columnName="Created"/>
             <column columnName="CreatedBy"/>

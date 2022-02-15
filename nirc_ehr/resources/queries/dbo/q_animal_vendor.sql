@@ -1,16 +1,18 @@
 SELECT
-    ANIMAL_VENDOR_ID            as AnimalVendorId,
-    VENDOR_APPROVAL_CODE_ID     as VendorApprovalCode,
-    VENDOR_Name                 as VendorName,
-    STREET_ADDRESS1             as StreetAddress1,
-    STREET_ADDRESS2             as StreetAddress2,
-    CITY                        as City,
-    STATE_PROV                  as StateProv,
-    COUNTRY                     as Country,
-    ZIP                         as Zip,
-    ZIP_EXT                     as ZipExt,
-    PHONE_NUMBER                as PhoneNumber,
-    FAX_NUMBER                  as FaxNumber,
-    COMMENTS                    as Comments,
-    INTERNAL_VENDOR_YN          as InternalVendor
-FROM ANIMAL_VENDOR
+    av.ANIMAL_VENDOR_ID            as AnimalVendorId,
+    av.VENDOR_APPROVAL_CODE_ID     as VendorApprovalCode,
+    av.VENDOR_Name                 as VendorName,
+    av.STREET_ADDRESS1             as StreetAddress1,
+    av.STREET_ADDRESS2             as StreetAddress2,
+    av.CITY                        as City,
+    av.STATE_PROV                  as StateProv,
+    av.COUNTRY                     as Country,
+    av.ZIP                         as Zip,
+    av.ZIP_EXT                     as ZipExt,
+    av.PHONE_NUMBER                as PhoneNumber,
+    av.FAX_NUMBER                  as FaxNumber,
+    av.COMMENTS                    as Comments,
+    av.INTERNAL_VENDOR_YN          as InternalVendor,
+    vpn.VENDOR_PRODUCTION_LOCATION_ID   as VendorProductionLocation
+FROM ANIMAL_VENDOR av
+LEFT JOIN VENDOR_PRODUCTION_LOCATION vpn ON av.ANIMAL_VENDOR_ID = vpn.ANIMAL_VENDOR_ID

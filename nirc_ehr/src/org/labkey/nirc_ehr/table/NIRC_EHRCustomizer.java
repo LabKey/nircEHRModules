@@ -96,6 +96,12 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 col.setLabel("Description");
             }
+            if ("units".equalsIgnoreCase(col.getName()) && null == col.getFk())
+            {
+                UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                col.setLabel("Units");
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "numeric_unit", "value", "title"));
+            }
         }
     }
 
