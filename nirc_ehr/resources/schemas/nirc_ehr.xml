@@ -267,6 +267,7 @@
             <column columnName="FaxNumber"/>
             <column columnName="Comments"/>
             <column columnName="InternalVendor"/>
+            <column columnName="VendorProductionLocation"/>
             <column columnName="Container"/>
             <column columnName="Created"/>
             <column columnName="CreatedBy"/>
@@ -397,5 +398,59 @@
             <column columnName="ModifiedBy"/>
         </columns>
     </table>
+
+    <table tableName="DeletedRecord" tableDbType="TABLE">
+        <tableTitle>Deleted Record</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="Id"/>
+            <column columnName="Protocol"/>
+            <column columnName="UserReferenceNumber"/>
+            <column columnName="Investigator"/>
+            <column columnName="Title"/>
+            <column columnName="EsigEvent"/>
+            <column columnName="EsigUser"/>
+            <column columnName="EsigDate"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="Question" tableDbType="TABLE">
+        <tableTitle>Question</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="QuestionId"/>
+            <column columnName="Type"/>
+            <column columnName="Text"/>
+            <column columnName="CreationDate"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="QuestionResponse" tableDbType="TABLE">
+        <tableTitle>Question Response</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="QuestionResponseId"/>
+            <column columnName="Protocol"/>
+            <column columnName="Response"/>
+            <column columnName="Question"/>
+            <column columnName="Questionnaire"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
 
 </tables>

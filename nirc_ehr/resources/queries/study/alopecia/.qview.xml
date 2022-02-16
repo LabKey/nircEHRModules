@@ -5,12 +5,11 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="bloodPressure"/>
-        <column name="heartRate"/>
-        <column name="respRate"/>
-        <column name="temp"/>
-        <column name="pulseRate"/>
+        <column name="score"/>
         <column name="units"/>
-        <column name="type"/>
+        <column name="diagnosis"/>
+        <column name="remark"/>
+        <column name="performedBy"/>
+        <column name="history"/>
     </columns>
 </customView>

@@ -1,10 +1,9 @@
-
 require("ehr/triggers").initScript(this);
 
-EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'ehr', 'protocol', function (helper, scriptErrors, row, oldRow) {
+EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'nirc_ehr', 'QuestionResponse', function (helper, scriptErrors, row, oldRow) {
 
-    if (row.description) {
-        plainTextParts = row.description.split("\\loch\\af0")
+    if (row.Response) {
+        plainTextParts = row.Response.split("\\loch\\af0")
         let plainText = "";
         for(let i = 1; i < plainTextParts.length; i++)
         {
@@ -24,9 +23,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
             plainText += chunk.trim();
             plainText += " ";
-
         }
-        row.description = plainText.trim();
+        row.Response = plainText.trim();
     }
 
 });

@@ -18,3 +18,6 @@ termination_reason_codes	Termination Reason Codes Codes	value	title
 keyword	Keyword	value	title
 clinremarks_category	Clinremarks Category	value	title
 id_history_type	Id History Type	value	title
+qualifier	Qualifier	value	title
+vendor_production_location	Vendor Production Location	value	title
+numeric_unit	Numeric Units	value	title

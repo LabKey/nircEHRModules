@@ -19,6 +19,15 @@
                     <column columnName="VendorName">
                         <columnTitle>Vendor Name</columnTitle>
                     </column>
+                    <column columnName="VendorProductionLocation">
+                        <columnTitle>Vendor Production Location</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>vendor_production_location</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                            <fkDisplayColumnName>title</fkDisplayColumnName>
+                        </fk>
+                    </column>
                     <column columnName="StreetAddress1">
                         <columnTitle>Street Address 1</columnTitle>
                     </column>
