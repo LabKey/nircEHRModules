@@ -5,7 +5,7 @@ SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;qualifier;/data/qu
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;numeric_unit;/data/numeric_unit.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;vendor_production_location;/data/vendor_production_location.tsv');
 
-SELECT core.executeJavaUpgradeCode('reloadStudy');
+SELECT core.executeJavaUpgradeCode('reloadFolder');
 
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/alopecia;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/blood;truncate');
