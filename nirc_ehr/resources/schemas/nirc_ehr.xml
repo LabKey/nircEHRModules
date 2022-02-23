@@ -452,5 +452,39 @@
         </columns>
     </table>
 
+    <table tableName="ProtocolStress" tableDbType="TABLE">
+        <tableTitle>Protocol Stress</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="Protocol"/>
+            <column columnName="Species"/>
+            <column columnName="Stress"/>
+            <column columnName="Allowed"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="Stress" tableDbType="TABLE">
+        <tableTitle>Stress</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="StressId"/>
+            <column columnName="Name"/>
+            <column columnName="Description"/>
+            <column columnName="Ranking"/>
+            <column columnName="RegulatoryStressLevel"/>
+            <column columnName="Active"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
 
 </tables>

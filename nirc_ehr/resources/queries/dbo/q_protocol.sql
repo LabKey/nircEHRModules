@@ -43,11 +43,11 @@ SELECT
        p.HONOR_RESET_YN         AS isHonorReset,
        area.area                AS area,
        pd.text                  AS description,
-       X.modified
+       COALESCE(X.modified, to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
 FROM PROTOCOL p
     LEFT JOIN (
         SELECT substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = ')) AS protocolId,
-               COALESCE(MAX(CAST(CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
+               MAX(CAST(CHANGE_DATETIME AS TIMESTAMP)) AS modified
         FROM AUDIT_TRAIL
         WHERE TABLE_NAME = 'PROTOCOL'
         GROUP BY substring(PRIMARY_KEY_VALUES, length('PROTOCOL_ID = '))

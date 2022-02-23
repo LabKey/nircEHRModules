@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <etl xmlns="http://labkey.org/etl/xml">
-    <name>Protocol ESig</name>
-    <description>Protocol ESignature data</description>
+    <name>Protocol Supplement</name>
+    <description>Protocol Supplement data</description>
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
             <description>Copy to protocol esig target</description>
@@ -11,6 +11,13 @@
                 <columnTransforms>
                     <column source="UserProfile" target="UserProfile" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
                 </columnTransforms>
+            </destination>
+        </transform>
+        <transform id="step2" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to protocol stress target</description>
+            <source schemaName="dbo" queryName="q_protocol_stress"/>
+            <destination schemaName="nirc_ehr" queryName="ProtocolStress"
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
             </destination>
         </transform>
     </transforms>

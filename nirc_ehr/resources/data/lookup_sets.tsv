@@ -21,3 +21,5 @@ id_history_type	Id History Type	value	title
 qualifier	Qualifier	value	title
 vendor_production_location	Vendor Production Location	value	title
 numeric_unit	Numeric Units	value	title
+regulatory_stress_levels	Regulatory Stress Levels	value	title
+euthanasia_type	Euthanasia Type	value	title

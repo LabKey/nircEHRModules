@@ -144,6 +144,18 @@
             schemaName: 'ehr_lookups',
             queryName: 'qualifier',
             pk: 'value'
+        }, {
+            label: 'Regulatory Stress Levels',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'regulatory_stress_levels',
+            pk: 'value'
+        }, {
+            label: 'Euthanasia Type',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'euthanasia_type',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {
