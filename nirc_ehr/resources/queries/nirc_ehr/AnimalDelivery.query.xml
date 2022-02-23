@@ -90,12 +90,6 @@
                             <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
                     </column>
-                    <column columnName="DeliveryNumber">
-                        <columnTitle>Delivery Number</columnTitle>
-                    </column>
-                    <column columnName="ExpectedDate">
-                        <columnTitle>Expected Date</columnTitle>
-                    </column>
                     <column columnName="Project">
                         <columnTitle>Project</columnTitle>
                         <fk>

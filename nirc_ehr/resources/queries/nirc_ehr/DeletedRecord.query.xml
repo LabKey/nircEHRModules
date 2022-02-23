@@ -4,9 +4,6 @@
             <table tableName="DeletedRecord" tableDbType="TABLE">
                 <tableTitle>Deleted Record</tableTitle>
                 <columns>
-                    <column columnName="UserReferenceNumber">
-                        <columnTitle>User Reference Number</columnTitle>
-                    </column>
                     <column columnName="EsigEvent">
                         <columnTitle>Esig Event</columnTitle>
                         <fk>
@@ -24,9 +21,6 @@
                             <fkColumnName>UserId</fkColumnName>
                             <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
                         </fk>
-                    </column>
-                    <column columnName="EsigDate">
-                        <columnTitle>Esig Date</columnTitle>
                     </column>
                 </columns>
             </table>

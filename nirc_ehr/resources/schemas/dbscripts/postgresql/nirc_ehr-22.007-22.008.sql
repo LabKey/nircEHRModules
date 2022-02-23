@@ -31,3 +31,17 @@ CREATE TABLE nirc_ehr.Stress
     CONSTRAINT FK_STRESS_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Stress_Container ON nirc_ehr.Stress (Container);
+
+CREATE TABLE nirc_ehr.ProtocolProcedures
+(
+    Protocol                INTEGER,
+    Species                 VARCHAR,
+    Procedure               VARCHAR,
+    Container               entityId NOT NULL,
+    Created                 TIMESTAMP,
+    CreatedBy               USERID,
+    Modified                TIMESTAMP,
+    ModifiedBy              USERID,
+    CONSTRAINT FK_PROTOCOLPROCEDURES_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
+);
+CREATE INDEX IX_Nirc_Ehr_ProtocolProcedures_Container ON nirc_ehr.ProtocolProcedures (Container);

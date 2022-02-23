@@ -4,9 +4,6 @@
             <table tableName="AnimalShipment" tableDbType="TABLE">
                 <tableTitle>Animal Shipment</tableTitle>
                 <columns>
-                    <column columnName="AnimalShipmentId">
-                        <columnTitle>Animal Shipment Id</columnTitle>
-                    </column>
                     <column columnName="ReceivedByStaff">
                         <columnTitle>Received By Staff</columnTitle>
                         <fk>
@@ -80,24 +77,6 @@
                             <fkColumnName>lotId</fkColumnName>
                         </fk>
                     </column>
-                    <column columnName="ReceivedDate">
-                        <columnTitle>Received Date</columnTitle>
-                    </column>
-                    <column columnName="BirthDate">
-                        <columnTitle>Birth Date</columnTitle>
-                    </column>
-                    <column columnName="MalesReceived">
-                        <columnTitle>Males Received</columnTitle>
-                    </column>
-                    <column columnName="FemalesReceived">
-                        <columnTitle>Females Received</columnTitle>
-                    </column>
-                    <column columnName="EitherReceived">
-                        <columnTitle>Either Received</columnTitle>
-                    </column>
-                    <column columnName="CanUnreceive">
-                        <columnTitle>Can Unreceive</columnTitle>
-                    </column>
                     <column columnName="CostCenter">
                         <columnTitle>Cost Center</columnTitle>
                         <fk>
@@ -106,12 +85,6 @@
                             <fkColumnName>value</fkColumnName>
                             <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
-                    </column>
-                    <column columnName="RecordedDate">
-                        <columnTitle>Recorded Date</columnTitle>
-                    </column>
-                    <column columnName="RecordedBy">
-                        <columnTitle>Recorded By</columnTitle>
                     </column>
                 </columns>
             </table>

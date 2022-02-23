@@ -3,18 +3,10 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="ProtocolEsig" tableDbType="TABLE">
                 <tableTitle>Protocol ESignature</tableTitle>
+                <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
                 <columns>
                     <column columnName="EsigId">
                         <columnTitle>Esig Id</columnTitle>
-                    </column>
-                    <column columnName="Protocol">
-                        <columnTitle>Protocol</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr</fkDbSchema>
-                            <fkTable>protocol</fkTable>
-                            <fkColumnName>protocol</fkColumnName>
-                            <fkDisplayColumnName>title</fkDisplayColumnName>
-                        </fk>
                     </column>
                     <column columnName="EsigEvent">
                         <columnTitle>Esig Event</columnTitle>

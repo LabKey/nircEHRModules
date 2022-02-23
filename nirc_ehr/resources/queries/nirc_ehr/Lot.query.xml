@@ -4,9 +4,6 @@
             <table tableName="Lot" tableDbType="TABLE">
                 <tableTitle>Animal Lot</tableTitle>
                 <columns>
-                    <column columnName="LotId">
-                        <columnTitle>Lot Id</columnTitle>
-                    </column>
                     <column columnName="AnimalShipment">
                         <columnTitle>Animal Shipment</columnTitle>
                         <fk>
@@ -15,9 +12,6 @@
                             <fkColumnName>AnimalShipmentId</fkColumnName>
                             <fkDisplayColumnName>AnimalShipmentId</fkDisplayColumnName>
                         </fk>
-                    </column>
-                    <column columnName="LotSequence">
-                        <columnTitle>Lot Sequence</columnTitle>
                     </column>
                 </columns>
             </table>

@@ -20,6 +20,13 @@
                          bulkLoad="true" batchSize="5000" targetOption="truncate">
             </destination>
         </transform>
+        <transform id="step3" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to protocol procedures target</description>
+            <source schemaName="dbo" queryName="q_protocol_procedures"/>
+            <destination schemaName="nirc_ehr" queryName="ProtocolProcedures"
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
+            </destination>
+        </transform>
     </transforms>
 
     <schedule>

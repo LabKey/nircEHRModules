@@ -1,17 +1,17 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="protocol_counts" tableDbType="TABLE">
-                <tableTitle>NHPs Allowed Per Protocol</tableTitle>
+            <table tableName="ProtocolProcedures" tableDbType="TABLE">
+                <tableTitle>Protocol Procedures</tableTitle>
                 <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="euthanasia">
-                        <columnTitle>Euthanasia</columnTitle>
+                    <column columnName="Procedure">
+                        <columnTitle>Procedures</columnTitle>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>euthanasia_type</fkTable>
-                            <fkColumnName>value</fkColumnName>
-                            <fkDisplayColumnName>title</fkDisplayColumnName>
+                            <fkTable>procedures</fkTable>
+                            <fkColumnName>name</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
                         </fk>
                     </column>
                 </columns>

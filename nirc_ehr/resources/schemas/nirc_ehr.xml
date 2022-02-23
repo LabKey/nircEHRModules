@@ -486,5 +486,19 @@
         </columns>
     </table>
 
+    <table tableName="ProtocolProcedures" tableDbType="TABLE">
+        <tableTitle>Protocol Procedures</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="Protocol"/>
+            <column columnName="Species"/>
+            <column columnName="Procedure"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
 
 </tables>
