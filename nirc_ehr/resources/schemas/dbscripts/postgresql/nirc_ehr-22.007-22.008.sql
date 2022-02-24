@@ -1,3 +1,9 @@
+ALTER TABLE nirc_ehr.ProtocolUsage DROP COLUMN SegmentId;
+ALTER TABLE nirc_ehr.ProtocolUsage ADD COLUMN Species integer;
+
+ALTER TABLE nirc_ehr.AnimalReqOrder DROP COLUMN Segment;
+ALTER TABLE nirc_ehr.AnimalReqOrder ADD COLUMN Protocol integer;
+ALTER TABLE nirc_ehr.AnimalReqOrder ADD COLUMN Species integer;
 
 CREATE TABLE nirc_ehr.ProtocolStress
 (

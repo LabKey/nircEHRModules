@@ -217,7 +217,8 @@
             <column columnName="ApprovedByStaff"/>
             <column columnName="SubmittedDate"/>
             <column columnName="ApprovedDate"/>
-            <column columnName="Segment"/>
+            <column columnName="Species"/>
+            <column columnName="Protocol"/>
             <column columnName="Project"/>
             <column columnName="SiteCage"/>
             <column columnName="SiteRoom"/>
@@ -334,7 +335,7 @@
             <column columnName="UsedAmt"/>
             <column columnName="AvailableAmt"/>
             <column columnName="PercentLeft"/>
-            <column columnName="SegmentId"/>
+            <column columnName="Species"/>
             <column columnName="Container"/>
             <column columnName="Created"/>
             <column columnName="CreatedBy"/>

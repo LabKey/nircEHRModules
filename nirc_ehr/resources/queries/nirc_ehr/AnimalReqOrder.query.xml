@@ -3,6 +3,7 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="AnimalReqOrder" tableDbType="TABLE">
                 <tableTitle>Animal Req Order</tableTitle>
+                <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
                 <columns>
                     <column columnName="AnimalVendor">
                         <columnTitle>Animal Vendor</columnTitle>
