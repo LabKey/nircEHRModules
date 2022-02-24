@@ -51,3 +51,30 @@ CREATE TABLE nirc_ehr.ProtocolProcedures
     CONSTRAINT FK_PROTOCOLPROCEDURES_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_ProtocolProcedures_Container ON nirc_ehr.ProtocolProcedures (Container);
+
+CREATE TABLE nirc_ehr.CageCard
+(
+    CageCardId              INTEGER,
+    Protocol                INTEGER,
+    Species                 INTEGER,
+    CardFormat              INTEGER,
+    CostCenter              INTEGER,
+    GenerationDate          TIMESTAMP,
+    UpdateDate              TIMESTAMP,
+    NumberOfAnimals         INTEGER,
+    Location                INTEGER,
+    Account                 INTEGER,
+    AccountStaff            USERID,
+    CensusActivityStatus    VARCHAR,
+    CensusActivityDate      TIMESTAMP,
+    AnimalDelivery          INTEGER,
+    AnimalRequestedByStaff  USERID,
+    Container               entityId NOT NULL,
+    Created                 TIMESTAMP,
+    CreatedBy               USERID,
+    Modified                TIMESTAMP,
+    ModifiedBy              USERID,
+    CONSTRAINT PK_CAGECARD PRIMARY KEY (CageCardId),
+    CONSTRAINT FK_CAGECARD_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
+);
+CREATE INDEX IX_Nirc_Ehr_Cage_Card_Container ON nirc_ehr.CageCard (Container);

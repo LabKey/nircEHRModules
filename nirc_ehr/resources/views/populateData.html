@@ -156,6 +156,18 @@
             schemaName: 'ehr_lookups',
             queryName: 'euthanasia_type',
             pk: 'value'
+        }, {
+            label: 'Card Format',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'card_format',
+            pk: 'value'
+        }, {
+            label: 'Census Activity Status',
+            populateFn: 'populateFromFile',
+            schemaName: 'ehr_lookups',
+            queryName: 'census_activity_status',
+            pk: 'value'
         }];
 
         tables.sort(function(a, b) {

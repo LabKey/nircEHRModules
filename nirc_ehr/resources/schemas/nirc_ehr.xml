@@ -502,4 +502,31 @@
         </columns>
     </table>
 
+    <table tableName="CageCard" tableDbType="TABLE">
+        <tableTitle>Cage Card</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="CageCardId"/>
+            <column columnName="Species"/>
+            <column columnName="Protocol"/>
+            <column columnName="CardFormat"/>
+            <column columnName="CostCenter"/>
+            <column columnName="GenerationDate"/>
+            <column columnName="UpdateDate"/>
+            <column columnName="NumberOfAnimals"/>
+            <column columnName="Location"/>
+            <column columnName="Account"/>
+            <column columnName="AccountStaff"/>
+            <column columnName="CensusActivityStatus"/>
+            <column columnName="CensusActivityDate"/>
+            <column columnName="AnimalDelivery"/>
+            <column columnName="AnimalRequestedByStaff"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
 </tables>

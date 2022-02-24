@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>Cage Card</name>
+    <description>Cage Card data</description>
+    <transforms>
+        <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to cage card target</description>
+            <source schemaName="dbo" queryName="q_cage_card"/>
+            <destination schemaName="nirc_ehr" queryName="CageCard"
+                         bulkLoad="true" targetOption="truncate">
+                <columnTransforms>
+                    <column source="AccountStaff" target="AccountStaff" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
+                    <column source="AnimalRequestedByStaff" target="AnimalRequestedByStaff" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
+                </columnTransforms>
+            </destination>
+        </transform>
+    </transforms>
+
+    <schedule>
+        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
+    </schedule>
+</etl>
