@@ -121,3 +121,20 @@ CREATE TABLE nirc_ehr.CageCardHistory
     CONSTRAINT FK_CAGECARDHISTORY_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Cage_Card_History_Container ON nirc_ehr.CageCardHistory (Container);
+
+SELECT core.executeJavaUpgradeCode('importTemplate;nirc_ehr;ehr');
+
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;card_format;/data/card_format.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;census_activity_status;/data/census_activity_status.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;euthanasia_type;/data/euthanasia_type.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;regulatory_stress_levels;/data/regulatory_stress_levels.tsv');
+
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolCounts');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolSupplement');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolUsage;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cageCard');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/stress');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalReqOrder;truncate');

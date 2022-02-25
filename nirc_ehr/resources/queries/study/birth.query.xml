@@ -19,10 +19,6 @@
                         <shownInInsertView>true</shownInInsertView>
                         <shownInUpdateView>true</shownInUpdateView>
                         <isHidden>false</isHidden>
-                        <!--<url>/EHR/cageDetails.view?-->
-                        <!--room=${room}&amp;-->
-                        <!--cage=${cage}-->
-                        <!--</url>-->
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>rooms</fkTable>
@@ -38,15 +34,6 @@
                             room=${room}&amp;
                             cage=${cage}
                         </url>
-                    </column>
-                    <column columnName="species">
-                        <columnTitle>Species</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>species_codes</fkTable>
-                            <fkColumnName>code</fkColumnName>
-                            <fkDisplayColumnName>scientific_name</fkDisplayColumnName>
-                        </fk>
                     </column>
                     <column columnName="geographic_origin">
                         <columnTitle>Geographic Origin</columnTitle>
