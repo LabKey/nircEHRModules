@@ -7,9 +7,11 @@ SELECT
     cc.GENERATION_DATETIME  AS GenerationDate,
     cc.UPDATE_DATETIME      AS UpdateDate,
     cc.NUMBER_OF_ANIMALS    AS NumberOfAnimals,
-    cg.location                         AS cage,
-    COALESCE(fl.floor, cg.floor)        AS floor,
-    COALESCE(ar.area, cg.area, fl.area) AS area,
+    cg.location                    as cage,
+    COALESCE(rm.room, cg.room)     as room,
+    COALESCE(fl.floor, cg.floor, rm.floor)                      as floor,
+    COALESCE(bu.Name, cg.building, rm.building, fl.building)    as building,
+    COALESCE(ar.area, cg.area, rm.area, fl.area, bu.area)       as area,
     cc.STAFF_ACCOUNT_ACCOUNT_ID     AS Account,
     (CASE
          WHEN (cc.STAFF_ACCOUNT_STAFF_ID.STAFF_FIRST_NAME IS NULL OR cc.STAFF_ACCOUNT_STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
@@ -25,5 +27,7 @@ SELECT
 FROM CAGE_CARD cc
 LEFT JOIN SEGMENT s ON cc.SEGMENT_ID = s.SEGMENT_ID
 LEFT JOIN q_cages cg ON cg.location = cc.LOCATION_ID
+LEFT JOIN q_rooms rm ON rm.room = cc.LOCATION_ID
 LEFT JOIN q_floors fl ON fl.floor = cc.LOCATION_ID
+LEFT JOIN q_buildings bu ON bu.name = cc.LOCATION_ID
 LEFT JOIN q_areas ar ON ar.area = cc.LOCATION_ID

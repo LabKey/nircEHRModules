@@ -3,6 +3,7 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="AnimalDelivery" tableDbType="TABLE">
                 <tableTitle>Animal Delivery</tableTitle>
+                <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
                 <columns>
                     <column columnName="AnimalDeliveryId">
                         <columnTitle>Animal Delivery Id</columnTitle>
@@ -23,53 +24,6 @@
                             <fkTable>ShipTo</fkTable>
                             <fkColumnName>ShipToId</fkColumnName>
                             <fkDisplayColumnName>Name</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="cage">
-                        <columnTitle>Cage</columnTitle>
-                        <url>/nirc_ehr/cageDetails.view?room=${cage/room}&amp;cage=${cage}&amp;</url>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>cage</fkTable>
-                            <fkColumnName>location</fkColumnName>
-                            <fkDisplayColumnName>cage</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="room">
-                        <columnTitle>Room</columnTitle>
-                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>rooms</fkTable>
-                            <fkColumnName>room</fkColumnName>
-                            <fkDisplayColumnName>name</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="floor">
-                        <columnTitle>Floor</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>floors</fkTable>
-                            <fkColumnName>floor</fkColumnName>
-                            <fkDisplayColumnName>name</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="building">
-                        <columnTitle>Building</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>buildings</fkTable>
-                            <fkColumnName>name</fkColumnName>
-                            <fkDisplayColumnName>description</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="area">
-                        <columnTitle>Area</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>areas</fkTable>
-                            <fkColumnName>area</fkColumnName>
-                            <fkDisplayColumnName>description</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="AnimalReqOrder">

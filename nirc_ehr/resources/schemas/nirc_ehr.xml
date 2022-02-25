@@ -356,9 +356,6 @@
             <column columnName="ProjectCode"/>
             <column columnName="Description"/>
             <column columnName="Active"/>
-            <column columnName="Cage"/>
-            <column columnName="Room"/>
-            <column columnName="Building"/>
             <column columnName="Area"/>
             <column columnName="Container"/>
             <column columnName="Created"/>
@@ -514,12 +511,52 @@
             <column columnName="GenerationDate"/>
             <column columnName="UpdateDate"/>
             <column columnName="NumberOfAnimals"/>
-            <column columnName="Location"/>
+            <column columnName="Cage"/>
+            <column columnName="Room"/>
+            <column columnName="Floor"/>
+            <column columnName="Building"/>
+            <column columnName="Area"/>
             <column columnName="Account"/>
             <column columnName="AccountStaff"/>
             <column columnName="CensusActivityStatus"/>
             <column columnName="CensusActivityDate"/>
             <column columnName="AnimalDelivery"/>
+            <column columnName="AnimalRequestedByStaff"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="CageCardHistory" tableDbType="TABLE">
+        <tableTitle>Cage Card History</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="CageCardId"/>
+            <column columnName="Species"/>
+            <column columnName="Protocol"/>
+            <column columnName="CardFormat"/>
+            <column columnName="CostCenter"/>
+            <column columnName="GenerationDate"/>
+            <column columnName="UpdateDate"/>
+            <column columnName="NumberOfAnimals"/>
+            <column columnName="Cage"/>
+            <column columnName="Room"/>
+            <column columnName="Floor"/>
+            <column columnName="Building"/>
+            <column columnName="Area"/>
+            <column columnName="Account"/>
+            <column columnName="AccountStaff"/>
+            <column columnName="CensusActivityStatus"/>
+            <column columnName="CensusActivityDate"/>
+            <column columnName="CensusStartDate"/>
+            <column columnName="CensusStopDate"/>
+            <column columnName="TransferDate"/>
+            <column columnName="ActionDate"/>
+            <column columnName="AnimalDelivery"/>
+            <column columnName="RetrospectiveStress"/>
             <column columnName="AnimalRequestedByStaff"/>
             <column columnName="Container"/>
             <column columnName="Created"/>

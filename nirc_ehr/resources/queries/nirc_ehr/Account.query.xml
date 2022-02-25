@@ -3,6 +3,7 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="Account" tableDbType="TABLE">
                 <tableTitle>Account</tableTitle>
+                <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
                 <columns>
                     <column columnName="Department">
                         <columnTitle>Department</columnTitle>
@@ -38,41 +39,6 @@
                             <fkTable>project</fkTable>
                             <fkColumnName>project</fkColumnName>
                             <fkDisplayColumnName>displayName</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="cage">
-                        <columnTitle>Cage</columnTitle>
-                        <url>/nirc_ehr/cageDetails.view?room=${cage/room}&amp;cage=${cage}&amp;</url>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>cage</fkTable>
-                            <fkColumnName>cage</fkColumnName>
-                            <fkDisplayColumnName>cage</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="room">
-                        <columnTitle>Room</columnTitle>
-                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>rooms</fkTable>
-                            <fkColumnName>room</fkColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="building">
-                        <columnTitle>Building</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>buildings</fkTable>
-                            <fkColumnName>name</fkColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="area">
-                        <columnTitle>Area</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>areas</fkTable>
-                            <fkColumnName>area</fkColumnName>
                         </fk>
                     </column>
                 </columns>
