@@ -11,6 +11,7 @@ ALTER TABLE nirc_ehr.Account DROP COLUMN building;
 
 CREATE TABLE nirc_ehr.ProtocolStress
 (
+    RowId                   SERIAL NOT NULL,
     Protocol                INTEGER,
     Species                 VARCHAR,
     Stress                  INTEGER,
@@ -20,6 +21,7 @@ CREATE TABLE nirc_ehr.ProtocolStress
     CreatedBy               USERID,
     Modified                TIMESTAMP,
     ModifiedBy              USERID,
+    CONSTRAINT PK_PROTOCOLSTRESS PRIMARY KEY (RowId),
     CONSTRAINT FK_PROTOCOLSTRESS_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_ProtocolStress_Container ON nirc_ehr.ProtocolStress (Container);
@@ -44,6 +46,7 @@ CREATE INDEX IX_Nirc_Ehr_Stress_Container ON nirc_ehr.Stress (Container);
 
 CREATE TABLE nirc_ehr.ProtocolProcedures
 (
+    RowId                   SERIAL NOT NULL,
     Protocol                INTEGER,
     Species                 VARCHAR,
     Procedure               VARCHAR,
@@ -52,6 +55,7 @@ CREATE TABLE nirc_ehr.ProtocolProcedures
     CreatedBy               USERID,
     Modified                TIMESTAMP,
     ModifiedBy              USERID,
+    CONSTRAINT PK_PROTOCOLPROCEDURES PRIMARY KEY (RowId),
     CONSTRAINT FK_PROTOCOLPROCEDURES_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_ProtocolProcedures_Container ON nirc_ehr.ProtocolProcedures (Container);
@@ -89,6 +93,7 @@ CREATE INDEX IX_Nirc_Ehr_Cage_Card_Container ON nirc_ehr.CageCard (Container);
 
 CREATE TABLE nirc_ehr.CageCardHistory
 (
+    RowId                   SERIAL NOT NULL,
     CageCardId              INTEGER,
     AnimalDelivery          INTEGER,
     Protocol                INTEGER,
@@ -118,6 +123,7 @@ CREATE TABLE nirc_ehr.CageCardHistory
     CreatedBy               USERID,
     Modified                TIMESTAMP,
     ModifiedBy              USERID,
+    CONSTRAINT PK_CAGECARDHISTORY PRIMARY KEY (RowId),
     CONSTRAINT FK_CAGECARDHISTORY_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Cage_Card_History_Container ON nirc_ehr.CageCardHistory (Container);

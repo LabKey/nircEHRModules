@@ -454,6 +454,7 @@
         <tableTitle>Protocol Stress</tableTitle>
         <auditLogging>DETAILED</auditLogging>
         <columns>
+            <column columnName="RowId"/>
             <column columnName="Protocol"/>
             <column columnName="Species"/>
             <column columnName="Stress"/>
@@ -488,6 +489,7 @@
         <tableTitle>Protocol Procedures</tableTitle>
         <auditLogging>DETAILED</auditLogging>
         <columns>
+            <column columnName="RowId"/>
             <column columnName="Protocol"/>
             <column columnName="Species"/>
             <column columnName="Procedure"/>
@@ -534,6 +536,7 @@
         <tableTitle>Cage Card History</tableTitle>
         <auditLogging>DETAILED</auditLogging>
         <columns>
+            <column columnName="RowId"/>
             <column columnName="CageCardId"/>
             <column columnName="Species"/>
             <column columnName="Protocol"/>
