@@ -22,7 +22,8 @@ SELECT
         || '|' || ar.APPROVED_BY_STAFF_ID.STAFF_LAST_NAME as ApprovedByStaff,
     ar.SUBMITTED_DATE                  as SubmittedDate,
     ar.APPROVED_DATE                   as ApprovedDate,
-    ar.SEGMENT_ID                      as Segment,
+    s.SPECIES_ID                       as Species,
+    s.PROTOCOL_ID                      as Protocol,
     ar.PROJECT_CODE_ID                 as Project,
     cg.location                        as SiteCage,
     COALESCE(rm.room, cg.room)         as SiteRoom,
@@ -37,3 +38,4 @@ FROM ANIMAL_REQ_ORDER ar
     LEFT JOIN q_floors fl ON fl.floor = ar.SITE_LOCATION_ID
     LEFT JOIN q_areas area ON area.area = ar.SITE_LOCATION_ID
     LEFT JOIN q_buildings bu ON bu.name = ar.SITE_LOCATION_ID
+    LEFT JOIN SEGMENT s ON ar.SEGMENT_ID = s.SEGMENT_ID

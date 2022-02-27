@@ -18,6 +18,7 @@ import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.study.DatasetTable;
+import org.labkey.api.util.StringExpressionFactory;
 
 import java.util.Calendar;
 
@@ -76,17 +77,49 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 col.setLabel("Species");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "species_codes", "code", "scientific_name"));
             }
+            if ("protocol".equalsIgnoreCase(col.getName()) && null == col.getFk() && !"protocol".equalsIgnoreCase(ti.getName()))
+            {
+                UserSchema us = getEHRUserSchema(ti, "ehr");
+                col.setLabel("Protocol");
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "protocol", "protocol", "title"));
+            }
             if ("gender".equalsIgnoreCase(col.getName()) && null == col.getFk())
             {
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                 col.setLabel("Gender");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "gender_codes", "code", "meaning"));
             }
+            if ("cage".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("cage"))
+            {
+                UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                col.setLabel("Cage");
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "cage", "location", "cage"));
+                col.setURL(StringExpressionFactory.createURL("/nirc_ehr/cageDetails.view?room=${cage/room}&cage=${cage}"));
+            }
             if ("room".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("rooms"))
             {
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                 col.setLabel("Room");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "rooms", "room", "name"));
+                col.setURL(StringExpressionFactory.createURL("/nirc_ehr/cageDetails.view?room=${room}"));
+            }
+            if ("building".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("buildings"))
+            {
+                UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                col.setLabel("Building");
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "buildings", "name", "description"));
+            }
+            if ("floor".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("floors"))
+            {
+                UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                col.setLabel("Floor");
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "floors", "floor", "name"));
+            }
+            if ("area".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("areas"))
+            {
+                UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                col.setLabel("Area");
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "areas", "area", "description"));
             }
             if ("remark".equalsIgnoreCase(col.getName()) && null == col.getFk())
             {
