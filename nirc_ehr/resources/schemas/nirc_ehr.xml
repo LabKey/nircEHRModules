@@ -217,7 +217,8 @@
             <column columnName="ApprovedByStaff"/>
             <column columnName="SubmittedDate"/>
             <column columnName="ApprovedDate"/>
-            <column columnName="Segment"/>
+            <column columnName="Species"/>
+            <column columnName="Protocol"/>
             <column columnName="Project"/>
             <column columnName="SiteCage"/>
             <column columnName="SiteRoom"/>
@@ -334,7 +335,7 @@
             <column columnName="UsedAmt"/>
             <column columnName="AvailableAmt"/>
             <column columnName="PercentLeft"/>
-            <column columnName="SegmentId"/>
+            <column columnName="Species"/>
             <column columnName="Container"/>
             <column columnName="Created"/>
             <column columnName="CreatedBy"/>
@@ -355,9 +356,6 @@
             <column columnName="ProjectCode"/>
             <column columnName="Description"/>
             <column columnName="Active"/>
-            <column columnName="Cage"/>
-            <column columnName="Room"/>
-            <column columnName="Building"/>
             <column columnName="Area"/>
             <column columnName="Container"/>
             <column columnName="Created"/>
@@ -452,5 +450,123 @@
         </columns>
     </table>
 
+    <table tableName="ProtocolStress" tableDbType="TABLE">
+        <tableTitle>Protocol Stress</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="RowId"/>
+            <column columnName="Protocol"/>
+            <column columnName="Species"/>
+            <column columnName="Stress"/>
+            <column columnName="Allowed"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="Stress" tableDbType="TABLE">
+        <tableTitle>Stress</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="StressId"/>
+            <column columnName="Name"/>
+            <column columnName="Description"/>
+            <column columnName="Ranking"/>
+            <column columnName="RegulatoryStressLevel"/>
+            <column columnName="Active"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="ProtocolProcedures" tableDbType="TABLE">
+        <tableTitle>Protocol Procedures</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="RowId"/>
+            <column columnName="Protocol"/>
+            <column columnName="Species"/>
+            <column columnName="Procedure"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="CageCard" tableDbType="TABLE">
+        <tableTitle>Cage Card</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="CageCardId"/>
+            <column columnName="Species"/>
+            <column columnName="Protocol"/>
+            <column columnName="CardFormat"/>
+            <column columnName="CostCenter"/>
+            <column columnName="GenerationDate"/>
+            <column columnName="UpdateDate"/>
+            <column columnName="NumberOfAnimals"/>
+            <column columnName="Cage"/>
+            <column columnName="Room"/>
+            <column columnName="Floor"/>
+            <column columnName="Building"/>
+            <column columnName="Area"/>
+            <column columnName="Account"/>
+            <column columnName="AccountStaff"/>
+            <column columnName="CensusActivityStatus"/>
+            <column columnName="CensusActivityDate"/>
+            <column columnName="AnimalDelivery"/>
+            <column columnName="AnimalRequestedByStaff"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="CageCardHistory" tableDbType="TABLE">
+        <tableTitle>Cage Card History</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="RowId"/>
+            <column columnName="CageCardId"/>
+            <column columnName="Species"/>
+            <column columnName="Protocol"/>
+            <column columnName="CardFormat"/>
+            <column columnName="CostCenter"/>
+            <column columnName="GenerationDate"/>
+            <column columnName="UpdateDate"/>
+            <column columnName="NumberOfAnimals"/>
+            <column columnName="Cage"/>
+            <column columnName="Room"/>
+            <column columnName="Floor"/>
+            <column columnName="Building"/>
+            <column columnName="Area"/>
+            <column columnName="Account"/>
+            <column columnName="AccountStaff"/>
+            <column columnName="CensusActivityStatus"/>
+            <column columnName="CensusActivityDate"/>
+            <column columnName="CensusStartDate"/>
+            <column columnName="CensusStopDate"/>
+            <column columnName="TransferDate"/>
+            <column columnName="ActionDate"/>
+            <column columnName="AnimalDelivery"/>
+            <column columnName="RetrospectiveStress"/>
+            <column columnName="AnimalRequestedByStaff"/>
+            <column columnName="Container"/>
+            <column columnName="Created"/>
+            <column columnName="CreatedBy"/>
+            <column columnName="Modified"/>
+            <column columnName="ModifiedBy"/>
+        </columns>
+    </table>
 
 </tables>

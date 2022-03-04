@@ -112,4 +112,14 @@
         </table>
     </template>
 
+    <template xsi:type="EHRTemplateType">
+        <table tableName="protocol_counts" tableDbType="TABLE">
+            <dat:columns>
+                <dat:column columnName="Euthanasia">
+                    <dat:rangeURI>int</dat:rangeURI>
+                </dat:column>
+            </dat:columns>
+        </table>
+    </template>
+
 </templates>

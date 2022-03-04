@@ -1,0 +1,5 @@
+SELECT
+    SEGMENT_ID.PROTOCOL_ID.PROTOCOL_ID      AS Protocol,
+    SEGMENT_ID.SPECIES_ID                   AS Species,
+    PROCEDURE_ID.PROCEDURE_NAME             AS Procedure
+FROM SEGMENT_PROCEDURE

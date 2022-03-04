@@ -4,9 +4,6 @@
             <table tableName="AnimalDeliveryEsig" tableDbType="TABLE">
                 <tableTitle>Animal Delivery ESignature</tableTitle>
                 <columns>
-                    <column columnName="EsigId">
-                        <columnTitle>Esig Id</columnTitle>
-                    </column>
                     <column columnName="AnimalDelivery">
                         <columnTitle>Animal Delivery</columnTitle>
                         <fk>
