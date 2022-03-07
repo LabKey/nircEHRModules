@@ -3,10 +3,8 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="AnimalReqOrder" tableDbType="TABLE">
                 <tableTitle>Animal Req Order</tableTitle>
+                <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="AnimalReqOrderId">
-                        <columnTitle>Animal Req Order Id</columnTitle>
-                    </column>
                     <column columnName="AnimalVendor">
                         <columnTitle>Animal Vendor</columnTitle>
                         <fk>
@@ -24,21 +22,6 @@
                             <fkColumnName>UserId</fkColumnName>
                             <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
                         </fk>
-                    </column>
-                    <column columnName="RequestNumber">
-                        <columnTitle>Request Number</columnTitle>
-                    </column>
-                    <column columnName="RequisitionNumber">
-                        <columnTitle>Requisition Number</columnTitle>
-                    </column>
-                    <column columnName="Bill">
-                        <columnTitle>Bill</columnTitle>
-                    </column>
-                    <column columnName="ShippingContact">
-                        <columnTitle>Shipping Contact</columnTitle>
-                    </column>
-                    <column columnName="CreateDate">
-                        <columnTitle>Create Date</columnTitle>
                     </column>
                     <column columnName="ReqOrderType">
                         <columnTitle>Req Order Type</columnTitle>
@@ -111,15 +94,6 @@
                             <fkColumnName>UserId</fkColumnName>
                             <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
                         </fk>
-                    </column>
-                    <column columnName="SubmittedDate">
-                        <columnTitle>Submitted Date</columnTitle>
-                    </column>
-                    <column columnName="ApprovedDate">
-                        <columnTitle>Approved Date</columnTitle>
-                    </column>
-                    <column columnName="Segment">
-                        <columnTitle>Segment</columnTitle>
                     </column>
                     <column columnName="Project">
                         <columnTitle>Project</columnTitle>
