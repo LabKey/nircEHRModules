@@ -23,46 +23,27 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 function onComplete(event, errors, helper){
 
     // Similar to EHR housing trigger onComplete with minor differences to handle ETL
-    var idsToClose = [];
-    if (helper.isETL()) {
-        var boundaryRows = helper.getRows();
-        if (boundaryRows && boundaryRows.length > 0) {
-            boundaryRows = [boundaryRows[0]];  // Just need first boundary row for this extra step
-            for (var i = 0; i < boundaryRows.length; i++) {
-                if (EHR.Server.Security.getQCStateByLabel(boundaryRows[i].row.QCStateLabel).PublicData && boundaryRows[i].row.date) {
-                    boundaryRows[i].row.date.setHours(12);  // This just prevents warnings in EHR
+    if (!helper.isValidateOnly()) {
+        var updateRows = helper.getRows();
+        if (updateRows && updateRows.length > 0) {
+            if (helper.isETL()) {  // Only need boundary rows (batch or incremental) for ETL
+                updateRows = [updateRows[0]];
+            }
+            var idsToClose = [];
+            for (var i = 0; i < updateRows.length; i++) {
+                if (EHR.Server.Security.getQCStateByLabel(updateRows[i].row.QCStateLabel).PublicData && updateRows[i].row.date) {
+                    updateRows[i].row.date.setHours(12);  // Necessary to clear EHR warning
                     idsToClose.push({
-                        Id: boundaryRows[i].row.Id,
-                        date: EHR.Server.Utils.datetimeToString(boundaryRows[i].row.date),  //stringify to serialize properly
-                        objectid: boundaryRows[i].row.objectid
+                        Id: updateRows[i].row.Id,
+                        date: EHR.Server.Utils.datetimeToString(updateRows[i].row.date),  //stringify to serialize properly
+                        objectid: updateRows[i].row.objectid
                     });
                 }
             }
-        }
-    }
-
-    else if (!helper.isValidateOnly()) {
-        var housingRows = helper.getRows();
-        if (housingRows && housingRows.length > 0) {
-            console.log("count: " + housingRows.length);
-            housingRows = [housingRows[0]]
-            for (var i = 0; i < housingRows.length; i++) {
-                console.log("id: " + housingRows[i].row.Id);
-                console.log("date: " + EHR.Server.Utils.datetimeToString(housingRows[i].row.date))
-                if (EHR.Server.Security.getQCStateByLabel(housingRows[i].row.QCStateLabel).PublicData && housingRows[i].row.date) {
-                    housingRows[i].row.date.setHours(12);
-                    idsToClose.push({
-                        Id: housingRows[i].row.Id,
-                        date: EHR.Server.Utils.datetimeToString(housingRows[i].row.date),  //stringify to serialize properly
-                        objectid: housingRows[i].row.objectid
-                    });
-                }
+            if (idsToClose.length){
+                helper.getJavaHelper().closeHousingRecords(idsToClose);
             }
         }
-    }
-
-    if (idsToClose.length){
-        helper.getJavaHelper().closeHousingRecords(idsToClose);
     }
 };
 
