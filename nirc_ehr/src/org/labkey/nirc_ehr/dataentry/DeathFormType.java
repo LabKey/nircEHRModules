@@ -1,14 +1,11 @@
 package org.labkey.nirc_ehr.dataentry;
 
-import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.dataentry.AnimalDetailsFormSection;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.SimpleGridPanel;
 import org.labkey.api.ehr.dataentry.TaskFormSection;
 import org.labkey.api.ehr.dataentry.UnsaveableTask;
 import org.labkey.api.ehr.dataentry.forms.DeathInstructionsFormSection;
-import org.labkey.api.ehr.security.EHRCompletedInsertPermission;
-import org.labkey.api.ehr.security.EHRSurgeryEntryPermission;
 import org.labkey.api.module.Module;
 
 import java.util.Arrays;
@@ -30,14 +27,5 @@ public class DeathFormType extends UnsaveableTask
                 new AnimalDetailsFormSection(),
                 new SimpleGridPanel("study", "deaths", "Deaths")
         ));
-    }
-
-    @Override
-    protected boolean canInsert()
-    {
-        if (!getCtx().getContainer().hasPermission(getCtx().getUser(), EHRSurgeryEntryPermission.class))
-            return false;
-
-        return EHRService.get().hasPermission("study", "deaths", getCtx().getContainer(), getCtx().getUser(), EHRCompletedInsertPermission.class);
     }
 }
