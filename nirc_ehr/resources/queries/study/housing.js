@@ -13,7 +13,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
     }
 
         if (row.endDate === 'undefined') {
-            console.log("end date not found for animal event - " + row.objectId);
+            console.log("Housing end date not found for animal event - " + row.objectId);
         }
 
         prevAnimalId = row.Id;
