@@ -1,1 +1,1 @@
-SELECT core.executeJavaUpgradeCode('reloadStudy');
+SELECT core.executeJavaUpgradeCode('reloadFolder');
