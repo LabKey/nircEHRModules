@@ -64,12 +64,7 @@
                     </column>
                     <column columnName="BillToStaff">
                         <columnTitle>Bill To Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                     <column columnName="PerDiemAccount">
                         <columnTitle>Per Diem Account</columnTitle>
@@ -82,12 +77,7 @@
                     </column>
                     <column columnName="PerDiemStaff">
                         <columnTitle>Per Diem Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                 </columns>
             </table>

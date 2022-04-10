@@ -16,6 +16,7 @@ import org.labkey.api.ldk.table.AbstractTableCustomizer;
 import org.labkey.api.query.ExprColumn;
 import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
+import org.labkey.api.query.UserIdQueryForeignKey;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.study.DatasetTable;
 import org.labkey.api.util.StringExpressionFactory;
@@ -24,8 +25,6 @@ import java.util.Calendar;
 
 public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 {
-    public static final String PERFORMEDBY_CONCEPT_URI = "urn:ehr.labkey.org/#PerformedBy";
-
     public UserSchema getEHRUserSchema(AbstractTableInfo ds, String name)
     {
         Container ehrContainer = EHRService.get().getEHRStudyContainer(ds.getUserSchema().getContainer());
@@ -67,9 +66,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             if ("performedby".equalsIgnoreCase(col.getName()) && null == col.getFk())
             {
-                UserSchema us = getEHRUserSchema(ti, "core");
                 col.setLabel("PerformedBy");
-                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "SiteUsers", "UserId", "DisplayName"));
+                col.setFk(new UserIdQueryForeignKey(ti.getUserSchema(), true));
             }
             if ("species".equalsIgnoreCase(col.getName()) && null == col.getFk())
             {

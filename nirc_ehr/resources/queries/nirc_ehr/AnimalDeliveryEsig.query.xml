@@ -24,12 +24,7 @@
                     </column>
                     <column columnName="UserProfile">
                         <columnTitle>User Profile</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                     <column columnName="EsigDateTime">
                         <columnTitle>Esig Date</columnTitle>
