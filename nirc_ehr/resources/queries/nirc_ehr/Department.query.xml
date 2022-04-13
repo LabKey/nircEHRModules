@@ -16,12 +16,7 @@
                     </column>
                     <column columnName="Staff">
                         <columnTitle>Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                 </columns>
             </table>
