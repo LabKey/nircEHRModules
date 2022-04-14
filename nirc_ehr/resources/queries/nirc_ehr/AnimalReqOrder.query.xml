@@ -16,12 +16,7 @@
                     </column>
                     <column columnName="RequisitionerStaff">
                         <columnTitle>Requisitioner Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                     <column columnName="ReqOrderType">
                         <columnTitle>Req Order Type</columnTitle>
@@ -52,12 +47,7 @@
                     </column>
                     <column columnName="BillToStaff">
                         <columnTitle>Bill To Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                     <column columnName="PerDiemAccount">
                         <columnTitle>Per Diem Account</columnTitle>
@@ -70,30 +60,15 @@
                     </column>
                     <column columnName="PerDiemStaff">
                         <columnTitle>Per Diem Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                     <column columnName="SubmittedByStaff">
                         <columnTitle>Submitted By Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                     <column columnName="ApprovedByStaff">
                         <columnTitle>Approved By Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                     <column columnName="Project">
                         <columnTitle>Project</columnTitle>
@@ -151,12 +126,7 @@
                     </column>
                     <column columnName="CreatedByStaff">
                         <columnTitle>Created By Staff</columnTitle>
-                        <fk>
-                            <fkDbSchema>core</fkDbSchema>
-                            <fkTable>Users</fkTable>
-                            <fkColumnName>UserId</fkColumnName>
-                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
-                        </fk>
+                        <conceptURI>http://www.labkey.org/types#userId</conceptURI>
                     </column>
                 </columns>
             </table>
