@@ -146,6 +146,7 @@
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
+                <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
             </column>
         </columns>
     </table>
@@ -273,6 +274,7 @@
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
+                <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
             </column>
         </columns>
     </table>
@@ -596,6 +598,11 @@
             <column columnName="remark">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="attachmentFile">
+                <columnTitle>Attachment File</columnTitle>
+                <datatype>varchar</datatype>
+                <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
+            </column>
         </columns>
     </table>
     <table tableName="pairings" tableDbType="TABLE">
@@ -775,6 +782,7 @@
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
+                <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
             </column>
         </columns>
     </table>
@@ -813,6 +821,7 @@
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
+                <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
             </column>
         </columns>
     </table>
@@ -958,6 +967,7 @@
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
+                <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
             </column>
         </columns>
     </table>
@@ -989,6 +999,7 @@
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
+                <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
             </column>
         </columns>
         <tableTitle>Notes</tableTitle>
