@@ -8,7 +8,10 @@ SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
                 || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        anmCmt.TEXT AS remark,
        anmEvt.EVENT_ID.NAME AS category,
-       anmEvt.ATTACHMENT_PATH                                                    AS attachmentFile
+       CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
+            ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'
+                || substring(anmEvt.ATTACHMENT_PATH, LENGTH('N:\'), LENGTH(anmEvt.ATTACHMENT_PATH)))
+       ELSE NULL END AS attachmentFile
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
