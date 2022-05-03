@@ -6,7 +6,10 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
             ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
                 || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS type,
-       anmEvt.ATTACHMENT_PATH                                                    AS attachmentFile,
+       CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
+                ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'
+                    || substring(anmEvt.ATTACHMENT_PATH, LENGTH('N:\'), LENGTH(anmEvt.ATTACHMENT_PATH)))
+            ELSE NULL END AS attachmentFile,
        anmEvt.DIAGNOSIS                                                          AS description,
        anmCmt.TEXT                                                               AS remark,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified

@@ -4,20 +4,16 @@ var prevDate;
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'housing', function (helper, scriptErrors, row, oldRow) {
 
-    if (helper.isETL()) {
-        var isTransfer = prevAnimalId === row.Id;
+        if (helper.isETL()) {
+            var isBatch = prevAnimalId === row.Id;
 
-        if (isTransfer) {
-            row.endDate = prevDate;
+            if (isBatch) {
+                row.endDate = prevDate;
+            }
+
+            prevAnimalId = row.Id;
+            prevDate = row.date;
         }
-    }
-
-        if (row.endDate === 'undefined') {
-            console.log("Housing end date not found for animal event - " + row.objectId);
-        }
-
-        prevAnimalId = row.Id;
-        prevDate = row.date;
     });
 
 function onComplete(event, errors, helper){
@@ -26,7 +22,10 @@ function onComplete(event, errors, helper){
     if (!helper.isValidateOnly()) {
         var updateRows = helper.getRows();
         if (updateRows && updateRows.length > 0) {
-            if (helper.isETL()) {  // Only need boundary rows (batch or incremental) for ETL
+            // Only need boundary rows for batch. Changing batch size on ETL may require change here. Incremental updates
+            // should update all incoming rows so don't do this.
+            if (helper.isETL() && updateRows.length > 4000) {
+                console.log("Batch import: only closing boundary housing record")
                 updateRows = [updateRows[0]];
             }
             var idsToClose = [];
