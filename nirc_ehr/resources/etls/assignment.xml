@@ -9,6 +9,9 @@
             <destination schemaName="study" queryName="assignment"
                          bulkLoad="true" batchSize="5000" targetOption="merge">
 
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
             </destination>
         </transform>
     </transforms>
