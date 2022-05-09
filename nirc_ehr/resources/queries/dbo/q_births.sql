@@ -1,4 +1,4 @@
-SELECT anm.ANIMAL_ID_NUMBER AS Id,
+SELECT anm.ANIMAL_ID_NUMBER AS participantId,
        anm.BIRTH_DATE       AS birthDate,
        anm.GENDER_ID        AS gender,
        anm.SSB_ID.SPECIES_ID           AS species,

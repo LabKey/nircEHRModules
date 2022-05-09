@@ -9,7 +9,7 @@
             <destination schemaName="study" queryName="deaths"
                          bulkLoad="true" batchSize="20" targetOption="merge">
                 <alternateKeys>
-                    <column name="id"/>
+                    <column name="participantId"/>
                 </alternateKeys>
                 <columnTransforms>
                     <column source="deathDate" target="date"/>

@@ -1,5 +1,5 @@
 
-SELECT an.ANIMAL_ID_NUMBER AS Id,
+SELECT an.ANIMAL_ID_NUMBER AS participantId,
        an.DEATH_DATE AS deathDate,
        an.TERMINATION_REASON_ID as reason,
        COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
