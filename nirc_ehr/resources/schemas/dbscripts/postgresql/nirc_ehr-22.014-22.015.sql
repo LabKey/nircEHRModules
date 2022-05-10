@@ -28,3 +28,5 @@ SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate')
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/serology;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/vitals;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/weight;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProtocolAndAssignment;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProjectAndAssignment;truncate');

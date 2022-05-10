@@ -8,7 +8,9 @@
             <source schemaName="dbo" queryName="q_assignment"/>
             <destination schemaName="study" queryName="assignment"
                          bulkLoad="true" batchSize="5000" targetOption="merge">
-
+                <columnTransforms>
+                    <column source="assignmentDate" target="date"/>
+                </columnTransforms>
                 <alternateKeys>
                     <column name="objectid"/>
                 </alternateKeys>
