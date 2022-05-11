@@ -8,6 +8,9 @@
             <source schemaName="dbo" queryName="q_deaths"/>
             <destination schemaName="study" queryName="deaths"
                          bulkLoad="true" batchSize="20" targetOption="merge">
+                <alternateKeys>
+                    <column name="participantId"/>
+                </alternateKeys>
                 <columnTransforms>
                     <column source="deathDate" target="date"/>
                 </columnTransforms>

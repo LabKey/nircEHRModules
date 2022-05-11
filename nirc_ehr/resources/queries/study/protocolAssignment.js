@@ -31,7 +31,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
         protocolId = getProtocolIdByName(toProtocol);
         if (!protocolId || protocolId === 'undefined') {
-            console.log("Protocol not found for animal event - " + row.animalEventId);
+            console.log("Protocol not found for animal event - " + row.animalEventId + ", protocol - " + toProtocol);
         }
         else {
             row.protocol = protocolId;

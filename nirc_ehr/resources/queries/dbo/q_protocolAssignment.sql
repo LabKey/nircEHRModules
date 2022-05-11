@@ -1,5 +1,5 @@
 
-SELECT anm.ANIMAL_ID AS "objectId",
+SELECT anmEvt.ANIMAL_EVENT_ID AS "objectId",
        anmEvt.ANIMAL_EVENT_ID AS "animalEventId",
        anm.ANIMAL_ID_NUMBER AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS transferDate,
