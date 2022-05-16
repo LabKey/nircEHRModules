@@ -3,16 +3,18 @@ var protocolData = {};
 var prevAnimalId;
 var prevDate;
 
+var missing = [];
+
 function onInit(event, helper){
     LABKEY.Query.selectRows({
         schemaName: 'ehr',
         queryName: 'protocol',
-        columns: 'protocol,objectid',
+        columns: 'title,objectid',
         success: function(results){
             if (results.rows.length){
                 for (var i = 0; i < results.rows.length; i++) {
                     let rec = results.rows[i];
-                    protocolData[rec.objectid]  = rec.protocol;
+                    protocolData[rec.objectid]  = rec.title;
                 }
             }
         },
@@ -26,12 +28,13 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
     if (row.remark) {
         var remarkTextArr = row.remark.split(':');
-        var toProtocol = remarkTextArr[3];
+        var toProtocol = remarkTextArr[3].split(' (')[0]; // Get "To Protocol:" value without segment
         var protocolId;
 
         protocolId = getProtocolIdByName(toProtocol);
         if (!protocolId || protocolId === 'undefined') {
-            console.log("Protocol not found for animal event - " + row.animalEventId + ", protocol - " + toProtocol);
+            if (missing.indexOf(toProtocol) === -1)
+                missing.push(toProtocol)
         }
         else {
             row.protocol = protocolId;
@@ -50,11 +53,16 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
 });
 
+function onComplete(event, helper){
+    if (missing.length > 0)
+        console.log("Missing Protocols: " + missing);
+}
+
 function getProtocolIdByName(protocolName) {
     var protocols = Object.keys(protocolData);
     for (var i = 0; i< protocols.length; i++) {
         var pName = protocolData[protocols[i]] ;
-        if (protocolName.trim().indexOf(pName.toString()) === 0) {
+        if (pName && protocolName.trim().indexOf(pName.toString()) === 0) {
             return protocols[i];
         }
     }
