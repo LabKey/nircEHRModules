@@ -1,0 +1,16 @@
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/demographics;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/notes;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/obs;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pairings;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/physicalExam;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/prc;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pregnancy;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/serology;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/vitals;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/weight;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/project;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/assignment;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate');
