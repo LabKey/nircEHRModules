@@ -12,7 +12,7 @@
                             <fkDbSchema>ehr</fkDbSchema>
                             <fkTable>protocol</fkTable>
                             <fkColumnName>objectid</fkColumnName>
-                            <fkDisplayColumnName>protocol</fkDisplayColumnName>
+                            <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
                     </column>
                 </columns>

@@ -1,5 +1,5 @@
 
-SELECT anm.ANIMAL_ID_NUMBER AS Id,
+SELECT anm.ANIMAL_ID_NUMBER AS participantId,
        anm.BIRTH_DATE,
        anm.GENDER_ID AS gender,
        anm.SSB_ID.SPECIES_ID AS species,
@@ -18,15 +18,18 @@ SELECT anm.ANIMAL_ID_NUMBER AS Id,
        altOrigin.Name AS geographic_origin,
        altSrc.Name AS source,
        altCites.Name AS CITES,
-       COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), to_date('01/01/1970' ,'MM/DD/YYYY')) AS modified
+       -- audit timestamp for modifications or animal event received for created
+       COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), ae.CREATED_DATETIME) AS modified
 FROM Animal anm
 LEFT JOIN AUDIT_TRAIL adt ON anm.ANIMAL_ID = substring(PRIMARY_KEY_VALUES, length('ANIMAL_ID = '))
 AND adt.TABLE_NAME = 'ANIMAL'
 LEFT JOIN q_status st ON st.Id = anm.ANIMAL_ID_NUMBER
+LEFT JOIN ANIMAL_EVENT ae ON ae.ANIMAL_ID = anm.ANIMAL_ID AND EVENT_ID = 1  -- Received
 LEFT JOIN ALTERNATE alt ON alt.ANIMAL_ID = anm.ANIMAL_ID AND alt.ALTERNATE_TYPE_ID = 7  -- Dam/sire
 LEFT JOIN ALTERNATE altOrigin ON altOrigin.ANIMAL_ID = anm.ANIMAL_ID AND altOrigin.ALTERNATE_TYPE_ID = 10  -- Country of origin
 LEFT JOIN ALTERNATE altSrc ON altSrc.ANIMAL_ID = anm.ANIMAL_ID AND altSrc.ALTERNATE_TYPE_ID = 11  -- Source
 LEFT JOIN ALTERNATE altCites ON altCites.ANIMAL_ID = anm.ANIMAL_ID AND altCites.ALTERNATE_TYPE_ID = 3  -- CITES number
+WHERE anm.ANIMAL_DISPOSITION_ID IS NULL OR anm.ANIMAL_DISPOSITION_ID != 110  -- Invalid Id
 GROUP BY anm.ANIMAL_ID_NUMBER,
     anm.BIRTH_DATE,
     anm.GENDER_ID,
@@ -45,4 +48,5 @@ GROUP BY anm.ANIMAL_ID_NUMBER,
     alt.NAME,
     altOrigin.Name,
     altSrc.Name,
-    altCites.Name
+    altCites.Name,
+    ae.CREATED_DATETIME

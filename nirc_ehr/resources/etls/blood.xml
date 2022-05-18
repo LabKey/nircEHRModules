@@ -8,6 +8,9 @@
             <source schemaName="dbo" queryName="q_blood"/>
             <destination schemaName="study" queryName="blood"
                          bulkLoad="true" batchSize="5000" targetOption="merge">
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
                 <columnTransforms>
                     <column source="bloodDate" target="date"/>
                     <column source="performedby" target="performedby" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>

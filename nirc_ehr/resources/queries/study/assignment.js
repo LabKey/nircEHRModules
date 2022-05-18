@@ -22,11 +22,9 @@ function onInit(event, helper){
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'assignment', function (helper, scriptErrors, row, oldRow) {
 
+    // use enddate of previous assignment otherwise animal birth/arrival will be in row.date
     if (prevAnimalId === row.Id) {
         row.date = prevDate;
-    }
-    else {
-        row.date = new Date("1970/01/01");
     }
 
     if (row.changeDateText) {
