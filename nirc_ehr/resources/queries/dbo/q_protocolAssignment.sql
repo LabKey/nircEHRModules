@@ -3,6 +3,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID AS "objectId",
        anmEvt.ANIMAL_EVENT_ID AS "animalEventId",
        anm.ANIMAL_ID_NUMBER AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS transferDate,
+       COALESCE(dea.deathDate, dep.eventDate) AS enddate,
        (CASE
             WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
             ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
@@ -12,6 +13,8 @@ SELECT anmEvt.ANIMAL_EVENT_ID AS "objectId",
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
+         LEFT JOIN q_deaths dea ON anm.ANIMAL_ID_NUMBER = dea.participantId
+         LEFT JOIN q_departure dep ON anm.ANIMAL_ID_NUMBER = dep.Id
 WHERE anmEvt.EVENT_ID = 2 --Animal Transfer
   AND anmCmt.TEXT LIKE '%Pro%'
   ORDER BY anm.ANIMAL_ID_NUMBER,anmEvt.ANIMAL_EVENT_ID DESC
