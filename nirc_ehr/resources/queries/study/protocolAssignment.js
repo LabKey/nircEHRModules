@@ -5,6 +5,36 @@ var prevDate;
 
 var missing = [];
 
+var count = 0;
+var batchLastDate;
+
+function getLastAssignment(id){
+    LABKEY.Query.selectRows({
+        schemaName: 'study',
+        queryName: 'protocolAssignment',
+        columns: 'Id,date',
+        filterArray: [LABKEY.Filter.create('Id', id)],
+        success: function (results) {
+            if (results.rows.length) {
+                for (var i = 0; i < results.rows.length; i++) {
+                    let rec = results.rows[i];
+                    if (!batchLastDate) {
+                        batchLastDate = rec.date;
+                    }
+                    else {
+                        var oldDate = new Date(batchLastDate);
+                        var newDate = new Date(rec.date);
+                        if (newDate > oldDate) {
+                            batchLastDate = rec.date;
+                        }
+                    }
+                }
+            }
+        },
+        scope: this
+    });
+}
+
 function onInit(event, helper){
     if (helper.isETL()) {
         LABKEY.Query.selectRows({
@@ -48,12 +78,26 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                     var death = new Date(row.enddate);
                     var prev = new Date(prevDate);
 
+                    // Sanity check
                     if (prev < death) {
                         row.enddate = prevDate;
                     }
                 }
                 else {
                     row.enddate = prevDate;
+                }
+            }
+            else if (count === 0) {
+                // This handles batch boundary row for full truncate ETL, which is the only ETL setup for this currently.
+                // Gets previous date from db for first row in batch
+                getLastAssignment(row.Id);
+                console.log("Batch boundary id - " + row.Id);
+                if (batchLastDate) {
+                    console.log("Batch boundary date from previous row - " + batchLastDate);
+                    row.enddate = batchLastDate;
+                }
+                else {
+                    console.log("Batch boundary date from existing row - " + row.enddate);
                 }
             }
 
@@ -64,6 +108,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
         prevAnimalId = row.Id;
         prevDate = row.date;
+        count++;
     }
 
 });

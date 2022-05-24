@@ -13,7 +13,7 @@ LEFT JOIN AUDIT_TRAIL adt ON alt.ALTERNATE_ID = substring(PRIMARY_KEY_VALUES, le
     AND adt.TABLE_NAME = 'ALTERNATE'
 LEFT JOIN ANIMAL_EVENT ae ON ae.ANIMAL_ID = anm.ANIMAL_ID AND EVENT_ID = 1  -- Received
 LEFT JOIN q_deaths dea ON anm.ANIMAL_ID_NUMBER = dea.participantId
-LEFT JOIN q_departure dep ON anm.ANIMAL_ID_NUMBER = dep.Id
+LEFT JOIN q_latestDeparture dep ON anm.ANIMAL_ID_NUMBER = dep.Id
 WHERE alt.ALTERNATE_TYPE_ID = 6 -- Project Inventory Number for project transfers
 GROUP BY alt.ALTERNATE_ID,
          anm.ANIMAL_ID,
