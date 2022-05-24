@@ -91,13 +91,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 // This handles batch boundary row for full truncate ETL, which is the only ETL setup for this currently.
                 // Gets previous date from db for first row in batch
                 getLastAssignment(row.Id);
-                console.log("Batch boundary id - " + row.Id);
                 if (batchLastDate) {
-                    console.log("Batch boundary date from previous row - " + batchLastDate);
                     row.enddate = batchLastDate;
-                }
-                else {
-                    console.log("Batch boundary date from existing row - " + row.enddate);
                 }
             }
 
