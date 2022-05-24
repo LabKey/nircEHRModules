@@ -2,34 +2,26 @@ require("ehr/triggers").initScript(this);
 var projectData = {};
 var prevAnimalId;
 var prevDate;
-var batchLatestEnddate;
 var count = 0;
 
 function getLastAssignment(id){
+    var batchLatestEnddate;
+
     LABKEY.Query.selectRows({
         schemaName: 'study',
         queryName: 'assignment',
         columns: 'Id,enddate',
         filterArray: [LABKEY.Filter.create('Id', id)],
+        sort: '-enddate',
         success: function (results) {
             if (results.rows.length) {
-                for (var i = 0; i < results.rows.length; i++) {
-                    let rec = results.rows[i];
-                    if (!batchLatestEnddate) {
-                        batchLatestEnddate = rec.enddate;
-                    }
-                    else {
-                        var oldDate = new Date(batchLatestEnddate);
-                        var newDate = new Date(rec.enddate);
-                        if (newDate > oldDate) {
-                            batchLatestEnddate = rec.enddate;
-                        }
-                    }
-                }
+                batchLatestEnddate = results.rows[0].enddate;
             }
         },
         scope: this
     });
+
+    return batchLatestEnddate;
 }
 
 function onInit(event, helper){
@@ -60,7 +52,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         else if (count === 0) {
             // This handles batch boundary row for full truncate ETL, which is the only ETL setup for this currently.
             // Gets previous enddate from db for first row
-            getLastAssignment(row.Id);
+            var batchLatestEnddate = getLastAssignment(row.Id);
             if (batchLatestEnddate) {
                 row.date = batchLatestEnddate;
             }

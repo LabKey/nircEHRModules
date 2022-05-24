@@ -6,33 +6,25 @@ var prevDate;
 var missing = [];
 
 var count = 0;
-var batchLastDate;
 
 function getLastAssignment(id){
+    var batchLastDate;
+
     LABKEY.Query.selectRows({
         schemaName: 'study',
         queryName: 'protocolAssignment',
         columns: 'Id,date',
         filterArray: [LABKEY.Filter.create('Id', id)],
+        sort: '-date',
         success: function (results) {
             if (results.rows.length) {
-                for (var i = 0; i < results.rows.length; i++) {
-                    let rec = results.rows[i];
-                    if (!batchLastDate) {
-                        batchLastDate = rec.date;
-                    }
-                    else {
-                        var oldDate = new Date(batchLastDate);
-                        var newDate = new Date(rec.date);
-                        if (newDate > oldDate) {
-                            batchLastDate = rec.date;
-                        }
-                    }
-                }
+                batchLastDate = results.rows[0].date;
             }
         },
         scope: this
     });
+
+    return batchLastDate;
 }
 
 function onInit(event, helper){
@@ -90,7 +82,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             else if (count === 0) {
                 // This handles batch boundary row for full truncate ETL, which is the only ETL setup for this currently.
                 // Gets previous date from db for first row in batch
-                getLastAssignment(row.Id);
+                var batchLastDate = getLastAssignment(row.Id);
                 if (batchLastDate) {
                     row.enddate = batchLastDate;
                 }
