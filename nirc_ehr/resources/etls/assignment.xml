@@ -7,19 +7,11 @@
             <description>Copy to assignment target</description>
             <source schemaName="dbo" queryName="q_assignment"/>
             <destination schemaName="study" queryName="assignment"
-                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
                 <columnTransforms>
                     <column source="assignmentDate" target="date"/>
                 </columnTransforms>
-                <alternateKeys>
-                    <column name="objectid"/>
-                </alternateKeys>
             </destination>
         </transform>
     </transforms>
-
-    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified" >
-        <deletedRowsSource schemaName="dbo" queryName="q_assignment_delete" timestampColumnName="modified"
-                           deletedSourceKeyColumnName="objectid" targetKeyColumnName="objectid"/>
-    </incrementalFilter>
 </etl>

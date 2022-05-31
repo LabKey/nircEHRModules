@@ -7,10 +7,7 @@
             <description>Copy to assignment target</description>
             <source schemaName="dbo" queryName="q_protocolAssignment"/>
             <destination schemaName="study" queryName="protocolAssignment"
-                         bulkLoad="true" batchSize="5000" targetOption="merge">
-                <alternateKeys>
-                    <column name="objectid"/>
-                </alternateKeys>
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
                 <columnTransforms>
                     <column source="transferDate" target="date"/>
                     <column source="performedby" target="performedby" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
