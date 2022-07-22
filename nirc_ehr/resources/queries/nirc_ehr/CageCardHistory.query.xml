@@ -3,7 +3,7 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="CageCardHistory" tableDbType="TABLE">
                 <tableTitle>Cage Card History</tableTitle>
-                <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
+                <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer" />
                 <columns>
                     <column columnName="AccountStaff">
                         <columnTitle>Account Staff</columnTitle>
