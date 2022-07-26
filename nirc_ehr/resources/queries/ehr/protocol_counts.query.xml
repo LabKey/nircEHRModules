@@ -3,7 +3,7 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="protocol_counts" tableDbType="TABLE">
                 <tableTitle>NHPs Allowed Per Protocol</tableTitle>
-                <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
+                <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer" />
                 <columns>
                     <column columnName="species">
                         <columnTitle>Species</columnTitle>

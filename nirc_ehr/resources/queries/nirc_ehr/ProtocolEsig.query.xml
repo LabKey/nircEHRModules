@@ -3,7 +3,7 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="ProtocolEsig" tableDbType="TABLE">
                 <tableTitle>Protocol ESignature</tableTitle>
-                <javaCustomizer>org.labkey.nirc_ehr.table.NIRC_EHRCustomizer</javaCustomizer>
+                <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer" />
                 <columns>
                     <column columnName="EsigId">
                         <columnTitle>Esig Id</columnTitle>
