@@ -19,7 +19,7 @@ FROM
             LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
             LEFT JOIN EVENT evt ON anmEvt.EVENT_ID = evt.EVENT_ID
             LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
-   WHERE anmEvt.EVENT_ID IN (SELECT EVENT_ID FROM EVENT WHERE NAME LIKE 'Lab Transfer To%')
+   WHERE anmEvt.EVENT_ID IN (SELECT EVENT_ID FROM EVENT WHERE NAME LIKE 'Lab Transfer To%' OR NAME LIKE 'Lab Transfer to%')
    GROUP BY anm.ANIMAL_ID_NUMBER,
             anm.ANIMAL_DISPOSITION_ID,
             anmEvt.EVENT_DATETIME,
