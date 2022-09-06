@@ -31,6 +31,7 @@ import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.DefaultSchema;
 import org.labkey.api.query.QuerySchema;
 import org.labkey.api.resource.Resource;
+import org.labkey.api.util.NetworkDrive;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.ArrivalFormType;
@@ -42,6 +43,7 @@ import org.labkey.nirc_ehr.history.DefaultBloodDrawDataSource;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -107,6 +109,13 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");
 
         registerDataEntry();
+
+        // Ensure N: is mounted if it's configured, as it's being mapped in via a symlink/shortcut, so we can't
+        // recognize paths using it based solely on their drive letter and mount just-in-time
+        if (NetworkDrive.getNetworkDrive("N:\\") != null)
+        {
+            NetworkDrive.exists(new File("N:\\"));
+        }
     }
 
     private void registerDataEntry()
