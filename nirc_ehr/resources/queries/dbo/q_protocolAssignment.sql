@@ -17,7 +17,7 @@ SELECT * FROM
        LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
        LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
        LEFT JOIN q_deaths dea ON anm.ANIMAL_ID_NUMBER = dea.participantId
-       LEFT JOIN q_latestDeparture dep ON anm.ANIMAL_ID_NUMBER = dep.Id
+       LEFT JOIN q_finalDeparture dep ON anm.ANIMAL_ID_NUMBER = dep.Id
   WHERE anmEvt.EVENT_ID = 2 --Animal Transfer
     AND anmCmt.TEXT LIKE '%Pro%'
 
@@ -42,6 +42,6 @@ SELECT * FROM
        JOIN PROTOCOL pr ON se.PROTOCOL_ID = pr.PROTOCOL_ID
        LEFT JOIN ANIMAL_EVENT ae ON ae.ANIMAL_ID = an.ANIMAL_ID AND EVENT_ID = 1 -- Received
        LEFT JOIN q_deaths dea ON an.ANIMAL_ID_NUMBER = dea.participantId
-       LEFT JOIN q_latestDeparture dep ON an.ANIMAL_ID_NUMBER = dep.Id
+       LEFT JOIN q_finalDeparture dep ON an.ANIMAL_ID_NUMBER = dep.Id
 ) a
 ORDER BY a.Id,a.transferDate DESC
