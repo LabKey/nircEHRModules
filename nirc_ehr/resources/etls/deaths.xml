@@ -22,7 +22,4 @@
         <deletedRowsSource schemaName="dbo" queryName="q_deaths_delete" timestampColumnName="modified"
                            deletedSourceKeyColumnName="Id" targetKeyColumnName="Id"/>
     </incrementalFilter>
-    <schedule>
-        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
-    </schedule>
 </etl>
