@@ -18,12 +18,13 @@
             document.title = title;
             LABKEY.Utils.setWebpartTitle(title, webpart.id);
 
-            Ext4.create('NIRC_EHR.panel.ParticipantDetailsPanel', {
+            Ext4.create('EHR.panel.ParticipantDetailsPanel', {
                 participantId: participantId,
                 defaultReport: ctx.DefaultAnimalHistoryReport,
                 defaultTab: 'General',
                 autoLoadDefaultTab: true,
-                showReportsOption:true
+                showReportsOption:true,
+                caseInsensitive: true,
             }).render(webpart.wrapperDivId);
         });
 

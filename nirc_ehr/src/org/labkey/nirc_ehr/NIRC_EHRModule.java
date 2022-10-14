@@ -82,7 +82,6 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         addController(NIRC_EHRController.NAME, NIRC_EHRController.class);
 
         EHRService ehrService = EHRService.get();
-        ehrService.registerClientDependency(ClientDependency.supplierFromPath("ehr/metadata/Default.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nircReports.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SnapshotPanel.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/BloodSummaryPanel.js"), this);
