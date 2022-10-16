@@ -6,12 +6,13 @@
         if(!ctx)
             return;
 
-        Ext4.create('NIRC_EHR.panel.AnimalHistoryPanel', {
+        Ext4.create('EHR.panel.AnimalHistoryPanel', {
             defaultReport: ctx.DefaultAnimalHistoryReport,
             defaultTab: 'General',
             showFilterOptionsTitle: true,
             showReportsOption:true,
-            renderTo: webpart.wrapperDivId
+            renderTo: webpart.wrapperDivId,
+            caseInsensitiveSubjects: true
         });
     });
 
