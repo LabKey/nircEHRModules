@@ -2,7 +2,6 @@
     <dependencies>
         <dependency path="ehr.context" />
 
-        <dependency path="nirc_ehr/utils.js"/>
         <dependency path="ehr/form/field/RoomField.js"/>
         <dependency path="ehr/form/field/CageField.js"/>
 
@@ -11,8 +10,6 @@
         <dependency path="ehr/panel/HiddenSingleSubjectFilterType.js"/>
 
         <dependency path="ehr/panel/AnimalHistoryPanel.js"/>
-        <dependency path="nirc_ehr/panel/AnimalHistoryPanel.js"/>
-<!--        <dependency path="ehr/panel/ParticipantDetailsPanel.js"/>-->
-        <dependency path="nirc_ehr/panel/ParticipantDetailsPanel.js"/>
+        <dependency path="ehr/panel/ParticipantDetailsPanel.js"/>
     </dependencies>
 </view>
