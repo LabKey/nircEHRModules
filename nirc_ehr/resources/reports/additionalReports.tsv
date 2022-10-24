@@ -1,0 +1,2 @@
+reportname	category	reporttype	reporttitle	visible	containerpath	schemaname	queryname	viewname	report	datefieldname	todayonly	queryhaslocation	sort_order	QCStateLabelFieldName	description
+MHC	Genetics	query	MHC	true		study	MHC				false	false		qcstate/publicdata	This report shows MHC type
