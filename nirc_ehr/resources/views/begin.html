@@ -32,8 +32,7 @@
         var byDatasetItems = [];
         byDatasetItems.push({name: 'Browse All Datasets', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-datasets.view?'});
         byDatasetItems.push({name: 'Housing Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-housingQueries.view?'});
-        // uncomment after protocol setup
-        // byDatasetItems.push({name: 'Protocol and Project Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-projectQueries.view?'});
+        byDatasetItems.push({name: 'Protocol and Project Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-projectQueries.view?'});
 
         Ext4.create('EHR.NavMenu', {
             width: 270,
