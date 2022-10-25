@@ -6,6 +6,14 @@
     </requiredWebParts>
 
     <preferredWebParts>
+        <webPart>
+            <name>Electronic Health Record</name>
+            <location>menu</location>
+        </webPart>
+        <webPart>
+            <name>Quick Search</name>
+            <location>menu</location>
+        </webPart>
     </preferredWebParts>
 
     <folderTabs>
