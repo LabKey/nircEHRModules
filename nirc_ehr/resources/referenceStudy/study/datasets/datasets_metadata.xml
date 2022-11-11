@@ -814,8 +814,20 @@
                 <columnTitle>Case category</columnTitle>
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="diagnosis">
-                <columnTitle>Diagnosis</columnTitle>
+            <column columnName="openDiagnosis">
+                <columnTitle>Open Diagnosis</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="closeDiagnosis">
+                <columnTitle>Close Diagnosis</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="openRemark">
+                <columnTitle>Open Remark</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="closeRemark">
+                <columnTitle>Close Remark</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="attachmentFile">

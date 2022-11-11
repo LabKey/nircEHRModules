@@ -4,23 +4,25 @@
     <description>Clinical Treatment Cases</description>
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
-            <description>Copy to cases target</description>
+            <description>Copy to cases temp table</description>
             <source schemaName="dbo" queryName="q_cases"/>
-            <destination schemaName="study" queryName="cases"
-                         bulkLoad="true" batchSize="5000" targetOption="merge">
-                <alternateKeys>
-                    <column name="objectid"/>
-                </alternateKeys>
+            <destination schemaName="nirc_ehr" queryName="CasesTemp"
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
                 <columnTransforms>
                     <column source="caseDate" target="date"/>
                     <column source="performedby" target="performedby" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
                 </columnTransforms>
             </destination>
         </transform>
+        <transform id="step2" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy from cases temp to cases</description>
+            <source schemaName="nirc_ehr" queryName="casesSource"/>
+            <destination schemaName="study" queryName="cases"
+                         bulkLoad="true" targetOption="truncate">
+            </destination>
+        </transform>
     </transforms>
-
-    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified" >
-        <deletedRowsSource schemaName="dbo" queryName="q_cases_delete" timestampColumnName="modified"
-                           deletedSourceKeyColumnName="objectid" targetKeyColumnName="objectid"/>
-    </incrementalFilter>
+    <schedule>
+        <cron expression="0 0 20 * * ?" /> <!--Run at 8PM every day-->
+    </schedule>
 </etl>
