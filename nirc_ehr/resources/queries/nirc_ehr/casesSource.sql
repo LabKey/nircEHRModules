@@ -2,7 +2,6 @@
 SELECT objectid,
        Id,
        date,
-       modified,
        performedby,
        openRemark,
        closeRemark,
@@ -11,5 +10,5 @@ SELECT objectid,
        enddate,
        category,
        attachmentFile
-FROM casesTemp
+FROM CasesTemp
 WHERE category = 'Presenting Diagnosis'

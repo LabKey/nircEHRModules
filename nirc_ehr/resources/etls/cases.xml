@@ -6,7 +6,7 @@
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
             <description>Copy to cases temp table</description>
             <source schemaName="dbo" queryName="q_cases"/>
-            <destination schemaName="study" queryName="casesTemp"
+            <destination schemaName="nirc_ehr" queryName="CasesTemp"
                          bulkLoad="true" batchSize="5000" targetOption="truncate">
                 <columnTransforms>
                     <column source="caseDate" target="date"/>
@@ -16,7 +16,7 @@
         </transform>
         <transform id="step2" type="org.labkey.di.pipeline.TransformTask">
             <description>Copy from cases temp to cases</description>
-            <source schemaName="study" queryName="casesSource"/>
+            <source schemaName="nirc_ehr" queryName="casesSource"/>
             <destination schemaName="study" queryName="cases"
                          bulkLoad="true" targetOption="truncate">
             </destination>

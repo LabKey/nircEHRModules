@@ -5,11 +5,12 @@ var LABKEY = require("labkey");
 var prevRow;
 
 function init() {
-    // Get boundary rows for ETL batches
+    // Get boundary rows for ETL batches. Trigger will lose scope between batches so need to load up previous row from
+    // prior batch.
     if (extraContext.dataSource === "etl") {
         LABKEY.Query.executeSql({
-            schemaName: 'study',
-            sql: "SELECT Id, date, category FROM study.casesTemp ORDER BY objectid DESC LIMIT 1",
+            schemaName: 'nirc_ehr',
+            sql: "SELECT Id, date, category FROM nirc_ehr.casesTemp ORDER BY objectid DESC LIMIT 1",
             maxRows: 1,
             scope: this,
             failure: LABKEY.Utils.getCallbackWrapper(function (response) {
@@ -35,10 +36,10 @@ function getEnddate(row, enddate){
     var closeDate = new Date(enddate);
 
     if (row.enddate) {
-        var death = new Date(row.enddate);
+        var deathOrDep = new Date(row.enddate);
 
-        if (death < closeDate)
-            return death;
+        if (deathOrDep < closeDate)
+            return deathOrDep;
     }
     return closeDate;
 }
@@ -53,7 +54,7 @@ function beforeInsert(row, errors){
                 row.closeRemark = "No resolution. A new case opened."
             }
             else if (row.category == "Clinical Resolution" && prevRow.category == "Clinical Resolution") {
-                console.log("Multiple resolutions: Id - " + row.Id + ", Date - " + row.date + " and Id - " + prevRow.Id + ", Date - " + prevRow.date)
+                // console.log("Multiple resolutions: Id - " + row.Id + ", Date - " + row.date + " and Id - " + prevRow.Id + ", Date - " + prevRow.date)
             }
             else if (row.category == "Presenting Diagnosis") {
                 row.closeRemark = prevRow.closeRemark || null;
