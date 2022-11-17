@@ -569,7 +569,7 @@
         </columns>
     </table>
     <table tableName="CasesTemp" tableDbType="TABLE">
-        <tableTitle>Cases Staging For ETl</tableTitle>
+        <tableTitle>Cases Staging For ETL</tableTitle>
         <columns>
             <column columnName="Id"/>
             <column columnName="date"/>
