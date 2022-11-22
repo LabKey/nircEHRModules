@@ -11,4 +11,4 @@ SELECT objectid,
        category,
        attachmentFile
 FROM CasesTemp
-WHERE category = 'Presenting Diagnosis'
+WHERE category = 'Presenting Diagnosis' AND (openRemark IS NULL OR openRemark NOT LIKE 'Error:%')

@@ -30,4 +30,4 @@ SELECT * FROM (
           OR anmEvt.EVENT_ID = 1677 -- 1580 Presenting Diagnosis, 1677 Clinical Resolution
            AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
       ) cas
-ORDER BY cas.Id, cas.objectid DESC
+ORDER BY cas.Id, cas.caseDate DESC
