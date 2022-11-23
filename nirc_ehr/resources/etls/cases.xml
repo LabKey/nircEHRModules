@@ -7,7 +7,7 @@
             <description>Copy to cases temp table</description>
             <source schemaName="dbo" queryName="q_cases"/>
             <destination schemaName="nirc_ehr" queryName="CasesTemp"
-                         bulkLoad="true" batchSize="5000" targetOption="truncate">
+                         bulkLoad="true" targetOption="truncate">
                 <columnTransforms>
                     <column source="caseDate" target="date"/>
                     <column source="performedby" target="performedby" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
