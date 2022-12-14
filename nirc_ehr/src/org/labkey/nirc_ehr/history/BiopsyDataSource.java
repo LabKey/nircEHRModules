@@ -8,9 +8,9 @@ import org.labkey.api.query.FieldKey;
 
 import java.sql.SQLException;
 
-public class DefaultBiopsyDataSource extends AbstractDataSource
+public class BiopsyDataSource extends AbstractDataSource
 {
-    public DefaultBiopsyDataSource(Module module)
+    public BiopsyDataSource(Module module)
     {
         super("study", "Biopsy", "Biopsy", "Biopsy", module);
     }
