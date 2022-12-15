@@ -195,7 +195,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (ds.getColumn("flags") == null)
         {
             var col = getWrappedCol(us, ds, "Flags", "demographicsActiveFlags", "Id", "Id");
-            col.setLabel("ActiveFlags");
+            col.setLabel("Active Flags");
             col.setURL(DetailsURL.fromString("/query/executeQuery.view?schemaName=ehr_lookups&queryName=flag_values&query.Id~eq=${Id}", ds.getContainerContext()));
             ds.addColumn(col);
         }
