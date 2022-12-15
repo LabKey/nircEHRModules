@@ -202,8 +202,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (ds.getColumn("demographicsActiveAssignment") == null)
         {
             var col21 = getWrappedCol(us, ds, "activeAssignments", "demographicsActiveAssignment", "Id", "Id");
-            col21.setLabel("Assignments - Active");
-            col21.setDescription("Shows all projects to which the animal is actively assigned on the current date");
+            col21.setLabel("Active Protocol Assignments");
+            col21.setDescription("Shows all protocols to which the animal is actively assigned on the current date");
             ds.addColumn(col21);
         }
     }

@@ -30,7 +30,7 @@ public class ArrivalDataSource extends AbstractDataSource
         StringBuilder sb = new StringBuilder();
 
         if(rs.hasColumn(FieldKey.fromString("Id/Demographics/gender/meaning")) && rs.getObject(FieldKey.fromString("Id/Demographics/gender/meaning")) != null)
-            sb.append("Gender: " + rs.getString(FieldKey.fromString("Id/Demographics/gender/meaning")));
+            sb.append("Sex: " + rs.getString(FieldKey.fromString("Id/Demographics/gender/meaning")));
 
         return sb.toString();
     }
