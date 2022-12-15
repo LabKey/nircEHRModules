@@ -13,6 +13,7 @@ import org.labkey.api.ehr.EHRService;
 import org.labkey.api.exp.api.StorageProvisioner;
 import org.labkey.api.exp.property.Domain;
 import org.labkey.api.ldk.table.AbstractTableCustomizer;
+import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.ExprColumn;
 import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
@@ -190,6 +191,20 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             col15.setLabel("Number of Offspring");
             col15.setDescription("Shows the total offspring of each animal");
             ds.addColumn(col15);
+        }
+        if (ds.getColumn("flags") == null)
+        {
+            var col = getWrappedCol(us, ds, "Flags", "demographicsActiveFlags", "Id", "Id");
+            col.setLabel("Active Flags");
+            col.setURL(DetailsURL.fromString("/query/executeQuery.view?schemaName=ehr_lookups&queryName=flag_values&query.Id~eq=${Id}", ds.getContainerContext()));
+            ds.addColumn(col);
+        }
+        if (ds.getColumn("demographicsActiveAssignment") == null)
+        {
+            var col21 = getWrappedCol(us, ds, "activeAssignments", "demographicsActiveAssignment", "Id", "Id");
+            col21.setLabel("Active Protocol Assignments");
+            col21.setDescription("Shows all protocols to which the animal is actively assigned on the current date");
+            ds.addColumn(col21);
         }
     }
 
