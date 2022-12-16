@@ -24,7 +24,12 @@ import org.labkey.api.ehr.SharedEHRUpgradeCode;
 import org.labkey.api.ehr.dataentry.DefaultDataEntryFormFactory;
 import org.labkey.api.ehr.dataentry.forms.BirthFormType;
 import org.labkey.api.ehr.dataentry.forms.BloodDrawFormType;
+import org.labkey.api.ehr.demographics.ParentsDemographicsProvider;
+import org.labkey.api.ehr.history.DefaultAlopeciaDataSource;
+import org.labkey.api.ehr.history.DefaultAnimalRecordFlagDataSource;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
+import org.labkey.api.ehr.history.DefaultNotesDataSource;
+import org.labkey.api.ehr.history.DefaultVitalsDataSource;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
@@ -37,9 +42,15 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.ArrivalFormType;
 import org.labkey.nirc_ehr.dataentry.DeathFormType;
 import org.labkey.nirc_ehr.dataentry.DepartureFormType;
+import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
-import org.labkey.nirc_ehr.history.DefaultBiopsyDataSource;
-import org.labkey.nirc_ehr.history.DefaultBloodDrawDataSource;
+import org.labkey.nirc_ehr.history.ArrivalDataSource;
+import org.labkey.nirc_ehr.history.BiopsyDataSource;
+import org.labkey.nirc_ehr.history.BirthDataSource;
+import org.labkey.nirc_ehr.history.BloodDrawDataSource;
+import org.labkey.nirc_ehr.history.DeathDataSource;
+import org.labkey.nirc_ehr.history.DepartureDataSource;
+import org.labkey.nirc_ehr.history.ProjectAssignmentDataSource;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 
@@ -100,10 +111,21 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerTableCustomizer(this, NIRC_EHRCustomizer.class);
 
         EHRService.get().registerDemographicsProvider(new ActiveFlagsDemographicsProvider(this));
+        EHRService.get().registerDemographicsProvider(new ParentsDemographicsProvider(this));
+        EHRService.get().registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));
 
+        EHRService.get().registerHistoryDataSource(new ArrivalDataSource(this));
+        EHRService.get().registerHistoryDataSource(new BirthDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DeathDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DepartureDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DefaultAnimalRecordFlagDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DefaultNotesDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DefaultVitalsDataSource(this));
+        EHRService.get().registerHistoryDataSource(new DefaultAlopeciaDataSource(this));
+        EHRService.get().registerHistoryDataSource(new ProjectAssignmentDataSource(this));
         EHRService.get().registerHistoryDataSource(new DefaultClinicalRemarksDataSource(this));
-        EHRService.get().registerHistoryDataSource(new DefaultBiopsyDataSource(this));
-        EHRService.get().registerHistoryDataSource(new DefaultBloodDrawDataSource(this));
+        EHRService.get().registerHistoryDataSource(new BiopsyDataSource(this));
+        EHRService.get().registerHistoryDataSource(new BloodDrawDataSource(this));
 
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");

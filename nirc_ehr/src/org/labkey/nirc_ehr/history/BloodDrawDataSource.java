@@ -22,9 +22,9 @@ import org.labkey.api.module.Module;
 
 import java.sql.SQLException;
 
-public class DefaultBloodDrawDataSource extends AbstractDataSource
+public class BloodDrawDataSource extends AbstractDataSource
 {
-    public DefaultBloodDrawDataSource(Module module)
+    public BloodDrawDataSource(Module module)
     {
         super("study", "Blood Draws", "Blood Draw", "Blood Draws", module);
     }
