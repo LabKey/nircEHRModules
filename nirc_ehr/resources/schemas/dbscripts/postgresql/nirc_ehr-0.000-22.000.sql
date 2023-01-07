@@ -1,4 +1,3 @@
-
 CREATE SCHEMA nirc_ehr;
 
 CREATE TABLE nirc_ehr.LocationTypes
