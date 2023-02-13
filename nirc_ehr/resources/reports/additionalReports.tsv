@@ -1,3 +1,4 @@
 reportname	category	reporttype	reporttitle	visible	containerpath	schemaname	queryname	viewname	report	datefieldname	todayonly	queryhaslocation	sort_order	QCStateLabelFieldName	description
-MHC	Genetics	query	MHC	true		study	MHC				false	false		qcstate/publicdata	This report shows MHC type
-assignment	Colony Management	query	Protocol Assignment	true		study	protocolAssignment				false	false		qcstate/publicdata	This report shows protocol assignments
+MHC	Genetics	query	MHC	TRUE		study	MHC				FALSE	FALSE		qcstate/publicdata	This report shows MHC type
+assignment	Colony Management	query	Protocol Assignment	TRUE		study	protocolAssignment				FALSE	FALSE		qcstate/publicdata	This report shows protocol assignments
+Histopathology	Pathology	query	Histopathology	TRUE		study	histopathology				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports

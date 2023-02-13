@@ -15,8 +15,6 @@ SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
-         LEFT JOIN EVENT_EVENT_GROUP evtEvtGrp ON evtEvtGrp.EVENT_ID = anmEvt.EVENT_ID
          LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
-WHERE evtEvtGrp.EVENT_GROUP_ID = 5
-  -- 5 Necropsy
+WHERE anmEvt.EVENT_ID = 1575 -- 1575 Necropsy
   AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
