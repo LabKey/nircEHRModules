@@ -12,7 +12,7 @@
         <column name="birth"/>
         <column name="performedBy"/>
         <column name="history"/>
-        <column name="lab"/>
+        <column name="sourceFacility"/>
         <column name="attachmentFile"/>
     </columns>
 </customView>
