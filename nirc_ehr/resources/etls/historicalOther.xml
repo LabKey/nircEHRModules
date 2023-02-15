@@ -7,7 +7,7 @@
             <description>Copy to historicalOther target</description>
             <source schemaName="dbo" queryName="q_historicalOther"/>
             <destination schemaName="study" queryName="historicalOther"
-                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
                 <alternateKeys>
                     <column name="objectid"/>
                 </alternateKeys>

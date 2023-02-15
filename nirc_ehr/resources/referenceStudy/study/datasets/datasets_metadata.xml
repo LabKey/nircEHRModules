@@ -58,7 +58,7 @@
             <column columnName="species">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="lab">
+            <column columnName="sourceFacility">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="attachmentFile">

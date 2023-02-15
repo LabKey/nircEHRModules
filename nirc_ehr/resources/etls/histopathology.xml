@@ -7,7 +7,7 @@
             <description>Copy to histopathology target</description>
             <source schemaName="dbo" queryName="q_histopathology"/>
             <destination schemaName="study" queryName="histopathology"
-                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                         bulkLoad="true" batchSize="5000" targetOption="truncate">
                 <alternateKeys>
                     <column name="objectid"/>
                 </alternateKeys>

@@ -11,7 +11,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID   AS objectid,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS eventDate,
        NULL                  AS acqDateText,
        'Animal Event'        AS source,
-       Evt.NAME              AS lab,
+       Evt.NAME              AS sourceFacility,
        CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
                    ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'
                        || substring(anmEvt.ATTACHMENT_PATH, LENGTH('N:\'), LENGTH(anmEvt.ATTACHMENT_PATH)))
