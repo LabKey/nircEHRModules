@@ -15,7 +15,9 @@ FROM ANIMAL_EVENT anmEvt
          LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
          LEFT JOIN EVENT ev ON anmEvt.EVENT_ID = ev.EVENT_ID
 
-WHERE anmEvt.EVENT_ID.EVENT_ID IN (1864, 1581)
+WHERE anmEvt.EVENT_ID.EVENT_ID IN (1864, 1581, 2129, 219)
   AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
 --     1864 Blood Sample Collection (with Volume)
 --     1581 Blood Sample Collection
+--     2129 Blood-Predose
+--     219 SRV Draw

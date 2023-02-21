@@ -10,8 +10,14 @@ SELECT anmEvt.ANIMAL_EVENT_ID   AS objectid,
        anm.SSB_ID.SPECIES_ID            AS species,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS eventDate,
        NULL                  AS acqDateText,
-       'Animal Event'        AS source
+       'Animal Event'        AS source,
+       Evt.NAME              AS sourceFacility,
+       CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
+                   ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'
+                       || substring(anmEvt.ATTACHMENT_PATH, LENGTH('N:\'), LENGTH(anmEvt.ATTACHMENT_PATH)))
+              ELSE NULL END AS attachmentFile
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
          LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
+         LEFT JOIN EVENT Evt ON anmEvt.EVENT_ID = Evt.EVENT_ID
 WHERE anmEvt.EVENT_ID IN (SELECT EVENT_ID FROM EVENT WHERE NAME LIKE 'Lab Transfer Fr%')

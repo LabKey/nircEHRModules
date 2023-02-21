@@ -50,14 +50,6 @@ function onUpsert(helper, scriptErrors, row, oldRow){
                 row.sire = '';
                 row.dam = '';
             }
-
-            // Known issue with this Id listed as sire and dam
-            if (row.sire === 'C0502009') {
-                row.sire = '';
-            }
-            if (row.dam === 'C0502009') {
-                row.dam = '';
-            }
         }
     }
 }
