@@ -11,7 +11,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
                 ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'
                     || substring(anmEvt.ATTACHMENT_PATH, LENGTH('N:\'), LENGTH(anmEvt.ATTACHMENT_PATH)))
             ELSE NULL END AS attachmentFile,
-       anmCmt.TEXT                                                               AS remark,
+       (CASE WHEN (anmEvt.DIAGNOSIS IS NOT NULL AND anmCmt.TEXT IS NOT NULL) THEN (anmEvt.DIAGNOSIS || ', ' || anmCmt.TEXT) WHEN (anmEvt.DIAGNOSIS IS NOT NULL AND anmCmt.TEXT IS NULL) THEN (anmEvt.DIAGNOSIS) ELSE (anmCmt.TEXT) END) AS remark,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
@@ -28,15 +28,3 @@ WHERE (evtEvtGrp.EVENT_GROUP_ID = 31 AND evtEvtGrp.EVENT_ID = 2261) -- Sedation 
 --     51	Oral Dose Administration - Alert
 --     54	Fluid Administration
 --     65	Sedation
-
-GROUP BY anmEvt.ANIMAL_EVENT_ID,
-         anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER,
-         anmEvt.EVENT_DATETIME,
-         anmEvt.STAFF_ID.STAFF_FIRST_NAME,
-         anmEvt.STAFF_ID.STAFF_LAST_NAME,
-         anmEvt.EVENT_ID.NAME,
-         anmEvt.RESULT,
-         anmEvt.ATTACHMENT_PATH,
-         anmCmt.TEXT,
-         anmEvt.CREATED_DATETIME,
-         adt.modified

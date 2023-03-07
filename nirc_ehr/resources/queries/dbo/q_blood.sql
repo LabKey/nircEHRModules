@@ -8,7 +8,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        anmEvt.EVENT_ID.NAME                                                      AS type,
        anmEvt.RESULT                                                             AS quantity,
        ev.NUMERIC_UNIT_ID                                                        AS Units,
-       anmCmt.TEXT                                                               AS remark,
+       (CASE WHEN (anmEvt.DIAGNOSIS IS NOT NULL AND anmCmt.TEXT IS NOT NULL) THEN (anmEvt.DIAGNOSIS || ', ' || anmCmt.TEXT) WHEN (anmEvt.DIAGNOSIS IS NOT NULL AND anmCmt.TEXT IS NULL) THEN (anmEvt.DIAGNOSIS) ELSE (anmCmt.TEXT) END) AS remark,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
