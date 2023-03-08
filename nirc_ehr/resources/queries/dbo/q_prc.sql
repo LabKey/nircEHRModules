@@ -45,3 +45,5 @@ OR -- Procedures from Quarantine Period
     (evtEvtGrp.EVENT_GROUP_ID = 26 AND evtEvtGrp.EVENT_ID = 1806)
 
 AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates
+GROUP BY anmEvt.ANIMAL_EVENT_ID, anm.ANIMAL_ID_NUMBER, anmEvt.EVENT_DATETIME, adt.modified, anmEvt.CREATED_DATETIME,
+         anmEvt.DIAGNOSIS, anmCmt.TEXT, anmEvt.EVENT_ID.NAME, anmEvt.STAFF_ID.STAFF_FIRST_NAME, anmEvt.STAFF_ID.STAFF_LAST_NAM
