@@ -2,3 +2,20 @@ reportname	category	reporttype	reporttitle	visible	containerpath	schemaname	quer
 MHC	Genetics	query	MHC	TRUE		study	MHC				FALSE	FALSE		qcstate/publicdata	This report shows MHC type
 assignment	Colony Management	query	Protocol Assignment	TRUE		study	protocolAssignment				FALSE	FALSE		qcstate/publicdata	This report shows protocol assignments
 Histopathology	Pathology	query	Histopathology	TRUE		study	histopathology				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
+obs	Clinical	query	Observations	TRUE		study	obs			date	FALSE	FALSE		qcstate/publicdata	This report displays observations for the selected animal
+behaviorCases
+behaviorRemarks
+clinObsBehavior
+drug
+pairingHousingSummary
+roommateHistoryBehavior
+pairingsBehavior
+pairingHistory
+clinMedicationSchedule
+dietSchedule
+surgMedicationSchedule
+surgMedicationScheduleDaily
+incompleteTreatments
+bloodSchedule
+cases
+surgicalCases
