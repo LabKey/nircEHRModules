@@ -7,6 +7,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
             ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
                 || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        anmCmt.TEXT AS remark,
+       anmEvt.DIAGNOSIS as diagnosis,
        anmEvt.EVENT_ID.NAME AS category,
        CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
             ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'

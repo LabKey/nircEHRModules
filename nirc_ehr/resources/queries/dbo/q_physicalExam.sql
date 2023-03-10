@@ -6,7 +6,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
             WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
             ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
                 || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
-       anmCmt.TEXT AS remark,
+       (CASE WHEN (anmEvt.DIAGNOSIS IS NOT NULL AND anmCmt.TEXT IS NOT NULL) THEN (anmEvt.DIAGNOSIS || ', ' || anmCmt.TEXT) WHEN (anmEvt.DIAGNOSIS IS NOT NULL AND anmCmt.TEXT IS NULL) THEN (anmEvt.DIAGNOSIS) ELSE (anmCmt.TEXT) END) AS remark,
        anmEvt.EVENT_ID.NAME AS exam,
        anmEvt.RESULT,
        ev.NUMERIC_UNIT_ID                                                        AS Units
