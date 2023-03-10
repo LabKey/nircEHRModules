@@ -3,19 +3,22 @@ MHC	Genetics	query	MHC	TRUE		study	MHC				FALSE	FALSE		qcstate/publicdata	This r
 assignment	Colony Management	query	Protocol Assignment	TRUE		study	protocolAssignment				FALSE	FALSE		qcstate/publicdata	This report shows protocol assignments
 Histopathology	Pathology	query	Histopathology	TRUE		study	histopathology				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
 obs	Clinical	query	Observations	TRUE		study	obs			date	FALSE	FALSE		qcstate/publicdata	This report displays observations for the selected animal
-behaviorCases
-behaviorRemarks
-clinObsBehavior
-drug
-pairingHousingSummary
-roommateHistoryBehavior
-pairingsBehavior
-pairingHistory
-clinMedicationSchedule
-dietSchedule
-surgMedicationSchedule
-surgMedicationScheduleDaily
-incompleteTreatments
-bloodSchedule
-cases
-surgicalCases
+foster	Reproductive Management	query	Fostering	TRUE		study	foster				FALSE	FALSE		qcstate/publicdata	This is for animal fostering data
+projects	Colony Management	query	Project Assignment	TRUE		study	assignment				FALSE	FALSE		qcstate/publicdata	This is for project assignments
+chemistry	Clinical	query	Chemistry	TRUE		study	chemistryResults				FALSE	FALSE		qcstate/publicdata	This is for chemistry results
+behaviorCases															
+behaviorRemarks															
+bloodSchedule															
+cases															
+clinMedicationSchedule															
+clinObsBehavior															
+dietSchedule															
+drug															
+incompleteTreatments															
+pairingsBehavior															
+pairingHistory															
+pairingHousingSummary															
+roommateHistoryBehavior															
+surgicalCases															
+surgMedicationSchedule															
+surgMedicationScheduleDaily															
