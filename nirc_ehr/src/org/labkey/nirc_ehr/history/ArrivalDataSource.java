@@ -12,16 +12,15 @@ import java.util.Set;
 
 public class ArrivalDataSource extends AbstractDataSource
 {
-
     public ArrivalDataSource(Module module)
     {
-        super("study", "Arrival", "Arrival", "Arrival/Departure", module);
+        super("study", "Arrival", "Arrival", "Arrival", module);
     }
 
     @Override
     protected Set<String> getColumnNames()
     {
-        return PageFlowUtil.set("Id", "date", "Id/Demographics/gender/meaning");
+        return PageFlowUtil.set("Id", "date", "sourceFacility");
     }
 
     @Override
@@ -29,8 +28,8 @@ public class ArrivalDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        if(rs.hasColumn(FieldKey.fromString("Id/Demographics/gender/meaning")) && rs.getObject(FieldKey.fromString("Id/Demographics/gender/meaning")) != null)
-            sb.append("Sex: " + rs.getString(FieldKey.fromString("Id/Demographics/gender/meaning")));
+        if (rs.hasColumn(FieldKey.fromString("sourceFacility")) && rs.getObject(FieldKey.fromString("sourceFacility")) != null)
+            sb.append("Lab Transfer From: " + rs.getString(FieldKey.fromString("sourceFacility")));
 
         return sb.toString();
     }

@@ -10,17 +10,18 @@ import org.labkey.api.util.PageFlowUtil;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class DepartureDataSource extends AbstractDataSource
+public class CasesDataSource extends AbstractDataSource
 {
-    public DepartureDataSource(Module module)
+
+    public CasesDataSource(Module module)
     {
-        super("study", "Departure", "Departure", "Departure", module);
+        super("study", "cases", "Cases", "Cases", module);
     }
 
     @Override
     protected Set<String> getColumnNames()
     {
-        return PageFlowUtil.set("Id", "date", "destination/title");
+        return PageFlowUtil.set("Id", "date", "openDiagnosis");
     }
 
     @Override
@@ -28,8 +29,8 @@ public class DepartureDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        if (rs.hasColumn(FieldKey.fromString("destination/title")) && rs.getObject(FieldKey.fromString("destination/title")) != null)
-            sb.append("Destination: " + rs.getString(FieldKey.fromString("destination/title")));
+        if(rs.hasColumn(FieldKey.fromString("openDiagnosis")) && rs.getObject(FieldKey.fromString("openDiagnosis")) != null)
+            sb.append("Reason: " + rs.getString(FieldKey.fromString("openDiagnosis")));
 
         return sb.toString();
     }

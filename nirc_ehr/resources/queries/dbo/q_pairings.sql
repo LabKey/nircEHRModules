@@ -14,5 +14,5 @@ FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
          LEFT JOIN EVENT_EVENT_GROUP evtEvtGrp ON evtEvtGrp.EVENT_ID = anmEvt.EVENT_ID
          LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
-WHERE evtEvtGrp.EVENT_GROUP_ID IN (42, 43, 62, 2183, 2184) --   Behavioral Assessment, Group/Pair Formation, Pair Housing Type, Special Pair Housing, Standard Housing
+WHERE evtEvtGrp.EVENT_GROUP_ID IN (42, 43, 62) --   Behavioral Assessment, Group/Pair Formation, Pair Housing Type
   AND anmEvt.CREATED_DATETIME < now() -- there are rows in ANIMAL_EVENT table with future dates

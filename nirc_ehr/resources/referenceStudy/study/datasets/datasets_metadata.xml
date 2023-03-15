@@ -510,6 +510,9 @@
             <column columnName="remark">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="diagnosis">
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
@@ -665,6 +668,9 @@
                 <datatype>varchar</datatype>
             </column>
             <column columnName="remark">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="diagnosis">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="attachmentFile">
