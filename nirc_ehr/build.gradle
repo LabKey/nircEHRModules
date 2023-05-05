@@ -17,4 +17,4 @@ dependencies
             BuildUtils.addLabKeyDependency(project: project, config: "modules", depProjectPath: ":server:modules:professional", depProjectConfig: "published", depExtension: "module")
         }
 
-tasks.module.dependsOn(project(":server:modules:LabDevKitModules:LDK").tasks.module)
+tasks.named('module').configure { dependsOn(project(":server:modules:LabDevKitModules:LDK").tasks.module) }
