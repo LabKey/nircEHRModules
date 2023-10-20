@@ -22,7 +22,7 @@ import java.util.Objects;
 
 public class NIRCUserCreateTransform extends ColumnTransform
 {
-    private transient Map<String, Integer> _sourceUserNameMap = new HashMap<>();
+    private transient final Map<String, Integer> _sourceUserNameMap = new HashMap<>();
 
     /**
      * Search for the user by the first|last name (ex. john|doe)
@@ -52,8 +52,9 @@ public class NIRCUserCreateTransform extends ColumnTransform
         UserSchema us = QueryService.get().getUserSchema(getContainerUser().getUser(), getContainerUser().getContainer(), NIRC_EHRUserSchema.SCHEMA_NAME);
 
         SQLFragment sql = new SQLFragment("SELECT email, displayName, officePhone, homePhone, cellPhone, positionName FROM ").append(Objects.requireNonNull(us.getTable("Staff")), "st");
-        sql.append(" WHERE (lower(firstName) = '").append(nameParts[0].replace("'", "''")).append("' AND lower(lastName) = '")
-                .append(nameParts[1].replace("'", "''")).append("') LIMIT 1");
+        sql.append(" WHERE (lower(firstName) = ? AND lower(lastName) = ?) LIMIT 1");
+        sql.add(nameParts[0]);
+        sql.add(nameParts[1]);
 
         User newUser = new User();
         new SqlSelector(us.getDbSchema(), sql).forEachMap(row -> {
