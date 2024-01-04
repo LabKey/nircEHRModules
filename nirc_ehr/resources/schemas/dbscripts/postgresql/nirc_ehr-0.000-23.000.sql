@@ -53,8 +53,6 @@ CREATE TABLE nirc_ehr.LocationsMapping
 );
 CREATE INDEX IX_nirc_ehr_LocationsMapping_Container ON nirc_ehr.LocationsMapping (Container);
 
-/* 22.xxx SQL scripts */
-
 CREATE TABLE nirc_ehr.Staff
 (
     staffId             INTEGER NOT NULL,
@@ -103,41 +101,6 @@ CREATE TABLE nirc_ehr.Staff
 );
 CREATE INDEX IX_nirc_ehr_Staff_Container ON nirc_ehr.Staff (Container);
 
-SELECT core.executeJavaUpgradeCode('reloadFolder');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/staff;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/alopecia;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/arrival;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/biopsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/blood;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/breeder;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cases;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/chemistryResults;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/clinremarks;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/departure;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/drug;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/exemptions;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/flags;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/foster;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/notes;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/obs;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pairings;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/physicalExam;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/prc;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pregnancy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/project;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/assignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/serology;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/vitals;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/weight;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/arrival;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/birth;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/deaths;truncate');
-
 CREATE TABLE nirc_ehr.Lot
 (
     LotId               INTEGER,
@@ -185,7 +148,6 @@ CREATE TABLE nirc_ehr.AnimalShipment
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Shipment_Container ON nirc_ehr.AnimalShipment (Container);
 
-
 CREATE TABLE nirc_ehr.AnimalDelivery
 (
     AnimalDeliveryId        INTEGER,
@@ -214,7 +176,6 @@ CREATE TABLE nirc_ehr.AnimalDelivery
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Delivery_Container ON nirc_ehr.AnimalDelivery (Container);
 
-
 CREATE TABLE nirc_ehr.AnimalDeliveryEsig
 (
     EsigId                  INTEGER,
@@ -231,7 +192,6 @@ CREATE TABLE nirc_ehr.AnimalDeliveryEsig
     CONSTRAINT FK_ANIMALDELIVERESIG_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Delivery_Esig_Container ON nirc_ehr.AnimalDeliveryEsig (Container);
-
 
 CREATE TABLE nirc_ehr.AnimalReqOrder
 (
@@ -270,7 +230,6 @@ CREATE TABLE nirc_ehr.AnimalReqOrder
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Req_Order_Container ON nirc_ehr.AnimalReqOrder (Container);
 
-
 CREATE TABLE nirc_ehr.AnimalReqOrderEsig
 (
     EsigId                  INTEGER,
@@ -287,7 +246,6 @@ CREATE TABLE nirc_ehr.AnimalReqOrderEsig
     CONSTRAINT FK_ANIMALREQORDERESIG_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Req_Order_Esig_Container ON nirc_ehr.AnimalReqOrderEsig (Container);
-
 
 CREATE TABLE nirc_ehr.AnimalVendor
 (
@@ -315,7 +273,6 @@ CREATE TABLE nirc_ehr.AnimalVendor
 );
 CREATE INDEX IX_Nirc_Ehr_Animal_Vendor_Container ON nirc_ehr.AnimalVendor (Container);
 
-
 CREATE TABLE nirc_ehr.ShipTo
 (
     ShipToId                INTEGER,
@@ -337,29 +294,11 @@ CREATE TABLE nirc_ehr.ShipTo
 );
 CREATE INDEX IX_Nirc_Ehr_Ship_To_Container ON nirc_ehr.ShipTo (Container);
 
-
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;country;/data/country.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;country_category;/data/country_category.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;delivery_state;/data/delivery_state.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;esig_events;/data/esig_events.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;req_order_state;/data/req_order_state.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;req_order_type;/data/req_order_type.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;vendor_approval_code;/data/vendor_approval_code.tsv');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalDelivery');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalReqOrder');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalShipment');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalVendor');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/lotNumber');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/shipTo');
-
 ALTER TABLE nirc_ehr.Staff
-ADD COLUMN Created TIMESTAMP,
-ADD COLUMN CreatedBy USERID,
-ADD COLUMN Modified TIMESTAMP,
-ADD COLUMN ModifiedBy USERID;
-
+    ADD COLUMN Created TIMESTAMP,
+    ADD COLUMN CreatedBy USERID,
+    ADD COLUMN Modified TIMESTAMP,
+    ADD COLUMN ModifiedBy USERID;
 
 CREATE TABLE nirc_ehr.ProtocolEsig
 (
@@ -448,27 +387,8 @@ CREATE TABLE nirc_ehr.Department
 );
 CREATE INDEX IX_Nirc_Ehr_Department_Container ON nirc_ehr.Department (Container);
 
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;cost_type;/data/cost_type.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;expense_class;/data/expense_class.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_category;/data/protocol_category.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_state;/data/protocol_state.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;protocol_type;/data/protocol_type.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;questionnaire;/data/questionnaire.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;gender_codes;/data/gender_codes.tsv');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ehr_lookups');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/staff;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolEsig');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolUsage');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/procedure');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/account');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/department');
-
 ALTER TABLE nirc_ehr.AnimalShipment ADD COLUMN Floor VARCHAR;
 ALTER TABLE nirc_ehr.AnimalDelivery ADD COLUMN Floor VARCHAR;
-
 
 CREATE TABLE nirc_ehr.IdHistory
 (
@@ -484,21 +404,6 @@ CREATE TABLE nirc_ehr.IdHistory
     CONSTRAINT FK_IDHISTORY_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityId)
 );
 CREATE INDEX IX_Nirc_Ehr_ID_History_Container ON nirc_ehr.IdHistory (Container);
-
-
-SELECT core.executeJavaUpgradeCode('importTemplate;nirc_ehr;ehr_lookups');
-SELECT core.executeJavaUpgradeCode('importTemplate;nirc_ehr;ehr');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;id_history_type;/data/id_history_type.tsv');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/locations;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/demographics;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/account;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalDelivery;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalReqOrder;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalShipment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProtocolAndAssignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/idHistory');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
 
 CREATE TABLE nirc_ehr.DeletedRecord
 (
@@ -553,24 +458,7 @@ CREATE TABLE nirc_ehr.QuestionResponse
 );
 CREATE INDEX IX_Nirc_Ehr_Question_Response_Container ON nirc_ehr.QuestionResponse (Container);
 
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/deletedRecord');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/questionResponse');
-
 ALTER TABLE nirc_ehr.AnimalVendor ADD COLUMN VendorProductionLocation INTEGER;
-
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;qualifier;/data/qualifier.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;numeric_unit;/data/numeric_unit.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;vendor_production_location;/data/vendor_production_location.tsv');
-
-SELECT core.executeJavaUpgradeCode('reloadFolder');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/alopecia;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/blood;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/vitals;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/physicalExam;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/weight;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalVendor;truncate');
 
 ALTER TABLE nirc_ehr.ProtocolUsage DROP COLUMN SegmentId;
 ALTER TABLE nirc_ehr.ProtocolUsage ADD COLUMN Species integer;
@@ -702,117 +590,6 @@ CREATE TABLE nirc_ehr.CageCardHistory
 );
 CREATE INDEX IX_Nirc_Ehr_Cage_Card_History_Container ON nirc_ehr.CageCardHistory (Container);
 
-SELECT core.executeJavaUpgradeCode('importTemplate;nirc_ehr;ehr');
-
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;card_format;/data/card_format.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;census_activity_status;/data/census_activity_status.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;euthanasia_type;/data/euthanasia_type.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;regulatory_stress_levels;/data/regulatory_stress_levels.tsv');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolCounts');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolSupplement');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolUsage;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cageCard');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/stress');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/animalReqOrder;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
-
-SELECT core.executeJavaUpgradeCode('reloadFolder');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/demographics;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/demographics;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/deaths;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/birth;truncate');
-
-SELECT core.executeJavaUpgradeCode('reloadFolder');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/biopsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/breeder;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/drug;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cases;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pregnancy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/notes;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/biopsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/breeder;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/drug;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cases;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pregnancy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/notes;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/demographics;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/birth;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/deaths;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/alopecia;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/arrival;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/assignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/biopsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/birth;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/blood;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/breeder;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cases;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/chemistryResults;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/clinremarks;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/departure;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/drug;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/exemptions;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/flags;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/foster;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/notes;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/obs;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pairings;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/physicalExam;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/prc;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pregnancy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/serology;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/vitals;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/weight;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProtocolAndAssignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProjectAndAssignment;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/demographics;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/notes;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/obs;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pairings;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/physicalExam;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/prc;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pregnancy;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/serology;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/vitals;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/weight;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/project;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/assignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/project;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/assignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocol;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/departure;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/assignment;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/protocolAssignment;truncate');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProjectAndAssignment');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProtocolAndAssignment');
-
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProjectAndAssignment');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProtocolAndAssignment');
-
 CREATE TABLE nirc_ehr.CasesTemp
 (
     Id                  TEXT,
@@ -827,6 +604,3 @@ CREATE TABLE nirc_ehr.CasesTemp
     attachmentFile      TEXT,
     performedby         USERID
 );
-
-SELECT core.executeJavaUpgradeCode('reloadFolder');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cases;truncate');
