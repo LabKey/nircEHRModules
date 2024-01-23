@@ -16,68 +16,23 @@
 
 package org.labkey.test.tests.nirc_ehr;
 
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.labkey.api.reader.Readers;
-import org.labkey.remoteapi.CommandException;
-import org.labkey.remoteapi.CommandResponse;
-import org.labkey.remoteapi.SimplePostCommand;
-import org.labkey.remoteapi.query.Filter;
-import org.labkey.remoteapi.query.InsertRowsCommand;
-import org.labkey.remoteapi.query.SaveRowsResponse;
 import org.labkey.test.Locator;
-import org.labkey.test.ModulePropertyValue;
 import org.labkey.test.TestFileUtils;
 import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
-import org.labkey.test.components.dumbster.EmailRecordTable;
-import org.labkey.test.components.ext4.Window;
-import org.labkey.test.components.ui.grids.QueryGrid;
-import org.labkey.test.pages.ehr.AnimalHistoryPage;
-import org.labkey.test.pages.ehr.EHRAdminPage;
-import org.labkey.test.pages.ehr.EnterDataPage;
-import org.labkey.test.pages.ehr.NotificationAdminPage;
-import org.labkey.test.pages.NIRC_ehr.EHRLookupPage;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
-import org.labkey.test.util.DataRegionTable;
-import org.labkey.test.util.Ext4Helper;
-import org.labkey.test.util.LogMethod;
-import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
-import org.labkey.test.util.ext4cmp.Ext4ComboRef;
-import org.labkey.test.util.ext4cmp.Ext4GridRef;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.labkey.test.components.html.Input.Input;
 
 @Category({EHR.class})
 public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnlyTest
 {
+    private static final String PROJECT_NAME = "NIRC";
+    private static final String PROJECT_TYPE = "NIRC EHR";
     SimpleDateFormat _dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
@@ -85,7 +40,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     {
         File path = new File(TestFileUtils.getLabKeyRoot(), getModulePath() + "/resources/referenceStudy");
         importFolderByPath(path, getContainerPath(), 1);
-        path = TestFileUtils.getSampleData("NIRC_ehr/study");
+        path = TestFileUtils.getSampleData("nirc_ehr/study");
         importFolderByPath(path, getContainerPath(), 2);
     }
 
@@ -130,5 +85,24 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     {
         NIRC_EHRTest init = (NIRC_EHRTest) getCurrentTest();
         init.doSetup();
+    }
+
+    private void doSetup() throws Exception
+    {
+        initProject(PROJECT_TYPE);
+        goToEHRFolder();
+        createTestSubjects();
+    }
+
+    @Override
+    protected String getProjectName()
+    {
+        return PROJECT_NAME;
+    }
+
+    @Override
+    protected String getAnimalHistoryPath()
+    {
+        return "/ehr/" + PROJECT_NAME + "/animalHistory.view?";
     }
 }
