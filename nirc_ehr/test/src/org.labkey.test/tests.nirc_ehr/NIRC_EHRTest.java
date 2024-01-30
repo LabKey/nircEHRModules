@@ -23,6 +23,7 @@ import org.labkey.test.TestFileUtils;
 import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
+import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 
 import java.io.File;
@@ -92,6 +93,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         initProject(PROJECT_TYPE);
         goToEHRFolder();
         createTestSubjects();
+        addNIRCEhrLinks();
+    }
+
+    private void addNIRCEhrLinks()
+    {
+        navigateToFolder(getProjectName(), getFolderName());
+        (new PortalHelper(this)).addWebPart("NIRC EHR Links");
     }
 
     @Override

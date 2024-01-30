@@ -1,4 +1,4 @@
-package org.labkey.nirc_ehr.dataentry;
+package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.AnimalDetailsFormSection;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;

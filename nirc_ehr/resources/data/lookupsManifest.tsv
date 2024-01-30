@@ -22,3 +22,7 @@ req_order_state
 req_order_type
 vendor_approval_code
 vendor_production_location
+necropsy_disposition_codes
+necropsy_tissue
+organ_appearance
+organ_systems

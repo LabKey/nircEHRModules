@@ -667,16 +667,98 @@
             <column columnName="category">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="remark">
+            <column columnName="accessionNumber">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="reason">
+                <columnTitle>Reason for Examination</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="condition">
+                <columnTitle>Condition of Specimen</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="physicalCondition">
+                <columnTitle>Physical Condition</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="relevantHistory">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="grossAbnormalities">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="diagnosis">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="identification">
+                <columnTitle>Name/State/License no. (quarantine only)</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="remark">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
                 <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
+            </column>
+        </columns>
+    </table>
+    <table tableName="grossPathology" tableDbType="TABLE">
+        <tableTitle>Gross Pathology</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="objectid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>true</isKeyField>
+            </column>
+            <column columnName="date">
+                <columnTitle>Date of Exam</columnTitle>
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="systemExamined">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="appearance">
+                <datatype>varchar</datatype>
+            </column>
+        </columns>
+    </table>
+    <table tableName="tissueDisposition" tableDbType="TABLE">
+        <tableTitle>Tissue Disposition</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="objectid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>true</isKeyField>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="necropsyTissue">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="necropsyDispositionCode">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>

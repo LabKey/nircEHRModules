@@ -39,9 +39,10 @@ import org.labkey.api.resource.Resource;
 import org.labkey.api.util.NetworkDrive;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
-import org.labkey.nirc_ehr.dataentry.ArrivalFormType;
-import org.labkey.nirc_ehr.dataentry.DeathFormType;
-import org.labkey.nirc_ehr.dataentry.DepartureFormType;
+import org.labkey.nirc_ehr.dataentry.form.ArrivalFormType;
+import org.labkey.nirc_ehr.dataentry.form.DeathFormType;
+import org.labkey.nirc_ehr.dataentry.form.DepartureFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCNecropsyFormType;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
@@ -137,6 +138,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");
+        ehrService.registerActionOverride("enterData", this, "views/enterData.html");
 
         registerDataEntry();
 
@@ -152,9 +154,10 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     {
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(ArrivalFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(BirthFormType.class, this));
-        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(BloodDrawFormType.class, this));
+//        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(BloodDrawFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(DeathFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(DepartureFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCNecropsyFormType.class, this));
     }
 
     @Override
