@@ -9,6 +9,27 @@
                     <column columnName="diagnosis">
                         <columnTitle>Diagnosis</columnTitle>
                     </column>
+                    <column columnName="examReason">
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>necropsy_exam_reason</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="specimenCondition">
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>necropsy_specimen_condition</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="physicalCondition">
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>necropsy_physical_condition</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
                     <column columnName="remark">
                         <isHidden>true</isHidden>
                     </column>

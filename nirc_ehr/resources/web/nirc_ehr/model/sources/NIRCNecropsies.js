@@ -38,11 +38,7 @@ EHR.model.DataModelManager.registerMetadata('NIRCNecropsies', {
             //         width: 200,
             //         height: 200
             //     },
-            // },
-            remark: {
-                hidden: true,
-                showInGrid: false
-            }
+            // }
         },
         'study.deaths': {
             performedBy: {

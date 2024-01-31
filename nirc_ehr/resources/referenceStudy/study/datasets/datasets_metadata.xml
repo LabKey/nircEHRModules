@@ -672,11 +672,11 @@
                 <columnTitle>Accession Number</columnTitle>
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="reason">
+            <column columnName="examReason">
                 <columnTitle>Reason for Examination</columnTitle>
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="condition">
+            <column columnName="specimenCondition">
                 <columnTitle>Condition of Specimen</columnTitle>
                 <datatype>varchar</datatype>
             </column>
