@@ -2,9 +2,11 @@ package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.AnimalDetailsFormSection;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
+import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.ehr.dataentry.TaskForm;
 import org.labkey.api.ehr.dataentry.TaskFormSection;
 import org.labkey.api.module.Module;
+import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCGrossPathologyFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCDeathFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCNecropsyFormSection;
@@ -27,5 +29,11 @@ public class NIRCNecropsyFormType extends TaskForm
                 new NIRCTissueDispositionFormSection(),
                 new NIRCNecropsyFormSection()
         ));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/NIRCNecropsies.js"));
+
+        for (FormSection s : getFormSections())
+        {
+            s.addConfigSource("NIRCNecropsies");
+        }
     }
 }

@@ -665,9 +665,11 @@
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
             <column columnName="category">
+                <columnTitle>Category</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="accessionNumber">
+                <columnTitle>Accession Number</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="reason">
@@ -683,12 +685,15 @@
                 <datatype>varchar</datatype>
             </column>
             <column columnName="relevantHistory">
+                <columnTitle>Relevant History</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="grossAbnormalities">
+                <columnTitle>Gross Abnormalities</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="diagnosis">
+                <columnTitle>Diagnosis</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="identification">

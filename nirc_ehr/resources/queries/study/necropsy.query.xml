@@ -9,6 +9,9 @@
                     <column columnName="diagnosis">
                         <columnTitle>Diagnosis</columnTitle>
                     </column>
+                    <column columnName="remark">
+                        <isHidden>true</isHidden>
+                    </column>
                 </columns>
             </table>
         </tables>
