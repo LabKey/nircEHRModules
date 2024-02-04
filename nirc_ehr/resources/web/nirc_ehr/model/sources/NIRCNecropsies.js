@@ -6,39 +6,36 @@
 EHR.model.DataModelManager.registerMetadata('NIRCNecropsies', {
     byQuery: {
         'study.necropsy': {
-            // grossAbnormalities: {
-            //     xtype: 'ehr-remarkfield',
-            //     label: 'Gross Abnormalities',
-            //     allowBlank: false,
-            //     resizeDirections: 's',
-            //     height: 200,
-            //     columnConfig: {
-            //         width: 200,
-            //         height: 200
-            //     },
-            // },
-            // diagnosis: {
-            //     xtype: 'ehr-remarkfield',
-            //     label: 'Diagnosis',
-            //     allowBlank: false,
-            //     resizeDirections: 's',
-            //     height: 100,
-            //     columnConfig: {
-            //         width: 200,
-            //         height: 200
-            //     },
-            // },
-            // relevantHistory: {
-            //     xtype: 'ehr-remarkfield',
-            //     label: 'Relevant History',
-            //     allowBlank: false,
-            //     resizeDirections: 's',
-            //     height: 200,
-            //     columnConfig: {
-            //         width: 200,
-            //         height: 200
-            //     },
-            // }
+        grossAbnormalities: {
+                xtype: 'ehr-remarkfield',
+                height: 100,
+                editorConfig: {
+                    resizeDirections: 's'
+                },
+                columnConfig: {
+                    width: 200
+                }
+            },
+            diagnosis: {
+                xtype: 'ehr-remarkfield',
+                label: 'Diagnosis',
+                allowBlank: false,
+                resizeDirections: 's',
+                height: 100,
+                columnConfig: {
+                    width: 200
+                },
+            },
+            relevantHistory: {
+                xtype: 'ehr-remarkfield',
+                label: 'Diagnosis',
+                allowBlank: false,
+                resizeDirections: 's',
+                height: 100,
+                columnConfig: {
+                    width: 200,
+                }
+            },
         },
         'study.deaths': {
             performedBy: {

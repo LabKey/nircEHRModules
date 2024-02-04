@@ -1,11 +1,11 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
-import org.labkey.api.ehr.dataentry.SimpleFormSection;
+import org.labkey.api.ehr.dataentry.SimpleFormPanelSection;
 
-public class NIRCDeathFormSection  extends SimpleFormSection
+public class NIRCDeathFormSection  extends SimpleFormPanelSection
 {
     public NIRCDeathFormSection()
     {
-        super("study", "deaths", "Deaths", "ehr-gridpanel");
+        super("study", "deaths", "Death");
     }
 }

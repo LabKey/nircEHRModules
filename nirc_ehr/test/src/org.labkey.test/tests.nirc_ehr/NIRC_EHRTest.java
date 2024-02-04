@@ -45,7 +45,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         importFolderByPath(path, getContainerPath(), 2);
     }
 
-    // TODO: reconcile with AbstractEHRTest.importFolderFromPath()
     public void importFolderByPath(File path, String containerPath, int finishedJobsExpected)
     {
         setPipelineRoot(path.getPath(), false);

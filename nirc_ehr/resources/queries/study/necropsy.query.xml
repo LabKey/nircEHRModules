@@ -1,7 +1,7 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="Necropsy" tableDbType="TABLE">
+            <table tableName="necropsy" tableDbType="TABLE">
                 <columns>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
