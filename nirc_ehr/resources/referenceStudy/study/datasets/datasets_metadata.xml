@@ -59,6 +59,7 @@
                 <datatype>varchar</datatype>
             </column>
             <column columnName="sourceFacility">
+                <columnTitle>Source Facility</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="attachmentFile">

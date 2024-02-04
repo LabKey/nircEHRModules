@@ -3,40 +3,41 @@ package org.labkey.nirc_ehr.dataentry.form;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.ehr.dataentry.TaskForm;
-import org.labkey.api.ehr.dataentry.TaskFormSection;
-import org.labkey.api.ehr.dataentry.WeightFormSection;
 import org.labkey.api.ehr.dataentry.forms.ArrivalInstructionsFormSection;
 import org.labkey.api.ehr.dataentry.forms.DocumentArchiveFormSection;
 import org.labkey.api.ehr.dataentry.forms.LockAnimalsFormSection;
-import org.labkey.api.ehr.dataentry.forms.NewAnimalFormSection;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCArrivalFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class ArrivalFormType extends TaskForm
+public class NIRCArrivalFormType extends TaskForm
 {
     public static final String NAME = "arrival";
 
-    public ArrivalFormType(DataEntryFormContext ctx, Module owner)
+    public NIRCArrivalFormType(DataEntryFormContext ctx, Module owner)
     {
-        super(ctx, owner, NAME, "Arrival", "Colony Management", Arrays.asList(
+        super(ctx, owner, NAME, "Arrivals", "Colony Management", Arrays.asList(
                 new LockAnimalsFormSection(),
                 new ArrivalInstructionsFormSection(),
-                new TaskFormSection(),
+                new NIRCTaskFormSection(),
                 new DocumentArchiveFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NewAnimalFormSection("study", "arrival", "Arrivals", false),
-                new WeightFormSection()));
+                new NIRCArrivalFormSection(),
+                new NIRCWeightFormSection()
+                ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Arrival.js"));
 
-    }
+        for (FormSection s : getFormSections())
+        {
+            s.addConfigSource("Arrival");
+        }
 
-    public ArrivalFormType(DataEntryFormContext ctx, Module owner, List<FormSection> sections)
-    {
-        super(ctx, owner, NAME, "Arrival", "Colony Management", sections);
     }
 }

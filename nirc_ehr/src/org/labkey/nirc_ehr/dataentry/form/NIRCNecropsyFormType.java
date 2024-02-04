@@ -3,13 +3,13 @@ package org.labkey.nirc_ehr.dataentry.form;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.ehr.dataentry.TaskForm;
-import org.labkey.api.ehr.dataentry.TaskFormSection;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCDeathFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCGrossPathologyFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCNecropsyFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTissueDispositionFormSection;
 
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class NIRCNecropsyFormType extends TaskForm
     public NIRCNecropsyFormType(DataEntryFormContext ctx, Module owner)
     {
         super(ctx, owner, NAME, LABEL, "Pathology", Arrays.asList(
-                new TaskFormSection(),
+                new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCDeathFormSection(),
                 new NIRCNecropsyFormSection(),

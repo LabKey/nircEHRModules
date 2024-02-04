@@ -25,11 +25,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * User: bimber
- * Date: 7/14/13
- * Time: 10:29 AM
- */
 public class ActiveAssignmentsDemographicsProvider extends AbstractListDemographicsProvider
 {
     public ActiveAssignmentsDemographicsProvider(Module owner)

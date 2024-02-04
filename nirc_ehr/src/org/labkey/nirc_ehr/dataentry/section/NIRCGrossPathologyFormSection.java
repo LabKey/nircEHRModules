@@ -1,11 +1,9 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
-import org.labkey.api.ehr.dataentry.SimpleFormSection;
-
-public class NIRCGrossPathologyFormSection extends SimpleFormSection
+public class NIRCGrossPathologyFormSection extends BaseFormSection
 {
     public NIRCGrossPathologyFormSection()
     {
-        super("study", "grossPathology", "Gross Pathology", "ehr-gridpanel");
+        super("study", "grossPathology", "Gross Pathology", "ehr-gridpanel", true, true);
     }
 }
