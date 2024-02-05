@@ -1,7 +1,10 @@
 EHR.model.DataModelManager.registerMetadata('NIRCNecropsies', {
     byQuery: {
         'study.necropsy': {
-        grossAbnormalities: {
+            date: {
+                label: 'Exam Date'
+            },
+            grossAbnormalities: {
                 xtype: 'ehr-remarkfield',
                 height: 100,
                 editorConfig: {
@@ -23,7 +26,7 @@ EHR.model.DataModelManager.registerMetadata('NIRCNecropsies', {
             },
             relevantHistory: {
                 xtype: 'ehr-remarkfield',
-                label: 'Diagnosis',
+                label: 'Relevant History',
                 allowBlank: false,
                 resizeDirections: 's',
                 height: 100,
@@ -35,7 +38,10 @@ EHR.model.DataModelManager.registerMetadata('NIRCNecropsies', {
         'study.deaths': {
             performedBy: {
                 label: 'Performed By'
-            }
+            },
+            date: {
+                label: 'Death Date'
+            },
         },
         'study.grossPathology': {
             remark: {

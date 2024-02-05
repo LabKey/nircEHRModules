@@ -1,7 +1,7 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="Birth" tableDbType="TABLE" useColumnOrder="true">
+            <table tableName="birth" tableDbType="TABLE" useColumnOrder="true">
                 <tableUrl />
                 <insertUrl />
                 <importUrl />
@@ -9,10 +9,12 @@
                 <deleteUrl />
                 <columns>
                     <column columnName="Id">
-
                     </column>
                     <column columnName="date">
                         <columnTitle>Birth Date</columnTitle>
+                    </column>
+                    <column columnName="gender">
+                        <nullable>true</nullable>
                     </column>
                     <column columnName="room">
                         <columnTitle>Birth Room</columnTitle>
@@ -36,13 +38,13 @@
                         </url>
                     </column>
                     <column columnName="geographic_origin">
-                        <columnTitle>Geographic Origin</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>geographic_origins</fkTable>
-                            <fkColumnName>meaning</fkColumnName>
-                            <fkDisplayColumnName useRawValue="true"/>
-                        </fk>
+                        <isHidden>true</isHidden> <!-- This column is hidden since birth always will be at the primate center -->
+                    </column>
+                    <column columnName="species"/>
+                    <column columnName="project"/>
+                    <column columnName="remark"/>
+                    <column columnName="performedBy">
+                        <columnTitle>Performed By</columnTitle>
                     </column>
                 </columns>
             </table>

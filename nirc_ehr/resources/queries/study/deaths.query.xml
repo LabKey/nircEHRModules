@@ -1,8 +1,13 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="Deaths" tableDbType="TABLE">
+            <table tableName="Deaths" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
+                    <column columnName="id"/>
+                    <column columnName="date">
+                        <columnTitle>Death Date</columnTitle>
+                    </column>
+                    <column columnName="disposition"/>
                     <column columnName="reason">
                         <columnTitle>Disposition</columnTitle>
                         <fk>
@@ -11,6 +16,10 @@
                             <fkColumnName>value</fkColumnName>
                             <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
+                    </column>
+                    <column columnName="remark"/>
+                    <column columnName="performedBy">
+                        <columnTitle>Performed By</columnTitle>
                     </column>
                 </columns>
             </table>

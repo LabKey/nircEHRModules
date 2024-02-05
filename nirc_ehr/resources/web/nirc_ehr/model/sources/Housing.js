@@ -5,8 +5,7 @@ EHR.model.DataModelManager.registerMetadata('Housing', {
     byQuery: {
         'study.housing': {
             performedBy: {
-                hidden: true,
-                showInGrid: false
+                label: 'Performed By'
             }
         }
     }

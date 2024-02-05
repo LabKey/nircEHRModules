@@ -9,6 +9,8 @@ import org.labkey.api.module.Module;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCBirthFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCProjectAssignmentFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCProtocolAssignmentFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 
 import java.util.Arrays;
@@ -21,7 +23,9 @@ public class NIRCBirthFormType extends BirthFormType
                 new LockAnimalsFormSection(),
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCBirthFormSection()
+                new NIRCBirthFormSection(),
+                new NIRCProtocolAssignmentFormSection(),
+                new NIRCProjectAssignmentFormSection()
         ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));

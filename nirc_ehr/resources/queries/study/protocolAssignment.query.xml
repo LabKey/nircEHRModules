@@ -1,8 +1,11 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="Protocol Assignments" tableDbType="TABLE">
+            <table tableName="protocolAssignment" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
+                    <column columnName="Id"/>
+                    <column columnName="date"/>
+                    <column columnName="endDate"/>
                     <column columnName="project">
                         <isHidden>true</isHidden>
                     </column>
@@ -14,6 +17,10 @@
                             <fkColumnName>objectid</fkColumnName>
                             <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
+                    </column>
+                    <column columnName="remark"/>
+                    <column columnName="performedBy">
+                        <columnTitle>Performed By</columnTitle>
                     </column>
                 </columns>
             </table>
