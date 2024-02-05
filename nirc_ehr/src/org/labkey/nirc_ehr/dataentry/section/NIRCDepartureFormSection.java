@@ -1,6 +1,6 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
-public class NIRCDepartureFormSection  extends BaseFormSection
+public class NIRCDepartureFormSection extends BaseFormSection
 {
     public NIRCDepartureFormSection()
     {

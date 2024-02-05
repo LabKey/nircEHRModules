@@ -1,4 +1,3 @@
-
 EHR.model.DataModelManager.registerMetadata('Arrival', {
     allQueries: {
 

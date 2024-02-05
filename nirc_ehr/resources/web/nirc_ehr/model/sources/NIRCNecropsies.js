@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2024 LabKey Corporation
- *
- * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
- */
 EHR.model.DataModelManager.registerMetadata('NIRCNecropsies', {
     byQuery: {
         'study.necropsy': {

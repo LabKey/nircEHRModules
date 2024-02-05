@@ -22,7 +22,6 @@ import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
 import org.labkey.api.ehr.dataentry.DefaultDataEntryFormFactory;
-import org.labkey.api.ehr.dataentry.forms.BirthFormType;
 import org.labkey.api.ehr.demographics.ParentsDemographicsProvider;
 import org.labkey.api.ehr.history.DefaultAlopeciaDataSource;
 import org.labkey.api.ehr.history.DefaultAnimalRecordFlagDataSource;
@@ -41,6 +40,7 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.form.NIRCArrivalFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCBirthFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCHousingFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCNecropsyFormType;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
@@ -157,6 +157,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCBirthFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCDepartureFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCNecropsyFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCHousingFormType.class, this));
     }
 
     @Override
