@@ -61,6 +61,16 @@ EHR.model.DataModelManager.registerMetadata('NIRCNecropsies', {
                 hidden: true,
                 showInGrid: false
             },
+            appearance: {
+                defaultValue: 'Normal',
+                lookup: {
+                    schemaName: 'ehr_lookups',
+                    queryName: 'necropsy_organ_appearance',
+                    keyColumn: 'title',
+                    displayColumn: 'title',
+                    defaultValue: 'Normal'
+                }
+            }
         },
         'study.tissueDisposition': {
             project: {

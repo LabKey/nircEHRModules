@@ -24,8 +24,8 @@ vendor_approval_code
 vendor_production_location
 necropsy_disposition_codes
 necropsy_tissue
-organ_appearance
-organ_systems
+necropsy_organ_appearance
+necropsy_organ_systems
 necropsy_physical_condition
 necropsy_exam_reason
 necropsy_specimen_condition
