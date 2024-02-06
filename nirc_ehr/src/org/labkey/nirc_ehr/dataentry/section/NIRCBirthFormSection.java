@@ -35,4 +35,20 @@ public class NIRCBirthFormSection extends NewAnimalFormSection
 
         return keys;
     }
+
+    @Override
+    public List<String> getTbarButtons()
+    {
+        List<String> defaults = super.getTbarButtons();
+        defaults.remove("COPYFROMSECTION");
+        return defaults;
+    }
+
+    @Override
+    public List<String> getTbarMoreActionButtons()
+    {
+        List<String> defaultButtons = super.getTbarMoreActionButtons();
+        defaultButtons.remove("GUESSPROJECT");
+        return defaultButtons;
+    }
 }

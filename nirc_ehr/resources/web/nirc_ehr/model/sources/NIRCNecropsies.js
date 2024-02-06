@@ -63,10 +63,6 @@ EHR.model.DataModelManager.registerMetadata('NIRCNecropsies', {
             },
         },
         'study.tissueDisposition': {
-            remark: {
-                hidden: true,
-                showInGrid: false
-            },
             project: {
                 hidden: true,
                 showInGrid: false
