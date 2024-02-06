@@ -31,3 +31,4 @@ organ_systems	Organ Systems	value	title
 necropsy_physical_condition	Physical Condition	value	title
 necropsy_exam_reason	Necropsy Reason	value	title
 necropsy_specimen_condition	Specimen Condition	value	title
+housing_reason	Housing Reason	value

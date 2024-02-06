@@ -24,12 +24,6 @@ public class NIRCHousingFormType extends TaskForm
                 new NIRCHousingFormSection()
         ));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Housing.js"));
-
-        for (FormSection s : getFormSections())
-        {
-            s.addConfigSource("Housing");
-        }
     }
 
     @Override

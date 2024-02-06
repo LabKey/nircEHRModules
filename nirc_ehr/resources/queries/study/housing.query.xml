@@ -17,29 +17,34 @@
                     <column columnName="cage">
                         <columnTitle>Cage</columnTitle>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${cage}&amp;</url>
-<!--                        <fk>-->
-<!--                            <fkDbSchema>ehr_lookups</fkDbSchema>-->
-<!--                            <fkTable>cage</fkTable>-->
-<!--                            <fkColumnName>location</fkColumnName>-->
-<!--                            <fkDisplayColumnName>cage</fkDisplayColumnName>-->
-<!--                        </fk>-->
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>cage</fkTable>
+                            <fkColumnName>location</fkColumnName>
+                            <fkDisplayColumnName>cage</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="room">
                         <nullable>false</nullable>
                         <columnTitle>Room</columnTitle>
-<!--                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>-->
-<!--                        <fk>-->
-<!--                            <fkDbSchema>ehr_lookups</fkDbSchema>-->
-<!--                            <fkTable>rooms</fkTable>-->
-<!--                            <fkColumnName>room</fkColumnName>-->
-<!--                            <fkDisplayColumnName>name</fkDisplayColumnName>-->
-<!--                        </fk>-->
+                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>rooms</fkTable>
+                            <fkColumnName>room</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="location">
                         <columnTitle>Location</columnTitle>
                     </column>
                     <column columnName="reason">
-                        <columnTitle>Reason</columnTitle>
+                        <columnTitle>Reason For Move</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>housing_reason</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
                     </column>
                     <column columnName="remark"/>
                     <column columnName="performedBy">
