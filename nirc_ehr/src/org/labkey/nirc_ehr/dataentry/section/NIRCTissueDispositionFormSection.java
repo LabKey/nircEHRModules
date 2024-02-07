@@ -1,12 +1,24 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
+import org.labkey.api.view.template.ClientDependency;
+
 import java.util.List;
 
 public class NIRCTissueDispositionFormSection extends BaseFormSection
 {
-    public NIRCTissueDispositionFormSection()
+    public NIRCTissueDispositionFormSection(boolean isChild)
     {
         super("study", "tissueDisposition", "Tissue Disposition", "ehr-gridpanel", true, true);
+        if (isChild)
+        {
+            addExtraProperty("parentQueryName", "deaths");
+
+            addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ParentChild.js"));
+            addConfigSource("ParentChild");
+
+            addClientDependency(ClientDependency.supplierFromPath("ehr/data/ChildClientStore.js"));
+            setClientStoreClass("EHR.data.ChildClientStore");
+        }
     }
 
     @Override

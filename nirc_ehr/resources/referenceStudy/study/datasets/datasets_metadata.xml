@@ -27,11 +27,21 @@
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#Remark</propertyURI>
             </column>
+            <column columnName="objectid">
+                <datatype>entityid</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>true</isKeyField>
+            </column>
         </columns>
     </sharedConfig>
     <table tableName="arrival" tableDbType="TABLE">
         <tableTitle>Arrival</tableTitle>
         <columns>
+            <column columnName="objectid">
+                <datatype>entityid</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>false</isKeyField>
+            </column>
             <column columnName="Id">
                 <datatype>varchar</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
@@ -46,11 +56,6 @@
             </column>
             <column columnName="birth">
                 <datatype>timestamp</datatype>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="gender">
                 <datatype>varchar</datatype>
@@ -87,11 +92,6 @@
             <column columnName="enddate">
                 <datatype>timestamp</datatype>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
         </columns>
     </table>
     <table tableName="alopecia" tableDbType="TABLE">
@@ -108,11 +108,6 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="score">
                 <columnTitle>Score</columnTitle>
@@ -142,11 +137,6 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="type">
                 <columnTitle>Type</columnTitle>
@@ -180,16 +170,16 @@
             <column columnName="protocol">
                 <datatype>integer</datatype>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
         </columns>
     </table>
     <table tableName="birth" tableDbType="TABLE">
         <tableTitle>Birth</tableTitle>
         <columns>
+            <column columnName="objectid">
+                <datatype>entityid</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>false</isKeyField>
+            </column>
             <column columnName="Id">
                 <datatype>varchar</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
@@ -234,11 +224,6 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="type">
                 <columnTitle>Type</columnTitle>
                 <datatype>varchar</datatype>
@@ -266,11 +251,6 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="type">
                 <columnTitle>Type</columnTitle>
@@ -302,11 +282,6 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="category">
                 <datatype>varchar</datatype>
             </column>
@@ -318,6 +293,11 @@
     <table tableName="demographics" tableDbType="TABLE">
         <tableTitle>Demographics</tableTitle>
         <columns>
+            <column columnName="objectid">
+                <datatype>entityid</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>false</isKeyField>
+            </column>
             <column columnName="Id">
                 <datatype>varchar</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
@@ -386,17 +366,17 @@
     <table tableName="departure" tableDbType="TABLE">
         <tableTitle>Departure</tableTitle>
         <columns>
+            <column columnName="objectid">
+                <datatype>entityid</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>false</isKeyField>
+            </column>
             <column columnName="Id">
                 <datatype>varchar</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
                 <importAliases>
                     <importAlias>ptid</importAlias>
                 </importAliases>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
@@ -411,6 +391,11 @@
     <table tableName="deaths" tableDbType="TABLE">
         <tableTitle>Deaths</tableTitle>
         <columns>
+            <column columnName="objectid">
+                <datatype>entityid</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>false</isKeyField>
+            </column>
             <column columnName="Id">
                 <datatype>varchar</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
@@ -438,11 +423,6 @@
                     <importAlias>ptid</importAlias>
                 </importAliases>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
@@ -464,11 +444,6 @@
                 <importAliases>
                     <importAlias>ptid</importAlias>
                 </importAliases>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
@@ -494,11 +469,6 @@
                 <importAliases>
                     <importAlias>ptid</importAlias>
                 </importAliases>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
@@ -530,11 +500,6 @@
                     <importAlias>ptid</importAlias>
                 </importAliases>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
@@ -563,11 +528,6 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="location">
                 <datatype>varchar</datatype>
@@ -627,11 +587,6 @@
                     <importAlias>ptid</importAlias>
                 </importAliases>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
@@ -654,11 +609,6 @@
                 <importAliases>
                     <importAlias>ptid</importAlias>
                 </importAliases>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
@@ -721,11 +671,6 @@
                     <importAlias>ptid</importAlias>
                 </importAliases>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="date">
                 <columnTitle>Date of Exam</columnTitle>
                 <datatype>timestamp</datatype>
@@ -750,11 +695,6 @@
                     <importAlias>ptid</importAlias>
                 </importAliases>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
@@ -778,11 +718,6 @@
                     <importAlias>ptid</importAlias>
                 </importAliases>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
@@ -805,11 +740,6 @@
                 <importAliases>
                     <importAlias>ptid</importAlias>
                 </importAliases>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
@@ -852,12 +782,6 @@
             <column columnName="type">
                 <datatype>varchar</datatype>
             </column>
-
-            <column columnName="objectid">
-                <datatype>entityid</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
         </columns>
     </table>
     <table tableName="serology" tableDbType="TABLE">
@@ -869,11 +793,6 @@
                 <importAliases>
                     <importAlias>ptid</importAlias>
                 </importAliases>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
@@ -929,11 +848,6 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="type">
                 <columnTitle>Type</columnTitle>
                 <datatype>varchar</datatype>
@@ -967,11 +881,6 @@
             <column columnName="enddate">
                 <datatype>timestamp</datatype>
                 <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="category">
                 <columnTitle>Case category</columnTitle>
@@ -1015,11 +924,6 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="amount">
                 <datatype>varchar</datatype>
             </column>
@@ -1062,11 +966,6 @@
                 <columnTitle>Pulse Rate</columnTitle>
                 <datatype>double</datatype>
             </column>
-            <column columnName="objectid">
-                <datatype>entityid</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="type">
                 <columnTitle>Type</columnTitle>
                 <datatype>varchar</datatype>
@@ -1087,11 +986,6 @@
                 <importAliases>
                     <importAlias>ptid</importAlias>
                 </importAliases>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
@@ -1121,11 +1015,6 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
             <column columnName="type">
                 <columnTitle>Type</columnTitle>
@@ -1166,11 +1055,6 @@
             <column columnName="type">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="attachmentFile">
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
@@ -1196,11 +1080,6 @@
             <column columnName="type">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
-            </column>
             <column columnName="result">
                 <columnTitle>Result</columnTitle>
                 <datatype>double</datatype>
@@ -1224,11 +1103,6 @@
             </column>
             <column columnName="type">
                 <datatype>varchar</datatype>
-            </column>
-            <column columnName="objectid">
-                <datatype>varchar</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>true</isKeyField>
             </column>
         </columns>
         <tableTitle>Fostering</tableTitle>

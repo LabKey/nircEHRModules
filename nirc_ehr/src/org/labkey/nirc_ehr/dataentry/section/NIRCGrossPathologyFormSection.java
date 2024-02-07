@@ -6,10 +6,20 @@ import java.util.List;
 
 public class NIRCGrossPathologyFormSection extends BaseFormSection
 {
-    public NIRCGrossPathologyFormSection()
+    public NIRCGrossPathologyFormSection(boolean isChild)
     {
         super("study", "grossPathology", "Gross Pathology", "ehr-gridpanel", true, true);
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/necropsyGridButtons.js"));
+        if (isChild)
+        {
+            addExtraProperty("parentQueryName", "deaths");
+
+            addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ParentChild.js"));
+            addConfigSource("ParentChild");
+
+            addClientDependency(ClientDependency.supplierFromPath("ehr/data/ChildClientStore.js"));
+            setClientStoreClass("EHR.data.ChildClientStore");
+        }
     }
 
     @Override
