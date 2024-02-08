@@ -10,7 +10,30 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
         },
         'study.necropsy': {
             date: {
-                label: 'Exam Date'
+                label: 'Exam Date',
+                editorConfig: {
+                    listeners: {
+                        change: function (combo, rec) {
+                            const panel = combo.up('ehr-dataentrypanel');
+                            if (panel) {
+                                const date = panel.down('datefield')?.value;
+                                const store = panel.storeCollection.getClientStoreByName('grossPathology');
+                                if (store && date) {
+                                    store.data.each(function (dateRec) {
+                                        dateRec.set('date', rec);
+                                    }, this);
+                                }
+
+                                const store2 = panel.storeCollection.getClientStoreByName('tissueDisposition');
+                                if (store2 && date) {
+                                    store2.data.each(function (dateRec) {
+                                        dateRec.set('date', rec);
+                                    }, this);
+                                }
+                            }
+                        }
+                    }
+                }
             },
             grossAbnormalities: {
                 xtype: 'ehr-remarkfield',
@@ -42,6 +65,15 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
             },
         },
         'study.grossPathology': {
+            date: {
+                hidden: true,
+                getInitialValue: function(v, rec){
+                    const necropsyStore = rec.storeCollection.getClientStoreByName('necropsy');
+                    if (necropsyStore) {
+                        return necropsyStore.data.items[0].data.date;
+                    }
+                }
+            },
             remark: {
                 hidden: true,
                 showInGrid: false
@@ -71,6 +103,15 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
             }
         },
         'study.tissueDisposition': {
+            date: {
+                hidden: true,
+                getInitialValue: function(v, rec){
+                    const necropsyStore = rec.storeCollection.getClientStoreByName('necropsy');
+                    if (necropsyStore) {
+                        return necropsyStore.data.items[0].data.date;
+                    }
+                }
+            },
             project: {
                 hidden: true,
                 showInGrid: false

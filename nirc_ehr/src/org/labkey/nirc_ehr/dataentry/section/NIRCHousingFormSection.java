@@ -4,6 +4,6 @@ public class NIRCHousingFormSection extends BaseFormSection
 {
     public NIRCHousingFormSection()
     {
-        super("study", "housing", "Housing Transfers", "ehr-gridpanel", true, true);
+        super("study", "housing", "Housing Transfers", "ehr-gridpanel", true, false);
     }
 }

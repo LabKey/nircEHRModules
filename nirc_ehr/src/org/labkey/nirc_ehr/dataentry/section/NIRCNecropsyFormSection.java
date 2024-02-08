@@ -1,14 +1,9 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
 import org.json.JSONObject;
-import org.labkey.api.data.TableInfo;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.SimpleFormPanelSection;
-import org.labkey.api.query.FieldKey;
 import org.labkey.api.view.template.ClientDependency;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class NIRCNecropsyFormSection extends SimpleFormPanelSection
 {
