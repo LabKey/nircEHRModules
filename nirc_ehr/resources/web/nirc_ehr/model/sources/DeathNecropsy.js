@@ -64,6 +64,25 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 }
             },
         },
+        'study.weight': {
+            weight: {
+                allowBlank: true,
+                useNull: true,
+                editorConfig: {
+                    allowNegative: false,
+                    decimalPrecision: 4
+                }
+            },
+            date: {
+                hidden: true,
+                getInitialValue: function(v, rec){
+                    const necropsyStore = rec.storeCollection.getClientStoreByName('necropsy');
+                    if (necropsyStore) {
+                        return necropsyStore.data.items[0].data.date;
+                    }
+                }
+            },
+        },
         'study.grossPathology': {
             date: {
                 hidden: true,

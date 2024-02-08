@@ -7,6 +7,7 @@ import org.labkey.api.module.Module;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCDeathFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCDeathNecropsyWeightFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCGrossPathologyFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCNecropsyFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
@@ -26,6 +27,7 @@ public class NIRCDeathNecropsyFormType extends TaskForm
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCDeathFormSection(),
                 new NIRCNecropsyFormSection(true),
+                new NIRCDeathNecropsyWeightFormSection(true),
                 new NIRCGrossPathologyFormSection(true),
                 new NIRCTissueDispositionFormSection(true)
 
