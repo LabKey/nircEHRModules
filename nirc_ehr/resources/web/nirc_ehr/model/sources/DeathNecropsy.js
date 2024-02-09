@@ -70,7 +70,7 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 useNull: true,
                 editorConfig: {
                     allowNegative: false,
-                    decimalPrecision: 4
+                    decimalPrecision: 3
                 }
             },
             date: {
@@ -81,6 +81,9 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                         return necropsyStore.data.items[0].data.date;
                     }
                 }
+            },
+            performedBy: {
+                label: 'Performed By'
             },
         },
         'study.grossPathology': {
