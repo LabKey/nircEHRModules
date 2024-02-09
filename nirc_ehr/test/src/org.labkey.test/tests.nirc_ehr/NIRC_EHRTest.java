@@ -150,6 +150,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         DataRegionTable table = new DataRegionTable("query", this);
         int columnCount = table.getColumnCount();
         List<String> row = table.getRowDataAsText(0);
-        assertEquals("Calculated ages are incorrect", Arrays.asList("4.0", "4.0", "48.0"), row.subList(columnCount - 4, columnCount));
+        assertEquals("Calculated ages are incorrect", Arrays.asList("4.0", "4.0", "48.0"), row.subList(columnCount - 3, columnCount));
     }
 }
