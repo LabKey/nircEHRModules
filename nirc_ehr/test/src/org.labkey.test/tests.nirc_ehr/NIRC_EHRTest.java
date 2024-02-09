@@ -17,17 +17,25 @@
 package org.labkey.test.tests.nirc_ehr;
 
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.test.Locator;
 import org.labkey.test.TestFileUtils;
 import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
+import org.labkey.test.util.DataRegionTable;
+import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
+import org.labkey.test.util.ext4cmp.Ext4ComboRef;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 @Category({EHR.class})
 public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnlyTest
@@ -117,5 +125,31 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     protected String getAnimalHistoryPath()
     {
         return "/ehr/" + PROJECT_NAME + "/animalHistory.view?";
+    }
+
+    @Override
+    @Test
+    public void testQuickSearch()
+    {
+        //TODO: Implement this test once Quick Search is customized for NIRC
+    }
+
+    @Override
+    @Test
+    public void testCalculatedAgeColumns()
+    {
+        String subjectId = "test2008446";
+
+        beginAt(String.format("%s/query-executeQuery.view?schemaName=study&query.queryName=Weight&query.Id~contains=%s", getContainerPath(), subjectId));
+        _customizeViewsHelper.openCustomizeViewPanel();
+        _customizeViewsHelper.addColumn("ageAtTime/AgeAtTime");
+        _customizeViewsHelper.addColumn("ageAtTime/AgeAtTimeYearsRounded");
+        _customizeViewsHelper.addColumn("ageAtTime/AgeAtTimeMonths");
+        _customizeViewsHelper.applyCustomView();
+
+        DataRegionTable table = new DataRegionTable("query", this);
+        int columnCount = table.getColumnCount();
+        List<String> row = table.getRowDataAsText(0);
+        assertEquals("Calculated ages are incorrect", Arrays.asList("4.0", "4.0", "48.0"), row.subList(columnCount - 4, columnCount));
     }
 }
