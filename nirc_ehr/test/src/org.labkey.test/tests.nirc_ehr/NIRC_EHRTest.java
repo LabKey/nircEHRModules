@@ -70,6 +70,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     }
 
     @Override
+    protected boolean doSetUserPasswords()
+    {
+        return true;
+    }
+
+    @Override
     public String getModulePath()
     {
         return "/server/modules/" + getModuleDirectory();
