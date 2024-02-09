@@ -105,6 +105,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         EHRService.get().registerTableCustomizer(this, NIRC_EHRCustomizer.class);
 
+        ehrService.addModulePreferringTaskFormEditUI(this);
+
         EHRService.get().registerDemographicsProvider(new ActiveFlagsDemographicsProvider(this));
         EHRService.get().registerDemographicsProvider(new ParentsDemographicsProvider(this));
         EHRService.get().registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));

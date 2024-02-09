@@ -4,6 +4,6 @@ public class NIRCDepartureFormSection extends BaseFormSection
 {
     public NIRCDepartureFormSection()
     {
-        super("study", "departure", "Departure", "ehr-gridpanel", true, true);
+        super("study", "departure", "Departure", "ehr-gridpanel", true, false);
     }
 }
