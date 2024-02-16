@@ -28,7 +28,7 @@ public class NIRCNecropsyFormSection extends SimpleFormPanelSection
     {
         JSONObject json = super.toJSON(ctx, includeFormElements);
         json.put("collapsible", true);
-        json.put("initCollapsed", true);
+        json.put("initCollapsed", false);
         json.put("dataDependentCollapseHeader", true);
         return json;
     }

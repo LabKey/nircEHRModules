@@ -16,6 +16,12 @@
                         <columnTitle>Birth</columnTitle>
                         <formatString>Date</formatString>
                     </column>
+                    <column columnName="gender">
+                        <columnTitle>Sex</columnTitle>
+                    </column>
+                    <column columnName="project">
+                        <isHidden>true</isHidden>
+                    </column>
                 </columns>
             </table>
         </tables>

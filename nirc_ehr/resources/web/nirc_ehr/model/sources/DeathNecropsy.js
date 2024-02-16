@@ -67,7 +67,6 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
         'study.weight': {
             weight: {
                 allowBlank: true,
-                useNull: true,
                 editorConfig: {
                     allowNegative: false,
                     decimalPrecision: 3
@@ -77,7 +76,7 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 hidden: true,
                 getInitialValue: function(v, rec){
                     const necropsyStore = rec.storeCollection.getClientStoreByName('necropsy');
-                    if (necropsyStore) {
+                    if (necropsyStore && necropsyStore.data && necropsyStore.data.items.length > 0) {
                         return necropsyStore.data.items[0].data.date;
                     }
                 }
@@ -91,7 +90,7 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 hidden: true,
                 getInitialValue: function(v, rec){
                     const necropsyStore = rec.storeCollection.getClientStoreByName('necropsy');
-                    if (necropsyStore) {
+                    if (necropsyStore && necropsyStore.data && necropsyStore.data.items.length > 0) {
                         return necropsyStore.data.items[0].data.date;
                     }
                 }

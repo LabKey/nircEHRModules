@@ -2,10 +2,11 @@ package org.labkey.nirc_ehr.dataentry.section;
 
 import org.json.JSONObject;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
-import org.labkey.api.ehr.dataentry.SimpleFormPanelSection;
 import org.labkey.api.view.template.ClientDependency;
 
-public class NIRCDeathNecropsyWeightFormSection extends SimpleFormPanelSection
+import java.util.List;
+
+public class NIRCDeathNecropsyWeightFormSection extends BaseFormSection
 {
     public NIRCDeathNecropsyWeightFormSection(boolean isChild)
     {
@@ -30,5 +31,24 @@ public class NIRCDeathNecropsyWeightFormSection extends SimpleFormPanelSection
         json.put("initCollapsed", true);
         json.put("dataDependentCollapseHeader", true);
         return json;
+    }
+
+    @Override
+    public List<String> getTbarButtons()
+    {
+        List<String> defaults = super.getTbarButtons();
+        defaults.remove("COPYFROMSECTION");
+        defaults.remove("ADDANIMALS");
+        defaults.remove("TEMPLATE");
+        return defaults;
+    }
+
+    @Override
+    public List<String> getTbarMoreActionButtons()
+    {
+        List<String> defaultButtons = super.getTbarMoreActionButtons();
+        defaultButtons.remove("GUESSPROJECT");
+        defaultButtons.remove("COPY_IDS");
+        return defaultButtons;
     }
 }

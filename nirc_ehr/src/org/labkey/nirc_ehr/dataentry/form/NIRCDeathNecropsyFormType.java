@@ -26,8 +26,8 @@ public class NIRCDeathNecropsyFormType extends TaskForm
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCDeathFormSection(),
-                new NIRCNecropsyFormSection(true),
                 new NIRCDeathNecropsyWeightFormSection(true),
+                new NIRCNecropsyFormSection(true),
                 new NIRCGrossPathologyFormSection(true),
                 new NIRCTissueDispositionFormSection(true)
 
