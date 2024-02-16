@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script type="text/javascript" nonce="<%=scriptNonce%>">
 
     Ext4.onReady(createNavMenu);
 
@@ -30,9 +30,9 @@
         );
 
         var byDatasetItems = [];
-        byDatasetItems.push({name: 'Browse All Datasets', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-datasets.view?'});
-        byDatasetItems.push({name: 'Housing Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-housingQueries.view?'});
-        byDatasetItems.push({name: 'Protocol and Project Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-projectQueries.view?'});
+        byDatasetItems.push({name: 'Browse All Datasets', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-datasets.view'});
+        byDatasetItems.push({name: 'Housing Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-housingQueries.view'});
+        byDatasetItems.push({name: 'Protocol and Project Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-projectQueries.view'});
 
         Ext4.create('EHR.NavMenu', {
             width: 270,
@@ -40,8 +40,8 @@
             sections: [
                 {header: 'By Animal',
                     items: [
-                        {name: 'Animal History', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view?'},
-                        {name: 'Animal Search', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalSearch.view?'}
+                        {name: 'Animal History', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view'},
+                        {name: 'Animal Search', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalSearch.view'}
                 ]},
                 {header: 'By Dataset',
                     items: byDatasetItems},
@@ -58,7 +58,7 @@
         if (isDataAdmin()) {
             menuTwo.sections.push( {header: 'Entire Colony',
                 items: [
-                    {name: 'Population Summary', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-populationOverview.view?'},
+                    {name: 'Population Summary', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-populationOverview.view'},
                     {name: 'Colony Population By Age', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=study&query.queryName=colonyPopulationByAge'}
                 ]});
         }
@@ -77,7 +77,7 @@
                 header: 'Admin',
                 items: [
                     {name: 'EHR Admin Page', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-ehrAdmin.view'},
-                    {name: 'Manage EHR Study', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/study-manageStudy.view?'},
+                    {name: 'Manage EHR Study', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/study-manageStudy.view'},
                 ]
             });
         }
