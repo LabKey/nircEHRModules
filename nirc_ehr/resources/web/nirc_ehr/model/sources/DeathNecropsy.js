@@ -76,7 +76,7 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 hidden: true,
                 getInitialValue: function(v, rec){
                     const necropsyStore = rec.storeCollection.getClientStoreByName('necropsy');
-                    if (necropsyStore && necropsyStore.data && necropsyStore.data.items.length > 0) {
+                    if (necropsyStore?.data?.items.length > 0) {
                         return necropsyStore.data.items[0].data.date;
                     }
                 }
