@@ -1,4 +1,5 @@
 setname	label	keyfield	titleColumn
+editable_lookups	List of UI editable lookup values	value
 country	Country	value	title
 country_category	Country Category	value	title
 delivery_state	Delivery State	value	title
