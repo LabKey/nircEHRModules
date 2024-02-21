@@ -16,7 +16,7 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                     width: 150
                 },
             },
-            performedBy: {
+            performedby: {
                 hidden: true,
                 showInGrid: false
             },

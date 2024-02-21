@@ -2,7 +2,6 @@ package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
-import org.labkey.api.ehr.dataentry.TaskForm;
 import org.labkey.api.ehr.dataentry.forms.LockAnimalsFormSection;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.template.ClientDependency;
@@ -16,7 +15,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 
 import java.util.Arrays;
 
-public class NIRCArrivalFormType extends TaskForm
+public class NIRCArrivalFormType extends NIRCBaseTaskFormType
 {
     public static final String NAME = "arrival";
 
@@ -29,8 +28,8 @@ public class NIRCArrivalFormType extends TaskForm
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCArrivalFormSection(),
                 new NIRCWeightFormSection(),
-                new NIRCProtocolAssignmentFormSection(),
-                new NIRCProjectAssignmentFormSection()
+                new NIRCProtocolAssignmentFormSection(true, true, true),
+                new NIRCProjectAssignmentFormSection(true, true, true)
                 ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));

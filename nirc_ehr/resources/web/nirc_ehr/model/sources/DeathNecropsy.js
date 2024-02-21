@@ -1,14 +1,33 @@
 EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
-    byQuery: {
-        'study.deaths': {
-            performedBy: {
-                label: 'Performed By'
+    allQueries: {
+        performedby: {
+            allowBlank: false,
+            defaultValue: LABKEY.Security.currentUser.displayName,
+            lookup: {
+                schemaName: 'core',
+                queryName: 'users',
+                keyColumn: 'DisplayName',
+                displayColumn: 'DisplayName',
+                columns: 'UserId,DisplayName,FirstName,LastName',
+                sort: 'Type,DisplayName'
             },
-            date: {
-                label: 'Death Date'
+            editorConfig: {
+                anyMatch: true,
+                listConfig: {
+                    innerTpl: '{[LABKEY.Utils.encodeHtml(values.DisplayName + (values.LastName ? " (" + values.LastName + (values.FirstName ? ", " + values.FirstName : "") + ")" : ""))]}',
+                    getInnerTpl: function(){
+                        return this.innerTpl;
+                    }
+                }
             }
-        },
+        }
+    },
+    byQuery: {
         'study.necropsy': {
+            performedby: {
+                hidden: false,
+                defaultValue: LABKEY.Security.currentUser.displayName
+            },
             date: {
                 label: 'Exam Date',
                 editorConfig: {
@@ -81,8 +100,9 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                     }
                 }
             },
-            performedBy: {
-                label: 'Performed By'
+            performedby: {
+                xtype: 'combo',
+                defaultValue: LABKEY.Security.currentUser.displayName
             },
         },
         'study.grossPathology': {
@@ -90,7 +110,7 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 hidden: true,
                 getInitialValue: function(v, rec){
                     const necropsyStore = rec.storeCollection.getClientStoreByName('necropsy');
-                    if (necropsyStore && necropsyStore.data && necropsyStore.data.items.length > 0) {
+                    if (necropsyStore?.data?.items.length > 0) {
                         return necropsyStore.data.items[0].data.date;
                     }
                 }
@@ -108,7 +128,7 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                     width: 200
                 }
             },
-            performedBy: {
+            performedby: {
                 hidden: true,
                 showInGrid: false
             },
@@ -137,7 +157,7 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 hidden: true,
                 showInGrid: false
             },
-            performedBy: {
+            performedby: {
                 hidden: true,
                 showInGrid: false
             },

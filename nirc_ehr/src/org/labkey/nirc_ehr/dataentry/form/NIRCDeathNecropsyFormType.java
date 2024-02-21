@@ -15,7 +15,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCTissueDispositionFormSection;
 
 import java.util.Arrays;
 
-public class NIRCDeathNecropsyFormType extends TaskForm
+public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
 {
     public static final String NAME = "Necropsy";
     public static final String LABEL = "Death/Necropsy";

@@ -138,6 +138,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerHistoryDataSource(new ProtocolDataSource(this));
         EHRService.get().registerHistoryDataSource(new SerologyDataSource(this));
 
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nirc_ehr_api"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nircOverrides.js"), this);
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");

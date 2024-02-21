@@ -46,9 +46,7 @@
                         <isHidden>true</isHidden>
                     </column>
                     <column columnName="remark"/>
-                    <column columnName="performedBy">
-                        <columnTitle>Performed By</columnTitle>
-                    </column>
+                    <column columnName="performedby"/>
                 </columns>
             </table>
         </tables>

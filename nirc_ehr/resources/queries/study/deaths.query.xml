@@ -1,7 +1,7 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="Deaths" tableDbType="TABLE" useColumnOrder="true">
+            <table tableName="deaths" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
                     <column columnName="Id"/>
                     <column columnName="date">
@@ -18,8 +18,9 @@
                         </fk>
                     </column>
                     <column columnName="remark"/>
-                    <column columnName="performedBy">
-                        <columnTitle>Performed By</columnTitle>
+                    <column columnName="performedby"/>
+                    <column columnName="project">
+                        <isHidden>true</isHidden>
                     </column>
                 </columns>
             </table>

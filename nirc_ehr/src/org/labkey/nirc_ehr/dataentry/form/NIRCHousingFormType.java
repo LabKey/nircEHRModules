@@ -12,7 +12,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 
 import java.util.Arrays;
 
-public class NIRCHousingFormType extends TaskForm
+public class NIRCHousingFormType extends NIRCBaseTaskFormType
 {
     public static final String NAME = "Housing";
 

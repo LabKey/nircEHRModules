@@ -10,7 +10,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 
 import java.util.Arrays;
 
-public class NIRCDepartureFormType extends TaskForm
+public class NIRCDepartureFormType extends NIRCBaseTaskFormType
 {
     public static final String NAME = "departure";
 

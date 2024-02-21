@@ -16,6 +16,7 @@
                 <propertyURI>urn:ehr.labkey.org/#ParentId</propertyURI>
             </column>
             <column columnName="performedby">
+                <columnTitle>Performed By</columnTitle>
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#PerformedBy</propertyURI>
             </column>

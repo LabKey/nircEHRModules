@@ -13,7 +13,9 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCProjectAssignmentFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCProtocolAssignmentFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class NIRCBirthFormType extends BirthFormType
 {
@@ -25,16 +27,28 @@ public class NIRCBirthFormType extends BirthFormType
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCBirthFormSection(),
-                new NIRCProtocolAssignmentFormSection(),
-                new NIRCProjectAssignmentFormSection()
+                new NIRCProtocolAssignmentFormSection(true, true, true),
+                new NIRCProjectAssignmentFormSection(true, true, true)
         ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/NIRCDefault.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Birth.js"));
 
         for (FormSection s : getFormSections())
         {
             s.addConfigSource("Birth");
         }
+    }
+
+    @Override
+    protected List<String> getButtonConfigs()
+    {
+        List<String> defaultButtons = new ArrayList<String>();
+        defaultButtons.add("SAVEDRAFT");
+        defaultButtons.add("BIRTHARRIVALREVIEW");
+        defaultButtons.add("BIRTHARRIVALFINAL");
+
+        return defaultButtons;
     }
 }
