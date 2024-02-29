@@ -30,8 +30,10 @@ public class NIRCBirthFormSection extends NewAnimalFormSection
     {
         List<FieldKey> keys = super.getFieldKeys(ti);
 
-        keys.add(2, FieldKey.fromString("Id/demographics/dam"));
-        keys.add(3, FieldKey.fromString("Id/demographics/sire"));
+        keys.add(2, FieldKey.fromString("Id/demographics/species"));
+        keys.add(3, FieldKey.fromString("Id/demographics/gender"));
+        keys.add(4, FieldKey.fromString("Id/demographics/dam"));
+        keys.add(5, FieldKey.fromString("Id/demographics/sire"));
 
         return keys;
     }

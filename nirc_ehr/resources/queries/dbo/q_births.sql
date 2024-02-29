@@ -1,7 +1,5 @@
 SELECT anm.ANIMAL_ID_NUMBER AS participantId,
        anm.BIRTH_DATE       AS birthDate,
-       anm.GENDER_ID        AS gender,
-       anm.SSB_ID.SPECIES_ID           AS species,
        -- audit timestamp for modifications or animal event received for created
        COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), ae.CREATED_DATETIME) AS modified
 FROM Animal anm
@@ -14,6 +12,4 @@ AND anm.ANIMAL_ID_NUMBER LIKE 'A%' -- Animal born in centers are pre-appended wi
 AND alt.DESCRIPTION IS NOT NULL
 GROUP BY anm.ANIMAL_ID_NUMBER,
          anm.BIRTH_DATE,
-         anm.GENDER_ID,
-         anm.SSB_ID.SPECIES_ID,
          ae.CREATED_DATETIME
