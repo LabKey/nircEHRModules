@@ -1,10 +1,6 @@
 Common	Scientific Name	Id Prefix	Mhc Prefix	Max Blood Draw (mL/kg)	Max Percent Blood Drawn	Blood Reconstitution Interval (Days)	Cites Code	Date Disabled	USDA	Gestation
 Cynomolgus Macaque	Macaca fascicularis								true
-Dog	Canis familiaris								true
-Pigtail Macaque	Macaca nemestrina								true
+Pig-Tailed Macaque	Macaca nemestrina								true
 Rhesus Macaque	Macaca mulatta								true
-Baboon	Papio spp.							2023-10-31	true
 Common Marmoset	Callithrix jacchus								true
-Hamadryas Baboon	Papio hamadryas								true
-Olive Baboon	Papio anubis								true
-Rabbit	Oryctolagus cuniculus								true
+Spider Monkey	Ateles var.								true
