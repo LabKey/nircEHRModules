@@ -30,5 +30,5 @@ necropsy_physical_condition	Colony Management	Necropsy Physical Condition
 necropsy_exam_reason	Colony Management	Necropsy Exam Reason
 necropsy_specimen_condition	Colony Management	Necropsy Specimen Condition
 housing_reason	Housing	Housing Move Reason	Used in housing dataset for location transfers.
-death_reason	Colony Management		Death Reason
+death_reason	Colony Management	Death Reason
 weight_ranges	Clinical	Weight Ranges	Min/Max allowable weight per species. Used in various weight reports.
