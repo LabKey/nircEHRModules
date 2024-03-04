@@ -73,7 +73,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             var obj = {
                 Id: row.Id,
                 date: row.date,
-                calculated_status: isLiving ? 'Alive' : 'Dead',
+                calculated_status: 'Alive',
                 dam: row['Id/demographics/dam'] || null,
                 sire: row['Id/demographics/sire'] || null,
                 species: row['Id/demographics/species'] || null,
@@ -91,10 +91,6 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
             if (obj.dam && !obj.species) {
                 obj.species = helper.getJavaHelper().getSpecies(obj.dam);
-            }
-
-            if (!isLiving) {
-                obj.death = obj.date;
             }
 
             if (!oldRow) {
