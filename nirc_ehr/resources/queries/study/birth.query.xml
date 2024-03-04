@@ -13,24 +13,9 @@
                     <column columnName="date">
                         <columnTitle>Birth Date</columnTitle>
                     </column>
-                    <column columnName="gender">
-                        <columnTitle>Sex</columnTitle>
-                        <nullable>true</nullable>
-                    </column>
-                    <column columnName="cage">
-                        <columnTitle>Location</columnTitle>
-                        <shownInInsertView>true</shownInInsertView>
-                        <shownInUpdateView>true</shownInUpdateView>
-                        <isHidden>false</isHidden>
-                        <url>/EHR/cageDetails.view?
-                            room=${room}&amp;
-                            cage=${cage}
-                        </url>
-                    </column>
                     <column columnName="geographic_origin">
                         <isHidden>true</isHidden> <!-- This column is hidden since birth always will be at the primate center -->
                     </column>
-                    <column columnName="species"/>
                     <column columnName="project">
                         <isHidden>true</isHidden>
                     </column>
