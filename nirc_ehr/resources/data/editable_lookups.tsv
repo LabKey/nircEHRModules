@@ -1,6 +1,6 @@
 Value	Category	title	description
 ageclass	Colony Management	Age Class	Categories of age, such as infant or adult, by species. Used in various reports grouping animals by age class.
-card_format		Colony Management	Card Format
+card_format	Colony Management	Card Format
 census_activity_status	Colony Management	Census Activity Status
 cost_type	Colony Management	Cost Type
 country	Colony Management	Country
@@ -31,3 +31,4 @@ necropsy_exam_reason	Colony Management	Necropsy Exam Reason
 necropsy_specimen_condition	Colony Management	Necropsy Specimen Condition
 housing_reason	Housing	Housing Move Reason	Used in housing dataset for location transfers.
 death_reason	Colony Management		Death Reason
+weight_ranges	Clinical	Weight Ranges	Min/Max allowable weight per species. Used in various weight reports.
