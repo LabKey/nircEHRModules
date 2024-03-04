@@ -1,5 +1,5 @@
 <libraries xmlns="http://labkey.org/clientLibrary/xml/">
     <library compileInProductionMode="false">
-        <script path="jhu_ehr/model/sources/NIRCDefault.js"/>
+        <script path="nirc_ehr/model/sources/NIRCDefault.js"/>
     </library>
 </libraries>
