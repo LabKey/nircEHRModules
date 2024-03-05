@@ -1,5 +1,7 @@
+SELECT core.executeJavaUpgradeCode('reloadFolder');
+
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/arrival;truncate');
-SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/births;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/birth;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cageCard;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
