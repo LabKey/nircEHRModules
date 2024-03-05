@@ -15,7 +15,8 @@
                         <columnTitle>Out Date</columnTitle>
                     </column>
                     <column columnName="cage">
-                        <columnTitle>Cage</columnTitle>
+                        <displayWidth>80</displayWidth>
+                        <columnTitle>Location</columnTitle>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${cage}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
@@ -25,6 +26,7 @@
                         </fk>
                     </column>
                     <column columnName="room">
+                        <isHidden>true</isHidden>
                         <nullable>false</nullable>
                         <columnTitle>Room</columnTitle>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
