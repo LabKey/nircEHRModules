@@ -16,7 +16,6 @@
                     </column>
                     <column columnName="cage">
                         <displayWidth>80</displayWidth>
-                        <columnTitle>Location</columnTitle>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${cage}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
