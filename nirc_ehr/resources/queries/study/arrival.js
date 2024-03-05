@@ -52,6 +52,22 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             }
         }
 
+        //if cage also known as "location" is provided, we insert into housing.
+        if (row.cage && row.Id && row.date) {
+            var housingRec = {
+                Id: row.Id,
+                date: row.date,
+                cage: row.cage,
+                taskid: row.taskid,
+                qcstate: row.qcstate
+            }
+
+            var housingErrors = triggerHelper.createBirthHousingRecord(row.Id, housingRec);
+            if (housingErrors) {
+                EHR.Server.Utils.addError(scriptErrors, 'Id', housingErrors, 'ERROR');
+            }
+        }
+
         if(!oldRow) {
             //if not already present, we insert into demographics
             helper.getJavaHelper().createDemographicsRecord(row.Id, row, extraDemographicsFieldMappings);

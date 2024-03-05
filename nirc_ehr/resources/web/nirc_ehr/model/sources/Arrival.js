@@ -10,7 +10,15 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
             'Id/demographics/sire': {
                 xtype: 'ehr-animalfield'
             },
-            attachmentFile: {
+            'cage': {
+                xtype: 'combo',
+                lookup: {
+                    schemaName: 'ehr_lookups',
+                    queryName: 'cage',
+                    keyColumn: 'location',
+                    displayColumn: 'cage',
+                    columns: 'location,cage'
+                },
                 columnConfig: {
                     fixed: true,
                     width: 150
@@ -25,7 +33,7 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                     fixed: true,
                     width: 150
                 },
-            }
+            },
         },
         'study.assignment': {
             'project': {

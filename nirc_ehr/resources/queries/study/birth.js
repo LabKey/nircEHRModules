@@ -49,12 +49,12 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
         if (!helper.isGeneratedByServer() && !helper.isValidateOnly()) {
 
-            //if room provided, we insert into housing.  if this animal already has an active housing record, skip
-            if (row.room && row.Id && row.date) {
+            //if cage also known as "location" is provided, we insert into housing.
+            if (row.cage && row.Id && row.date) {
                 var housingRec = {
                     Id: row.Id,
                     date: row.date,
-                    location: row.location,
+                    cage: row.cage || null,
                     taskid: row.taskid,
                     qcstate: row.qcstate
                 }

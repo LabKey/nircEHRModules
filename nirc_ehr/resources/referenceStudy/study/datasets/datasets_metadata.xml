@@ -50,6 +50,10 @@
                     <importAlias>ptid</importAlias>
                 </importAliases>
             </column>
+            <column columnName="cage">
+                <columnTitle>Location</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
@@ -181,6 +185,10 @@
                 <importAliases>
                     <importAlias>ptid</importAlias>
                 </importAliases>
+            </column>
+            <column columnName="cage">
+                <datatype>varchar</datatype>
+                <columnTitle>Location</columnTitle>
             </column>
             <column columnName="date">
                 <datatype>timestamp</datatype>

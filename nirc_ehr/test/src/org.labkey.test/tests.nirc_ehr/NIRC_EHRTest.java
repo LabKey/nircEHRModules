@@ -26,6 +26,7 @@ import org.labkey.test.TestFileUtils;
 import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
 import org.labkey.test.components.ui.grids.QueryGrid;
+import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.jhu_ehr.EHRLookupPage;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
@@ -142,6 +143,17 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToEHRFolder();
         createTestSubjects();
         addNIRCEhrLinks();
+        addExtensibleCols();
+    }
+
+    private void addExtensibleCols()
+    {
+        log("Setup the EHR table definitions");
+        EHRAdminPage.beginAt(this,getContainerPath());
+        click(Locator.linkWithText("EHR EXTENSIBLE COLUMNS"));
+        click(Locator.linkWithText("Load EHR table definitions"));
+        waitForElement(Locator.tagWithClass("span", "x4-window-header-text").withText("Success"));
+        assertExt4MsgBox("EHR tables updated successfully.", "OK");
     }
 
     private void addNIRCEhrLinks()
