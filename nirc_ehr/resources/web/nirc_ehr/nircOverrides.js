@@ -1,0 +1,1 @@
+EHR.Utils.rowEditorPlugin = 'NIRC_EHR.plugin.RowEditor';

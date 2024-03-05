@@ -22,8 +22,6 @@ import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
 import org.labkey.api.ehr.dataentry.DefaultDataEntryFormFactory;
-import org.labkey.api.ehr.dataentry.forms.BirthFormType;
-import org.labkey.api.ehr.dataentry.forms.BloodDrawFormType;
 import org.labkey.api.ehr.demographics.ParentsDemographicsProvider;
 import org.labkey.api.ehr.history.DefaultAlopeciaDataSource;
 import org.labkey.api.ehr.history.DefaultAnimalRecordFlagDataSource;
@@ -39,9 +37,11 @@ import org.labkey.api.resource.Resource;
 import org.labkey.api.util.NetworkDrive;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
-import org.labkey.nirc_ehr.dataentry.ArrivalFormType;
-import org.labkey.nirc_ehr.dataentry.DeathFormType;
-import org.labkey.nirc_ehr.dataentry.DepartureFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCArrivalFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCBirthFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCHousingFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCDeathNecropsyFormType;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
@@ -65,7 +65,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.000;
+        return 24.001;
     }
 
     @Override
@@ -90,6 +90,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nircReports.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SnapshotPanel.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/BloodSummaryPanel.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/AnimalDetailsPanel.js"), this);
     }
 
     @Override
@@ -103,6 +104,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerTriggerScript(this, r);
 
         EHRService.get().registerTableCustomizer(this, NIRC_EHRCustomizer.class);
+
+        ehrService.addModulePreferringTaskFormEditUI(this);
 
         EHRService.get().registerDemographicsProvider(new ActiveFlagsDemographicsProvider(this));
         EHRService.get().registerDemographicsProvider(new ParentsDemographicsProvider(this));
@@ -135,8 +138,11 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerHistoryDataSource(new ProtocolDataSource(this));
         EHRService.get().registerHistoryDataSource(new SerologyDataSource(this));
 
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nirc_ehr_api"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nircOverrides.js"), this);
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");
+        ehrService.registerActionOverride("enterData", this, "views/enterData.html");
 
         registerDataEntry();
 
@@ -150,11 +156,11 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
     private void registerDataEntry()
     {
-        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(ArrivalFormType.class, this));
-        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(BirthFormType.class, this));
-        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(BloodDrawFormType.class, this));
-        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(DeathFormType.class, this));
-        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(DepartureFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCArrivalFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCBirthFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCDepartureFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCDeathNecropsyFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCHousingFormType.class, this));
     }
 
     @Override

@@ -1,12 +1,12 @@
 SELECT
        p.PROTOCOL_ID            AS objectid,
        p.PROTOCOL_NUMBER        AS title,
-       p.PI_ID.STAFF_FIRST_NAME
-           || '|' || p.PI_ID.STAFF_LAST_NAME as investigatorId,
-       p.AUTHOR_ID.STAFF_FIRST_NAME
-           || '|' || p.AUTHOR_ID.STAFF_LAST_NAME as authorId,
-       p.OWNER_ID.STAFF_FIRST_NAME
-           || '|' || p.OWNER_ID.STAFF_LAST_NAME as ownerId,
+       trim(p.PI_ID.STAFF_FIRST_NAME)
+           || '|' || trim(p.PI_ID.STAFF_LAST_NAME) as investigatorId,
+       trim(p.AUTHOR_ID.STAFF_FIRST_NAME)
+           || '|' || trim(p.AUTHOR_ID.STAFF_LAST_NAME) as authorId,
+       trim(p.OWNER_ID.STAFF_FIRST_NAME)
+           || '|' || trim(p.OWNER_ID.STAFF_LAST_NAME) as ownerId,
        p.PROTOCOL_NUMBER        AS external_id,
        p.PROTOCOL_ID            AS protocol,
        p.DEPARTMENT_ID          AS departmentId,

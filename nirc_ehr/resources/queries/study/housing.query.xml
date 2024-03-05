@@ -1,8 +1,9 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="housing" tableDbType="TABLE">
+            <table tableName="housing" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
+                    <column columnName="Id"/>
                     <column columnName="date">
                         <columnTitle>In Date</columnTitle>
                     </column>
@@ -14,7 +15,7 @@
                         <columnTitle>Out Date</columnTitle>
                     </column>
                     <column columnName="cage">
-                        <columnTitle>Cage</columnTitle>
+                        <displayWidth>80</displayWidth>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${cage}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
@@ -24,7 +25,8 @@
                         </fk>
                     </column>
                     <column columnName="room">
-                        <nullable>false</nullable>
+                        <isHidden>false</isHidden>
+                        <nullable>true</nullable>
                         <columnTitle>Room</columnTitle>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
                         <fk>
@@ -33,6 +35,21 @@
                             <fkColumnName>room</fkColumnName>
                             <fkDisplayColumnName>name</fkDisplayColumnName>
                         </fk>
+                    </column>
+                    <column columnName="location">
+                        <columnTitle>Location</columnTitle>
+                    </column>
+                    <column columnName="reason">
+                        <columnTitle>Reason For Move</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>housing_reason</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="remark"/>
+                    <column columnName="performedBy">
+                        <columnTitle>Performed By</columnTitle>
                     </column>
                 </columns>
             </table>
