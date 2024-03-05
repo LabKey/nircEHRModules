@@ -24,7 +24,7 @@
                         <columnTitle>Location</columnTitle>
                         <shownInInsertView>true</shownInInsertView>
                         <shownInUpdateView>true</shownInUpdateView>
-                        <isHidden>false</isHidden>
+                        <isHidden>true</isHidden> <!-- TODO Hidden for now, set to false once Housing is implemented correctly -->
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>cage</fkTable>

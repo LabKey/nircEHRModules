@@ -82,6 +82,12 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                     width: 200,
                 }
             },
+            attachmentFile: {
+                hidden: true
+            },
+            category: {
+                hidden: true
+            },
         },
         'study.weight': {
             weight: {

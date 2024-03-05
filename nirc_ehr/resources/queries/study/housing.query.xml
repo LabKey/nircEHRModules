@@ -26,8 +26,8 @@
                         </fk>
                     </column>
                     <column columnName="room">
-                        <isHidden>true</isHidden>
-                        <nullable>false</nullable>
+                        <isHidden>false</isHidden>
+                        <nullable>true</nullable>
                         <columnTitle>Room</columnTitle>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
                         <fk>
