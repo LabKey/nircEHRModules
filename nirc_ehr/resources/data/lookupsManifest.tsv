@@ -1,4 +1,5 @@
 name
+editable_lookups
 ageclass
 card_format
 census_activity_status
@@ -22,3 +23,13 @@ req_order_state
 req_order_type
 vendor_approval_code
 vendor_production_location
+necropsy_disposition_codes
+necropsy_tissue
+necropsy_organ_appearance
+necropsy_organ_systems
+necropsy_physical_condition
+necropsy_exam_reason
+necropsy_specimen_condition
+housing_reason
+death_reason
+weight_ranges

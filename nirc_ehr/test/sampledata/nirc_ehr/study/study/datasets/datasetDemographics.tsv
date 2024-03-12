@@ -1,0 +1,49 @@
+objectid	Id	date	birth	death	calculated_status	gender	sire	dam	species	geographic_origin	QCStateLabel	weanedDate	dispostion	termination	implantNumber	vendorNumber	activeStatus	lotId	source	CITES
+1	44444	-1381d	-1381d		Alive	m	44442	44443	Rhesus Macaque		Completed
+2	TSTCP	-1382d	-1382d		Alive	m	44442	44443	Rhesus Macaque		Completed
+3	44446	-1406d	-1406d		Alive	m	44442	44443	Rhesus Macaque		Completed
+4	44445	-1414d	-1414d	-726d	Dead	f	44442	44443	Rhesus Macaque		Completed
+5	TEST3844307	-2454d	-2454d		Alive	m	5748235	TEST2312318	Rhesus Macaque		Completed
+6	TEST8976544	-2470d	-2470d		Alive	f	9516255	8739374	Pigtail Macaque	CHINESE	Completed
+7	TEST9195996	-2473d	-2473d		Alive	m	TEST6390238	TEST2312318	Rhesus Macaque		Completed
+8	TEST6208376	-2500d	-2500d		Alive	f	2568235	5961588	Pigtail Macaque	CHINESE	Completed
+9	TEST6700530	-2507d	-2507d	-2132d	Dead	m	9516255	7773678	Pigtail Macaque	CHINESE	Completed
+10	TEST3621582	-2759d	-2759d		Alive	f	TEST6390238	TEST2312318	Rhesus Macaque		Completed
+11	TEST3224553	-2779d	-2779d	-2189d	Dead	f	4434585	7877112	Pigtail Macaque	CHINESE	Completed
+12	TEST727088	-2815d	-2815d		Alive	f	3686702	9719847	Pigtail Macaque	CHINESE	Completed
+13	TEST1112911	-2819d	-2819d		Alive	f	731544	6914348	Pigtail Macaque	CHINESE	Completed
+14	TEST1020148	-2908d	-2908d	-2235d	Dead	f	57307	7166552	Rhesus Macaque		Completed
+15	TEST1099252	-2916d	-2916d	-2244d	Dead	f	TEST6390238	TEST2312318	Rhesus Macaque		Completed
+16	TEST1441142	-2918d	-2918d	-2231d	Dead	f	731544	1256797	Pigtail Macaque	CHINESE	Completed
+17	TEST4037096	-2930d	-2930d		Alive	f		4597773	Pigtail Macaque	CHINESE	Completed
+18	TEST3771679	-2958d	-2958d		Alive	f	TEST6390238	TEST2312318	Rhesus Macaque		Completed
+19	TEST9118022	-2980d	-2980d	-2262d	Dead	f	2042908	7257197	Pigtail Macaque	CHINESE	Completed
+20	TEST5409620	-2989d	-2989d		Alive	m	9468964	6954679	Pigtail Macaque	CHINESE	Completed
+21	TEST5131891	-2993d	-2993d		Alive	m	2480492	2001039	Pigtail Macaque	CHINESE	Completed
+22	TEST5158984	-3005d	-3005d		Alive	m	TEST6390238	TEST2312318	Rhesus Macaque		Completed
+23	TEST7151371	-3022d	-3022d		Alive	m	2042908	838626	Pigtail Macaque	CHINESE	Completed
+24	TEST3137998	-3025d	-3025d		Alive	m	4778953	690232	Pigtail Macaque	CHINESE	Completed
+25	TEST4945025	-3082d	-3082d		Alive	m	9819418	3066209	Pigtail Macaque	CHINESE	Completed
+26	TEST1684145	-3087d	-3087d		Alive	f	4891303	8982969	Pigtail Macaque	CHINESE	Completed
+27	TEST5598475	-3091d	-3091d		Alive	m	TEST6390238	TEST2312318	Rhesus Macaque		Completed
+28	TEST7407382	-3178d	-3178d		Alive	m	731451	1712704	Pigtail Macaque	INDIAN	Completed
+29	TEST8533200	-3209d	-3209d		Alive	m	9468964	1636539	Pigtail Macaque	INDIAN	Completed
+30	TEST3843301	-3219d	-3219d		Alive	m	731544	TEST2312318	Rhesus Macaque		Completed
+31	TEST4935165	-3240d	-3240d		Alive	f	6974794	4343642	Pigtail Macaque	INDIAN	Completed
+32	TEST2227135	-3242d	-3242d		Alive	f	TEST6390238	TEST2312318	Rhesus Macaque		Completed
+33	TEST5292692	-3310d	-3310d		Alive	m	5542511	4076261	Pigtail Macaque	INDIAN	Completed
+34	TEST4013108	-3334d	-3334d		Alive	m	4891303	7524224	Rhesus Macaque		Completed
+35	TEST3935154	-3338d	-3338d		Alive	m	7785547	7579363	Rhesus Macaque		Completed
+36	TEST4710248	-3341d	-3341d		Alive	m	9819418	642333	Pigtail Macaque	INDIAN	Completed
+37	TEST2950014	-3358d	-3358d	-2224d	Dead	m	4778953	3386291	Pigtail Macaque	INDIAN	Completed
+38	TEST5171727	-3360d	-3360d		Alive	m	731544	116526	Pigtail Macaque	INDIAN	Completed
+39	TEST499022	-3566d	-3566d		Alive	f	731451	532430	Rhesus Macaque		Completed
+40	TEST2008446	-3618d	-3618d		Alive	f	4884340	7405528	Pigtail Macaque	INDIAN	Completed
+41	TEST3997535	-3637d	-3637d		Alive	f	4778953	9681212	Pigtail Macaque	INDIAN	Completed
+42	TEST6390238	-3923d	-3923d		Alive	f	3565069	5250080	Rhesus Macaque		Completed
+43	TEST4564246	-4622d	-4622d		Alive	f	8296075	7877112	Rhesus Macaque		Completed
+44	TEST5904521	-5431d	-5431d		Alive	m		8377984	Pigtail Macaque	INDIAN	Completed
+45	TEST3804589	-5806d	-5806d		Alive	m	493957	9749422	Pigtail Macaque	INDIAN	Completed
+46	TEST4551032	-6362d	-6362d		Alive	m	5030167	8416939	Pigtail Macaque	INDIAN	Completed
+47	TEST2312318	-8069d	-8069d		Alive	m	5748235	8739374	Rhesus Macaque		Completed
+48	TEST1993532	-11808d	-11808d	-2259d	Dead	f	5409336	3784452	Pigtail Macaque	INDIAN	Completed
