@@ -38,13 +38,25 @@
             width: 270,
             renderTo: 'ehrMenu1_'+webpart.wrapperDivId,
             sections: [
-                {header: 'By Animal',
+                {
+                    header: 'By Animal',
                     items: [
                         {name: 'Animal History', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view'},
                         {name: 'Animal Search', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalSearch.view'}
-                ]},
-                {header: 'By Dataset',
-                    items: byDatasetItems},
+                    ]
+                }, {
+                    header: 'By Dataset',
+                    items: byDatasetItems
+                }, {
+                //TODO: security check - display for appropriate users/groups who should be allowed to see this and Enter data
+                    header: 'Data Entry',
+                    items: [
+                        {
+                            name: 'Enter Data',
+                            url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-enterData.view'
+                        }
+                    ]
+                }
 
             ]
         });
@@ -78,6 +90,7 @@
                 items: [
                     {name: 'EHR Admin Page', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-ehrAdmin.view'},
                     {name: 'Manage EHR Study', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/study-manageStudy.view'},
+                    {name: 'Manage Lookup Tables', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-ehrLookups.view' }
                 ]
             });
         }

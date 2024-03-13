@@ -25,6 +25,13 @@ function getLastAssignment(id){
 }
 
 function onInit(event, helper){
+
+    helper.setScriptOptions({
+        allowAnyId: true,
+        requiresStatusRecalc: true,
+        allowDatesInDistantPast: true
+    });
+
     if (helper.isETL()) {
         LABKEY.Query.selectRows({
             schemaName: 'ehr',

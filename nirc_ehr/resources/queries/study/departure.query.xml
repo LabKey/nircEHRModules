@@ -12,9 +12,8 @@
                         <columnTitle>Destination</columnTitle>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>disposition_codes</fkTable>
-                            <fkColumnName>value</fkColumnName>
-                            <fkDisplayColumnName>title</fkDisplayColumnName>
+                            <fkTable>source</fkTable>
+                            <fkColumnName>code</fkColumnName>
                         </fk>
                     </column>
                 </columns>

@@ -35,5 +35,7 @@
         <dataset name="treatment_order" id="1014" category="Clinical" type="Standard"/>
         <dataset name="vitals" id="1033" category="Clinical" type="Standard"/>
         <dataset name="weight" id="1015" category="Clinical" type="Standard"/>
+        <dataset name="grossPathology" id="1022" category="Pathology" type="Standard"/>
+        <dataset name="tissueDisposition" id="1026" category="Pathology" type="Standard"/>
     </datasets>
 </datasets>

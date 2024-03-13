@@ -3,7 +3,6 @@ SELECT anmEvt.ANIMAL_EVENT_ID AS objectId,
        anm.ANIMAL_ID_NUMBER AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS transferDate,
        anmCmt.TEXT AS remark,
-       cg.room,
        cg.location AS cage,
        (CASE
             WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'

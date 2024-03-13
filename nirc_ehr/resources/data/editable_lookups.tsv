@@ -1,0 +1,36 @@
+Value	Category	title	description
+ageclass	Colony Management	Age Class	Categories of age, such as infant or adult, by species. Used in various reports grouping animals by age class.
+card_format	Colony Management	Card Format
+census_activity_status	Colony Management	Census Activity Status
+cost_type	Colony Management	Cost Type
+country	Colony Management	Country
+country_category	Colony Management	Country Category
+delivery_state	Colony Management	Delivery State
+esig_events	Colony Management	Esig Events
+euthanasia_type	Colony Management	Euthanasia Type
+expense_class	Colony Management	Expense Class
+gender_codes	Colony Management	Gender Codes	Used in demographics dataset.
+id_history_type	Colony Management	Id History Type
+numeric_unit	Colony Management	Numeric Unit
+protocol_category	Colony Management	Protocol Category
+protocol_state	Colony Management	Protocol State
+protocol_type	Colony Management	Protocol Type
+qualifier	Colony Management	Qualifier
+questionnaire	Colony Management	Questionnaire
+regulatory_stress_levels	Colony Management	Regulatory Stress Levels
+req_order_state	Colony Management	Request Order State
+req_order_type	Colony Management	Request Order Type
+vendor_approval_code	Colony Management	Vendor Approval Code
+vendor_production_location	Colony Management	Vendor Production Location
+necropsy_disposition_codes	Colony Management	Necropsy Disposition Codes
+necropsy_tissue	Colony Management	Necropsy Tissue
+necropsy_organ_appearance	Colony Management	Necropsy Organ Appearance
+necropsy_organ_systems	Colony Management	Necropsy Organ Systems
+necropsy_physical_condition	Colony Management	Necropsy Physical Condition
+necropsy_exam_reason	Colony Management	Necropsy Exam Reason
+necropsy_specimen_condition	Colony Management	Necropsy Specimen Condition
+housing_reason	Housing	Housing Move Reason	Used in housing dataset for location transfers.
+death_reason	Colony Management	Death Reason
+weight_ranges	Clinical	Weight Ranges	Min/Max allowable weight per species. Used in various weight reports.
+species	Colony Management	Species
+species_codes	Colony Management	Species Codes

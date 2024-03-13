@@ -67,7 +67,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             if ("performedby".equalsIgnoreCase(col.getName()) && null == col.getFk())
             {
-                col.setLabel("PerformedBy");
+                col.setLabel("Performed By");
                 col.setFk(new UserIdQueryForeignKey(ti.getUserSchema(), true));
             }
             if ("species".equalsIgnoreCase(col.getName()) && null == col.getFk())
