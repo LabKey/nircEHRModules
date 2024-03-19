@@ -37,6 +37,7 @@ import org.labkey.api.resource.Resource;
 import org.labkey.api.util.NetworkDrive;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
+import org.labkey.nirc_ehr.dataentry.form.NIRCAliasFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCArrivalFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCBirthFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
@@ -157,6 +158,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
     private void registerDataEntry()
     {
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCAliasFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCArrivalFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCBirthFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCDepartureFormType.class, this));
