@@ -17,7 +17,7 @@ public class NIRCPregnancyFormType extends NIRCBaseTaskFormType
 
     public NIRCPregnancyFormType(DataEntryFormContext ctx, Module owner)
     {
-        super(ctx, owner, NAME, LABEL, "Clinical", List.of(
+        super(ctx, owner, NAME, LABEL, "Colony Management", List.of(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCPregnancyFormSection(LABEL)
