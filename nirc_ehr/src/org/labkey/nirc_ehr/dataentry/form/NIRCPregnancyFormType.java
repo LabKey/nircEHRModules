@@ -1,6 +1,7 @@
 package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
+import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
@@ -23,5 +24,11 @@ public class NIRCPregnancyFormType extends NIRCBaseTaskFormType
         ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Pregnancy.js"));
+
+        for (FormSection s : getFormSections())
+        {
+            s.addConfigSource("Pregnancy");
+        }
     }
 }

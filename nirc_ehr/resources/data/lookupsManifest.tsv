@@ -1,6 +1,7 @@
 name
 editable_lookups
 ageclass
+alias_category
 card_format
 census_activity_status
 cost_type
