@@ -13,6 +13,7 @@ expense_class	Colony Management	Expense Class
 gender_codes	Colony Management	Gender Codes	Used in demographics dataset.
 id_history_type	Colony Management	Id History Type
 numeric_unit	Colony Management	Numeric Unit
+pregnancy_result	Colony Management	Pregancy Result
 protocol_category	Colony Management	Protocol Category
 protocol_state	Colony Management	Protocol State
 protocol_type	Colony Management	Protocol Type

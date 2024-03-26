@@ -19,9 +19,7 @@ public class NIRCWeightFormType extends NIRCBaseTaskFormType
         super(ctx, owner, NAME, LABEL, "Clinical", List.of(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCWeightFormSection()
+                new NIRCWeightFormSection(false)
         ));
-
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
     }
 }

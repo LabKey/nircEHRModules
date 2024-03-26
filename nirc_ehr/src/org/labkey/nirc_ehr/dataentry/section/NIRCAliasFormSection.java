@@ -4,6 +4,6 @@ public class NIRCAliasFormSection extends BaseFormSection
 {
     public NIRCAliasFormSection(String label)
     {
-        super("study", "alias", label, "ehr-gridpanel", true, true);
+        super("study", "alias", label, "ehr-gridpanel", true, false);
     }
 }

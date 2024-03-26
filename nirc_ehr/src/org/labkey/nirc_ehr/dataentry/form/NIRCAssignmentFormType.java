@@ -25,7 +25,6 @@ public class NIRCAssignmentFormType extends NIRCBaseTaskFormType
                 new NIRCProjectAssignmentFormSection(true, true, true)
         ));
 
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Assignment.js"));
 
         for (FormSection s : getFormSections())

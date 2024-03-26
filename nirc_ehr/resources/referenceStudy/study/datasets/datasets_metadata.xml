@@ -198,7 +198,7 @@
                 <datatype>timestamp</datatype>
             </column>
             <column columnName="protocol">
-                <datatype>integer</datatype>
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>

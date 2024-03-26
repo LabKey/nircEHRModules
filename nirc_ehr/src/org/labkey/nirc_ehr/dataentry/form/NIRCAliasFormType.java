@@ -24,7 +24,6 @@ public class NIRCAliasFormType extends NIRCBaseTaskFormType
                 new NIRCAliasFormSection(LABEL)
         ));
 
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Alias.js"));
 
         for (FormSection s : getFormSections())

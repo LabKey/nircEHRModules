@@ -29,7 +29,8 @@ function onInit(event, helper){
     helper.setScriptOptions({
         allowAnyId: true,
         requiresStatusRecalc: true,
-        allowDatesInDistantPast: true
+        allowDatesInDistantPast: true,
+        skipAssignmentCheck: true
     });
 
     if (helper.isETL()) {

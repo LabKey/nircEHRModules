@@ -23,7 +23,6 @@ public class NIRCPregnancyFormType extends NIRCBaseTaskFormType
                 new NIRCPregnancyFormSection(LABEL)
         ));
 
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Pregnancy.js"));
 
         for (FormSection s : getFormSections())
