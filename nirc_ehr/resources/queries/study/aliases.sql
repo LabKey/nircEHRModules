@@ -7,3 +7,7 @@ UNION
 SELECT Id,
     Name as alias
 FROM nirc_ehr.IdHistory
+UNION
+SELECT Id,
+    Alias as alias
+FROM study.alias

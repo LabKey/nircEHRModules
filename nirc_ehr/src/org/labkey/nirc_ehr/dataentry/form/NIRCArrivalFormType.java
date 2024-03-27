@@ -27,12 +27,11 @@ public class NIRCArrivalFormType extends NIRCBaseTaskFormType
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCArrivalFormSection(),
-                new NIRCWeightFormSection(),
+                new NIRCWeightFormSection(true),
                 new NIRCProtocolAssignmentFormSection(true, true, true),
                 new NIRCProjectAssignmentFormSection(true, true, true)
                 ));
 
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Arrival.js"));
 
         for (FormSection s : getFormSections())
