@@ -27,14 +27,12 @@ import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
 import org.labkey.test.components.ui.grids.QueryGrid;
 import org.labkey.test.pages.ehr.EHRAdminPage;
-import org.labkey.test.pages.jhu_ehr.EHRLookupPage;
+import org.labkey.test.pages.ehr.EHRLookupPage;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
-import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
-import org.labkey.test.util.ext4cmp.Ext4ComboRef;
 
 import java.io.BufferedReader;
 import java.io.File;
