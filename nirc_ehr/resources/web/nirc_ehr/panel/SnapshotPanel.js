@@ -16,7 +16,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         this.on('afterrender', function() {
 
             var displayField = this.down('#flags');
-            if (displayField.getEl()) {
+            if (displayField && displayField.getEl()) {
 
                 var anchor = displayField.getEl('nircFlagsLink');
 
