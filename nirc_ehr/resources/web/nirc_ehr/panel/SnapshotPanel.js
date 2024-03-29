@@ -2,6 +2,34 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
     extend: 'EHR.panel.SnapshotPanel',
     alias: 'widget.nirc_ehr-snapshotpanel',
 
+    initComponent: function() {
+        Ext4.apply(this, {
+            defaults: {
+                border: false
+            },
+            items: this.getItems()
+        });
+
+        this.callParent();
+
+
+        this.on('afterrender', function() {
+
+            var displayField = this.down('#flags');
+            if (displayField && displayField.getEl()) {
+
+                var anchor = displayField.getEl('nircFlagsLink');
+
+                if (anchor) {
+                    Ext4.get(anchor).on('click', function(e) {
+                        e.preventDefault();
+                        NIRC_EHR.Utils.showFlagPopup(this.subjectId, this);
+                    });
+                }
+            }
+        });
+    },
+
     appendDemographicsResults: function(toSet, row, id){
         if (!row){
             console.log('Id not found');
@@ -73,7 +101,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
             }
         }
 
-        toSet['flags'] = values.length ? '<a onclick="NIRC_EHR.Utils.showFlagPopup(\'' + LABKEY.Utils.encodeHtml(this.subjectId) + '\', this);">' + values.join('<br>') + '</div>' : null;
+        toSet['flags'] = values.length ? '<a id="nircFlagsLink">' + values.join('<br>') + '</div>' : null;
     }
 
 });
