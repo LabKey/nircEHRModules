@@ -69,14 +69,6 @@
         }).render('allAnimals_' + webpart.wrapperDivId);
 
 
-        LDK.Utils.getReadOnlyQWP({
-            title: 'Cage Observations For This Location',
-            schemaName: 'ehr',
-            queryName: 'cage_observations',
-            filterArray: filterArray,
-            sort: '-Date'
-        }).render('cageNotes_' + webpart.wrapperDivId);
-
         var filterArray2 = [].concat(filterArray);
         filterArray2.push(LABKEY.Filter.create('enddate', null, LABKEY.Filter.Types.ISBLANK));
         LDK.Utils.getReadOnlyQWP({

@@ -21,14 +21,6 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 hidden: true
             },
             'cage': {
-                // xtype: 'combo',
-                // lookup: {
-                //     schemaName: 'ehr_lookups',
-                //     queryName: 'cage',
-                //     keyColumn: 'location',
-                //     displayColumn: 'cage',
-                //     columns: 'location,cage'
-                // },
                 columnConfig: {
                     fixed: true,
                     width: 150

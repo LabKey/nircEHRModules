@@ -300,6 +300,7 @@
             </column>
             <column columnName="gender">
                 <datatype>varchar</datatype>
+                <columnTitle>sex</columnTitle>
             </column>
             <column columnName="sire">
                 <datatype>varchar</datatype>
@@ -516,9 +517,6 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="room">
-                <datatype>varchar</datatype>
             </column>
             <column columnName="cage">
                 <columnTitle>Location</columnTitle>

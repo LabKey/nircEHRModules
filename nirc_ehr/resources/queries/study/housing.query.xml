@@ -15,7 +15,6 @@
                         <columnTitle>Out Date</columnTitle>
                     </column>
                     <column columnName="cage">
-<!--                        <displayWidth>80</displayWidth>-->
                         <columnTitle>Location</columnTitle>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${cage}&amp;</url>
                         <fk>
@@ -25,18 +24,16 @@
                             <fkDisplayColumnName>cage</fkDisplayColumnName>
                         </fk>
                     </column>
-<!--                    <column columnName="room">-->
-<!--                        <isHidden>false</isHidden>-->
-<!--                        <nullable>true</nullable>-->
-<!--                        <columnTitle>Room</columnTitle>-->
-<!--                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>-->
-<!--                        <fk>-->
-<!--                            <fkDbSchema>ehr_lookups</fkDbSchema>-->
-<!--                            <fkTable>rooms</fkTable>-->
-<!--                            <fkColumnName>room</fkColumnName>-->
-<!--                            <fkDisplayColumnName>name</fkDisplayColumnName>-->
-<!--                        </fk>-->
-<!--                    </column>-->
+                    <column columnName="room">
+                        <columnTitle>Room</columnTitle>
+                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;</url>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>rooms</fkTable>
+                            <fkColumnName>room</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                        </fk>
+                    </column>
                     <column columnName="reason">
                         <columnTitle>Reason For Move</columnTitle>
                         <fk>

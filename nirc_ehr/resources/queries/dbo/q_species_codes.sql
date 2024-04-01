@@ -2,7 +2,7 @@
 SELECT
     SPECIES_ID AS code,
     SPEC_NAME AS common_name,
-    SPEC_DESC AS scientific_name,
+    replace(SPEC_DESC, CHR(13) || CHR(10), ' ') AS scientific_name,
     SPECIES_GROUP_ID as species,
     CASE ACTIVE_YN
         WHEN 'Y' THEN NULL
