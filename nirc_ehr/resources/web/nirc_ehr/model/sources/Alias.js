@@ -6,6 +6,14 @@ EHR.model.DataModelManager.registerMetadata('Alias', {
         'study.alias': {
             project: {
                 hidden: true,
+            },
+            alias: {
+                allowBlank: false,
+                nullable: false,
+            },
+            category: {
+                allowBlank: false,
+                nullable: false,
             }
         },
 

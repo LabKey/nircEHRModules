@@ -15,6 +15,10 @@ EHR.model.DataModelManager.registerMetadata('Pregnancy', {
             },
             attachmentFile: {
                 hidden: true,
+            },
+            result: {
+                allowBlank: false,
+                nullable: false,
             }
         },
 

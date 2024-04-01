@@ -55,6 +55,7 @@ import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class NIRC_EHRModule extends ExtendedSimpleModule
 {
@@ -147,6 +148,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerActionOverride("animalHistory", this, "views/animalHistory.html");
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");
         ehrService.registerActionOverride("enterData", this, "views/enterData.html");
+
+        ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment"));
 
         registerDataEntry();
 
