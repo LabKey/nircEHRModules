@@ -35,6 +35,37 @@
             </column>
         </columns>
     </sharedConfig>
+    <table tableName="alias" tableDbType="TABLE">
+        <tableTitle>Alias</tableTitle>
+        <columns>
+            <column columnName="objectid">
+                <datatype>entityid</datatype>
+                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
+                <isKeyField>false</isKeyField>
+            </column>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="alias">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="remark">
+                <datatype>varchar</datatype>
+            </column>
+        </columns>
+    </table>
     <table tableName="arrival" tableDbType="TABLE">
         <tableTitle>Arrival</tableTitle>
         <columns>
@@ -167,7 +198,7 @@
                 <datatype>timestamp</datatype>
             </column>
             <column columnName="protocol">
-                <datatype>integer</datatype>
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>
