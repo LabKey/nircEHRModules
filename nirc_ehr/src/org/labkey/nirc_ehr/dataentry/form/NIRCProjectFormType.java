@@ -17,7 +17,7 @@ public class NIRCProjectFormType extends AdminLinksFormType
     @Override
     protected ActionURL dataEntryLink()
     {
-        ActionURL url = new ActionURL("ehr", "updateQuery", getCtx().getContainer());
+        ActionURL url = new ActionURL("ldk", "updateQuery", getCtx().getContainer());
         url.addParameter("schemaName", "ehr");
         url.addParameter("query.queryName", "project");
         url.addParameter("showImport", "true");
