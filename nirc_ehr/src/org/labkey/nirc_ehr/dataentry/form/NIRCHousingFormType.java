@@ -21,7 +21,6 @@ public class NIRCHousingFormType extends NIRCBaseTaskFormType
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCHousingFormSection()
         ));
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
     }
 
     @Override

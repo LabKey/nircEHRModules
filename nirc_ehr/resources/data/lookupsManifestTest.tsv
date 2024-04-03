@@ -14,6 +14,7 @@ expense_class
 gender_codes
 id_history_type
 numeric_unit
+pregnancy_result
 protocol_category
 protocol_state
 protocol_type

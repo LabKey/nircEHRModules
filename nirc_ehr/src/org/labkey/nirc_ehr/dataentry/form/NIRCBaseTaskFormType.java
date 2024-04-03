@@ -15,6 +15,7 @@ public class NIRCBaseTaskFormType extends TaskForm
     {
         super(ctx, owner, name, label, category, sections);
 
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/NIRCDefault.js"));
     }
 

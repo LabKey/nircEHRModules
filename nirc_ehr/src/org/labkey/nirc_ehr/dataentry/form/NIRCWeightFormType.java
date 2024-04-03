@@ -1,26 +1,25 @@
 package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
-import org.labkey.api.ehr.dataentry.TaskForm;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCDepartureFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 
-import java.util.Arrays;
+import java.util.List;
 
-public class NIRCDepartureFormType extends NIRCBaseTaskFormType
+public class NIRCWeightFormType extends NIRCBaseTaskFormType
 {
-    public static final String NAME = "departure";
+    public static final String NAME = "Weight";
+    public static final String LABEL = "Weights";
 
-    public NIRCDepartureFormType(DataEntryFormContext ctx, Module owner)
+    public NIRCWeightFormType(DataEntryFormContext ctx, Module owner)
     {
-        super(ctx, owner, NAME, "Departure", "Colony Management", Arrays.asList(
+        super(ctx, owner, NAME, LABEL, "Clinical", List.of(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCDepartureFormSection()
+                new NIRCWeightFormSection(false)
         ));
     }
 }
-

@@ -24,13 +24,7 @@ function getLastAssignment(id){
     return batchLatestEnddate;
 }
 
-function onInit(event, helper){
-
-    helper.setScriptOptions({
-        allowAnyId: true,
-        requiresStatusRecalc: true,
-        allowDatesInDistantPast: true
-    });
+EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'assignment', function(event, helper){
 
     if (helper.isETL()) {
         LABKEY.Query.selectRows({
@@ -48,7 +42,7 @@ function onInit(event, helper){
             scope: this
         });
     }
-}
+});
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'assignment', function (helper, scriptErrors, row, oldRow) {
 
