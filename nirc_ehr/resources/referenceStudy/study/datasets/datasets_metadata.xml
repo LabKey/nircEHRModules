@@ -38,11 +38,6 @@
     <table tableName="alias" tableDbType="TABLE">
         <tableTitle>Alias</tableTitle>
         <columns>
-            <column columnName="objectid">
-                <datatype>entityid</datatype>
-                <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
-                <isKeyField>false</isKeyField>
-            </column>
             <column columnName="Id">
                 <datatype>varchar</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
@@ -331,6 +326,7 @@
             </column>
             <column columnName="gender">
                 <datatype>varchar</datatype>
+                <columnTitle>sex</columnTitle>
             </column>
             <column columnName="sire">
                 <datatype>varchar</datatype>
@@ -547,9 +543,6 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="room">
-                <datatype>varchar</datatype>
             </column>
             <column columnName="cage">
                 <columnTitle>Location</columnTitle>

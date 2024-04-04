@@ -9,6 +9,9 @@
                     <column columnName="gender">
                         <columnTitle>Sex</columnTitle>
                     </column>
+                    <column columnName="species">
+                        <columnTitle>Species</columnTitle>
+                    </column>
                     <column columnName="birth">
                         <formatString>Date</formatString>
                         <columnTitle>Birth</columnTitle>

@@ -26,12 +26,12 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         if (row.getActiveHousing() && row.getActiveHousing().length){
             var housingRow = row.getActiveHousing();
             location = '';
-            if (!Ext4.isEmpty(row.getCurrentCage()))
-                location +=  LABKEY.Utils.encodeHtml(row.getCurrentCage());
+            if (housingRow)
+                location +=  LABKEY.Utils.encodeHtml(housingRow[0]?.['cage/cage']);
 
             if (location){
-                if (this.showLocationDuration && housingRow.date){
-                    var date = LDK.ConvertUtils.parseDate(housingRow.date);
+                if (this.showLocationDuration && housingRow[0].date){
+                    var date = LDK.ConvertUtils.parseDate(housingRow[0].date);
                     if (date)
                         location += ' (' + Ext4.Date.format(date, LABKEY.extDefaultDateFormat) + ')';
                 }

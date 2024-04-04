@@ -13,5 +13,31 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             },
             defaultValue: LABKEY.Security.currentUser.displayName
         }
+    },
+    byQuery: {
+        'study.housing': {
+            room: {
+                allowBlank: true,
+                hidden: true
+            },
+            'cage': {
+                columnConfig: {
+                    fixed: true,
+                    width: 150
+                },
+            }
+        },
+        'study.arrival': {
+            initialRoom: {
+                allowBlank: true,
+                hidden: true
+            }
+        },
+        'study.birth': {
+            room: {
+                allowBlank: true,
+                hidden: true
+            }
+        }
     }
 });

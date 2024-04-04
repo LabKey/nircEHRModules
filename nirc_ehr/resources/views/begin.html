@@ -3,109 +3,151 @@
     Ext4.onReady(createNavMenu);
 
     function createNavMenu(){
-        var webpart = <%=webpartContext%>;
-        var ctx = EHR.Utils.getEHRContext(webpart.wrapperDivId);
+        let webpart = <%=webpartContext%>;
+        let ctx = EHR.Utils.getEHRContext(webpart.wrapperDivId);
+        let currentUserGroups = [];
 
-        if (!ctx) {
-            return;
-        }         
+        Ext4.onReady(() => {
 
-        Ext4.get(webpart.wrapperDivId).update(
-            '<table>' +
-            '  <tr style="vertical-align:top">' +
-            '    <td style="width:300px">' +
-            '        <div id="ehrMenu1_'+webpart.wrapperDivId+'"></div>' +
-            '    </td>' +
-            '    <td style="width:300px;vertical-align:top">' +
-            '        <div id="ehrMenu2_'+webpart.wrapperDivId+'"></div>' +
-            '    </td>' +
-            '    <td style="width:300px;vertical-align:top">' +
-            '        <div id="ehrMenu3_'+webpart.wrapperDivId+'"></div>' +
-            '    </td>' +
-            '    <td style="width:300px;vertical-align:top">' +
-            '        <div id="ehrMenu4_'+webpart.wrapperDivId+'"></div>' +
-            '    </td>' +
-            '  </tr>' +
-            '</table>'
-        );
+            if (!ctx)
+                return;
 
-        var byDatasetItems = [];
-        byDatasetItems.push({name: 'Browse All Datasets', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-datasets.view?'});
-        byDatasetItems.push({name: 'Housing Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-housingQueries.view?'});
-        byDatasetItems.push({name: 'Protocol and Project Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-projectQueries.view?'});
+            const getCurrentUserGroups = () => {
+                return new Promise((resolve, reject) => {
+                    const success = groups => {
+                        resolve(groups)
+                    }
+                    const failure = error => {
+                        reject(error)
+                    }
+                    LABKEY.Security.getGroupsForCurrentUser({
+                        success,
+                        failure
+                    })
+                })
+            }
+            getCurrentUserGroups().then(({ groups }) => {
+                currentUserGroups = groups;
+                renderPage();
+            }).catch(error => {
+                console.log(error)
+            })
+        });
+        const renderPage = () => {
+            let issueHTML = '';
 
-        Ext4.create('EHR.NavMenu', {
-            width: 270,
-            renderTo: 'ehrMenu1_'+webpart.wrapperDivId,
-            sections: [
-                {
+            if (ctx['EHRIssuesContainer']) {
+                issueHTML = '<div style="max-width:920px">Below are the sections of the Electronic Health Record.  If there are additional reports you would like, please submit a request <a href="' + LABKEY.ActionURL.buildURL('issues', 'list', ctx['EHRIssuesContainer']) + '" target="_blank">here</a>.<br><br></div>'
+            }
+
+            Ext4.get(webpart.wrapperDivId).update(
+                    issueHTML +
+                    '<table>' +
+                    '<tr style="vertical-align:top">' +
+                    '    <td style="width:300px">' +
+                    '        <div id="ehrMenu1_' + webpart.wrapperDivId + '"></div>' +
+                    '    </td>' +
+                    '    <td style="width:300px;vertical-align:top">' +
+                    '        <div id="ehrMenu2_' + webpart.wrapperDivId + '"></div>' +
+                    '    </td>' +
+                    '    <td style="width:300px">' +
+                    '        <div id="ehrMenu3_' + webpart.wrapperDivId + '"></div>' +
+                    '    </td>' +
+                    '</tr>' +
+                    '</table>'
+            );
+
+            Ext4.create('LDK.panel.NavPanel', {
+                width: 270,
+                renderTo: 'ehrMenu1_' + webpart.wrapperDivId,
+                sections: [{
                     header: 'By Animal',
+                    itemDefaults: {
+                        linkCls: 'none',
+                        style: 'font-weight: bold;'
+                    },
                     items: [
-                        {name: 'Animal History', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view?'},
-                        {name: 'Animal Search', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalSearch.view?'}
+                        { name: 'Animal History', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view?' },
+                        { name: 'Animal Search', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalSearch.view?' }
                     ]
                 }, {
                     header: 'By Dataset',
-                    items: byDatasetItems
-                }, {
-                //TODO: security check - display for appropriate users/groups who should be allowed to see this and Enter data
-                    header: 'Data Entry',
+                    itemDefaults: {
+                        linkCls: 'none',
+                        style: 'font-weight: bold;'
+                    },
                     items: [
-                        {
-                            name: 'Enter Data',
-                            url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-enterData.view'
-                        }
+                        { name: 'Browse All Datasets', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/nirc_ehr-datasets.view?' },
+                        { name: 'Housing Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-housingQueries.view?' },
+                        { name: 'Protocol and Project Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-projectQueries.view?' }
                     ]
                 }
-
-            ]
-        });
-
-        var menuTwo = {
-            width: 270,
-            renderTo: 'ehrMenu2_'+webpart.wrapperDivId,
-            sections: []
-        };
-
-        if (isDataAdmin()) {
-            menuTwo.sections.push( {header: 'Entire Colony',
-                items: [
-                    {name: 'Population Summary', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-populationOverview.view?'},
-                    {name: 'Colony Population By Age', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=study&query.queryName=colonyPopulationByAge'}
-                ]});
-        }
-
-
-        Ext4.create('EHR.NavMenu', menuTwo);
-
-        var menuThree = {
-            width: 270,
-            renderTo: 'ehrMenu3_'+webpart.wrapperDivId,
-            sections: []
-        };
-
-        if (LABKEY.Security.currentUser.isAdmin){
-            menuThree.sections.push({
-                header: 'Admin',
-                items: [
-                    {name: 'EHR Admin Page', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-ehrAdmin.view'},
-                    {name: 'Manage EHR Study', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/study-manageStudy.view?'},
-                    {name: 'Manage Lookup Tables', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-ehrLookups.view' }
                 ]
             });
+
+            Ext4.create('LDK.panel.NavPanel', {
+                width: 270,
+                renderTo: 'ehrMenu2_' + webpart.wrapperDivId,
+                sections: [
+                    {
+                        header: 'Entire Colony',
+                        itemDefaults: {
+                            linkCls: 'none',
+                            style: 'font-weight: bold;'
+                        },
+                        items: [
+                            { name: 'Population Summary', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-populationOverview.view?'},
+                            { name: 'Colony Population By Age', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=study&query.queryName=colonyPopulationByAge'},
+                            { name: 'Colony Overview', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-colonyOverview.view?' },
+                            { name: 'Room Utilization', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=ehr_lookups&query.queryName=roomUtilization' },
+                            { name: 'More Reports', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-moreReports.view?' },
+                        ]
+                    }
+                ]
+            });
+
+            let menuCfg = {
+                width: 330,
+                renderTo: 'ehrMenu3_' + webpart.wrapperDivId,
+                sections: [{
+                    header: 'Misc',
+                    itemDefaults: {
+                        linkCls: 'none',
+                        style: 'font-weight: bold;'
+                    },
+                    items: [
+                        { name: 'Compare Lists of Animals', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-utilities.view?' },
+                    ]
+                }, {
+                    header: 'Data Entry',
+                    itemDefaults: {
+                        linkCls: 'none',
+                        style: 'font-weight: bold;'
+                    },
+                    items: [
+                        { name: 'Enter Data', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-enterData.view' },
+                    ]
+
+                }
+                ]
+            };
+
+            if (LABKEY.Security.currentUser.isAdmin) {
+                menuCfg.sections.push({
+                    header: 'Admin',
+                    itemDefaults: {
+                        linkCls: 'none',
+                        style: 'font-weight: bold;'
+                    },
+                    items: [
+                        { name: 'EHR Admin Page', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-ehrAdmin.view' },
+                        { name: 'Manage Lookup Tables', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-ehrLookups.view' },
+                    ]
+                });
+            }
+
+            Ext4.create('LDK.panel.NavPanel', menuCfg);
+
         }
-
-
-        Ext4.create('EHR.NavMenu', menuThree);
-
     }
-
-    function isDataAdmin(){
-        var ctx = EHR.Utils.getEHRContext();
-        if (!ctx || !ctx.EHRStudyContainerInfo)
-            return false;
-
-        return ctx.EHRStudyContainerInfo.effectivePermissions.indexOf(EHR.Security.Permissions.DATA_ADMIN) > -1;
-    }
-
 </script>

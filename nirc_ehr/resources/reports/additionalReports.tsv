@@ -6,6 +6,7 @@ obs	Clinical	query	Observations	TRUE		study	obs			date	FALSE	FALSE		qcstate/publ
 foster	Reproductive Management	query	Fostering	TRUE		study	foster				FALSE	FALSE		qcstate/publicdata	This is for animal fostering data
 projects	Colony Management	query	Project Assignment	TRUE		study	assignment				FALSE	FALSE		qcstate/publicdata	This is for project assignments
 chemistry	Clinical	query	Chemistry	TRUE		study	chemistryResults				FALSE	FALSE		qcstate/publicdata	This is for chemistry results
+alias	Colony Management	query	Aliases	true		study	demographicsAliases				false	false		qcstate/publicdata	This report shows the animal aliases
 behaviorCases															
 behaviorRemarks															
 bloodSchedule															

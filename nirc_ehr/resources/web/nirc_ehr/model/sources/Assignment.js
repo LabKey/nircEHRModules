@@ -6,6 +6,7 @@ EHR.model.DataModelManager.registerMetadata('Assignment', {
         'study.assignment': {
             'project': {
                 xtype: 'combo',
+                nullable: false,
                 lookup: {
                     schemaName: 'ehr',
                     queryName: 'project',
@@ -17,6 +18,7 @@ EHR.model.DataModelManager.registerMetadata('Assignment', {
         'study.protocolAssignment': {
             'protocol': {
                 xtype: 'combo',
+                nullable: false,
                 columnConfig: {
                     fixed: true,
                     width: 150
