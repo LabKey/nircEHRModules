@@ -26,4 +26,12 @@ exports.init = function (EHR) {
             doStandardProtocolCountValidation: false
         });
     });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'alias', function(event, helper) {
+        console.log("nirc alias init")
+        helper.setScriptOptions({
+            allowDatesInDistantPast: true,
+            removeTimeFromDate: false,
+        });
+    });
 }

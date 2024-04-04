@@ -242,6 +242,12 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             col21.setDescription("Shows all protocols to which the animal is actively assigned on the current date");
             ds.addColumn(col21);
         }
+        if (ds.getColumn("alias") == null)
+        {
+            var col = getWrappedCol(us, ds, "alias", "demographicsAliases", "Id", "Id");
+            col.setLabel("Alias");
+            ds.addColumn(col);
+        }
     }
 
     private void customizeProtocolTable(AbstractTableInfo ti)
