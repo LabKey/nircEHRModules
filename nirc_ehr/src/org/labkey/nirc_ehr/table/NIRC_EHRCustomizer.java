@@ -163,7 +163,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
     private void customizeHousingTable(AbstractTableInfo ti)
     {
-        if (ti.getColumn("room") == null)
+        if (ti.getColumn("room") == null && ti.getColumn("cage") != null)
         {
             UserSchema us = getUserSchema(ti, "ehr_lookups");
             if (us != null)
