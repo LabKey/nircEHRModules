@@ -4,12 +4,6 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
     },
     byQuery: {
         'study.arrival': {
-            'Id/demographics/dam': {
-                xtype: 'ehr-animalfield'
-            },
-            'Id/demographics/sire': {
-                xtype: 'ehr-animalfield'
-            },
             'cage': {
                 columnConfig: {
                     fixed: true,

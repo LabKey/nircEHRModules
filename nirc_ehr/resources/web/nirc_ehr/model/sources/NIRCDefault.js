@@ -1,5 +1,14 @@
 EHR.model.DataModelManager.registerMetadata('Default', {
     allQueries: {
+        Id: {
+            xtype: 'ehr-animalIdUpperField',
+        },
+        'Id/demographics/dam': {
+            xtype: 'ehr-animalIdUpperField',
+        },
+        'Id/demographics/sire': {
+            xtype: 'ehr-animalIdUpperField',
+        },
         performedby: {
             allowBlank: true,
             nullable: true,
