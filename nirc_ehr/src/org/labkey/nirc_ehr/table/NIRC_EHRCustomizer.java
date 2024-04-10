@@ -12,7 +12,9 @@ import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.exp.api.StorageProvisioner;
 import org.labkey.api.exp.property.Domain;
+import org.labkey.api.gwt.client.FacetingBehaviorType;
 import org.labkey.api.ldk.table.AbstractTableCustomizer;
+import org.labkey.api.query.AliasedColumn;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.ExprColumn;
 import org.labkey.api.query.FilteredTable;
@@ -94,6 +96,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 col.setLabel("Cage");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "cage", "location", "cage"));
                 col.setURL(StringExpressionFactory.createURL("/nirc_ehr/cageDetails.view?room=${cage/room}&cage=${cage}"));
+                col.setFacetingBehaviorType(FacetingBehaviorType.AUTOMATIC);
             }
             if ("room".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("rooms"))
             {
@@ -137,8 +140,41 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         }
     }
 
+    private void ensureSortColumn(AbstractTableInfo ti, ColumnInfo baseColumn)
+    {
+        String sortName = baseColumn.getName() + "_sortValue";
+        if (ti.getColumn(sortName, false) == null)
+        {
+            AliasedColumn sortCol = new AliasedColumn(ti, sortName, baseColumn);
+            sortCol.setKeyField(false);
+            sortCol.setHidden(true);
+            sortCol.setCalculated(true);
+            sortCol.setUserEditable(false);
+            sortCol.setNullable(true);
+            sortCol.setPropertyURI(sortCol.getPropertyURI() + "_sortValue");
+            sortCol.setRequired(false);
+            sortCol.setShownInDetailsView(false);
+            sortCol.setShownInInsertView(false);
+            sortCol.setShownInUpdateView(false);
+            sortCol.setLabel(baseColumn.getLabel() + " - Sort Field");
+            ti.addColumn(sortCol);
+        }
+    }
+
     private void customizeHousingTable(AbstractTableInfo ti)
     {
+        if (ti.getColumn("room") == null && ti.getColumn("cage") != null)
+        {
+            UserSchema us = getUserSchema(ti, "ehr_lookups");
+            if (us != null)
+            {
+                SQLFragment roomSql = new SQLFragment("(SELECT room FROM ehr_lookups.cage WHERE location = " + ExprColumn.STR_TABLE_ALIAS + ".cage)");
+                ExprColumn roomCol = new ExprColumn(ti, "room", roomSql, JdbcType.VARCHAR, ti.getColumn("cage"));
+                ti.addColumn(roomCol);
+            }
+
+            ensureSortColumn(ti, ti.getColumn("room"));
+        }
         if (ti.getColumn("daysInRoom") == null)
         {
             TableInfo realTable = getRealTable(ti);
@@ -205,6 +241,12 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             col21.setLabel("Active Protocol Assignments");
             col21.setDescription("Shows all protocols to which the animal is actively assigned on the current date");
             ds.addColumn(col21);
+        }
+        if (ds.getColumn("alias") == null)
+        {
+            var col = getWrappedCol(us, ds, "alias", "demographicsAliases", "Id", "Id");
+            col.setLabel("Alias");
+            ds.addColumn(col);
         }
     }
 

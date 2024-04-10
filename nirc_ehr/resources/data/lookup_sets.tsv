@@ -1,5 +1,6 @@
 setname	label	keyfield	titleColumn
 editable_lookups	List of UI editable lookup values	value
+alias_category	Alias Category	value	title
 country	Country	value	title
 country_category	Country Category	value	title
 delivery_state	Delivery State	value	title
@@ -35,3 +36,4 @@ necropsy_specimen_condition	Specimen Condition	value	title
 housing_reason	Housing Reason	value
 death_reason	Death Reason	value
 weight_ranges	Weight Ranges	value
+pregnancy_result	Pregnancy Results	value

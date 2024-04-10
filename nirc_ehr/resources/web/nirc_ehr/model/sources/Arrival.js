@@ -11,18 +11,20 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                 xtype: 'ehr-animalfield'
             },
             'cage': {
-                xtype: 'combo',
-                lookup: {
-                    schemaName: 'ehr_lookups',
-                    queryName: 'cage',
-                    keyColumn: 'location',
-                    displayColumn: 'cage',
-                    columns: 'location,cage'
-                },
                 columnConfig: {
                     fixed: true,
-                    width: 150
+                    width: 200
                 },
+            },
+            'Id/demographics/species': {
+                columnConfig: {
+                    fixed: true,
+                    width: 250
+                }
+            },
+            project: {
+                hidden: true,
+                allowBlank: true
             },
             performedby: {
                 hidden: true,

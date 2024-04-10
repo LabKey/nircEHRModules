@@ -21,7 +21,6 @@ public class NIRCDepartureFormType extends NIRCBaseTaskFormType
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCDepartureFormSection()
         ));
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
     }
 }
 

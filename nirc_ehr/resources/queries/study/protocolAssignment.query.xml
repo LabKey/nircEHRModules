@@ -14,8 +14,8 @@
                         <fk>
                             <fkDbSchema>ehr</fkDbSchema>
                             <fkTable>protocol</fkTable>
-                            <fkColumnName>objectid</fkColumnName>
-                            <fkDisplayColumnName>protocol</fkDisplayColumnName>
+                            <fkColumnName>protocol</fkColumnName>
+                            <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="remark"/>

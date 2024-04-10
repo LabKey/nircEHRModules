@@ -13,6 +13,9 @@
                             <fkDisplayColumnName>name</fkDisplayColumnName>
                         </fk>
                     </column>
+                    <column columnName="cage">
+                        <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${location}&amp;</url>
+                    </column>
                 </columns>
             </table>
         </tables>
