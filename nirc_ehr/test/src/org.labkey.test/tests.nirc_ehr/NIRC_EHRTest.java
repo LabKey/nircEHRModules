@@ -27,7 +27,7 @@ import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
 import org.labkey.test.components.ui.grids.QueryGrid;
 import org.labkey.test.pages.ehr.EHRAdminPage;
-//import org.labkey.test.pages.ehr.EHRLookupPage;
+import org.labkey.test.pages.ehr.EHRLookupPage;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.LogMethod;
@@ -204,10 +204,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToEHRFolder();
         clickAndWait(Locator.linkWithText("Manage Lookup Tables"));
 
-//        EHRLookupPage ehrLookupPage = new EHRLookupPage(this);
-//        ehrLookupPage.waitForPage();
-//        QueryGrid grid = ehrLookupPage.getQueryGrid();
-//        checker().verifyEquals("Missing look up tables", countLines(TestFileUtils.getLabKeyRoot() + getModulePath() + "/resources/data/editable_lookups.tsv") - 1, grid.getRecordCount());
+        EHRLookupPage ehrLookupPage = new EHRLookupPage(this);
+        ehrLookupPage.waitForPage();
+        QueryGrid grid = ehrLookupPage.getQueryGrid();
+        checker().verifyEquals("Missing look up tables", countLines(TestFileUtils.getLabKeyRoot() + getModulePath() + "/resources/data/editable_lookups.tsv") - 1, grid.getRecordCount());
 
         clickAndWait(Locator.linkWithText("Age Class"));
         checker().verifyEquals("Navigated to incorrect schema", "ehr_lookups", getUrlParam("schemaName"));
