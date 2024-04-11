@@ -61,6 +61,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         importFolderByPath(path, getContainerPath(), 2);
     }
 
+    @Override
+    protected String getExpectedAnimalIDCasing(String id)
+    {
+        return id.toUpperCase();
+    }
+
     public void importFolderByPath(File path, String containerPath, int finishedJobsExpected)
     {
         setPipelineRoot(path.getPath(), false);
