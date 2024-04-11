@@ -2,8 +2,8 @@ package org.labkey.nirc_ehr.dataentry.section;
 
 public class NIRCWeightFormSection extends BaseFormSection
 {
-    public NIRCWeightFormSection()
+    public NIRCWeightFormSection(boolean initCollapsed)
     {
-        super("study", "weight", "Weights", "ehr-gridpanel", true, true);
+        super("study", "weight", "Weights", "ehr-gridpanel", true, initCollapsed);
     }
 }

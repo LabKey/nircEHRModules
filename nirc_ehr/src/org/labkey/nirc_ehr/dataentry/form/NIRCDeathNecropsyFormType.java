@@ -33,7 +33,6 @@ public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
 
         ));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/DeathNecropsy.js"));
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
 
         for (FormSection s : getFormSections())
         {
