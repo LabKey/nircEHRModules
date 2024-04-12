@@ -78,7 +78,7 @@ Ext4.onReady(function () {
                     cfg.items.push({
                         xtype: 'ldk-linkbutton',
                         tooltip: item.searchTooltip || 'Admin click to update records',
-                        href: LABKEY.ActionURL.buildURL('ehr', 'updateQuery', null, params),
+                        href: LABKEY.ActionURL.buildURL('ldk', 'updateQuery', null, params),
                         text: 'Admin Update Records'
                     });
                 }

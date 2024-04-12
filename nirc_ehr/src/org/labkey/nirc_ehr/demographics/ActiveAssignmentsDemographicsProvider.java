@@ -29,7 +29,8 @@ public class ActiveAssignmentsDemographicsProvider extends AbstractListDemograph
 {
     public ActiveAssignmentsDemographicsProvider(Module owner)
     {
-        super(owner, "study", "protocolAssignment", "activeAssignments");
+        super(owner, "study", "activeAssignments", "activeAssignments");
+        _supportsQCState = false; // handling qcstate filter in 'activeAssignments' query
     }
 
     @Override
@@ -38,16 +39,11 @@ public class ActiveAssignmentsDemographicsProvider extends AbstractListDemograph
         Set<FieldKey> keys = new HashSet<FieldKey>();
         keys.add(FieldKey.fromString("lsid"));
         keys.add(FieldKey.fromString("Id"));
-        keys.add(FieldKey.fromString("date"));
-        keys.add(FieldKey.fromString("enddate"));
-        keys.add(FieldKey.fromString("projectedRelease"));
-        keys.add(FieldKey.fromString("protocol"));
-        keys.add(FieldKey.fromString("protocol/title"));
-        keys.add(FieldKey.fromString("protocol/displayName"));
-        keys.add(FieldKey.fromString("protocol/InvestigatorId"));
-        keys.add(FieldKey.fromString("protocol/InvestigatorId/firstName"));
-        keys.add(FieldKey.fromString("protocol/InvestigatorId/lastName"));
-        keys.add(FieldKey.fromString("remark"));
+        keys.add(FieldKey.fromString("protocolTitle"));
+        keys.add(FieldKey.fromString("investigatorId"));
+        keys.add(FieldKey.fromString("investigatorName"));
+        keys.add(FieldKey.fromString("investigatorLastName"));
+        keys.add(FieldKey.fromString("project"));
 
         return keys;
     }
@@ -55,18 +51,14 @@ public class ActiveAssignmentsDemographicsProvider extends AbstractListDemograph
     @Override
     protected SimpleFilter getFilter(Collection<String> ids)
     {
-        SimpleFilter filter = super.getFilter(ids);
-        filter.addCondition(FieldKey.fromString("qcstate/publicData"), true, CompareType.EQUAL);
-
-        return filter;
+        return super.getFilter(ids);
     }
 
     @Override
     public boolean requiresRecalc(String schema, String query)
     {
         return ("study".equalsIgnoreCase(schema) && "protocolAssignment".equalsIgnoreCase(query)) ||
-               ("study".equalsIgnoreCase(schema) && "Animal Record Flags".equalsIgnoreCase(query)) ||
-               ("study".equalsIgnoreCase(schema) && "flags".equalsIgnoreCase(query));
+               ("study".equalsIgnoreCase(schema) && "assignment".equalsIgnoreCase(query));
     }
 
     @Override

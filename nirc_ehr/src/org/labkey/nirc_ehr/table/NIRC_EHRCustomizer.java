@@ -65,6 +65,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             customizeProtocolTable(ti);
         }
+        if (matches(ti, "study", "protocolAssignment"))
+        {
+            EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.allowSameDay);
+        }
     }
 
     public void doSharedCustomization(AbstractTableInfo ti)

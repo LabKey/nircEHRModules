@@ -74,6 +74,28 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         }
 
         toSet['flags'] = values.length ? '<a onclick="NIRC_EHR.Utils.showFlagPopup(\'' + LABKEY.Utils.encodeHtml(this.subjectId) + '\', this);">' + values.join('<br>') + '</div>' : null;
-    }
+    },
+
+    appendAssignments: function(toSet, results){
+        toSet['assignments'] = null;
+
+        if (this.redacted) {
+            return;
+        }
+
+        var values = [];
+        if (results){
+            Ext4.each(results, function(row){
+                var val = row['protocolTitle'] || '';
+                val += ' - ' + (row['investigatorLastName'] || row['investigatorId'] || row['investigatorName']);
+                val += ' - ' + (row['project']);
+
+                if (val)
+                    values.push(LABKEY.Utils.encodeHtml(val));
+            }, this);
+        }
+
+        toSet['assignments'] = values.length ? values.join('<br>') : 'None';
+    },
 
 });
