@@ -1,9 +1,13 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
 import org.json.JSONObject;
+import org.labkey.api.data.TableInfo;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.SimpleFormPanelSection;
+import org.labkey.api.query.FieldKey;
 import org.labkey.api.view.template.ClientDependency;
+
+import java.util.List;
 
 public class NIRCNecropsyFormSection extends SimpleFormPanelSection
 {
@@ -31,5 +35,15 @@ public class NIRCNecropsyFormSection extends SimpleFormPanelSection
         json.put("initCollapsed", false);
         json.put("dataDependentCollapseHeader", true);
         return json;
+    }
+
+    @Override
+    protected List<FieldKey> getFieldKeys(TableInfo ti)
+    {
+        List<FieldKey> keys = super.getFieldKeys(ti);
+
+        keys.add(3, FieldKey.fromString("Id/MostRecentWeight/MostRecentWeight"));
+
+        return keys;
     }
 }

@@ -1,5 +1,7 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
+import org.json.JSONObject;
+import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.view.template.ClientDependency;
 
 import java.util.List;
@@ -26,12 +28,8 @@ public class NIRCGrossPathologyFormSection extends BaseFormSection
     public List<String> getTbarButtons()
     {
         List<String> defaults = super.getTbarButtons();
-
         defaults.clear();
         defaults.add("ADDGROSSPATHOLOGY");
-        defaults.add("SELECTALL");
-        defaults.add("DELETERECORD");
-
         return defaults;
     }
 

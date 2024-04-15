@@ -290,4 +290,16 @@ public class NIRC_EHRTriggerHelper
         }
         return false;
     }
+
+    public boolean deathExists(String id)
+    {
+        TableInfo ti = getTableInfo("study", "deaths");
+        if (ti != null)
+        {
+            SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+            TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid"), filter, null);
+            return ts.exists();
+        }
+        return false;
+    }
 }
