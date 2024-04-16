@@ -154,7 +154,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerActionOverride("participantView", this, "views/participantView.html");
         ehrService.registerActionOverride("enterData", this, "views/enterData.html");
 
-        ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment"));
+        ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment", "protocolAssignment"));
 
         registerDataEntry();
 

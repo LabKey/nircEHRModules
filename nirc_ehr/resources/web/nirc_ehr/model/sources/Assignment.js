@@ -1,6 +1,8 @@
 EHR.model.DataModelManager.registerMetadata('Assignment', {
     allQueries: {
-
+        endDate: {
+            hidden: true
+        }
     },
     byQuery: {
         'study.assignment': {
