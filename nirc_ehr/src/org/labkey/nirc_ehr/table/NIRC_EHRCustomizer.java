@@ -40,10 +40,14 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
     @Override
     public void customize(TableInfo table)
     {
-        if (table instanceof AbstractTableInfo)
+        if (table instanceof AbstractTableInfo ti)
         {
-            doSharedCustomization((AbstractTableInfo) table);
-            doTableSpecificCustomizations((AbstractTableInfo) table);
+            doSharedCustomization(ti);
+            doTableSpecificCustomizations(ti);
+            if (ti instanceof DatasetTable)
+            {
+                ti.addTriggerFactory(new NIRC_EHRTriggerScriptFactory());
+            }
         }
     }
 
