@@ -1,6 +1,8 @@
 EHR.model.DataModelManager.registerMetadata('Birth', {
     allQueries: {
-
+        'endDate': {
+            hidden: true
+        }
     },
     byQuery: {
         'study.birth': {
@@ -17,17 +19,6 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
                 },
             }
         },
-        'study.assignment': {
-            'project': {
-                xtype: 'combo',
-                lookup: {
-                    schemaName: 'ehr',
-                    queryName: 'project',
-                    keyColumn: 'project',
-                    columns: 'project,name'
-                }
-            }
-        },
         'study.protocolAssignment': {
             'protocol': {
                 xtype: 'combo',
@@ -35,6 +26,15 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
                     fixed: true,
                     width: 150
                 },
+                'project': {
+                    xtype: 'combo',
+                    lookup: {
+                        schemaName: 'ehr',
+                        queryName: 'project',
+                        keyColumn: 'project',
+                        columns: 'project,name'
+                    }
+                }
             }
         }
     }

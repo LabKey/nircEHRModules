@@ -27,8 +27,7 @@ public class NIRCBirthFormType extends BirthFormType
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCBirthFormSection(),
-                new NIRCProtocolAssignmentFormSection(true, true, true),
-                new NIRCProjectAssignmentFormSection(true, true, true)
+                new NIRCProtocolAssignmentFormSection(true, true, true)
         ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/NIRCDefault.js"));

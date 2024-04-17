@@ -7,6 +7,8 @@ var missing = [];
 
 var count = 0;
 
+var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
+
 function getLastAssignment(id){
     var batchLastDate;
 
@@ -28,6 +30,8 @@ function getLastAssignment(id){
 }
 
 function onInit(event, helper){
+    helper.decodeExtraContextProperty('skipCreateAssignmentRecord');
+
     helper.setScriptOptions({
         allowAnyId: true,
         requiresStatusRecalc: true,
@@ -103,6 +107,33 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         count++;
     }
 
+});
+
+EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'protocolAssignment', function(helper, scriptErrors, row, oldRow) {
+    if (!helper.isETL()) {
+
+        if (helper.getProperty('skipCreateAssignmentRecord')['form'] === 'assignment') {
+            return;
+        }
+
+        if (row.project && row.Id && row.date) {
+
+            if (row.QCStateLabel) {
+                row.qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
+            }
+
+            let assignmentRec = {
+                Id: row.Id,
+                date: row.date,
+                project: row.project,
+                taskid: row.taskid,
+                remark: row.remark,
+                qcstate: row.qcstate
+            }
+
+            triggerHelper.createProjectAssignmentRecord(row.Id, assignmentRec);
+        }
+    }
 });
 
 function onComplete(event, helper){

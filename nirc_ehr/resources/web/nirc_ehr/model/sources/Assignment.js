@@ -1,3 +1,16 @@
+Ext4.onReady(function() {
+    // this is to skip inserting/updating into assignment dataset from this form
+    if (EHR.data.DataEntryClientStore) {
+        Ext4.override(EHR.data.DataEntryClientStore, {
+            getExtraContext: function(){
+                return {
+                    skipCreateAssignmentRecord: {'form': 'assignment'}
+                }
+            }
+        });
+    }
+});
+
 EHR.model.DataModelManager.registerMetadata('Assignment', {
     allQueries: {
         endDate: {
@@ -18,6 +31,9 @@ EHR.model.DataModelManager.registerMetadata('Assignment', {
             }
         },
         'study.protocolAssignment': {
+            'project': {
+              hidden: true
+            },
             'protocol': {
                 xtype: 'combo',
                 nullable: false,

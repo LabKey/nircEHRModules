@@ -291,29 +291,28 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public String createProtocolAssignmentRecord(String id, Map<String, Object> row) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
+    public String createProjectAssignmentRecord(String id, Map<String, Object> row) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
     {
         BatchValidationException errors = new BatchValidationException();
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
-        String room = ConvertHelper.convert(row.get("room"), String.class);
-        if (id == null || date == null || room == null)
-            return "Attempting to create a protocol assignment record with no id, date, or room";
+        if (id == null || date == null)
+            return "Attempting to create a project assignment record with no id, date, or room";
 
-        TableInfo ti = getTableInfo("study", "protocolAssignment");
+        TableInfo ti = getTableInfo("study", "assignment");
 
         String taskId = ConvertHelper.convert(row.get("taskid"), String.class);
         if (taskId == null) {
-            return "Attempting to create a protocol assignment record with no taskid";
+            return "Attempting to create a project assignment record with no taskid";
         }
 
         String qcstate = ConvertHelper.convert(row.get("qcstate"), String.class);
         if (qcstate == null) {
-            return "Attempting to create a birth record with no qcstate";
+            return "Attempting to create a project assignment record with no qcstate";
         }
 
         boolean updateRecord = false;
 
-        // If there is already a protocol assignment record for this task, update that record
+        // If there is already a project assignment record for this task, update that record
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
         filter.addCondition(FieldKey.fromString("taskid"), taskId);
         TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
@@ -336,13 +335,15 @@ public class NIRC_EHRTriggerHelper
             saveRow.put("objectid", new GUID().toString());
         }
 
-        String protocol = ConvertHelper.convert(row.get("protocol"), String.class);
-        if (protocol != null)
-            saveRow.put("protocol", protocol);
-
         String project = ConvertHelper.convert(row.get("project"), String.class);
         if (project != null)
+        {
             saveRow.put("project", project);
+        }
+        else
+        {
+            return "Attempting to create a project assignment record with no project";
+        }
 
         List<Map<String, Object>> rows = new ArrayList<>();
         rows.add(saveRow);
