@@ -109,33 +109,6 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
 });
 
-EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'protocolAssignment', function(helper, scriptErrors, row, oldRow) {
-    if (!helper.isETL()) {
-
-        if (helper.getProperty('skipCreateAssignmentRecord')['form'] === 'assignment') {
-            return;
-        }
-
-        if (row.project && row.Id && row.date) {
-
-            if (row.QCStateLabel) {
-                row.qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
-            }
-
-            let assignmentRec = {
-                Id: row.Id,
-                date: row.date,
-                project: row.project,
-                taskid: row.taskid,
-                remark: row.remark,
-                qcstate: row.qcstate
-            }
-
-            triggerHelper.createProjectAssignmentRecord(row.Id, assignmentRec);
-        }
-    }
-});
-
 function onComplete(event, helper){
     if (missing.length > 0)
         console.log("Missing Protocols: " + missing);

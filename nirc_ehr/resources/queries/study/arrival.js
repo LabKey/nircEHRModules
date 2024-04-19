@@ -52,6 +52,25 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             }
         }
 
+        if (row.project && row.Id && row.date) {
+
+            let assignmentRec = {
+                Id: row.Id,
+                date: row.date,
+                project: row.project,
+                taskid: row.taskid,
+                remark: row.remark,
+                qcstate: row.qcstate
+            }
+
+            triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+
+            if (row.arrivalProtocol) {
+                assignmentRec['protocol'] = row.arrivalProtocol;
+                triggerHelper.createAssignmentRecord("protocolAssignment", row.Id, assignmentRec);
+            }
+        }
+
         // TODO: This is currently not working since room is required and cage is not
         //if cage also known as "location" is provided, we insert into housing.
         // if (row.cage && row.Id && row.date) {

@@ -19,8 +19,13 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                 }
             },
             project: {
-                hidden: true,
-                allowBlank: true
+                xtype: 'combo',
+                lookup: {
+                    schemaName: 'ehr',
+                    queryName: 'project',
+                    keyColumn: 'project',
+                    columns: 'project,name'
+                }
             },
             performedby: {
                 hidden: true,
@@ -32,15 +37,6 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                     width: 150
                 },
             },
-        },
-        'study.protocolAssignment': {
-            'protocol': {
-                xtype: 'combo',
-                columnConfig: {
-                    fixed: true,
-                    width: 150
-                },
-            }
         }
     }
 });

@@ -17,23 +17,15 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
                     fixed: true,
                     width: 200
                 },
-            }
-        },
-        'study.protocolAssignment': {
-            'protocol': {
+            },
+            project: {
                 xtype: 'combo',
-                columnConfig: {
-                    fixed: true,
-                    width: 150
-                },
-                'project': {
-                    xtype: 'combo',
-                    lookup: {
-                        schemaName: 'ehr',
-                        queryName: 'project',
-                        keyColumn: 'project',
-                        columns: 'project,name'
-                    }
+                nullable: false,
+                lookup: {
+                    schemaName: 'ehr',
+                    queryName: 'project',
+                    keyColumn: 'project',
+                    columns: 'project,name'
                 }
             }
         }

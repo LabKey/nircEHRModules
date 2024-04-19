@@ -291,14 +291,14 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public String createProjectAssignmentRecord(String id, Map<String, Object> row) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
+    public String createAssignmentRecord(String dataset, String id, Map<String, Object> row) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
     {
         BatchValidationException errors = new BatchValidationException();
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
         if (id == null || date == null)
             return "Attempting to create a project assignment record with no id, date, or room";
 
-        TableInfo ti = getTableInfo("study", "assignment");
+        TableInfo ti = getTableInfo("study", dataset);
 
         String taskId = ConvertHelper.convert(row.get("taskid"), String.class);
         if (taskId == null) {
@@ -340,9 +340,19 @@ public class NIRC_EHRTriggerHelper
         {
             saveRow.put("project", project);
         }
-        else
+        else if (dataset.equalsIgnoreCase("assignment"))
         {
             return "Attempting to create a project assignment record with no project";
+        }
+
+        String protocol = ConvertHelper.convert(row.get("protocol"), String.class);
+        if (protocol != null)
+        {
+            saveRow.put("protocol", protocol);
+        }
+        else if (dataset.equalsIgnoreCase("protocolAssignment"))
+        {
+            return "Attempting to create a protocol assignment record with no protocol";
         }
 
         List<Map<String, Object>> rows = new ArrayList<>();
