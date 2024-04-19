@@ -30,7 +30,6 @@ function getLastAssignment(id){
 }
 
 function onInit(event, helper){
-    helper.decodeExtraContextProperty('skipCreateAssignmentRecord');
 
     helper.setScriptOptions({
         allowAnyId: true,

@@ -1,15 +1,3 @@
-Ext4.onReady(function() {
-    // this is to skip inserting/updating into assignment dataset from this form
-    if (EHR.data.DataEntryClientStore) {
-        Ext4.override(EHR.data.DataEntryClientStore, {
-            getExtraContext: function(){
-                return {
-                    skipCreateAssignmentRecord: {'form': 'assignment'}
-                }
-            }
-        });
-    }
-});
 
 EHR.model.DataModelManager.registerMetadata('Assignment', {
     allQueries: {
