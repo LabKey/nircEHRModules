@@ -29,7 +29,7 @@ function getLastAssignment(id){
 
 function onInit(event, helper){
     helper.setScriptOptions({
-        allowAnyId: true,
+        allowAnyId: false,
         requiresStatusRecalc: true,
         allowDatesInDistantPast: true
     });
