@@ -27,7 +27,12 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
                     keyColumn: 'project',
                     columns: 'project,name'
                 }
-            }
+            },
+            birthProtocol: {
+                columnConfig: {
+                    width: 200
+                }
+            },
         }
     }
 });

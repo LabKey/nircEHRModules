@@ -27,6 +27,11 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                     columns: 'project,name'
                 }
             },
+            arrivalProtocol: {
+                columnConfig: {
+                    width: 200
+                }
+            },
             performedby: {
                 hidden: true,
                 showInGrid: false
