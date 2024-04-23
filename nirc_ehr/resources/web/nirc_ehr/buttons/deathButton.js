@@ -8,20 +8,18 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
     errorThreshold: 'ERROR',
     successURL: LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
     itemId: 'submitDeathBtn',
-    handler: function(btn){
-        var panel = btn.up('ehr-dataentrypanel');
-
-        //TODO:
-        // 1. Info dialog about sending Death Notification.
-        // 2. Send Death notification to the configured email addresses.
-        // Ext4.Msg.confirm('Finalize Form', 'You are about to finalize this form.  Do you want to do this?', function(v){
-        //     if(v === 'yes')
-        //     {
-        //         this.onSubmit(btn);
-        //         panel.disable();
-        //     }
-        //
-        // }, this);
+    disabled: true,
+    handler: function(submitDeathBtn){
+        Ext4.Msg.show({
+            title: 'Info',
+            msg: 'You are about to submit a death record.  This will send a email notification to the appropriate parties.',
+            buttons: Ext4.Msg.OK,
+            width: 400,
+            fn: function(okBtn, text, config) {
+                var panel = submitDeathBtn.up('ehr-dataentrypanel');
+                panel.onSubmit(submitDeathBtn);
+            }
+        }, this);
     },
     disableOn: 'ERROR'
 });
@@ -37,7 +35,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
 //     handler: function(btn){
 //         var panel = btn.up('ehr-dataentrypanel');
 //
-//         //TODO: Death notification message
+//         //
 //         // Ext4.Msg.confirm('Finalize Form', 'You are about to finalize this form.  Do you want to do this?', function(v){
 //         //     if(v === 'yes')
 //         //     {

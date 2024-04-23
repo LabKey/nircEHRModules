@@ -11,7 +11,6 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCNecropsyFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTissueDispositionFormSection;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -29,6 +29,7 @@ import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ehr.history.DefaultNotesDataSource;
 import org.labkey.api.ehr.history.DefaultVitalsDataSource;
 import org.labkey.api.ldk.ExtendedSimpleModule;
+import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.DefaultSchema;
@@ -44,10 +45,9 @@ import org.labkey.nirc_ehr.dataentry.form.NIRCBirthFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDeathNecropsyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCHousingFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCPregnancyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCProjectFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCProtocolFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCDeathNecropsyFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCPregnancyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCWeightFormType;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
@@ -157,6 +157,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment"));
 
         registerDataEntry();
+        NotificationService.get().registerNotification(new DeathNotification());
 
         // Ensure N: is mounted if it's configured, as it's being mapped in via a symlink/shortcut, so we can't
         // recognize paths using it based solely on their drive letter and mount just-in-time

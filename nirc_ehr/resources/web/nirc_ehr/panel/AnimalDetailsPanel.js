@@ -169,7 +169,7 @@ Ext4.define('NIRC_EHR.panel.AnimalDetailsPanel', {
                     text: '[Show Recent Vet/Behavior Remarks]',
                     handler: function(){
                         if (this.subjectId){
-                            NIRC_EHR.window.RecentRemarksWindow.showRecentRemarks(this.subjectId);
+                            // TODO? NIRC_EHR.window.RecentRemarksWindow.showRecentRemarks(this.subjectId);
                         }
                         else {
                             console.log('no id');

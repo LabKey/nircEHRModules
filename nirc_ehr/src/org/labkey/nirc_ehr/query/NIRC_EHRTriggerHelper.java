@@ -11,6 +11,10 @@ import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.ehr.EHRDemographicsService;
+import org.labkey.api.ehr.demographics.AnimalRecord;
+import org.labkey.api.ehr.notification.TriggerScriptNotification;
+import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
 import org.labkey.api.query.FieldKey;
@@ -20,9 +24,12 @@ import org.labkey.api.query.QueryUpdateServiceException;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.security.User;
 import org.labkey.api.security.UserManager;
+import org.labkey.api.security.UserPrincipal;
+import org.labkey.api.settings.AppProps;
 import org.labkey.api.settings.LookAndFeelProperties;
 import org.labkey.api.util.GUID;
 import org.labkey.api.util.PageFlowUtil;
+import org.labkey.nirc_ehr.DeathNotification;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -33,6 +40,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class NIRC_EHRTriggerHelper
 {
@@ -301,5 +309,63 @@ public class NIRC_EHRTriggerHelper
             return ts.exists();
         }
         return false;
+    }
+
+    public void sendDeathNotification(final String animalId, final Date recordedDeathDate, final String taskid) throws Exception
+    {
+        //check whether Death Notification is enabled
+        if (!NotificationService.get().isActive(new DeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
+        {
+            _log.info("Death notification service is not enabled, will not send death notification.");
+            return;
+        }
+
+        // get recipients
+        Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new DeathNotification(), _container);
+        if (recipients.size() == 0)
+        {
+            _log.warn("No recipients set, skipping death notification");
+            return;
+        }
+
+        String subject = "Death Notification: " + animalId;
+
+        final StringBuilder html = new StringBuilder();
+        html.append("<p>Animal ").append(PageFlowUtil.filter(animalId)).append(" has been marked as dead on '").append(_dateFormat.format(recordedDeathDate)).append("'.<p>");
+        appendAnimalDetails(html, animalId, _container);
+
+        String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + _container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskid;
+        html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
+        html.append("Click here to record Necropsy</a>.  <p>");
+
+        // send Death Notification
+        _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + _container.getPath());
+        TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, _container, _user);
+    }
+
+    private void appendAnimalDetails(StringBuilder html, String id, Container container)
+    {
+        String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + _container.getPath() + "/participantView.view?participantId=" + id;
+        html.append("<a href='").append(url).append("'>");
+        html.append("Click here to view this animal's clinical details</a>.  <p>");
+
+        AnimalRecord ar = EHRDemographicsService.get().getAnimal(container, id);
+        html.append("Species: ").append(PageFlowUtil.filter(ar.getSpecies())).append("<br>");
+        html.append("Sex: ").append(PageFlowUtil.filter(ar.getGenderMeaning())).append("<br>");
+        html.append("Date of birth: ").append(PageFlowUtil.filter(null != ar.getBirth() ? _dateFormat.format(ar.getBirth()) : null)).append("<br>");
+        html.append("Age: ").append(PageFlowUtil.filter(ar.getAgeInYearsAndDays())).append("<br>");
+        html.append("Dam: ").append(PageFlowUtil.filter(ar.getDam())).append("<br>");
+        html.append("Sire: ").append(PageFlowUtil.filter(ar.getSire())).append("<br>");
+        if (ar.getActiveHousing() != null && !ar.getActiveHousing().isEmpty())
+        {
+//            ar.getActiveHousing().forEach(h -> {
+//                html.append("Housing Location: ").append(PageFlowUtil.filter(h.get("room")));
+//                if (h.get("cage/enclosureId") != null)
+//                {
+//                    html.append(", ").append(PageFlowUtil.filter(h.get("cage/enclosureId")));
+//                }
+//                html.append("<br>");
+//            });
+        }
     }
 }
