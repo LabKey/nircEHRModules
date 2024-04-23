@@ -8,19 +8,17 @@ import org.labkey.api.query.FieldKey;
 
 import java.util.List;
 
-public class NIRCArrivalFormSection extends NewAnimalFormSection
+public class NIRCArrivalFormSection extends BaseFormSection
 {
     public NIRCArrivalFormSection()
     {
-        super("study", "arrival", "Arrivals", false);
+        super("study", "arrival", "Arrivals", "ehr-gridpanel", true, true);
     }
 
     @Override
     public JSONObject toJSON(DataEntryFormContext ctx, boolean includeFormElements)
     {
         JSONObject json = super.toJSON(ctx, includeFormElements);
-        json.put("collapsible", true);
-        json.put("initCollapsed", true);
         json.put("dataDependentCollapseHeader", true);
         return json;
     }
