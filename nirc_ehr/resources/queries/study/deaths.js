@@ -56,30 +56,44 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
     if (!helper.isETL()) {
 
         console.log("idMap[row.Id]=" + idMap[row.Id]);
-        if (idMap[row.Id])
-        {
-            EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
-        }
-        // update demographics death date if finalized and not changed from existing value
-        if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel && row.QCStateLabel === "In Progress") {
 
-            if (validIds.indexOf(row.id) !== -1) {
+        //only allow death record to be created if animal is in demographics table
+        if (idMap[row.Id]) {
 
-                demographicsUpdates.push({
-                    Id: row.Id,
-                    death: row.date,
-                    calculated_status: 'Dead',
-                    QCStateLabel: 'Review Required'
-                });
-
-                console.log('updating demographics death date for animal: ' + row.Id);
-                helper.getJavaHelper().updateDemographicsRecord(demographicsUpdates);
-                console.log('updated demographics death date for animal: ' + row.Id);
+            // check if death record already exists for this animal
+            if (idMap[row.Id].calculated_status === 'Dead') {
+                EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
             }
-            else {
-                console.log(row.id + " is not a valid animal id");
+            // check if the animal is at the center
+            if (idMap[row.Id].calculated_status === 'Shipped') {
+                EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal is not at the center.', 'ERROR');
+            }
+            // update demographics
+            if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel) {
+
+                if (validIds.indexOf(row.id) !== -1) {
+
+                    demographicsUpdates.push({
+                        Id: row.Id,
+                        death: row.date,
+                        calculated_status: 'Dead',
+                        QCStateLabel: row.QCStateLabel
+                    });
+
+                    console.log('updating demographics death date for animal: ' + row.Id);
+                    helper.getJavaHelper().updateDemographicsRecord(demographicsUpdates);
+                    console.log('updated demographics death date for animal: ' + row.Id);
+                }
+                else {
+                    console.log(row.id + " is not a valid animal id");
+                }
             }
         }
+        //TODO: This coincides with "Id: WARN: Id not found in demographics table:" Is there a way to remove the WARN,
+        // since the requirement is to only allow animals that are in demographics (that are alive and at the center)
+        // else {
+        //     EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal not found in demographics.', 'ERROR');
+        // }
     }
 }
 
