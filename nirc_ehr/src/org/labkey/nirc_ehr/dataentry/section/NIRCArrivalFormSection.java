@@ -30,11 +30,11 @@ public class NIRCArrivalFormSection extends NewAnimalFormSection
     {
         List<FieldKey> keys = super.getFieldKeys(ti);
 
-        keys.add(5, FieldKey.fromString("Id/demographics/dam"));
-        keys.add(6, FieldKey.fromString("Id/demographics/sire"));
-        keys.add(7, FieldKey.fromString("Id/demographics/species"));
-        keys.add(8, FieldKey.fromString("Id/demographics/birth"));
-        keys.add(9, FieldKey.fromString("Id/demographics/gender"));
+        keys.add(6, FieldKey.fromString("Id/demographics/dam"));
+        keys.add(7, FieldKey.fromString("Id/demographics/sire"));
+        keys.add(8, FieldKey.fromString("Id/demographics/species"));
+        keys.add(9, FieldKey.fromString("Id/demographics/birth"));
+        keys.add(10, FieldKey.fromString("Id/demographics/gender"));
 
         return keys;
     }

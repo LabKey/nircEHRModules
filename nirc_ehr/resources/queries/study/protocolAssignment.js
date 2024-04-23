@@ -7,6 +7,8 @@ var missing = [];
 
 var count = 0;
 
+var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
+
 function getLastAssignment(id){
     var batchLastDate;
 
@@ -28,6 +30,7 @@ function getLastAssignment(id){
 }
 
 function onInit(event, helper){
+
     helper.setScriptOptions({
         allowAnyId: true,
         requiresStatusRecalc: true,
