@@ -7,7 +7,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
             defaults: {
                 border: false
             },
-            items: this.getItems()
+            items: this.f()
         });
 
         this.callParent();
@@ -28,6 +28,100 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
                 }
             }
         });
+    },
+
+    getBaseItems: function(){
+        return [{
+            xtype: 'container',
+            border: false,
+            defaults: {
+                border: false
+            },
+            items: [{
+                xtype: 'container',
+                html: '<b>Summary:</b><hr>'
+            },{
+                bodyStyle: 'padding-bottom: 20px;',
+                layout: 'column',
+                defaults: {
+                    border: false
+                },
+                items: [{
+                    xtype: 'container',
+                    columnWidth: 0.25,
+                    defaults: {
+                        labelWidth: this.defaultLabelWidth,
+                        style: 'margin-right: 20px;'
+                    },
+                    items: [{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Location',
+                        name: 'location'
+                    },{
+                        xtype: 'displayfield',
+                        hidden: this.redacted,
+                        name: 'assignments',
+                        fieldLabel: 'Assignments'
+                    },{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Source',
+                        name: 'source'
+                    },{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Prev Id',
+                        name: 'prev_id'
+                    }]
+                },{
+                    xtype: 'container',
+                    columnWidth: 0.25,
+                    defaults: {
+                        labelWidth: this.defaultLabelWidth,
+                        style: 'margin-right: 20px;'
+                    },
+                    items: [{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Status',
+                        name: 'calculated_status'
+                    },{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Sex',
+                        name: 'gender'
+                    },{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Species',
+                        name: 'species'
+                    },{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Age',
+                        name: 'age'
+                    }]
+                },{
+                    xtype: 'container',
+                    columnWidth: 0.35,
+                    defaults: {
+                        labelWidth: this.defaultLabelWidth,
+                        style: 'margin-right: 20px;'
+                    },
+                    items: [{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Flags',
+                        name: 'flags'
+                    },{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Remark',
+                        name: 'remark'
+                    },{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Last TB',
+                        name: 'lastTB'
+                    },{
+                        xtype: 'displayfield',
+                        fieldLabel: 'Weights',
+                        name: 'weights'
+                    }]
+                }]
+            }]
+        }];
     },
 
     appendDemographicsResults: function(toSet, row, id){
@@ -102,6 +196,31 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         }
 
         toSet['flags'] = values.length ? '<a id="nircFlagsLink">' + values.join('<br>') + '</div>' : null;
-    }
+    },
+
+    appendAssignments: function(toSet, results){
+        toSet['assignments'] = null;
+
+        if (this.redacted) {
+            return;
+        }
+
+        var values = [];
+        if (results){
+            Ext4.each(results, function(row){
+                let val = '';
+                if (row['protocolTitle'])
+                    val += row['protocolTitle'];
+                val += ' - ' + (row['investigatorLastName'] || row['investigatorId'] || row['investigatorName']);
+                values.push(LABKEY.Utils.encodeHtml(val));
+                if (row['project']) {
+                    values.push("Project - " + LABKEY.Utils.encodeHtml(row['project']));
+                }
+
+            }, this);
+        }
+
+        toSet['assignments'] = values.length ? values.join('<br>') : 'None';
+    },
 
 });
