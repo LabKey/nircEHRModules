@@ -68,21 +68,26 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             if (idMap[row.Id].calculated_status === 'Shipped') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal is not at the center.', 'ERROR');
             }
-            // update demographics
+
             if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel) {
 
                 if (validIds.indexOf(row.id) !== -1) {
 
+                    // update demographics
                     demographicsUpdates.push({
                         Id: row.Id,
                         death: row.date,
                         calculated_status: 'Dead',
-                        QCStateLabel: row.QCStateLabel
+                        QCStateLabel: row.QCStateLabel,
                     });
 
                     console.log('updating demographics death date for animal: ' + row.Id);
                     helper.getJavaHelper().updateDemographicsRecord(demographicsUpdates);
                     console.log('updated demographics death date for animal: ' + row.Id);
+
+                    //TODO: These doesnt work demographics records dont show up in the email.
+                    // helper.cacheDemographics(row.Id, demographicsUpdates[0]);
+                    // helper.cacheDemographics(row.Id, row);
                 }
                 else {
                     console.log(row.id + " is not a valid animal id");
@@ -90,7 +95,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             }
         }
         //TODO: This coincides with "Id: WARN: Id not found in demographics table:" Is there a way to remove the WARN,
-        // since the requirement is to only allow animals that are in demographics (that are alive and at the center)
+        // since the requirement is to only allow animals that are in demographics (who are alive and at the center)
         // else {
         //     EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal not found in demographics.', 'ERROR');
         // }
@@ -98,13 +103,30 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 }
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_INSERT, 'study', 'deaths', function(helper, scriptErrors, row, oldRow) {
-    console.log("after insert row.QCStateLabel = " + row.QCStateLabel);
-    if (!helper.isETL()) {
-        console.log("after insert");
-        // Sending Death notification on COMPLETE event requires QC State to be "Completed".
-        // (Note: EHR.Server.TriggerManager.Events.COMPLETE is called once after all the row updates/inserts have taken place)
-        // Since the requirement is to send Death Notification once the Death is recorded, we are sending death notification
-        // on one animal after insert instead given that there always will be one Death recorded at a time/one row insert.
-        triggerHelper.sendDeathNotification(row.Id, row.date, row.taskid);
+    console.log("after insert");
+    helper.registerDeath(row.Id, row.date);
+    // if (!helper.isETL()) {
+    //     console.log("after insert");
+    //     // Sending Death notification on COMPLETE event requires QC State to be "Completed".
+    //     // (Note: EHR.Server.TriggerManager.Events.COMPLETE is called once after all the row updates/inserts have taken place)
+    //     // Since the requirement is to send Death Notification once the Death is recorded, we are sending death notification
+    //     // on one animal after insert instead given that there always will be one Death recorded at a time/one row insert.
+    //     triggerHelper.sendDeathNotification(row.Id, row.date, row.taskid);
+    // }
+});
+
+EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.COMPLETE, 'study', 'Deaths', function(event, errors, helper){
+    console.log("COMPLETE");
+    var deaths = helper.getDeaths();
+
+    if (deaths) {
+        var ids = [];
+        for (var id in deaths){
+            ids.push(id);
+        }
+
+        if (!helper.isETL()) {
+            triggerHelper.sendDeathNotification(ids[0]);
+        }
     }
 });

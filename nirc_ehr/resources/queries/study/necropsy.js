@@ -4,6 +4,15 @@ var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.S
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'necropsy', function(helper, scriptErrors, row, oldRow) {
 
 
+    //add/update a weight record
+    // var weightRecord = {
+    //     Id: row.Id,
+    //     date: row.date,
+    //     weight: row.weight,
+    //     taskid: row.taskid,
+    //     QCStateLabel: row.QCStateLabel
+    // };
+    // triggerHelper.upsertWeightRecord(weightRecord);
 
     // if (!helper.isETL()) {
     //

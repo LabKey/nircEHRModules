@@ -1,5 +1,8 @@
 package org.labkey.nirc_ehr.query;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
@@ -28,6 +31,7 @@ import org.labkey.api.security.UserPrincipal;
 import org.labkey.api.settings.AppProps;
 import org.labkey.api.settings.LookAndFeelProperties;
 import org.labkey.api.util.GUID;
+import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.nirc_ehr.DeathNotification;
 
@@ -41,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class NIRC_EHRTriggerHelper
 {
@@ -311,7 +316,92 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public void sendDeathNotification(final String animalId, final Date recordedDeathDate, final String taskid) throws Exception
+    public void upsertWeightRecord(Map<String, Object> row) throws QueryUpdateServiceException, DuplicateKeyException, SQLException, BatchValidationException, InvalidKeyException
+    {
+        BatchValidationException errors = new BatchValidationException();
+        Date date = ConvertHelper.convert(row.get("date"), Date.class);
+        String taskId = ConvertHelper.convert(row.get("taskid"), String.class);
+
+        TableInfo ti = getTableInfo("study", "weights");
+
+        // If there is already a weight record for this task, update that record
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), row.get("Id"));
+        filter.addCondition(FieldKey.fromString("taskid"), taskId);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
+        boolean updateRecord = ts.exists();
+
+        Map<String, Object> saveRow = new CaseInsensitiveHashMap<>();
+        saveRow.put("Id", row.get("Id"));
+        saveRow.put("date", date);
+        saveRow.put("taskId", taskId);
+        saveRow.put("qcstate", "Completed");
+        if (updateRecord)
+        {
+            saveRow.put("objectid", ts.getMap().get("objectid"));
+        }
+        else
+        {
+            saveRow.put("objectid", new GUID().toString());
+        }
+
+        Double weight = ConvertHelper.convert(row.get("weight"), Double.class);
+        if (weight != null)
+            saveRow.put("weight", weight);
+
+        List<Map<String, Object>> rows = new ArrayList<>();
+        rows.add(saveRow);
+
+        if (updateRecord)
+        {
+            ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+        }
+        else
+        {
+            ti.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+        }
+
+        if (errors.hasErrors())
+            throw errors;
+    }
+
+//    public void sendDeathNotification(final String animalId, final Date recordedDeathDate, final String taskid) throws Exception
+//    {
+//        //check whether Death Notification is enabled
+//        if (!NotificationService.get().isActive(new DeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
+//        {
+//            _log.info("Death notification service is not enabled, will not send death notification.");
+//            return;
+//        }
+//
+//        JobRunner.getDefault().execute(TimeUnit.MINUTES.toMillis(3), () -> {
+//            final Container container = _container;
+//            final User user = _user;
+//
+//            // get recipients
+//            Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new DeathNotification(), container);
+//            if (recipients.size() == 0)
+//            {
+//                _log.warn("No recipients set, skipping death notification");
+//                return;
+//            }
+//
+//            String subject = "Death Notification: " + animalId;
+//
+//            final StringBuilder html = new StringBuilder();
+//            html.append("<p>Animal ").append(PageFlowUtil.filter(animalId)).append(" has been marked as dead on '").append(_dateFormat.format(recordedDeathDate)).append("'.<p>");
+//            appendAnimalDetails(html, animalId, container);
+//
+//            String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskid;
+//            html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
+//            html.append("Click here to record Necropsy</a>.  <p>");
+//
+//            // send Death Notification
+//            _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
+//            TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
+//        });
+//    }
+
+    public void sendDeathNotification(final String animalId) throws Exception
     {
         //check whether Death Notification is enabled
         if (!NotificationService.get().isActive(new DeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
@@ -320,52 +410,96 @@ public class NIRC_EHRTriggerHelper
             return;
         }
 
-        // get recipients
-        Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new DeathNotification(), _container);
-        if (recipients.size() == 0)
-        {
-            _log.warn("No recipients set, skipping death notification");
-            return;
-        }
+        JobRunner.getDefault().execute(TimeUnit.MINUTES.toMillis(3), () -> {
+            final Container container = _container;
+            final User user = _user;
+            String subject = "Death Notification: " + animalId;
 
-        String subject = "Death Notification: " + animalId;
+            // get recipients
+            Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new DeathNotification(), container);
+            if (recipients.size() == 0)
+            {
+                _log.warn("No recipients set, skipping death notification");
+                return;
+            }
 
-        final StringBuilder html = new StringBuilder();
-        html.append("<p>Animal ").append(PageFlowUtil.filter(animalId)).append(" has been marked as dead on '").append(_dateFormat.format(recordedDeathDate)).append("'.<p>");
-        appendAnimalDetails(html, animalId, _container);
+            //get death info
+            TableInfo deaths = getTableInfo("study", "deaths");
+            TableSelector deathsTs = new TableSelector(deaths, PageFlowUtil.set("Id", "date", "taskid"), new SimpleFilter(FieldKey.fromString("Id"), animalId), null);
+            final Mutable<Date> deathDate = new MutableObject<>();
+            final Mutable<String> taskId = new MutableObject<>();
+            deathsTs.forEach(rs -> {
+                if (rs.getString("date") != null)
+                {
+                    Date date = ConvertHelper.convert(rs.getString("date"), Date.class);
+                    deathDate.setValue(date);
+                    taskId.setValue(rs.getString("taskid"));
+                }
+            });
 
-        String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + _container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskid;
-        html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
-        html.append("Click here to record Necropsy</a>.  <p>");
+            //construct html for email notification
+            final StringBuilder html = new StringBuilder();
+            if (deathDate.getValue() == null)
+            {
+                _log.error("NIRC death notification job found no death date for animal " + animalId + " in container " + _container.getPath());
+                html.append("Death date not found. Please contact system administrator.").append("<br>");
+                return;
+            }
+            html.append("<p>Animal '").append(PageFlowUtil.filter(animalId)).append(" has been marked as dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<p>");
 
-        // send Death Notification
-        _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + _container.getPath());
-        TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, _container, _user);
+            //append animal details
+            appendAnimalDetails(html, animalId, container);
+
+            //append link to Necropsy form
+            String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" +
+                    container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskId.getValue();
+            html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
+            html.append("Click here to record Necropsy</a>.  <p>");
+
+            // send Death Notification
+            _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
+            TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
+        });
     }
 
-    private void appendAnimalDetails(StringBuilder html, String id, Container container)
+    private void appendAnimalDetails(StringBuilder html, String id, final Container container)
     {
-        String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + _container.getPath() + "/participantView.view?participantId=" + id;
+        String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + container.getPath() + "/participantView.view?participantId=" + id;
         html.append("<a href='").append(url).append("'>");
         html.append("Click here to view this animal's clinical details</a>.  <p>");
 
         AnimalRecord ar = EHRDemographicsService.get().getAnimal(container, id);
+        html.append("Program No.: ").append(PageFlowUtil.filter(getProject(id))).append("<br>");
+        html.append("Study No.: ").append(PageFlowUtil.filter(getProtocol(id))).append("<br>");
         html.append("Species: ").append(PageFlowUtil.filter(ar.getSpecies())).append("<br>");
         html.append("Sex: ").append(PageFlowUtil.filter(ar.getGenderMeaning())).append("<br>");
         html.append("Date of birth: ").append(PageFlowUtil.filter(null != ar.getBirth() ? _dateFormat.format(ar.getBirth()) : null)).append("<br>");
         html.append("Age: ").append(PageFlowUtil.filter(ar.getAgeInYearsAndDays())).append("<br>");
-        html.append("Dam: ").append(PageFlowUtil.filter(ar.getDam())).append("<br>");
-        html.append("Sire: ").append(PageFlowUtil.filter(ar.getSire())).append("<br>");
-        if (ar.getActiveHousing() != null && !ar.getActiveHousing().isEmpty())
-        {
-//            ar.getActiveHousing().forEach(h -> {
-//                html.append("Housing Location: ").append(PageFlowUtil.filter(h.get("room")));
-//                if (h.get("cage/enclosureId") != null)
-//                {
-//                    html.append(", ").append(PageFlowUtil.filter(h.get("cage/enclosureId")));
-//                }
-//                html.append("<br>");
-//            });
-        }
+    }
+
+    private String getProject(String id)
+    {
+        TableInfo ti = getTableInfo("study", "assignment");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+        filter.addCondition(FieldKey.fromString("enddate"), CompareType.ISBLANK, null);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("project/displayName"), filter, null);
+        final Mutable<String> project = new MutableObject<>();
+        ts.forEach(rs -> {
+            project.setValue(rs.getString("project/displayName"));
+        });
+        return project.getValue();
+    }
+
+    private String getProtocol(String id)
+    {
+        TableInfo ti = getTableInfo("study", "protocolAssignment");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+        filter.addCondition(FieldKey.fromString("enddate"), CompareType.ISBLANK, null);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("protocol"), filter, null);
+        final Mutable<String> protocol = new MutableObject<>();
+        ts.forEach(rs -> {
+            protocol.setValue(rs.getString("protocol"));
+        });
+        return protocol.getValue();
     }
 }
