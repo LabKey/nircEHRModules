@@ -12,7 +12,8 @@ function onInit(event, helper){
         skipHousingCheck: true,
         announceAllModifiedParticipants: true,
         allowDatesInDistantPast: true,
-        removeTimeFromDate: true
+        removeTimeFromDate: true,
+        skipAssignmentCheck: true,
     });
 
     helper.decodeExtraContextProperty('birthsInTransaction');
@@ -45,6 +46,25 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
         if (row.QCStateLabel) {
             row.qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
+        }
+
+        if (row.project && row.Id && row.date) {
+
+            let assignmentRec = {
+                Id: row.Id,
+                date: row.date,
+                project: row.project,
+                taskid: row.taskid,
+                remark: row.remark,
+                qcstate: row.qcstate
+            }
+
+            triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+
+            if (row.birthProtocol) {
+                assignmentRec['protocol'] = row.birthProtocol;
+                triggerHelper.createAssignmentRecord("protocolAssignment", row.Id, assignmentRec);
+            }
         }
 
         if (!helper.isGeneratedByServer() && !helper.isValidateOnly()) {

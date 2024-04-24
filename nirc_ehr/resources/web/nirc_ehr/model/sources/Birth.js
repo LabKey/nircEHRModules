@@ -13,7 +13,9 @@ Ext4.onReady(function() {
 
 EHR.model.DataModelManager.registerMetadata('Birth', {
     allQueries: {
-
+        'endDate': {
+            hidden: true
+        }
     },
     byQuery: {
         'study.birth': {
@@ -28,27 +30,22 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
                     fixed: true,
                     width: 200
                 },
-            }
-        },
-        'study.assignment': {
-            'project': {
+            },
+            project: {
                 xtype: 'combo',
+                nullable: false,
                 lookup: {
                     schemaName: 'ehr',
                     queryName: 'project',
                     keyColumn: 'project',
                     columns: 'project,name'
                 }
-            }
-        },
-        'study.protocolAssignment': {
-            'protocol': {
-                xtype: 'combo',
+            },
+            birthProtocol: {
                 columnConfig: {
-                    fixed: true,
-                    width: 150
-                },
-            }
+                    width: 200
+                }
+            },
         }
     }
 });
