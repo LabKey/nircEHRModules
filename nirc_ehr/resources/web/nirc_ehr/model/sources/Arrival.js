@@ -1,3 +1,16 @@
+Ext4.onReady(function() {
+    // this is to skip Id not found warning during weights entry in Arrival data entry form
+    if (EHR.data.DataEntryClientStore) {
+        Ext4.override(EHR.data.DataEntryClientStore, {
+            getExtraContext: function(){
+                return {
+                    skipIdNotFoundError: {'form': 'arrival'}
+                }
+            }
+        });
+    }
+});
+
 EHR.model.DataModelManager.registerMetadata('Arrival', {
     allQueries: {
         'endDate': {

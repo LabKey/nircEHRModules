@@ -18,7 +18,7 @@ exports.init = function (EHR) {
 
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'assignment', function(event, helper) {
         helper.setScriptOptions({
-            allowAnyId: true,
+            allowAnyId: false,
             requiresStatusRecalc: true,
             allowDatesInDistantPast: true,
             skipAssignmentCheck: true,
@@ -65,7 +65,6 @@ exports.init = function (EHR) {
     });
 
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'alias', function(event, helper) {
-        console.log("nirc alias init")
         helper.setScriptOptions({
             allowDatesInDistantPast: true,
             removeTimeFromDate: false,
