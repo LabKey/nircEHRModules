@@ -19,7 +19,7 @@ public class NIRCWeightFormType extends NIRCBaseTaskFormType
         super(ctx, owner, NAME, LABEL, "Clinical", List.of(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCWeightFormSection(false)
+                new NIRCWeightFormSection(false, false)
         ));
     }
 }

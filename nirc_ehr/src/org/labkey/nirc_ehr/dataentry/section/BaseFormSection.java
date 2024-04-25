@@ -12,13 +12,14 @@ public class BaseFormSection extends SimpleFormSection
 {
     private boolean _collapsible = false;
     private boolean _initCollapsed = false;
+    private boolean _addCopyFromSection = false;
 
     public BaseFormSection(String schemaName, String queryName, String label)
     {
         this(schemaName, queryName, label, "ehr-gridpanel");
     }
 
-    public BaseFormSection(String schemaName, String queryName, String label, String xtype, boolean collapsible, boolean initCollapsed)
+    public BaseFormSection(String schemaName, String queryName, String label, String xtype, boolean collapsible, boolean initCollapsed, boolean addCopyFromSection)
     {
         this(schemaName, queryName, label, xtype, EHRService.FORM_SECTION_LOCATION.Body);
 
@@ -27,6 +28,7 @@ public class BaseFormSection extends SimpleFormSection
 
         _collapsible = collapsible;
         _initCollapsed = initCollapsed;
+        _addCopyFromSection = addCopyFromSection;
     }
 
     public BaseFormSection(String schemaName, String queryName, String label, String xtype)
@@ -72,7 +74,8 @@ public class BaseFormSection extends SimpleFormSection
     public List<String> getTbarButtons()
     {
         List<String> defaultButtons = super.getTbarButtons();
-        defaultButtons.remove("COPYFROMSECTION");
+        if (!_addCopyFromSection)
+            defaultButtons.remove("COPYFROMSECTION");
 
         return defaultButtons;
     }
