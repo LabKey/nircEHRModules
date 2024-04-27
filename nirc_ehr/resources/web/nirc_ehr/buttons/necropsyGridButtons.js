@@ -10,14 +10,16 @@ EHR.DataEntryUtils.registerGridButton('ADDGROSSPATHOLOGY', function(config){
                     queryName: 'necropsy_organ_systems',
                     success: function (results) {
                         var grid = btn.up('gridpanel');
-                        if (results && results.rows && results.rows.length > 0) {
-                            for (var i = 0; i < results.rows.length; i++) {
-                                var row = results.rows[i];
-                                var newRecord = grid.store.createModel({});
-                                newRecord.set({
-                                    systemExamined: row.title,
-                                });
-                                grid.store.add(newRecord);
+                        if (grid && grid.store && grid.store.data && grid.store.data.getCount() === 0) {
+                            if (results && results.rows && results.rows.length > 0) {
+                                for (var i = 0; i < results.rows.length; i++) {
+                                    var row = results.rows[i];
+                                    var newRecord = grid.store.createModel({});
+                                    newRecord.set({
+                                        systemExamined: row.title,
+                                    });
+                                    grid.store.add(newRecord);
+                                }
                             }
                         }
                     },

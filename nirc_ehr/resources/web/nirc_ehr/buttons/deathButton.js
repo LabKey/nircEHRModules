@@ -9,6 +9,8 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
     successURL: LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
     itemId: 'submitDeathBtn',
     disabled: true,
+    requiredQC: 'Review Required',
+    targetQC: 'Review Required',
     handler: function(submitDeathBtn){
         Ext4.Msg.show({
             title: 'Info',

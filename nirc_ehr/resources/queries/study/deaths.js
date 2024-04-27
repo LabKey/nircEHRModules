@@ -6,8 +6,10 @@ var idMap = {};
 
 function onInit(event, helper){
     helper.setScriptOptions({
+        allowShippedIds: false,
+        allowDeadIds: false,
         requiresStatusRecalc: false,
-        datasetsToClose: []
+        datasetsToClose: ['Assignment', 'Protocol Assignment' , 'Housing']
     });
     helper.decodeExtraContextProperty('deathsInTransaction');
 
@@ -39,7 +41,9 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
     var demographicsUpdates = [];
     demographicsUpdates.push({
         Id: row.Id,
-        death: null
+        death: null,
+        calculated_status: 'Alive',
+        QCStateLabel: 'Completed',
     });
 
     console.log('removing demographics death date for animal:' + row.Id);
@@ -51,7 +55,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
     var demographicsUpdates = [];
 
     console.log("row.QCStateLabel = " + row.QCStateLabel);
-    console.log("EHR.Server.Security.getQCStateByLabel(row.QCStateLabel) = " +  EHR.Server.Security.getQCStateByLabel(row.QCStateLabel));
+    console.log("oldRow.QCStateLabel = " + oldRow);
 
     if (!helper.isETL()) {
 
@@ -61,7 +65,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         if (idMap[row.Id]) {
 
             // check if death record already exists for this animal
-            if (idMap[row.Id].calculated_status === 'Dead') {
+            if (idMap[row.Id].calculated_status === 'Dead' && oldRow.QCStateLabel === 'Completed') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
             }
             // check if the animal is at the center
@@ -84,35 +88,18 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                     console.log('updating demographics death date for animal: ' + row.Id);
                     helper.getJavaHelper().updateDemographicsRecord(demographicsUpdates);
                     console.log('updated demographics death date for animal: ' + row.Id);
-
-                    //TODO: These doesnt work demographics records dont show up in the email.
-                    // helper.cacheDemographics(row.Id, demographicsUpdates[0]);
-                    // helper.cacheDemographics(row.Id, row);
                 }
                 else {
                     console.log(row.id + " is not a valid animal id");
                 }
             }
         }
-        //TODO: This coincides with "Id: WARN: Id not found in demographics table:" Is there a way to remove the WARN,
-        // since the requirement is to only allow animals that are in demographics (who are alive and at the center)
-        // else {
-        //     EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal not found in demographics.', 'ERROR');
-        // }
     }
 }
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_INSERT, 'study', 'deaths', function(helper, scriptErrors, row, oldRow) {
     console.log("after insert");
     helper.registerDeath(row.Id, row.date);
-    // if (!helper.isETL()) {
-    //     console.log("after insert");
-    //     // Sending Death notification on COMPLETE event requires QC State to be "Completed".
-    //     // (Note: EHR.Server.TriggerManager.Events.COMPLETE is called once after all the row updates/inserts have taken place)
-    //     // Since the requirement is to send Death Notification once the Death is recorded, we are sending death notification
-    //     // on one animal after insert instead given that there always will be one Death recorded at a time/one row insert.
-    //     triggerHelper.sendDeathNotification(row.Id, row.date, row.taskid);
-    // }
 });
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.COMPLETE, 'study', 'Deaths', function(event, errors, helper){
@@ -125,7 +112,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             ids.push(id);
         }
 
-        if (!helper.isETL()) {
+        console.log("event = " + event);
+        if (!helper.isETL() && event === 'insert') {
             triggerHelper.sendDeathNotification(ids[0]);
         }
     }
