@@ -44,7 +44,10 @@ import org.labkey.nirc_ehr.dataentry.form.NIRCAssignmentFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCBirthFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDeathNecropsyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCExemptionsFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCFlagsFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCHousingFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCNotesFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCPregnancyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCProjectFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCProtocolFormType;
@@ -157,7 +160,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment"));
 
         registerDataEntry();
-        NotificationService.get().registerNotification(new DeathNotification());
+        NotificationService.get().registerNotification(new NIRCDeathNotification());
 
         // Ensure N: is mounted if it's configured, as it's being mapped in via a symlink/shortcut, so we can't
         // recognize paths using it based solely on their drive letter and mount just-in-time
@@ -180,6 +183,9 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCProtocolFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCPregnancyFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCWeightFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCFlagsFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCExemptionsFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCNotesFormType.class, this));
     }
 
     @Override
