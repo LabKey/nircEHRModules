@@ -67,6 +67,7 @@ public class BaseFormSection extends SimpleFormSection
     {
         super(schemaName, queryName, label, xtype, location);
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/CopyFromSectionWindow.js"));
         setSupportFormSort(false);
     }
 
@@ -74,8 +75,17 @@ public class BaseFormSection extends SimpleFormSection
     public List<String> getTbarButtons()
     {
         List<String> defaultButtons = super.getTbarButtons();
-        if (!_addCopyFromSection)
-            defaultButtons.remove("COPYFROMSECTION");
+        int idx = defaultButtons.indexOf("COPYFROMSECTION");
+        if (idx > -1)
+        {
+            if (!_addCopyFromSection)
+                defaultButtons.remove(idx);
+            else
+            {
+                defaultButtons.remove(idx);
+                defaultButtons.add(idx, "NIRCCOPYFROMSECTION");
+            }
+        }
 
         return defaultButtons;
     }
