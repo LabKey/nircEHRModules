@@ -33,7 +33,7 @@ import org.labkey.api.settings.LookAndFeelProperties;
 import org.labkey.api.util.GUID;
 import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
-import org.labkey.nirc_ehr.DeathNotification;
+import org.labkey.nirc_ehr.NIRCDeathNotification;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -322,7 +322,7 @@ public class NIRC_EHRTriggerHelper
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
         String taskId = ConvertHelper.convert(row.get("taskid"), String.class);
 
-        TableInfo ti = getTableInfo("study", "weights");
+        TableInfo ti = getTableInfo("study", "weight");
 
         // If there is already a weight record for this task, update that record
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), row.get("Id"));
@@ -333,8 +333,8 @@ public class NIRC_EHRTriggerHelper
         Map<String, Object> saveRow = new CaseInsensitiveHashMap<>();
         saveRow.put("Id", row.get("Id"));
         saveRow.put("date", date);
-        saveRow.put("taskId", taskId);
-        saveRow.put("qcstate", "Completed");
+        saveRow.put("taskid", taskId);
+        saveRow.put("qcstate", row.get("qcstate"));
         if (updateRecord)
         {
             saveRow.put("objectid", ts.getMap().get("objectid"));
@@ -344,9 +344,12 @@ public class NIRC_EHRTriggerHelper
             saveRow.put("objectid", new GUID().toString());
         }
 
-        Double weight = ConvertHelper.convert(row.get("weight"), Double.class);
-        if (weight != null)
-            saveRow.put("weight", weight);
+        Double weight = null;
+        if (row.get("weight") != null)
+        {
+            weight = ConvertHelper.convert(row.get("weight"), Double.class);
+        }
+        saveRow.put("weight", weight);
 
         List<Map<String, Object>> rows = new ArrayList<>();
         rows.add(saveRow);
@@ -364,59 +367,22 @@ public class NIRC_EHRTriggerHelper
             throw errors;
     }
 
-//    public void sendDeathNotification(final String animalId, final Date recordedDeathDate, final String taskid) throws Exception
-//    {
-//        //check whether Death Notification is enabled
-//        if (!NotificationService.get().isActive(new DeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
-//        {
-//            _log.info("Death notification service is not enabled, will not send death notification.");
-//            return;
-//        }
-//
-//        JobRunner.getDefault().execute(TimeUnit.MINUTES.toMillis(3), () -> {
-//            final Container container = _container;
-//            final User user = _user;
-//
-//            // get recipients
-//            Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new DeathNotification(), container);
-//            if (recipients.size() == 0)
-//            {
-//                _log.warn("No recipients set, skipping death notification");
-//                return;
-//            }
-//
-//            String subject = "Death Notification: " + animalId;
-//
-//            final StringBuilder html = new StringBuilder();
-//            html.append("<p>Animal ").append(PageFlowUtil.filter(animalId)).append(" has been marked as dead on '").append(_dateFormat.format(recordedDeathDate)).append("'.<p>");
-//            appendAnimalDetails(html, animalId, container);
-//
-//            String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskid;
-//            html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
-//            html.append("Click here to record Necropsy</a>.  <p>");
-//
-//            // send Death Notification
-//            _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
-//            TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
-//        });
-//    }
-
     public void sendDeathNotification(final String animalId) throws Exception
     {
         //check whether Death Notification is enabled
-        if (!NotificationService.get().isActive(new DeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
+        if (!NotificationService.get().isActive(new NIRCDeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
         {
             _log.info("Death notification service is not enabled, will not send death notification.");
             return;
         }
 
-        JobRunner.getDefault().execute(TimeUnit.MINUTES.toMillis(3), () -> {
+        JobRunner.getDefault().execute(TimeUnit.MINUTES.toMillis(1), () -> {
             final Container container = _container;
             final User user = _user;
             String subject = "Death Notification: " + animalId;
 
             // get recipients
-            Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new DeathNotification(), container);
+            Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new NIRCDeathNotification(), container);
             if (recipients.size() == 0)
             {
                 _log.warn("No recipients set, skipping death notification");
@@ -468,24 +434,41 @@ public class NIRC_EHRTriggerHelper
         html.append("<a href='").append(url).append("'>");
         html.append("Click here to view this animal's clinical details</a>.  <p>");
 
-        AnimalRecord ar = EHRDemographicsService.get().getAnimal(container, id);
+//        AnimalRecord ar = EHRDemographicsService.get().getAnimal(container, id);
         html.append("Program No.: ").append(PageFlowUtil.filter(getProject(id))).append("<br>");
         html.append("Study No.: ").append(PageFlowUtil.filter(getProtocol(id))).append("<br>");
-        html.append("Species: ").append(PageFlowUtil.filter(ar.getSpecies())).append("<br>");
-        html.append("Sex: ").append(PageFlowUtil.filter(ar.getGenderMeaning())).append("<br>");
-        html.append("Date of birth: ").append(PageFlowUtil.filter(null != ar.getBirth() ? _dateFormat.format(ar.getBirth()) : null)).append("<br>");
-        html.append("Age: ").append(PageFlowUtil.filter(ar.getAgeInYearsAndDays())).append("<br>");
+
+//          Map<String, String> animalInfo = getDemographicsInfo(id);
+//        html.append("Species: ").append(PageFlowUtil.filter(animalInfo.get("species"))).append("<br>");
+//        html.append("Sex: ").append(PageFlowUtil.filter(animalInfo.get("gender"))).append("<br>");
+//        html.append("Date of birth: ").append(PageFlowUtil.filter(null != animalInfo.get("birth") ? _dateFormat.format(animalInfo.get("birth")) : null)).append("<br>");
+//        html.append("Age: ").append(PageFlowUtil.filter(animalInfo.get("age"))).append("<br>");
+    }
+
+    private Map<String, String> getDemographicsInfo(String id)
+    {
+        Map<String, String> demographics = new HashMap<>();
+        TableInfo ti = getTableInfo("study", "demographics");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+        TableSelector ts = new TableSelector(ti, filter, null);
+        ts.forEach(rs -> {
+            demographics.put("species", rs.getString(FieldKey.fromString("species/common_name").toString()));
+            demographics.put("sex", rs.getString(FieldKey.fromString("gender").toString()));
+            demographics.put("birth", rs.getString(FieldKey.fromString("birth").toString()));
+            demographics.put("age", rs.getString(FieldKey.fromString(", Id/age/ageFriendly").toString()));
+        });
+        return demographics;
     }
 
     private String getProject(String id)
     {
         TableInfo ti = getTableInfo("study", "assignment");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
-        filter.addCondition(FieldKey.fromString("enddate"), CompareType.ISBLANK, null);
-        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("project/displayName"), filter, null);
+        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("project"), filter, null);
         final Mutable<String> project = new MutableObject<>();
         ts.forEach(rs -> {
-            project.setValue(rs.getString("project/displayName"));
+            project.setValue(rs.getString("project"));
         });
         return project.getValue();
     }
@@ -494,7 +477,7 @@ public class NIRC_EHRTriggerHelper
     {
         TableInfo ti = getTableInfo("study", "protocolAssignment");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
-        filter.addCondition(FieldKey.fromString("enddate"), CompareType.ISBLANK, null);
+        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
         TableSelector ts = new TableSelector(ti, PageFlowUtil.set("protocol"), filter, null);
         final Mutable<String> protocol = new MutableObject<>();
         ts.forEach(rs -> {

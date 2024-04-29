@@ -28,9 +28,8 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 hidden: false,
                 defaultValue: LABKEY.Security.currentUser.displayName
             },
-            'Id/MostRecentWeight/MostRecentWeight': {
-                label: 'Weight',
-                nullable: false
+            necropsyWeight: {
+                label: 'Weight (kg)'
             },
             date: {
                 label: 'Exam Date',

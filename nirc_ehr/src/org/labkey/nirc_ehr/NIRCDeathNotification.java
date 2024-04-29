@@ -21,7 +21,7 @@ import org.labkey.api.security.User;
 
 import java.util.Date;
 
-public class DeathNotification extends AbstractEHRNotification
+public class NIRCDeathNotification extends AbstractEHRNotification
 {
     @Override
     public String getName()

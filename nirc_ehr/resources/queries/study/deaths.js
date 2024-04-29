@@ -54,22 +54,17 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 
     var demographicsUpdates = [];
 
-    console.log("row.QCStateLabel = " + row.QCStateLabel);
-    console.log("oldRow.QCStateLabel = " + oldRow);
-
     if (!helper.isETL()) {
-
-        console.log("idMap[row.Id]=" + idMap[row.Id]);
 
         //only allow death record to be created if animal is in demographics table
         if (idMap[row.Id]) {
 
             // check if death record already exists for this animal
-            if (idMap[row.Id].calculated_status === 'Dead' && oldRow.QCStateLabel === 'Completed') {
+            if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && row.QCStateLabel.toUpperCase() === 'IN PROGRESS') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
             }
             // check if the animal is at the center
-            if (idMap[row.Id].calculated_status === 'Shipped') {
+            if (idMap[row.Id].calculated_status.toUpperCase() === 'SHIPPED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal is not at the center.', 'ERROR');
             }
 
@@ -98,12 +93,10 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 }
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_INSERT, 'study', 'deaths', function(helper, scriptErrors, row, oldRow) {
-    console.log("after insert");
     helper.registerDeath(row.Id, row.date);
 });
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.COMPLETE, 'study', 'Deaths', function(event, errors, helper){
-    console.log("COMPLETE");
     var deaths = helper.getDeaths();
 
     if (deaths) {
@@ -111,8 +104,6 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         for (var id in deaths){
             ids.push(id);
         }
-
-        console.log("event = " + event);
         if (!helper.isETL() && event === 'insert') {
             triggerHelper.sendDeathNotification(ids[0]);
         }

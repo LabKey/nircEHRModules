@@ -28,6 +28,7 @@ import org.labkey.test.categories.EHR;
 import org.labkey.test.components.ui.grids.QueryGrid;
 import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
+import org.labkey.test.pages.ehr.NotificationAdminPage;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.LogMethod;
@@ -142,6 +143,28 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         createTestSubjects();
         addNIRCEhrLinks();
         addExtensibleCols();
+        enableSiteNotification();
+        enableNotification("status_org.labkey.nirc_ehr.notification.NIRCDeathNotification");
+    }
+
+    private void enableSiteNotification()
+    {
+        log("Enabling the notification at the site level");
+        goToAdminConsole().clickNotificationServiceAdmin();
+        _ext4Helper.selectComboBoxItem("Status of Notification Service:","Enabled");
+        clickButton("Save",0);
+        _helper.clickExt4WindowBtn("Success","OK");
+    }
+
+    private void enableNotification(String notification)
+    {
+        goToEHRFolder();
+        _containerHelper.enableModule("Dumbster");
+        log("Setup the notification service for this container");
+        EHRAdminPage.beginAt(this,getContainerPath());
+        NotificationAdminPage notificationAdminPage = EHRAdminPage.clickNotificationService(this);
+        notificationAdminPage.setNotificationUserAndReplyEmail(DATA_ADMIN_USER);
+        notificationAdminPage.enableRequestAdminAlerts(notification);
     }
 
     private void addExtensibleCols()
