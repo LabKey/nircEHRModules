@@ -1,3 +1,4 @@
+
 EHR.model.DataModelManager.registerMetadata('Assignment', {
     allQueries: {
         endDate: {
@@ -18,6 +19,9 @@ EHR.model.DataModelManager.registerMetadata('Assignment', {
             }
         },
         'study.protocolAssignment': {
+            'project': {
+              hidden: true
+            },
             'protocol': {
                 xtype: 'combo',
                 nullable: false,
