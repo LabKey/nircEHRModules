@@ -290,4 +290,86 @@ public class NIRC_EHRTriggerHelper
         }
         return false;
     }
+
+    public String createAssignmentRecord(String dataset, String id, Map<String, Object> row) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
+    {
+        BatchValidationException errors = new BatchValidationException();
+        Date date = ConvertHelper.convert(row.get("date"), Date.class);
+        if (id == null || date == null)
+            return "Attempting to create a project assignment record with no id, date, or room";
+
+        TableInfo ti = getTableInfo("study", dataset);
+
+        String taskId = ConvertHelper.convert(row.get("taskid"), String.class);
+        if (taskId == null) {
+            return "Attempting to create a project assignment record with no taskid";
+        }
+
+        String qcstate = ConvertHelper.convert(row.get("qcstate"), String.class);
+        if (qcstate == null) {
+            return "Attempting to create a project assignment record with no qcstate";
+        }
+
+        boolean updateRecord = false;
+
+        // If there is already a project assignment record for this task, update that record
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+        filter.addCondition(FieldKey.fromString("taskid"), taskId);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
+        if (ts.exists())
+        {
+            updateRecord = true;
+        }
+
+        Map<String, Object> saveRow = new CaseInsensitiveHashMap<>();
+        saveRow.put("Id", id);
+        saveRow.put("date", date);
+        saveRow.put("taskId", taskId);
+        saveRow.put("qcstate", qcstate);
+        if (updateRecord)
+        {
+            saveRow.put("objectid", ts.getMap().get("objectid"));
+        }
+        else
+        {
+            saveRow.put("objectid", new GUID().toString());
+        }
+
+        String project = ConvertHelper.convert(row.get("project"), String.class);
+        if (project != null)
+        {
+            saveRow.put("project", project);
+        }
+        else if (dataset.equalsIgnoreCase("assignment"))
+        {
+            return "Attempting to create a project assignment record with no project";
+        }
+
+        String protocol = ConvertHelper.convert(row.get("protocol"), String.class);
+        if (protocol != null)
+        {
+            saveRow.put("protocol", protocol);
+        }
+        else if (dataset.equalsIgnoreCase("protocolAssignment"))
+        {
+            return "Attempting to create a protocol assignment record with no protocol";
+        }
+
+        List<Map<String, Object>> rows = new ArrayList<>();
+        rows.add(saveRow);
+
+        if (updateRecord)
+        {
+            ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+        }
+        else
+        {
+            ti.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+        }
+
+        if (errors.hasErrors())
+            throw errors;
+
+        return null;
+    }
 }
