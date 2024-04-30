@@ -11,7 +11,7 @@ Ext4.define('NIRC_EHR.field.LocationField', {
 
     fieldLabel: 'Location',
     nullCaption: '[Blank]',
-    editable: false,
+    editable: true,
     expandToFitContent: true,
     addAllSelector: true,
     typeAhead: true,
