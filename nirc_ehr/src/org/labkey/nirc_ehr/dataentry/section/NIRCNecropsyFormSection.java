@@ -36,14 +36,4 @@ public class NIRCNecropsyFormSection extends SimpleFormPanelSection
         json.put("dataDependentCollapseHeader", true);
         return json;
     }
-
-    @Override
-    protected List<FieldKey> getFieldKeys(TableInfo ti)
-    {
-        List<FieldKey> keys = super.getFieldKeys(ti);
-
-        keys.add(3, FieldKey.fromString("Id/MostRecentWeight/MostRecentWeight"));
-
-        return keys;
-    }
 }
