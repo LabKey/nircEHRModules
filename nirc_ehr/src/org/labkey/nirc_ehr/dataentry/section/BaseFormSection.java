@@ -12,13 +12,14 @@ public class BaseFormSection extends SimpleFormSection
 {
     private boolean _collapsible = false;
     private boolean _initCollapsed = false;
+    private boolean _addCopyFromSection = false;
 
     public BaseFormSection(String schemaName, String queryName, String label)
     {
         this(schemaName, queryName, label, "ehr-gridpanel");
     }
 
-    public BaseFormSection(String schemaName, String queryName, String label, String xtype, boolean collapsible, boolean initCollapsed)
+    public BaseFormSection(String schemaName, String queryName, String label, String xtype, boolean collapsible, boolean initCollapsed, boolean addCopyFromSection)
     {
         this(schemaName, queryName, label, xtype, EHRService.FORM_SECTION_LOCATION.Body);
 
@@ -27,6 +28,7 @@ public class BaseFormSection extends SimpleFormSection
 
         _collapsible = collapsible;
         _initCollapsed = initCollapsed;
+        _addCopyFromSection = addCopyFromSection;
     }
 
     public BaseFormSection(String schemaName, String queryName, String label, String xtype)
@@ -65,6 +67,9 @@ public class BaseFormSection extends SimpleFormSection
     {
         super(schemaName, queryName, label, xtype, location);
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/AddAnimalsWindow.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/LocationField.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/CopyFromSectionWindow.js"));
         setSupportFormSort(false);
     }
 
@@ -72,7 +77,25 @@ public class BaseFormSection extends SimpleFormSection
     public List<String> getTbarButtons()
     {
         List<String> defaultButtons = super.getTbarButtons();
-        defaultButtons.remove("COPYFROMSECTION");
+
+        int idx = defaultButtons.indexOf("ADDANIMALS");
+        if (idx > -1)
+        {
+            defaultButtons.remove(idx);
+            defaultButtons.add(idx, "NIRC_ADDANIMALS");
+        }
+        
+        idx = defaultButtons.indexOf("COPYFROMSECTION");
+        if (idx > -1)
+        {
+            if (!_addCopyFromSection)
+                defaultButtons.remove(idx);
+            else
+            {
+                defaultButtons.remove(idx);
+                defaultButtons.add(idx, "NIRCCOPYFROMSECTION");
+            }
+        }
 
         return defaultButtons;
     }

@@ -1,15 +1,24 @@
+Ext4.onReady(function() {
+    // this is to skip Id not found warning during weights entry in Arrival data entry form
+    if (EHR.data.DataEntryClientStore) {
+        Ext4.override(EHR.data.DataEntryClientStore, {
+            getExtraContext: function(){
+                return {
+                    skipIdNotFoundError: {'form': 'arrival'}
+                }
+            }
+        });
+    }
+});
+
 EHR.model.DataModelManager.registerMetadata('Arrival', {
     allQueries: {
-
+        'endDate': {
+            hidden: true
+        }
     },
     byQuery: {
         'study.arrival': {
-            'Id/demographics/dam': {
-                xtype: 'ehr-animalfield'
-            },
-            'Id/demographics/sire': {
-                xtype: 'ehr-animalfield'
-            },
             'cage': {
                 columnConfig: {
                     fixed: true,
@@ -23,8 +32,18 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                 }
             },
             project: {
-                hidden: true,
-                allowBlank: true
+                xtype: 'combo',
+                lookup: {
+                    schemaName: 'ehr',
+                    queryName: 'project',
+                    keyColumn: 'project',
+                    columns: 'project,name'
+                }
+            },
+            arrivalProtocol: {
+                columnConfig: {
+                    width: 200
+                }
             },
             performedby: {
                 hidden: true,
@@ -36,26 +55,6 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                     width: 150
                 },
             },
-        },
-        'study.assignment': {
-            'project': {
-                xtype: 'combo',
-                lookup: {
-                    schemaName: 'ehr',
-                    queryName: 'project',
-                    keyColumn: 'project',
-                    columns: 'project,name'
-                }
-            }
-        },
-        'study.protocolAssignment': {
-            'protocol': {
-                xtype: 'combo',
-                columnConfig: {
-                    fixed: true,
-                    width: 150
-                },
-            }
         }
     }
 });

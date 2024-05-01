@@ -8,7 +8,7 @@ public class NIRCTissueDispositionFormSection extends BaseFormSection
 {
     public NIRCTissueDispositionFormSection(boolean isChild)
     {
-        super("study", "tissueDisposition", "Tissue Disposition", "ehr-gridpanel", true, true);
+        super("study", "tissueDisposition", "Tissue Disposition", "ehr-gridpanel", true, true, true);
         if (isChild)
         {
             addExtraProperty("parentQueryName", "deaths");

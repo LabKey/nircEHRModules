@@ -97,6 +97,9 @@
             <column columnName="CITES">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="arrivalProtocol">
+                <datatype>varchar</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="assignment" tableDbType="TABLE">
@@ -220,6 +223,9 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="birthProtocol">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>

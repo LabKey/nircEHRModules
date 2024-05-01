@@ -40,10 +40,14 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
     @Override
     public void customize(TableInfo table)
     {
-        if (table instanceof AbstractTableInfo)
+        if (table instanceof AbstractTableInfo ti)
         {
-            doSharedCustomization((AbstractTableInfo) table);
-            doTableSpecificCustomizations((AbstractTableInfo) table);
+            doSharedCustomization(ti);
+            doTableSpecificCustomizations(ti);
+            if (ti instanceof DatasetTable)
+            {
+                ti.addTriggerFactory(new NIRC_EHRTriggerScriptFactory());
+            }
         }
     }
 
@@ -60,6 +64,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (matches(ti, "ehr", "protocol"))
         {
             customizeProtocolTable(ti);
+        }
+        if (matches(ti, "study", "protocolAssignment"))
+        {
+            EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.allowSameDay);
         }
     }
 
@@ -180,7 +188,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             TableInfo realTable = getRealTable(ti);
             if (realTable != null && realTable.getColumn("participantid") != null && realTable.getColumn("date") != null && realTable.getColumn("enddate") != null)
             {
-                SQLFragment roomSql = new SQLFragment(realTable.getSqlDialect().getDateDiff(Calendar.DATE, "{fn curdate()}", "(SELECT max(h2.enddate) as d FROM " + realTable.getSelectName() + " h2 WHERE h2.enddate IS NOT NULL AND h2.enddate <= " + ExprColumn.STR_TABLE_ALIAS + ".date AND h2.participantid = " + ExprColumn.STR_TABLE_ALIAS + ".participantid and h2.room != " + ExprColumn.STR_TABLE_ALIAS + ".room)"));
+                SQLFragment roomSql = new SQLFragment(realTable.getSqlDialect().getDateDiff(Calendar.DATE, "{fn curdate()}", "COALESCE((SELECT max(h2.enddate) as d FROM " + realTable.getSelectName() + " h2 LEFT JOIN ehr_lookups.cage cg ON h2.cage = cg.location " +
+                        "WHERE h2.enddate IS NOT NULL AND h2.enddate <= " + ExprColumn.STR_TABLE_ALIAS + ".date AND h2.participantid = " + ExprColumn.STR_TABLE_ALIAS + ".participantid AND cg.room != (SELECT room FROM ehr_lookups.cage WHERE location = " + ExprColumn.STR_TABLE_ALIAS + ".cage)), " + ExprColumn.STR_TABLE_ALIAS + ".date)"));
                 ExprColumn roomCol = new ExprColumn(ti, "daysInRoom", roomSql, JdbcType.INTEGER, realTable.getColumn("participantid"), realTable.getColumn("date"), realTable.getColumn("enddate"));
                 roomCol.setLabel("Days In Room");
                 ti.addColumn(roomCol);

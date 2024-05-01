@@ -21,6 +21,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.api.reader.Readers;
+import org.labkey.remoteapi.query.InsertRowsCommand;
+import org.labkey.remoteapi.security.CreateUserResponse;
 import org.labkey.test.Locator;
 import org.labkey.test.ModulePropertyValue;
 import org.labkey.test.TestFileUtils;
@@ -41,6 +43,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +64,38 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         importFolderByPath(path, getContainerPath(), 1);
         path = TestFileUtils.getSampleData("nirc_ehr/study");
         importFolderByPath(path, getContainerPath(), 2);
+    }
+
+    @Override
+    protected String getExpectedAnimalIDCasing(String id)
+    {
+        return id.toUpperCase();
+    }
+
+    @LogMethod
+    protected void populateProtocolRecords() throws Exception
+    {
+        final String emailDomain = "@ehrstudy.test";
+        CreateUserResponse inves1 = _userHelper.createUser(INVES_ID + emailDomain, true);
+        CreateUserResponse inves2 =_userHelper.createUser(DUMMY_INVES + emailDomain, true);
+        goToEHRFolder();
+        _permissionsHelper.addUserToProjGroup(inves1.getEmail(), getProjectName(), INVESTIGATOR.getGroup());
+        _permissionsHelper.addUserToProjGroup(inves2.getEmail(), getProjectName(), INVESTIGATOR.getGroup());
+
+        InsertRowsCommand insertCmd = new InsertRowsCommand("ehr", "protocol");
+
+        Map<String,Object> rowMap = new HashMap<>();
+        rowMap.put("protocol", PROTOCOL_ID);
+        rowMap.put("InvestigatorId", inves1.getUserId());
+        rowMap.put("title", PROTOCOL_ID);
+        insertCmd.addRow(rowMap);
+        rowMap = new HashMap<>();
+        rowMap.put("protocol", DUMMY_PROTOCOL);
+        rowMap.put("InvestigatorId", inves2.getUserId());
+        rowMap.put("title", DUMMY_PROTOCOL);
+        insertCmd.addRow(rowMap);
+
+        insertCmd.execute(createDefaultConnection(), getContainerPath());
     }
 
     public void importFolderByPath(File path, String containerPath, int finishedJobsExpected)

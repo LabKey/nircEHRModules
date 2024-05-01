@@ -14,8 +14,8 @@
                         <columnTitle>Birth Date</columnTitle>
                     </column>
                     <column columnName="cage">
+                        <columnTitle>Birth Location</columnTitle>
                         <displayWidth>80</displayWidth>
-                        <columnTitle>Location</columnTitle>
                         <shownInInsertView>true</shownInInsertView>
                         <shownInUpdateView>true</shownInUpdateView>
                         <fk>
@@ -25,11 +25,26 @@
                             <fkDisplayColumnName>cage</fkDisplayColumnName>
                         </fk>
                     </column>
+                    <column columnName="project">
+                        <columnTitle>Project</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr</fkDbSchema>
+                            <fkTable>project</fkTable>
+                            <fkColumnName>project</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="birthProtocol">
+                        <columnTitle>Protocol</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr</fkDbSchema>
+                            <fkTable>protocol</fkTable>
+                            <fkColumnName>protocol</fkColumnName>
+                            <fkDisplayColumnName>title</fkDisplayColumnName>
+                        </fk>
+                    </column>
                     <column columnName="remark"/>
                     <column columnName="performedby"/>
-                    <column columnName="cage">
-                        <columnTitle>Birth Location</columnTitle>
-                    </column>
                 </columns>
             </table>
         </tables>
