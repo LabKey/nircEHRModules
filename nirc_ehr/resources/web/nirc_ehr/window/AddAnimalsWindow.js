@@ -23,10 +23,9 @@ Ext4.define('NIRC_EHR.window.AddAnimalsWindow', {
 
             var filterArray = this.getBaseFilterArray().concat([LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL)]);
 
-            if (!cage)
-                filterArray.push(LABKEY.Filter.create('cage', cage, LABKEY.Filter.Types.EQUALS_ONE_OF));
+            if (cage)
+                filterArray.push(LABKEY.Filter.create('cage/rowid', cage, LABKEY.Filter.Types.EQUALS_ONE_OF));
 
-            debugger
             this.doQuery({
                 schemaName: 'study',
                 queryName: 'housing',
