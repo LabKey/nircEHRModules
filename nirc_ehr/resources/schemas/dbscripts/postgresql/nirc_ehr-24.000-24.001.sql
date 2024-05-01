@@ -7,6 +7,7 @@ SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/housing;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
 SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/ProtocolAndAssignment;truncate');
 
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;death_reason;/data/death_reason.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;housing_reason;/data/housing_reason.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;necropsy_disposition_codes;/data/necropsy_disposition_codes.tsv');
