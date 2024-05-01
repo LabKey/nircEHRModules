@@ -6,7 +6,7 @@ public class NIRCProtocolAssignmentFormSection extends BaseFormSection
 {
     public NIRCProtocolAssignmentFormSection(boolean allowAnyId, boolean collapsible, boolean initCollapsed)
     {
-        super("study", "protocolAssignment", "Protocol Assignment","ehr-gridpanel", collapsible, initCollapsed);
+        super("study", "protocolAssignment", "Protocol Assignment","ehr-gridpanel", collapsible, initCollapsed, true);
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/AssignmentsClientStore.js"));
 
         if (allowAnyId)

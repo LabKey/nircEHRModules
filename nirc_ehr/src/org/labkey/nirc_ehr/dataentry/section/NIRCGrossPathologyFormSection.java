@@ -8,7 +8,7 @@ public class NIRCGrossPathologyFormSection extends BaseFormSection
 {
     public NIRCGrossPathologyFormSection(boolean isChild)
     {
-        super("study", "grossPathology", "Gross Pathology", "ehr-gridpanel", true, true);
+        super("study", "grossPathology", "Gross Pathology", "ehr-gridpanel", true, true, true);
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/necropsyGridButtons.js"));
         if (isChild)
         {
