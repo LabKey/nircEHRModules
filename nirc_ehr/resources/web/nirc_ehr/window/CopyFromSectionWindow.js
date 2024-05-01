@@ -20,9 +20,9 @@ Ext4.define('NIRC_EHR.window.CopyFromSectionWindow', {
         },{
             html: '<b>Date</b>'
         },{
-            html: '<b>Skip?</b>'
-        },{
             html: '<b>Performed By</b>'
+        },{
+            html: '<b>Skip?</b>'
         }];
 
         var keys = {}, key;
