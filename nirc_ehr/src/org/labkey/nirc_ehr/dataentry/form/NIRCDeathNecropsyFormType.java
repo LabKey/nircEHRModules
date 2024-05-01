@@ -2,6 +2,7 @@ package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
+import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
@@ -11,6 +12,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCNecropsyFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTissueDispositionFormSection;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
 
         ));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/DeathNecropsy.js"));
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/deathButton.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/deathNecropsyButtons.js"));
 
         for (FormSection s : getFormSections())
         {
@@ -42,8 +44,17 @@ public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
     @Override
     protected List<String> getButtonConfigs()
     {
-        List<String> defaultButtons = super.getButtonConfigs();
+        List<String> defaultButtons = new ArrayList<String>();
+        boolean isVet = getCtx().getContainer().hasPermission(getCtx().getUser(), EHRVeterinarianPermission.class);
+
+        defaultButtons.add("SAVEDRAFT");
         defaultButtons.add("DEATHSUBMIT");
+
+        if (isVet) {
+            defaultButtons.add("SUBMITNECROPSYFORREVIEW");
+            defaultButtons.add("SUBMIT"); //submit final
+        }
+
         return defaultButtons;
     }
 }

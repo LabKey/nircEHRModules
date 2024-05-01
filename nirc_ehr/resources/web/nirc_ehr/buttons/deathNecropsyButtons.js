@@ -26,26 +26,18 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
     disableOn: 'ERROR'
 });
 
-// EHR.DataEntryUtils.registerDataEntryFormButton('NECROPSYSUBMIT', {
-//     text: 'Submit Necropsy',
-//     name: 'submitNecropsy',
-//     requiredQC: 'Completed',
-//     targetQC: 'Completed',
-//     errorThreshold: 'ERROR',
-//     successURL: LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
-//     itemId: 'submitNecropsyBtn',
-//     handler: function(btn){
-//         var panel = btn.up('ehr-dataentrypanel');
-//
-//         //
-//         // Ext4.Msg.confirm('Finalize Form', 'You are about to finalize this form.  Do you want to do this?', function(v){
-//         //     if(v === 'yes')
-//         //     {
-//         //         this.onSubmit(btn);
-//         //         panel.disable();
-//         //     }
-//         //
-//         // }, this);
-//     },
-//     disableOn: 'ERROR'
-// });
+EHR.DataEntryUtils.registerDataEntryFormButton('SUBMITNECROPSYFORREVIEW', {
+    text: 'Submit for Review',
+    name: 'submitNecropsyForReview',
+    requiredQC: 'Review Required',
+    targetQC: 'Review Required',
+    errorThreshold: 'ERROR',
+    disabled: true,
+    successURL: LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
+    itemId: 'submitNecropsyForReviewBtn',
+    handler: function(btn){
+        var panel = btn.up('ehr-dataentrypanel');
+        panel.onSubmit(btn, false, true);
+    },
+    disableOn: 'ERROR'
+});
