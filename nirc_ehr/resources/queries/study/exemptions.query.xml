@@ -15,6 +15,11 @@
                     </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>exemption_category</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
                     </column>
                 </columns>
             </table>
