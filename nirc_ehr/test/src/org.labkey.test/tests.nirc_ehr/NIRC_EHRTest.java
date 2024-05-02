@@ -180,7 +180,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         addNIRCEhrLinks();
         addExtensibleCols();
         enableSiteNotification();
-        enableDumbster();
     }
 
     private void enableSiteNotification()
@@ -238,37 +237,32 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //TODO: Implement this test once Quick Search is customized for NIRC
     }
 
-    public void enableDumbster()
+    public void addDeathNecropsyUsersAndPermissions()
     {
-        goToEHRFolder();
-        _containerHelper.enableModule("Dumbster");
+        //create animal care basic submitter user (this user can 'Submit Death')
+        createUser("ac_bs@test.com", "EHR Basic Submitter", null);
+
+        //create a vet user with 'EHR Basic Submitter' role (this user can 'Submit for Review')
+        createUser("vet_bs@test.com", "EHR Basic Submitter", "EHR Veterinarian");
+
+        //create a vet user with 'EHR Full Submitter' role (this user can 'Submit Final')
+        createUser("vet_fs@test.com", "EHR Full Submitter", "EHR Veterinarian");
     }
 
-    public void setDeathNecropsyUsersAndPermissions()
-    {
-        //create a vet user
-        //create animal care basic submitter user ac_bs@test.com
-        //go to EHR folder > Manage Study > Manage Security > At the dataset level, add roles to Death, Necropsy, Gross Pathology, and Tissue Disposition level
-        //go to folder permissions > add the vet user to the EHR Veterinarian role
-        //go to folder permissions > add the basic submitter user to the EHR Basic Submitter role
-        //go to folder permissions > add the vet to the EHR Full Submitter role
-    }
-
-    private void createUsers (String userEmail, String groupName, @Nullable String permission)
+    private void createUser(String userEmail, String groupName, @Nullable String permission)
     {
         _userHelper.createUser(userEmail, false);
         goToEHRFolder();
-        _permissionsHelper.setUserPermissions(userEmail, permission);
-        _permissionsHelper.setUserPermissions(userEmail, "EHR Veterinarian");
+        if (permission != null)
+            _permissionsHelper.setUserPermissions(userEmail, permission);
         _permissionsHelper.addUserToProjGroup(userEmail, getProjectName(), groupName);
-        _permissionsHelper.addUserToProjGroup(userEmail, getProjectName(), "EHR Administrators");
     }
 
     @Test
     public void testDeathNecropsyForm()
     {
-        enableNotification("status_org.labkey.nirc_ehr.notification.NIRCDeathNotification");
-        setDeathNecropsyUsersAndPermissions(); //todo: implement this method
+//        enableNotification("status_org.labkey.nirc_ehr.notification.NIRCDeathNotification"); //TODO: fix
+        addDeathNecropsyUsersAndPermissions();
 
         //Go to EHR page > Enter Data > Death/Necropsy
 
@@ -288,7 +282,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         //stop impersonation
 
-        //wait for 1 minute
+        //wait for 1 minute (since the notification is set to run after one min after a Death record is submitted)
 
         //impersonate as a vet user who is a "EHR Basic Submitter" (vet_bs@test.com)
 
