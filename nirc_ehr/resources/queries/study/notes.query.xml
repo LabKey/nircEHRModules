@@ -19,6 +19,9 @@
                     <column columnName="type">
                         <columnTitle>Type</columnTitle>
                     </column>
+                    <column columnName="remark">
+                        <columnTitle>Note</columnTitle>
+                    </column>
                     <column columnName="attachmentFile">
                         <isHidden>true</isHidden>
                     </column>

@@ -10,6 +10,7 @@ country_category
 delivery_state
 esig_events
 euthanasia_type
+exemption_category
 expense_class
 gender_codes
 id_history_type
@@ -35,4 +36,3 @@ necropsy_specimen_condition
 housing_reason
 death_reason
 weight_ranges
-exemption_category
