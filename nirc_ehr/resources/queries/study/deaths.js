@@ -27,7 +27,7 @@ function onInit(event, helper){
             for(var i=0; i < results.rows.length; i++) {
                 validIds.push(results.rows[i]["Id"]["value"])
                 idMap[results.rows[i]["Id"]["value"]] = {calculated_status: results.rows[i]["calculated_status"]["value"], QCStateLabel: results.rows[i]["QCState/Label"]["value"]};
-                console.log(idMap[results.rows[i]["Id"]["value"]]);
+                // console.log(idMap[results.rows[i]["Id"]["value"]]);
             }
         },
         failure: function (error) {

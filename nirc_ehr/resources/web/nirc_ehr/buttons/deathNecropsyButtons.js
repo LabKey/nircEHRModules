@@ -22,18 +22,19 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
     disableOn: 'ERROR'
 });
 
-EHR.DataEntryUtils.registerDataEntryFormButton('SUBMITNECROPSYFORREVIEW', {
-    text: 'Submit for Review',
-    name: 'submitNecropsyForReview',
-    requiredQC: 'Review Required',
-    targetQC: 'Review Required',
-    errorThreshold: 'ERROR',
-    disabled: true,
-    successURL: LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
-    itemId: 'submitNecropsyForReviewBtn',
-    handler: function(btn){
-        var panel = btn.up('ehr-dataentrypanel');
-        panel.onSubmit(btn, false, true);
-    },
-    disableOn: 'ERROR'
-});
+//TODO: figure out the workflow from client
+// EHR.DataEntryUtils.registerDataEntryFormButton('SUBMITNECROPSYFORREVIEW', {
+//     text: 'Submit for Review',
+//     name: 'submitNecropsyForReview',
+//     requiredQC: 'Review Required',
+//     targetQC: 'Review Required',
+//     errorThreshold: 'ERROR',
+//     disabled: true,
+//     successURL: LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
+//     itemId: 'submitNecropsyForReviewBtn',
+//     handler: function(btn){
+//         var panel = btn.up('ehr-dataentrypanel');
+//         panel.onSubmit(btn, false, true);
+//     },
+//     disableOn: 'ERROR'
+// });

@@ -5,10 +5,14 @@ import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
+import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.ConvertHelper;
+import org.labkey.api.data.Results;
+import org.labkey.api.data.ResultsImpl;
+import org.labkey.api.data.Selector;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
@@ -32,6 +36,7 @@ import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.nirc_ehr.NIRCDeathNotification;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,6 +44,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -407,7 +413,7 @@ public class NIRC_EHRTriggerHelper
                 html.append("Death date not found. Please contact system administrator.").append("<br>");
                 return;
             }
-            html.append("<p>Animal '").append(PageFlowUtil.filter(animalId)).append(" has been marked as dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<p>");
+            html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been marked as dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br><br>");
 
             //append animal details
             appendAnimalDetails(html, animalId, container);
@@ -416,7 +422,8 @@ public class NIRC_EHRTriggerHelper
             String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" +
                     container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskId.getValue();
             html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
-            html.append("Click here to record Necropsy</a>.  <p>");
+
+            html.append("Click here to record Necropsy</a><br>");
 
             // send Death Notification
             _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
@@ -427,33 +434,10 @@ public class NIRC_EHRTriggerHelper
     private void appendAnimalDetails(StringBuilder html, String id, final Container container)
     {
         String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + container.getPath() + "/participantView.view?participantId=" + id;
+        html.append("Project: ").append(PageFlowUtil.filter(getProject(id))).append("<br>");
+        html.append("Protocol: ").append(PageFlowUtil.filter(getProtocol(id))).append("<br><br>");
         html.append("<a href='").append(url).append("'>");
-        html.append("Click here to view this animal's clinical details</a>.  <p>");
-
-//        AnimalRecord ar = EHRDemographicsService.get().getAnimal(container, id);
-        html.append("Program No.: ").append(PageFlowUtil.filter(getProject(id))).append("<br>");
-        html.append("Study No.: ").append(PageFlowUtil.filter(getProtocol(id))).append("<br>");
-
-//          Map<String, String> animalInfo = getDemographicsInfo(id);
-//        html.append("Species: ").append(PageFlowUtil.filter(animalInfo.get("species"))).append("<br>");
-//        html.append("Sex: ").append(PageFlowUtil.filter(animalInfo.get("gender"))).append("<br>");
-//        html.append("Date of birth: ").append(PageFlowUtil.filter(null != animalInfo.get("birth") ? _dateFormat.format(animalInfo.get("birth")) : null)).append("<br>");
-//        html.append("Age: ").append(PageFlowUtil.filter(animalInfo.get("age"))).append("<br>");
-    }
-
-    private Map<String, String> getDemographicsInfo(String id)
-    {
-        Map<String, String> demographics = new HashMap<>();
-        TableInfo ti = getTableInfo("study", "demographics");
-        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
-        TableSelector ts = new TableSelector(ti, filter, null);
-        ts.forEach(rs -> {
-            demographics.put("species", rs.getString(FieldKey.fromString("species/common_name").toString()));
-            demographics.put("sex", rs.getString(FieldKey.fromString("gender").toString()));
-            demographics.put("birth", rs.getString(FieldKey.fromString("birth").toString()));
-            demographics.put("age", rs.getString(FieldKey.fromString(", Id/age/ageFriendly").toString()));
-        });
-        return demographics;
+        html.append("Click here to view this animal's clinical details</a><br>");
     }
 
     private String getProject(String id)
@@ -474,10 +458,27 @@ public class NIRC_EHRTriggerHelper
         TableInfo ti = getTableInfo("study", "protocolAssignment");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
         filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
-        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("protocol"), filter, null);
+
+        Set<FieldKey> keys = new HashSet<>();
+        keys.add(FieldKey.fromString("protocol/title"));
+        keys.add(FieldKey.fromString("protocol/InvestigatorId/LastName"));
+        final Map<FieldKey, ColumnInfo> cols = QueryService.get().getColumns(ti, keys);
+        TableSelector ts = new TableSelector(ti, cols.values(), filter, null);
+
         final Mutable<String> protocol = new MutableObject<>();
-        ts.forEach(rs -> {
-            protocol.setValue(rs.getString("protocol"));
+
+        ts.forEach(object -> {
+            Results rs = new ResultsImpl(object, cols);
+            String title = rs.getString(FieldKey.fromString("protocol/title"));
+            String inves = rs.getString(FieldKey.fromString("protocol/InvestigatorId/LastName"));
+            if (title == null)
+            {
+                protocol.setValue("None");
+            }
+            else
+            {
+                protocol.setValue(title + (inves == null ? "" : " - " + inves));
+            }
         });
         return protocol.getValue();
     }
