@@ -12,12 +12,8 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
     requiredQC: 'Review Required',
     targetQC: 'Review Required',
     handler: function(submitDeathBtn){
-        Ext4.Msg.show({
-            title: 'Info',
-            msg: 'You are about to submit a death record.  This will send a email notification to the appropriate parties.',
-            buttons: Ext4.Msg.OK,
-            width: 400,
-            fn: function(okBtn, text, config) {
+        Ext4.Msg.confirm('Confirm', 'You are about to submit a death record. This will send an email notification to the appropriate parties. Submit death?', function(val){
+            if (val == 'yes') {
                 var panel = submitDeathBtn.up('ehr-dataentrypanel');
                 panel.onSubmit(submitDeathBtn);
             }
