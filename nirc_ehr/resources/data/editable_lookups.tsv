@@ -9,6 +9,7 @@ country_category	Colony Management	Country Category
 delivery_state	Colony Management	Delivery State
 esig_events	Colony Management	Esig Events
 euthanasia_type	Colony Management	Euthanasia Type
+exemption_category	Colony Management	Exemption Category
 expense_class	Colony Management	Expense Class
 gender_codes	Colony Management	Gender Codes	Used in demographics dataset.
 id_history_type	Colony Management	Id History Type

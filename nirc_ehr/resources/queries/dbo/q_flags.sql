@@ -5,8 +5,8 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        CAST(ae.EVENT_DATETIME AS TIMESTAMP)                                      AS enddate,
        (CASE
             WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
-            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
-                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
+            ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
+                || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        anmEvt.EVENT_ID                                                           AS flag,
        CASE WHEN anmCmt.TEXT IS NOT NULL THEN (anmCmt.TEXT || '-' || ac.TEXT)
        ELSE ac.TEXT END                                                          AS remark,
@@ -30,8 +30,8 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        NULL                                                                      AS enddate,
        (CASE
             WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
-            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
-                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
+            ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
+                || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                 AS performedby,
        anmEvt.EVENT_ID                                                           AS flag,
        anmCmt.TEXT                                                               AS remark,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP)        AS modified

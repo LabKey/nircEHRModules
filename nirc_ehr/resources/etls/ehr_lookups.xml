@@ -31,7 +31,7 @@
             </destination>
         </transform>
         <transform id="step6" type="org.labkey.di.pipeline.TransformTask">
-            <description>Copy to flag values target</description>
+            <description>Copy to flag categories target</description>
             <source schemaName="dbo" queryName="q_flag_categories"/>
             <destination schemaName="ehr_lookups" queryName="flag_categories"
                          bulkLoad="true" batchSize="5000" targetOption="truncate">
