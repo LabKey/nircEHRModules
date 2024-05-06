@@ -34,6 +34,9 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                     fixed: true,
                     width: 150
                 },
+            },
+            'enddate': {
+                hidden: true
             }
         },
         'study.arrival': {
@@ -46,6 +49,21 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             room: {
                 allowBlank: true,
                 hidden: true
+            }
+        },
+        'study.exemptions': {
+            category: {
+                columnConfig: {
+                    width: 300
+                }
+            }
+        },
+        'study.notes': {
+            remark: {
+                hidden: false,
+                columnConfig: {
+                    width: 400
+                }
             }
         }
     }

@@ -1,16 +1,24 @@
 package org.labkey.nirc_ehr.query;
 
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
+import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.ConvertHelper;
+import org.labkey.api.data.Results;
+import org.labkey.api.data.ResultsImpl;
+import org.labkey.api.data.Selector;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
+import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
 import org.labkey.api.query.FieldKey;
@@ -20,10 +28,15 @@ import org.labkey.api.query.QueryUpdateServiceException;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.security.User;
 import org.labkey.api.security.UserManager;
+import org.labkey.api.security.UserPrincipal;
+import org.labkey.api.settings.AppProps;
 import org.labkey.api.settings.LookAndFeelProperties;
 import org.labkey.api.util.GUID;
+import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
+import org.labkey.nirc_ehr.NIRCDeathNotification;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,8 +44,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class NIRC_EHRTriggerHelper
 {
@@ -289,6 +305,182 @@ public class NIRC_EHRTriggerHelper
             return ts.exists();
         }
         return false;
+    }
+    public boolean deathExists(String id)
+    {
+        TableInfo ti = getTableInfo("study", "deaths");
+        if (ti != null)
+        {
+            SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+            TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid"), filter, null);
+            return ts.exists();
+        }
+        return false;
+    }
+
+    public void upsertWeightRecord(Map<String, Object> row) throws QueryUpdateServiceException, DuplicateKeyException, SQLException, BatchValidationException, InvalidKeyException
+    {
+        BatchValidationException errors = new BatchValidationException();
+        Date date = ConvertHelper.convert(row.get("date"), Date.class);
+        String taskId = ConvertHelper.convert(row.get("taskid"), String.class);
+
+        TableInfo ti = getTableInfo("study", "weight");
+
+        // If there is already a weight record for this task, update that record
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), row.get("Id"));
+        filter.addCondition(FieldKey.fromString("taskid"), taskId);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
+        boolean updateRecord = ts.exists();
+
+        Map<String, Object> saveRow = new CaseInsensitiveHashMap<>();
+        saveRow.put("Id", row.get("Id"));
+        saveRow.put("date", date);
+        saveRow.put("taskid", taskId);
+        saveRow.put("qcstate", row.get("qcstate"));
+        if (updateRecord)
+        {
+            saveRow.put("objectid", ts.getMap().get("objectid"));
+        }
+        else
+        {
+            saveRow.put("objectid", new GUID().toString());
+        }
+
+        Double weight = null;
+        if (row.get("weight") != null)
+        {
+            weight = ConvertHelper.convert(row.get("weight"), Double.class);
+        }
+        saveRow.put("weight", weight);
+
+        List<Map<String, Object>> rows = new ArrayList<>();
+        rows.add(saveRow);
+
+        if (updateRecord)
+        {
+            ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+        }
+        else
+        {
+            ti.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+        }
+
+        if (errors.hasErrors())
+            throw errors;
+    }
+
+    public void sendDeathNotification(final String animalId) throws Exception
+    {
+        //check whether Death Notification is enabled
+        if (!NotificationService.get().isActive(new NIRCDeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
+        {
+            _log.info("Death notification service is not enabled, will not send death notification.");
+            return;
+        }
+
+        JobRunner.getDefault().execute(TimeUnit.MINUTES.toMillis(1), () -> {
+            final Container container = _container;
+            final User user = _user;
+            String subject = "Death Notification: " + animalId;
+
+            // get recipients
+            Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new NIRCDeathNotification(), container);
+            if (recipients.size() == 0)
+            {
+                _log.warn("No recipients set, skipping death notification");
+                return;
+            }
+
+            //get death info
+            TableInfo deaths = getTableInfo("study", "deaths");
+            TableSelector deathsTs = new TableSelector(deaths, PageFlowUtil.set("Id", "date", "taskid"), new SimpleFilter(FieldKey.fromString("Id"), animalId), null);
+            final Mutable<Date> deathDate = new MutableObject<>();
+            final Mutable<String> taskId = new MutableObject<>();
+            deathsTs.forEach(rs -> {
+                if (rs.getString("date") != null)
+                {
+                    Date date = ConvertHelper.convert(rs.getString("date"), Date.class);
+                    deathDate.setValue(date);
+                    taskId.setValue(rs.getString("taskid"));
+                }
+            });
+
+            //construct html for email notification
+            final StringBuilder html = new StringBuilder();
+            if (deathDate.getValue() == null)
+            {
+                _log.error("NIRC death notification job found no death date for animal " + animalId + " in container " + _container.getPath());
+                html.append("Death date not found. Please contact system administrator.").append("<br>");
+                return;
+            }
+            html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been marked as dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br><br>");
+
+            //append animal details
+            appendAnimalDetails(html, animalId, container);
+
+            //append link to Necropsy form
+            String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" +
+                    container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskId.getValue();
+            html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
+
+            html.append("Click here to record Necropsy</a><br>");
+
+            // send Death Notification
+            _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
+            TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
+        });
+    }
+
+    private void appendAnimalDetails(StringBuilder html, String id, final Container container)
+    {
+        String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + container.getPath() + "/participantView.view?participantId=" + id;
+        html.append("Project: ").append(PageFlowUtil.filter(getProject(id))).append("<br>");
+        html.append("Protocol: ").append(PageFlowUtil.filter(getProtocol(id))).append("<br><br>");
+        html.append("<a href='").append(url).append("'>");
+        html.append("Click here to view this animal's clinical details</a><br>");
+    }
+
+    private String getProject(String id)
+    {
+        TableInfo ti = getTableInfo("study", "assignment");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("project"), filter, null);
+        final Mutable<String> project = new MutableObject<>();
+        ts.forEach(rs -> {
+            project.setValue(rs.getString("project"));
+        });
+        return project.getValue();
+    }
+
+    private String getProtocol(String id)
+    {
+        TableInfo ti = getTableInfo("study", "protocolAssignment");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
+
+        Set<FieldKey> keys = new HashSet<>();
+        keys.add(FieldKey.fromString("protocol/title"));
+        keys.add(FieldKey.fromString("protocol/InvestigatorId/LastName"));
+        final Map<FieldKey, ColumnInfo> cols = QueryService.get().getColumns(ti, keys);
+        TableSelector ts = new TableSelector(ti, cols.values(), filter, null);
+
+        final Mutable<String> protocol = new MutableObject<>();
+
+        ts.forEach(object -> {
+            Results rs = new ResultsImpl(object, cols);
+            String title = rs.getString(FieldKey.fromString("protocol/title"));
+            String inves = rs.getString(FieldKey.fromString("protocol/InvestigatorId/LastName"));
+            if (title == null)
+            {
+                protocol.setValue("None");
+            }
+            else
+            {
+                protocol.setValue(title + (inves == null ? "" : " - " + inves));
+            }
+        });
+        return protocol.getValue();
     }
 
     public String createAssignmentRecord(String dataset, String id, Map<String, Object> row) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException

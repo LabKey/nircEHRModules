@@ -6,6 +6,7 @@
                     <column columnName="date">
                         <columnTitle>Exam Date</columnTitle>
                     </column>
+                    <column columnName="weight"/>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                     </column>

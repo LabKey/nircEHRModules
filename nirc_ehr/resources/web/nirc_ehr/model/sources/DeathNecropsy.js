@@ -28,6 +28,9 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 hidden: false,
                 defaultValue: LABKEY.Security.currentUser.displayName
             },
+            necropsyWeight: {
+                label: 'Weight (kg)'
+            },
             date: {
                 label: 'Exam Date',
                 editorConfig: {
@@ -87,28 +90,6 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
             },
             category: {
                 hidden: true
-            },
-        },
-        'study.weight': {
-            weight: {
-                allowBlank: true,
-                editorConfig: {
-                    allowNegative: false,
-                    decimalPrecision: 3
-                }
-            },
-            date: {
-                hidden: true,
-                getInitialValue: function(v, rec){
-                    const necropsyStore = rec.storeCollection.getClientStoreByName('necropsy');
-                    if (necropsyStore?.data?.items.length > 0) {
-                        return necropsyStore.data.items[0].data.date;
-                    }
-                }
-            },
-            performedby: {
-                xtype: 'combo',
-                defaultValue: LABKEY.Security.currentUser.displayName
             },
         },
         'study.grossPathology': {
