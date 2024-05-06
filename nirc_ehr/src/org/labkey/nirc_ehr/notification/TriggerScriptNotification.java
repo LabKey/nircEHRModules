@@ -9,8 +9,8 @@ import org.labkey.api.security.User;
 import org.labkey.api.security.UserPrincipal;
 import org.labkey.api.util.MailHelper;
 
-import javax.mail.Address;
-import javax.mail.Message;
+import jakarta.mail.Address;
+import jakarta.mail.Message;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
