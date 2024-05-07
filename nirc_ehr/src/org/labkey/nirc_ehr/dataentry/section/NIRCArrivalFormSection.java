@@ -12,7 +12,7 @@ public class NIRCArrivalFormSection extends BaseFormSection
 {
     public NIRCArrivalFormSection()
     {
-        super("study", "arrival", "Arrivals", "ehr-gridpanel", true, true);
+        super("study", "arrival", "Arrivals", "ehr-gridpanel", true, true, true);
     }
 
     @Override
