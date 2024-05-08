@@ -55,6 +55,7 @@ import org.labkey.nirc_ehr.dataentry.form.NIRCWeightFormType;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
+import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
@@ -119,10 +120,11 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         ehrService.addModulePreferringTaskFormEditUI(this);
 
-        EHRService.get().registerDemographicsProvider(new ActiveFlagsDemographicsProvider(this));
-        EHRService.get().registerDemographicsProvider(new ParentsDemographicsProvider(this));
-        EHRService.get().registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));
-        EHRService.get().registerDemographicsProvider(new HousingDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ActiveFlagsDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ParentsDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ProtocolAssignmentDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new HousingDemographicsProvider(this));
 
         EHRService.get().registerHistoryDataSource(new ArrivalDataSource(this));
         EHRService.get().registerHistoryDataSource(new BiopsyDataSource(this));

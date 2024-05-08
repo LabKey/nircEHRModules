@@ -32,8 +32,13 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
                     },{
                         xtype: 'displayfield',
                         hidden: this.redacted,
-                        name: 'assignments',
-                        fieldLabel: 'Assignments'
+                        name: 'protocolAssignment',
+                        fieldLabel: 'Protocol'
+                    },{
+                        xtype: 'displayfield',
+                        hidden: this.redacted,
+                        name: 'projectAssignment',
+                        fieldLabel: 'Project'
                     },{
                         xtype: 'displayfield',
                         fieldLabel: 'Source',
@@ -133,6 +138,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         }
 
         toSet['location'] = location || 'No active housing';
+        this.appendProtocolAssignment(toSet, row);
     },
 
     appendFlags: function(toSet, results){
@@ -171,7 +177,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
     },
 
     appendAssignments: function(toSet, results){
-        toSet['assignments'] = null;
+        toSet['projectAssignment'] = null;
 
         if (this.redacted) {
             return;
@@ -180,19 +186,33 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         var values = [];
         if (results){
             Ext4.each(results, function(row){
-                let val = '';
-                if (row['protocolTitle'])
-                    val += row['protocolTitle'];
-                val += ' - ' + (row['investigatorLastName'] || row['investigatorId'] || row['investigatorName']);
-                values.push(LABKEY.Utils.encodeHtml(val));
                 if (row['project']) {
-                    values.push("Project - " + LABKEY.Utils.encodeHtml(row['project']));
+                    values.push(LABKEY.Utils.encodeHtml(row['project']));
                 }
-
             }, this);
         }
 
-        toSet['assignments'] = values.length ? values.join('<br>') : 'None';
+        toSet['projectAssignment'] = values.length ? values.join('<br>') : 'None';
     },
 
+    appendProtocolAssignment: function(toSet, results){
+        let paRecords = results.getData()['protocolAssignments'];
+        let values = [];
+
+        let val;
+        if (Ext4.isArray(paRecords) && paRecords.length > 0) {
+            Ext4.each(paRecords, function(record) {
+                val = record['protocol/displayName'];
+                if (record['protocol/InvestigatorId/lastName']) {
+                    val += " - " + LABKEY.Utils.encodeHtml(record['protocol/InvestigatorId/lastName']);
+                }
+                if (record['protocol/InvestigatorId/firstName']) {
+                    val += ", " + LABKEY.Utils.encodeHtml(record['protocol/InvestigatorId/firstName']);
+                }
+                values.push(LABKEY.Utils.encodeHtml(val));
+            });
+        }
+
+        toSet['protocolAssignment'] = values.length > 0 ? values.join('<br/>') : 'None';
+    },
 });
