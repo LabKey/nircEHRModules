@@ -44,15 +44,19 @@ public class ActiveAssignmentsDemographicsProvider extends AbstractListDemograph
     }
 
     @Override
-    protected SimpleFilter getFilter(Collection<String> ids)
+    public SimpleFilter getFilter(Collection<String> ids)
     {
-        return super.getFilter(ids);
+        SimpleFilter filter = super.getFilter(ids);
+        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
+
+        return filter;
     }
 
     @Override
     public boolean requiresRecalc(String schema, String query)
     {
-        return ("study".equalsIgnoreCase(schema) && "assignment".equalsIgnoreCase(query));
+        return ("study".equalsIgnoreCase(schema) && "assignment".equalsIgnoreCase(query)) ||
+                ("ehr".equalsIgnoreCase(schema) && "project".equalsIgnoreCase(query));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.labkey.nirc_ehr.demographics;
 
+import org.labkey.api.data.CompareType;
+import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.ehr.demographics.AbstractListDemographicsProvider;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.FieldKey;
@@ -37,8 +39,18 @@ public class ProtocolAssignmentDemographicsProvider extends AbstractListDemograp
     }
 
     @Override
+    public SimpleFilter getFilter(Collection<String> ids)
+    {
+        SimpleFilter filter = super.getFilter(ids);
+        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
+
+        return filter;
+    }
+
+    @Override
     public boolean requiresRecalc(String schema, String query)
     {
-        return ("study".equalsIgnoreCase(schema) && "protocolAssignment".equalsIgnoreCase(query));
+        return ("study".equalsIgnoreCase(schema) && "protocolAssignment".equalsIgnoreCase(query)) ||
+                ("ehr".equalsIgnoreCase(schema) && "protocol".equalsIgnoreCase(query));
     }
 }
