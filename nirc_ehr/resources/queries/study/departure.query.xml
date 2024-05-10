@@ -13,7 +13,7 @@
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>source</fkTable>
-                            <fkColumnName>code</fkColumnName>
+                            <fkColumnName>meaning</fkColumnName>
                         </fk>
                     </column>
                 </columns>

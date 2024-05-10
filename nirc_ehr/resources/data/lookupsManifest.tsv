@@ -34,6 +34,7 @@ questionnaire
 regulatory_stress_levels
 req_order_state
 req_order_type
+source
 vendor_approval_code
 vendor_production_location
 weight_ranges
