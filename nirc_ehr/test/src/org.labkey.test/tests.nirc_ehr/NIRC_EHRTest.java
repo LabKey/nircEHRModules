@@ -17,10 +17,12 @@
 package org.labkey.test.tests.nirc_ehr;
 
 import org.jetbrains.annotations.Nullable;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.api.reader.Readers;
+import org.labkey.remoteapi.CommandException;
 import org.labkey.remoteapi.query.InsertRowsCommand;
 import org.labkey.remoteapi.security.CreateUserResponse;
 import org.labkey.test.Locator;
@@ -28,19 +30,28 @@ import org.labkey.test.ModulePropertyValue;
 import org.labkey.test.TestFileUtils;
 import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
+import org.labkey.test.components.CustomizeView;
+import org.labkey.test.components.ext4.Window;
 import org.labkey.test.components.ui.grids.QueryGrid;
 import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
 import org.labkey.test.pages.ehr.NotificationAdminPage;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
+import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
+import org.labkey.test.util.ext4cmp.Ext4GridRef;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -180,6 +191,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         addNIRCEhrLinks();
         addExtensibleCols();
         enableSiteNotification();
+        populateEHRLookups();
     }
 
     private void enableSiteNotification()
@@ -200,6 +212,25 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         NotificationAdminPage notificationAdminPage = EHRAdminPage.clickNotificationService(this);
         notificationAdminPage.setNotificationUserAndReplyEmail(DATA_ADMIN_USER);
         notificationAdminPage.enableRequestAdminAlerts(notification);
+    }
+
+    private void populateEHRLookups() throws IOException, CommandException
+    {
+        goToEHRFolder();
+        log("Inserting values in rooms");
+        InsertRowsCommand roomCmd = new InsertRowsCommand("ehr_lookups", "rooms");
+        roomCmd.addRow(Map.of("room", "R1"));
+        roomCmd.addRow(Map.of("room", "R2"));
+        roomCmd.addRow(Map.of("room", "R3"));
+        roomCmd.execute(getApiHelper().getConnection(), getContainerPath());
+
+        log("Inserting values in cage");
+        InsertRowsCommand cageCmd = new InsertRowsCommand("ehr_lookups", "cage");
+        cageCmd.addRow(Map.of("location", "L1", "cage", "C1", "room", "R1"));
+        cageCmd.addRow(Map.of("location", "L2", "cage", "C2", "room", "R1"));
+        cageCmd.addRow(Map.of("location", "L3", "cage", "C3", "room", "R2"));
+        cageCmd.addRow(Map.of("location", "L4", "cage", "C4", "room", "R3"));
+        cageCmd.execute(getApiHelper().getConnection(), getContainerPath());
     }
 
     private void addExtensibleCols()
@@ -228,6 +259,96 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     protected String getAnimalHistoryPath()
     {
         return "/ehr/" + PROJECT_NAME + "/animalHistory.view?";
+    }
+
+    @Test
+    public void testArrivalForm()
+    {
+        String arrivedAnimal = "30905";
+        LocalDateTime now = LocalDateTime.now();
+
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Arrivals"));
+        lockForm();
+
+        Ext4GridRef arrivals = _helper.getExt4GridForFormSection("Arrivals");
+        _helper.addRecordToGrid(arrivals);
+        arrivals.setGridCellJS(1, "date", now.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
+        arrivals.setGridCell(1, "Id", arrivedAnimal);
+        arrivals.setGridCell(1, "cage", "C1");
+        arrivals.setGridCell(1, "project", "640991");
+        arrivals.setGridCell(1, "arrivalProtocol", "dummyprotocol");
+        arrivals.setGridCellJS(1, "Id/demographics/birth", now.minusDays(7).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
+        submitFinal();
+
+        goToSchemaBrowser();
+        DataRegionTable table = viewQueryData("study", "arrival");
+        table.setFilter("Id", "Equals", arrivedAnimal);
+        CustomizeView view = table.openCustomizeGrid();
+        view.addColumn("cage");
+        view.addColumn("project");
+        view.addColumn("arrivalProtocol");
+        view.applyCustomView();
+        Assert.assertEquals("Invalid Arrival record", arrivedAnimal, table.getRowDataAsText(0, "Id"));
+        Assert.assertEquals("Invalid Arrival record", "C1", table.getRowDataAsText(0, "cage"));
+        Assert.assertEquals("Invalid Arrival record", "640991", table.getRowDataAsText(0, "project"));
+        Assert.assertEquals("Invalid Arrival record", "dummyprotocol", table.getRowDataAsText(0, "arrivalProtocol"));
+
+        table = viewQueryData("study", "birth");
+        table.setFilter("Id", "Equals", arrivedAnimal);
+        Assert.assertEquals("Birth record not created for arrival", 1, table.getDataRowCount());
+
+        table = viewQueryData("study", "assignment");
+        table.setFilter("Id", "Equals", arrivedAnimal);
+        Assert.assertEquals("Project assignment record not created for arrival", 1, table.getDataRowCount());
+
+        table = viewQueryData("study", "protocolAssignment");
+        table.setFilter("Id", "Equals", arrivedAnimal);
+        Assert.assertEquals("Protocol Assignment record not created for arrival", 1, table.getDataRowCount());
+
+        table = viewQueryData("study", "housing");
+        table.setFilter("Id", "Equals", arrivedAnimal);
+        Assert.assertEquals("Housing record not created for arrival", 1, table.getDataRowCount());
+    }
+
+    @Test
+    public void testBirthForm()
+    {
+        String bornAnimal = "80801";
+        LocalDateTime now = LocalDateTime.now();
+
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Birth"));
+        lockForm();
+
+        Ext4GridRef births = _helper.getExt4GridForFormSection("Births");
+        _helper.addRecordToGrid(births);
+        births.setGridCellJS(1, "date", now.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
+        births.setGridCell(1, "Id", bornAnimal);
+        births.setGridCell(1, "cage", "C3");
+        births.setGridCell(1, "project", "795644");
+        births.setGridCell(1, "birthProtocol", "protocol101");
+        submitFinal();
+
+        goToSchemaBrowser();
+        DataRegionTable table = viewQueryData("study", "birth");
+        table.setFilter("Id", "Equals", bornAnimal);
+        Assert.assertEquals("Invalid Birth record", bornAnimal, table.getRowDataAsText(0, "Id"));
+        Assert.assertEquals("Invalid Birth record", "C3", table.getRowDataAsText(0, "cage"));
+        Assert.assertEquals("Invalid Birth record", "795644", table.getRowDataAsText(0, "project"));
+        Assert.assertEquals("Invalid Birth record", "protocol101", table.getRowDataAsText(0, "birthProtocol"));
+
+        table = viewQueryData("study", "assignment");
+        table.setFilter("Id", "Equals", bornAnimal);
+        Assert.assertEquals("Project assignment record not created for birth", 1, table.getDataRowCount());
+
+        table = viewQueryData("study", "protocolAssignment");
+        table.setFilter("Id", "Equals", bornAnimal);
+        Assert.assertEquals("Protocol Assignment record not created for birth", 1, table.getDataRowCount());
+
+        table = viewQueryData("study", "housing");
+        table.setFilter("Id", "Equals", bornAnimal);
+        Assert.assertEquals("Housing record not created for birth", 1, table.getDataRowCount());
     }
 
     @Override
@@ -354,6 +475,40 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 count++;
             }
             return count;
+        }
+    }
+
+    private void submitFinal()
+    {
+        Locator submitFinalBtn = Locator.linkWithText("Submit Final");
+        shortWait().until(ExpectedConditions.elementToBeClickable(submitFinalBtn));
+        Window<?> msgWindow;
+        try
+        {
+            submitFinalBtn.findElement(getDriver()).click();
+            msgWindow = new Window.WindowFinder(this.getDriver()).withTitleContaining("Finalize").waitFor();
+        }
+        catch (NoSuchElementException e)
+        {
+            //retry
+            sleep(500);
+            submitFinalBtn.findElement(getDriver()).click();
+            msgWindow = new Window.WindowFinder(this.getDriver()).withTitleContaining("Finalize").waitFor();
+        }
+        msgWindow.clickButton("Yes");
+    }
+
+    private void gotoEnterData()
+    {
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "enterData.view"));
+    }
+
+    private void lockForm()
+    {
+        if (Ext4Helper.Locators.ext4Button("Lock Entry").isDisplayed(getDriver()))
+        {
+            Ext4Helper.Locators.ext4Button("Lock Entry").findElement(getDriver()).click();
+            waitForElement(Ext4Helper.Locators.ext4Button("Unlock Entry"));
         }
     }
 }
