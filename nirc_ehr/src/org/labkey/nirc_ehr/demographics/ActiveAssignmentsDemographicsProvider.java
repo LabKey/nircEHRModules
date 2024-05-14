@@ -29,8 +29,7 @@ public class ActiveAssignmentsDemographicsProvider extends AbstractListDemograph
 {
     public ActiveAssignmentsDemographicsProvider(Module owner)
     {
-        super(owner, "study", "activeAssignments", "activeAssignments");
-        _supportsQCState = false; // handling qcstate filter in 'activeAssignments' query
+        super(owner, "study", "assignment", "activeAssignments");
     }
 
     @Override
@@ -39,26 +38,25 @@ public class ActiveAssignmentsDemographicsProvider extends AbstractListDemograph
         Set<FieldKey> keys = new HashSet<FieldKey>();
         keys.add(FieldKey.fromString("lsid"));
         keys.add(FieldKey.fromString("Id"));
-        keys.add(FieldKey.fromString("protocolTitle"));
-        keys.add(FieldKey.fromString("investigatorId"));
-        keys.add(FieldKey.fromString("investigatorName"));
-        keys.add(FieldKey.fromString("investigatorLastName"));
         keys.add(FieldKey.fromString("project"));
 
         return keys;
     }
 
     @Override
-    protected SimpleFilter getFilter(Collection<String> ids)
+    public SimpleFilter getFilter(Collection<String> ids)
     {
-        return super.getFilter(ids);
+        SimpleFilter filter = super.getFilter(ids);
+        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
+
+        return filter;
     }
 
     @Override
     public boolean requiresRecalc(String schema, String query)
     {
-        return ("study".equalsIgnoreCase(schema) && "protocolAssignment".equalsIgnoreCase(query)) ||
-               ("study".equalsIgnoreCase(schema) && "assignment".equalsIgnoreCase(query));
+        return ("study".equalsIgnoreCase(schema) && "assignment".equalsIgnoreCase(query)) ||
+                ("ehr".equalsIgnoreCase(schema) && "project".equalsIgnoreCase(query));
     }
 
     @Override

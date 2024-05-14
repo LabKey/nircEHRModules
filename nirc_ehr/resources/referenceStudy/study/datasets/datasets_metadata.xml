@@ -449,6 +449,10 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+                <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
+            </column>
             <column columnName="category">
                 <datatype>varchar</datatype>
             </column>
@@ -630,6 +634,9 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="necropsyWeight">
+                <datatype>double</datatype>
             </column>
             <column columnName="category">
                 <columnTitle>Category</columnTitle>

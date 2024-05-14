@@ -16,6 +16,7 @@
 
 package org.labkey.test.tests.nirc_ehr;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -30,6 +31,7 @@ import org.labkey.test.categories.EHR;
 import org.labkey.test.components.ui.grids.QueryGrid;
 import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
+import org.labkey.test.pages.ehr.NotificationAdminPage;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.LogMethod;
@@ -177,6 +179,27 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         createTestSubjects();
         addNIRCEhrLinks();
         addExtensibleCols();
+        enableSiteNotification();
+    }
+
+    private void enableSiteNotification()
+    {
+        log("Enabling the notification at the site level");
+        goToAdminConsole().clickNotificationServiceAdmin();
+        _ext4Helper.selectComboBoxItem("Status of Notification Service:","Enabled");
+        clickButton("Save",0);
+        _helper.clickExt4WindowBtn("Success","OK");
+    }
+
+    private void enableNotification(String notification)
+    {
+        goToEHRFolder();
+        _containerHelper.enableModule("Dumbster");
+        log("Setup the notification service for this container");
+        EHRAdminPage.beginAt(this,getContainerPath());
+        NotificationAdminPage notificationAdminPage = EHRAdminPage.clickNotificationService(this);
+        notificationAdminPage.setNotificationUserAndReplyEmail(DATA_ADMIN_USER);
+        notificationAdminPage.enableRequestAdminAlerts(notification);
     }
 
     private void addExtensibleCols()
@@ -212,6 +235,78 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     public void testQuickSearch()
     {
         //TODO: Implement this test once Quick Search is customized for NIRC
+    }
+
+    public void addDeathNecropsyUsersAndPermissions()
+    {
+        //create animal care basic submitter user (this user can 'Submit Death')
+        createUser("ac_bs@test.com", "EHR Basic Submitter", null);
+
+        //create a vet user with 'EHR Basic Submitter' role (this user can 'Submit for Review')
+        createUser("vet_bs@test.com", "EHR Basic Submitter", "EHR Veterinarian");
+
+        //create a vet user with 'EHR Full Submitter' role (this user can 'Submit Final')
+        createUser("vet_fs@test.com", "EHR Full Submitter", "EHR Veterinarian");
+    }
+
+    private void createUser(String userEmail, String groupName, @Nullable String permission)
+    {
+        _userHelper.createUser(userEmail, false);
+        goToEHRFolder();
+        if (permission != null)
+            _permissionsHelper.setUserPermissions(userEmail, permission);
+        _permissionsHelper.addUserToProjGroup(userEmail, getProjectName(), groupName);
+    }
+
+    @Test
+    public void testDeathNecropsyForm()
+    {
+//        enableNotification("status_org.labkey.nirc_ehr.notification.NIRCDeathNotification"); //TODO: fix
+        addDeathNecropsyUsersAndPermissions();
+
+        //Go to EHR page > Enter Data > Death/Necropsy
+
+        //impersonate as basic submitter user (ac_bs@test.com)
+
+        //verify that only 'Submit Death' button is visible, and 'Submit for Review' and 'Submit Final' buttons are not visible.
+
+        //Enter data in the Death section
+        //1. Try entering Id of an already dead animal, verify error message near the submit buttons and 'Submit Death' btn stays disabled
+        //2. Try entering Id of animal that's shipped, verify error message near the submit buttons and 'Submit Death' btn stays disabled
+
+        //3. Now enter alive animal (animal 44444 has all the correct data for this test)
+        //verify that 'Submit Death' button is enabled, and submit the form
+        //you should be redirected to the main Data Entry page
+
+        //go to Animal History > enter animal that's marked as dead > General > Demographics > verify that animal is displayed with Status 'Dead'
+
+        //stop impersonation
+
+        //wait for 1 minute (since the notification is set to run after one min after a Death record is submitted)
+
+        //impersonate as a vet user who is a "EHR Basic Submitter" (vet_bs@test.com)
+
+        //go to Dumbster module
+
+        //verify death notification email was sent
+        //click on the necropsy link from the "email" and verify that the necropsy form is displayed with Death data filled in
+
+        //verify that 'Submit for Review' button is visible
+
+        //Fill out necropsy, gross pathology, and tissue disposition sections
+        //submit for review, and assign to vet_fs@test.com
+        //verify data in study.necropsy, grossPathology, and tissueDisposition datasets
+
+        //stop impersonation
+        //impersonate as a vet user who is a "EHR Full Submitter" (vet_fs@test.com)
+        //Go to EHR page > Enter Data > My tasks
+        //Click on task Title -  this should take user to the Death/Necropsy data entry form
+        //'Submit Final' button should be visible
+        //click Submit Final
+
+        //verify data in study.weight is inserted for this dead animal (submit final sets the QC State to "Completed", aka makes data public to be then available to view from Demographics as Most Recent Weight)
+
+        //verify that animal's record is closed, meaning 'end date' is set in study.assignments, study.protocolAssignments, and study.housing as the date of death
     }
 
     @Override
