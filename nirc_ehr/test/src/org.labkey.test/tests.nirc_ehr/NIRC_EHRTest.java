@@ -269,6 +269,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Arrivals"));
+        sleep(3000);
         lockForm();
 
         Ext4GridRef arrivals = _helper.getExt4GridForFormSection("Arrivals");
