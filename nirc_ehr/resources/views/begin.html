@@ -26,15 +26,62 @@
                     })
                 })
             }
-            getCurrentUserGroups().then(({ groups }) => {
-                currentUserGroups = groups;
-                renderPage();
+
+            const hasMyTasks = () => {
+                return new Promise((resolve, reject) => {
+                    const success = data => {
+                        resolve(data.rows.length);
+                    }
+                    const failure = error => {
+                        reject(error);
+                    }
+
+                    LABKEY.Query.selectRows({
+                        schemaName: 'ehr',
+                        queryName: 'my_tasks',
+                        columns: 'taskid',
+                        filterArray: [
+                            LABKEY.Filter.create('taskid', null, LABKEY.Filter.Types.NOT_BLANK),
+                            LABKEY.Filter.create('qcstate/Label', 'Review Required', LABKEY.Filter.Types.EQUAL)
+                        ],
+                        success,
+                        failure
+                    });
+                })
+            }
+
+            hasMyTasks().then(result => {
+                this.myNumOfTasks = result;
+                getCurrentUserGroups().then(({ groups }) => {
+                    currentUserGroups = groups;
+                    renderPage();
+                }).catch(error => {
+                    console.log(error)
+                })
             }).catch(error => {
-                console.log(error)
-            })
+                console.log(error);
+            });
+
+            this.myTasksRenderer = (item) => {
+
+                return {
+                    layout: 'hbox',
+                    bodyStyle: 'background-color: transparent;',
+                    items: [{
+                        xtype: 'ldk-linkbutton',
+                        style: item.style ? item.style : LDK.panel.NavPanel.ITEM_STYLE_DEFAULT + ';margin-left: 2px;',
+                        text: item.name,
+                        href: item.url ? item.url : item.urlConfig ? LABKEY.ActionURL.buildURL(item.urlConfig.controller, item.urlConfig.action, null, item.urlConfig.params) : null,
+                        tooltip: item.tooltip,
+                        showBrackets: false
+                    }]
+                }
+            }
         });
         const renderPage = () => {
             let issueHTML = '';
+            console.log("this.hasMyTasks = "+ this.myNumOfTasks);
+
 
             if (ctx['EHRIssuesContainer']) {
                 issueHTML = '<div style="max-width:920px">Below are the sections of the Electronic Health Record.  If there are additional reports you would like, please submit a request <a href="' + LABKEY.ActionURL.buildURL('issues', 'list', ctx['EHRIssuesContainer']) + '" target="_blank">here</a>.<br><br></div>'
@@ -120,14 +167,15 @@
                     ]
                 }, {
                     header: 'Data Entry',
+                    renderer: this.myTasksRenderer,
                     itemDefaults: {
                         linkCls: 'none',
                         style: 'font-weight: bold;'
                     },
                     items: [
                         { name: 'Enter Data', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-enterData.view' },
+                        { name: 'My Review Tasks (' + this.myNumOfTasks + ')' , url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=ehr&query.queryName=my_tasks&query.viewName=Review Required', style: this.myNumOfTasks > 0 ? 'background-color: #FBEC5D; margin: 2px; padding: 2px;' : undefined}
                     ]
-
                 }
                 ]
             };
