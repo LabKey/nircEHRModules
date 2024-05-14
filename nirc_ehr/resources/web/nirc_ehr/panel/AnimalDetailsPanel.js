@@ -112,8 +112,11 @@ Ext4.define('NIRC_EHR.panel.AnimalDetailsPanel', {
                     fieldLabel: 'Source',
                     name: 'source'
                 },{
-                    fieldLabel: 'Assignments',
-                    name: 'assignments'
+                    name: 'protocolAssignment',
+                    fieldLabel: 'Protocol'
+                },{
+                    name: 'projectAssignment',
+                    fieldLabel: 'Project'
                 }]
             },{
                 xtype: 'container',
