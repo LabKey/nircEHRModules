@@ -33,6 +33,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         row.species = row['Id/demographics/species'] || null;
         row.birth = row['Id/demographics/birth'] || null;
         row.gender = row['Id/demographics/gender'] || null;
+        row.geographic_origin = row['Id/demographics/geographic_origin'] || null;
 
         if (row.QCStateLabel) {
             row.qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
@@ -108,6 +109,12 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             if (row.species && row.species !== data.species )
             {
                 obj.species = row.species;
+                hasUpdates = true;
+            }
+
+            if (row.geographic_origin && row.geographic_origin !== data.geographic_origin )
+            {
+                obj.geographic_origin = row.geographic_origin;
                 hasUpdates = true;
             }
 

@@ -1,112 +1,108 @@
 code	meaning
 1	Adv Bioscience Labs
-2	Baylor Research Inst
-3	CDC
-4	Chiron Corp
-5	Covance Research Prod
-6	Ctr Captive Chimp Care
-7	Duke Univ Medical Ctr
-8	Emory University YPRC
-9	John Hopkins University
-10	Mannheimer Foundation
-11	Merck & Co (Rahway)
-12	Merck Research Labs WP
-13	New England NPRC
-14	NIAID (Bioqual)
-15	NIAID NIH Animal Ctr
-16	NINDS NIH Animal Ctr
-17	Oregon NPRC
-18	Primedica Labs
-19	Sierra Biomedical
-20	Stanford Univ School Med
-21	Tulane NPC (Covington)
-22	Tulane Univ Medical Ctr
-23	Univ Alabama Birmingham
-24	Univ Tex MD Anderson CC
-25	WRAIR
-26	Wyeth-Ayerst Rsrch (PR)
-27	LSU Health Science BR
-28	LSU Health Science Shv
-29	LSU Health Science NO
-30	Yale Univ Sch Medicine
-31	SW Found Biomed Rsrch
-32	NIH Animal Center
-33	Siconbrec Inc
-34	NYU School of Medicine
-35	Yerkes Regional PRC
-36	Chimp Haven
-37	Three Springs Scientific
-38	NIH
-39	Lovelace Biomedical
-40	Univ of Washington NPRC
-41	Charles River Laboratory
-42	Barton West End Farm
-43	Johns Hopkins University
-44	Buckshire Corporation
-45	Mass. General Hospital
-46	Harvard Medical School
-47	Boehringer Ingelheim
-48	USAMRIID
-49	Save the Chimps
-50	Novartis Vaccines Srl
-51	Battelle Memorial Inst
-52	Univ of Pittsburgh
-53	Univ of Kansas Med Ctr
-54	Virginia Commonwealth U
-55	Primate Products
-56	LRRI
-57	SNBL-SRC
-58	Rocky Mountain Lab
-59	RainForest Adventures
-60	St. Jude Childrens Rsrch
-61	Stony Brook University
-62	Univ of Maryland
-63	Primgen CSP
-64	CiToxLab North America
-65	Nationwide Children's
-66	Novartis Pharm. Corp.
-67	DHMRI
-68	Worldwide Primates, Inc
-69	SUNY Downstate Medical
-70	CBNC
-71	Univ of Texas at Austin
-72	Charles River/Reno
-73	Pfizer-Pearl River
-74	New York University
-75	Bioculture US LLC
-76	Durham Research Center
-77	WakeForest School of Med
-78	Boston University
-79	Univ of Nebraska Med Ctr
-80	Texas Biomed
-81	USAMRICD
-82	Univ of Illinois
-83	Univ of Wisconsin
-84	WaNPRC
-85	LC Preclinical Research
-86	Batatelle Memorial Inst
-87	Univ Alabama Brimingham
-88	NICHD/NIH
-89	 Alpha Genesis, Inc.
-90	China/Guangxi GF Sci Pri
-91	Alamogordo PrimateFaclty
-92	Indonesia (Pt. W. Sat)
-93	NIAID Morgan Island
-94	MD Anderson Cancer Ctr.
-95	Hainan, China
-96	Cynologics Ltd
-97	Guangdong Landau Biotech
-98	St. Kitts
-99	Republic of Mauritius
-100	Caribbean Primate Rsrch
-101	Worldwide Primates, Inc.
-102	Pfizer-Andover
-103	BIOCULTURE (MTIUS) LTD
-104	SRI International
-105	Envigo Global Services
-106	Pfizer
-107	CR Rsrch Models Houston
-108	BIOQUAL, Inc.
-109	Merck & Co (WP)
-110	PrimGen
-111	PreLabs
+2	Alamogordo PrimateFaclty
+3	Alpha Genesis, Inc.
+4	Barton West End Farm
+5	Battelle Memorial Inst
+6	Baylor Research Inst
+7	BIOCULTURE (MTIUS) LTD
+8	Bioculture US LLC
+9	BIOQUAL, Inc.
+10	Boehringer Ingelheim
+11	Boston University
+12	Buckshire Corporation
+13	Caribbean Primate Rsrch
+14	CBNC
+15	CDC
+16	Charles River Laboratory
+17	Charles River/Reno
+18	Chimp Haven
+19	China/Guangxi GF Sci Pri
+20	Chiron Corp
+21	CiToxLab North America
+22	Covance Research Prod
+23	CR Rsrch Models Houston
+24	Ctr Captive Chimp Care
+25	Cynologics Ltd
+26	DHMRI
+27	Duke Univ Medical Ctr
+28	Durham Research Center
+29	Emory University YPRC
+30	Envigo Global Services
+31	Guangdong Landau Biotech
+32	Hainan, China
+33	Harvard Medical School
+34	Indonesia (Pt. W. Sat)
+35	Johns Hopkins University
+36	LC Preclinical Research
+37	Lovelace Biomedical
+38	LRRI
+39	LSU Health Science BR
+40	LSU Health Science NO
+41	LSU Health Science Shv
+42	Mannheimer Foundation
+43	Mass. General Hospital
+44	MD Anderson Cancer Ctr.
+45	Merck & Co (Rahway)
+46	Merck & Co (WP)
+47	Merck Research Labs WP
+48	Nationwide Children's
+49	New England NPRC
+50	New York University
+51	NIAID (Bioqual)
+52	NIAID Morgan Island
+53	NIAID NIH Animal Ctr
+54	NICHD/NIH
+55	NIH
+56	NIH Animal Center
+57	NINDS NIH Animal Ctr
+58	Novartis Pharm. Corp.
+59	Novartis Vaccines Srl
+60	NYU School of Medicine
+61	Oregon NPRC
+62	Pfizer
+63	Pfizer-Andover
+64	Pfizer-Pearl River
+65	PreLabs
+66	Primate Products
+67	Primedica Labs
+68	PrimGen
+69	Primgen CSP
+70	RainForest Adventures
+71	Republic of Mauritius
+72	Rocky Mountain Lab
+73	Save the Chimps
+74	Siconbrec Inc
+75	Sierra Biomedical
+76	SNBL-SRC
+77	SRI International
+78	St. Jude Childrens Rsrch
+79	St. Kitts
+80	Stanford Univ School Med
+81	Stony Brook University
+82	SUNY Downstate Medical
+83	SW Found Biomed Rsrch
+84	Texas Biomed
+85	Three Springs Scientific
+86	Tulane NPC (Covington)
+87	Tulane Univ Medical Ctr
+88	Univ Alabama Birmingham
+89	Univ of Illinois
+90	Univ of Kansas Med Ctr
+91	Univ of Maryland
+92	Univ of Nebraska Med Ctr
+93	Univ of Pittsburgh
+94	Univ of Texas at Austin
+95	Univ of Washington NPRC
+96	Univ of Wisconsin
+97	Univ Tex MD Anderson CC
+98	USAMRICD
+99	USAMRIID
+100	Virginia Commonwealth U
+101	WakeForest School of Med
+102	WaNPRC
+103	Worldwide Primates, Inc.
+104	WRAIR
+105	Wyeth-Ayerst Rsrch (PR)
+106	Yale Univ Sch Medicine
+107	Yerkes Regional PRC

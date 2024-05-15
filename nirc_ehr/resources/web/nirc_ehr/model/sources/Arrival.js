@@ -28,7 +28,13 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
             'Id/demographics/species': {
                 columnConfig: {
                     fixed: true,
-                    width: 250
+                    width: 200
+                }
+            },
+            'Id/demographics/geographic_origin': {
+                columnConfig: {
+                    fixed: true,
+                    width: 200
                 }
             },
             project: {
