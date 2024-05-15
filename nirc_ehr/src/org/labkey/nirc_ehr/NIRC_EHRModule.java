@@ -29,6 +29,7 @@ import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ehr.history.DefaultNotesDataSource;
 import org.labkey.api.ehr.history.DefaultVitalsDataSource;
 import org.labkey.api.ldk.ExtendedSimpleModule;
+import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.DefaultSchema;
@@ -43,15 +44,18 @@ import org.labkey.nirc_ehr.dataentry.form.NIRCAssignmentFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCBirthFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDeathNecropsyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCExemptionsFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCFlagsFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCHousingFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCNotesFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCPregnancyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCProjectFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCProtocolFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCDeathNecropsyFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCPregnancyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCWeightFormType;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
+import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
@@ -74,7 +78,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.003;
+        return 24.004;
     }
 
     @Override
@@ -116,10 +120,11 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         ehrService.addModulePreferringTaskFormEditUI(this);
 
-        EHRService.get().registerDemographicsProvider(new ActiveFlagsDemographicsProvider(this));
-        EHRService.get().registerDemographicsProvider(new ParentsDemographicsProvider(this));
-        EHRService.get().registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));
-        EHRService.get().registerDemographicsProvider(new HousingDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ActiveFlagsDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ParentsDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ProtocolAssignmentDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new HousingDemographicsProvider(this));
 
         EHRService.get().registerHistoryDataSource(new ArrivalDataSource(this));
         EHRService.get().registerHistoryDataSource(new BiopsyDataSource(this));
@@ -157,6 +162,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment", "protocolAssignment"));
 
         registerDataEntry();
+        NotificationService.get().registerNotification(new NIRCDeathNotification());
 
         // Ensure N: is mounted if it's configured, as it's being mapped in via a symlink/shortcut, so we can't
         // recognize paths using it based solely on their drive letter and mount just-in-time
@@ -179,6 +185,9 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCProtocolFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCPregnancyFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCWeightFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCFlagsFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCExemptionsFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCNotesFormType.class, this));
     }
 
     @Override

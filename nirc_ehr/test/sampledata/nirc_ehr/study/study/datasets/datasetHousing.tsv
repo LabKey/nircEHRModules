@@ -1,74 +1,9 @@
-objectid	Id	date	enddate	cage	reason	remark	Description	QCStateLabel
-1	TEST3804589	-5762d	-5762d	2				Completed
-2	TEST3804589	-5761d	-5761d	3				Completed
-3	TEST3804589	-5760d	-5282d	4				Completed
-4	TEST3804589	-5282d	-5182d	5				Completed
-5	TEST3804589	-5182d	-5182d	6				Completed
-6	TEST3804589	-5181d	-5173d	7				Completed
-7	TEST3804589	-5173d	-4895d	8				Completed
-8	TEST3804589	-4895d	-4893d	9				Completed
-9	TEST3804589	-4893d	-4869d	10				Completed
-10	TEST4564246	-4566d		11				Completed
-11	TEST3804589	-4892d		2				Completed
-12	TEST4551032	-4893d		3				Completed
-13	TEST5904521	-4893d		4				Completed
-14	TEST1112911	-4527d		5				Completed
-15	TEST1684145	-4893d		6				Completed
-16	TESTAB500114	-4893d		7				Completed
-17	TESTAB50014	-4893d		8				Completed
-18	TEST9118022	-4893d		9				Completed
-19	44444	-1240d		10				Completed
-20	TSTCP	-1605d		11				Completed
-21	TEST8976544	-45d	-30d	12				Completed
-22	TEST8976544	-35d1m	-10d	13				Completed
-23	TEST8976544	-35d	-30d	14				Completed
-24	TEST9195996	-45d	-15d	15				Completed
-25	TEST9195996	-30d	-30d	16				Completed
-26	TEST9195996	-14d	-10d	17				Completed
-27	TESTMICE101	-45d	-30d	18				Completed
-28	TESTMICE101	-35d1m	-15d	19				Completed
-29	TESTMICE101	-35d	-30d	20				Completed
-30	TESTMICE102	-45d	-15d	21				Completed
-31	TESTMICE102	-30d	-30d	22				Completed
-32	TESTMICE102	-14d	-10d	23				Completed
-33	TESTRAT101	-45d	-30d	24				Completed
-34	TESTRAT101	-35d1m	-15d	25				Completed
-35	TESTRAT101	-35d	-30d	26				Completed
-36	TESTRAT102	-45d	-15d	27				Completed
-37	TESTRAT102	-30d	-30d	28				Completed
-38	TESTRAT102	-14d	-10d	29				Completed
-39	TESTGPIG101	-45d	-30d	30				Completed
-40	TESTGPIG101	-35d1m	-15d	31				Completed
-41	TESTGPIG101	-35d	-30d	2				Completed
-42	TESTGPIG102	-45d		3				Completed
-43	TESTGPIG102	-30d		4				Completed
-44	TESTGPIG102	-14d	-10d	5				Completed
-45	TESTGRBL101	-45d		6				Completed
-46	TESTGRBL101	-35d1m		7				Completed
-47	TESTGRBL101	-35d		8				Completed
-48	TESTGRBL102	-45d	-30d	9				Completed
-49	TESTGRBL102	-30d	-15d	10				Completed
-50	TESTGRBL102	-14d	-10d	11				Completed
-51	TESTRBT101	-45d	-15d	2				Completed
-52	TESTRBT101	-35d1m	-30d	3				Completed
-53	TESTRBT101	-35d	-15d	4				Completed
-54	TESTRBT102	-45d	-30d	5				Completed
-55	TESTRBT102	-30d	-15d	6				Completed
-56	TESTRBT102	-14d	-10d	7				Completed
-57	TESTHMSTR101	-45d	-15d	8				Completed
-58	TESTHMSTR101	-35d	-30d	9				Completed
-59	TESTHMSTR101	-35d	-15d	10				Completed
-60	TESTHMSTR102	-45d	-30d	11				Completed
-61	TESTHMSTR102	-30d	-15d	12				Completed
-62	TESTHMSTR102	-14d	-10d	13				Completed
-63	TESTCAT101	-45d	-10d	14				Completed
-64	TESTCAT101	-35d1m	-30d	15				Completed
-65	TESTCAT101	-35d	-15d	16				Completed
-66	TESTCAT102	-45d	-30d	17				Completed
-67	TESTCAT102	-30d	-15d	18				Completed
-68	TESTCAT102	-14d		19				Completed
-69	AnimalTx01	-14d		20				Completed
-70	AnimalTx02	-14d		21				Completed
-71	TEST4037096	-35d		22				Completed
-72	TESTCAT101	-54d	-53d	23				Completed
-73	TEST4037096	-54d	-53d	24				Completed
+objectid	Id	QCStateLabel	date	enddate	cage
+1	44444	Completed	-1381d	-1321d		11 - Rm 202B - ZZA
+2	44444	Completed	-1321d			11 - Rm 202B - ZZB
+3	44446	Completed	-1406d	-1316d		11 - Rm 202B - ZZA
+4	44446	Completed	-1316d			11 - Rm 202B - ZZC
+5	TEST4551032	Completed	-6362d			11 - Rm 202B - ZZD
+6	44442	Completed	-6100d	-5920d		11 - Rm 202B - ZZA
+7	44442	Completed	-5920d			11 - Rm 202B - ZZC
+8	44443	Completed	-6100d		11 - Rm 202B - ZZF

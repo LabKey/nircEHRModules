@@ -115,9 +115,19 @@ function onComplete(event, helper){
 
 function getProtocolIdByName(protocolName) {
     var protocols = Object.keys(protocolData);
+
+    // Search protocols for exact case-insensitive match
     for (var i = 0; i< protocols.length; i++) {
         var pName = protocolData[protocols[i]] ;
-        if (pName && protocolName.trim().indexOf(pName.toString()) === 0) {
+        if (pName && protocolName.trim().toLowerCase() === pName.toString().toLowerCase()) {
+            return protocols[i];
+        }
+    }
+
+    // If exact match not found, search for partial match at beginning of protocol
+    for (i = 0; i< protocols.length; i++) {
+        pName = protocolData[protocols[i]] ;
+        if (pName && protocolName.trim().toLowerCase().indexOf(pName.toString().toLowerCase()) === 0) {
             return protocols[i];
         }
     }
