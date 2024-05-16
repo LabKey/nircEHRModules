@@ -91,7 +91,13 @@
                         </fk>
                     </column>
                     <column columnName="geographic_origin">
-                        <columnTitle>Geographic Origin</columnTitle>
+                        <columnTitle>Origin</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>geographic_origins</fkTable>
+                            <fkColumnName>meaning</fkColumnName>
+                            <fkDisplayColumnName>meaning</fkDisplayColumnName>
+                        </fk>
                     </column>
                     <column columnName="source">
                         <columnTitle>Source</columnTitle>

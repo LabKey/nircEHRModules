@@ -240,13 +240,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     public void addDeathNecropsyUsersAndPermissions()
     {
         //create animal care basic submitter user (this user can 'Submit Death')
-        createUser("ac_bs@test.com", "EHR Basic Submitter", null);
+        createUser("ac_bs@test.com", "EHR Basic Submitters", null);
 
         //create a vet user with 'EHR Basic Submitter' role (this user can 'Submit for Review')
-        createUser("vet_bs@test.com", "EHR Basic Submitter", "EHR Veterinarian");
+        createUser("vet_bs@test.com", "EHR Basic Submitters", "EHR Veterinarian");
 
         //create a vet user with 'EHR Full Submitter' role (this user can 'Submit Final')
-        createUser("vet_fs@test.com", "EHR Full Submitter", "EHR Veterinarian");
+        createUser("vet_fs@test.com", "EHR Full Submitters", "EHR Veterinarian");
     }
 
     private void createUser(String userEmail, String groupName, @Nullable String permission)
