@@ -1,40 +1,40 @@
 setname	label	keyfield	titleColumn
-editable_lookups	List of UI editable lookup values	value
 alias_category	Alias Category	value	title
-country	Country	value	title
-country_category	Country Category	value	title
-delivery_state	Delivery State	value	title
-esig_events	ESig Events	value	title
-req_order_state	Req Order State	value	title
-req_order_type	Req Order Type	value	title
-vendor_approval_code	Vendor Approval Code	value	title
-protocol_category	Protocol Category	value	title
-protocol_state	Protocol State	value	title
-protocol_type	Protocol Type	value	title
-questionnaire	Questionnaire	value	title
-cost_type	Cost Type	value	title
-expense_class	Expense Class	value	description
-cost_center	Cost Center	value	title
-necropsy_disposition_codes	Tissue Disposition Codes	value	title
-termination_reason_codes	Termination Reason Codes Codes	value	title
-keyword	Keyword	value	title
-clinremarks_category	Clinremarks Category	value	title
-id_history_type	Id History Type	value	title
-qualifier	Qualifier	value	title
-vendor_production_location	Vendor Production Location	value	title
-numeric_unit	Numeric Units	value	title
-regulatory_stress_levels	Regulatory Stress Levels	value	title
-euthanasia_type	Euthanasia Type	value	title
 card_format	Card Format	value	title
 census_activity_status	Census Activity Status	value	title
-necropsy_tissue	Tissues	value	title
+clinremarks_category	Clinremarks Category	value	title
+cost_center	Cost Center	value	title
+cost_type	Cost Type	value	title
+country	Country	value	title
+country_category	Country Category	value	title
+death_reason	Death Reason	value
+delivery_state	Delivery State	value	title
+editable_lookups	List of UI editable lookup values	value
+esig_events	ESig Events	value	title
+euthanasia_type	Euthanasia Type	value	title
+exemption_category	Exemption Category	value	title
+expense_class	Expense Class	value	description
+housing_reason	Housing Reason	value
+id_history_type	Id History Type	value	title
+keyword	Keyword	value	title
+necropsy_disposition_codes	Tissue Disposition Codes	value	title
+necropsy_exam_reason	Necropsy Reason	value	title
 necropsy_organ_appearance	Appearance	value	title
 necropsy_organ_systems	Organ Systems	value	title
 necropsy_physical_condition	Physical Condition	value	title
-necropsy_exam_reason	Necropsy Reason	value	title
 necropsy_specimen_condition	Specimen Condition	value	title
-housing_reason	Housing Reason	value
-death_reason	Death Reason	value
-weight_ranges	Weight Ranges	value
+necropsy_tissue	Tissues	value	title
+numeric_unit	Numeric Units	value	title
 pregnancy_result	Pregnancy Results	value
-exemption_category	Exemption Category	value	title
+protocol_category	Protocol Category	value	title
+protocol_state	Protocol State	value	title
+protocol_type	Protocol Type	value	title
+qualifier	Qualifier	value	title
+questionnaire	Questionnaire	value	title
+regulatory_stress_levels	Regulatory Stress Levels	value	title
+req_order_state	Req Order State	value	title
+req_order_type	Req Order Type	value	title
+termination_reason_codes	Termination Reason Codes Codes	value	title
+vendor_approval_code	Vendor Approval Code	value	title
+vendor_production_location	Vendor Production Location	value	title
+weight_ranges	Weight Ranges	value

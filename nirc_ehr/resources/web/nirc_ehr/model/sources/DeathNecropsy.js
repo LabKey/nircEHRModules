@@ -23,6 +23,11 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
         }
     },
     byQuery: {
+        'study.deaths': {
+            qcstate: {
+                hidden: true
+            }
+        },
         'study.necropsy': {
             performedby: {
                 hidden: false,
@@ -91,6 +96,9 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
             category: {
                 hidden: true
             },
+            qcstate: {
+                hidden: true
+            }
         },
         'study.grossPathology': {
             date: {
