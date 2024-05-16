@@ -191,7 +191,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         addNIRCEhrLinks();
         addExtensibleCols();
         enableSiteNotification();
-        populateEHRLookups();
+        populateLocations();
     }
 
     private void enableSiteNotification()
@@ -214,7 +214,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         notificationAdminPage.enableRequestAdminAlerts(notification);
     }
 
-    private void populateEHRLookups() throws IOException, CommandException
+    @LogMethod
+    private void populateLocations() throws IOException, CommandException
     {
         goToEHRFolder();
         log("Inserting values in rooms");
@@ -297,6 +298,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         verifyRowCreated("study", "birth", arrivedAnimal, 1);
         verifyRowCreated("study", "assignment", arrivedAnimal, 1);
         verifyRowCreated("study", "protocolAssignment", arrivedAnimal, 1);
+        verifyRowCreated("study", "demographics", arrivedAnimal, 1);
         verifyRowCreated("study", "housing", arrivedAnimal, 1);
     }
 
@@ -329,6 +331,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         verifyRowCreated("study", "assignment", bornAnimal, 1);
         verifyRowCreated("study", "protocolAssignment", bornAnimal, 1);
+        verifyRowCreated("study", "demographics", bornAnimal, 1);
         verifyRowCreated("study", "housing", bornAnimal, 1);
     }
 
@@ -363,7 +366,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @Test
     public void testDeathNecropsyForm()
     {
-//        enableNotification("status_org.labkey.nirc_ehr.notification.NIRCDeathNotification"); //TODO: fix
+//        enableNotification("status_org.labkey.nirc_ehr.notification.NIRCDeathNotification");
         addDeathNecropsyUsersAndPermissions();
 
         //Go to EHR page > Enter Data > Death/Necropsy
