@@ -80,8 +80,6 @@
         });
         const renderPage = () => {
             let issueHTML = '';
-            console.log("this.hasMyTasks = "+ this.myNumOfTasks);
-
 
             if (ctx['EHRIssuesContainer']) {
                 issueHTML = '<div style="max-width:920px">Below are the sections of the Electronic Health Record.  If there are additional reports you would like, please submit a request <a href="' + LABKEY.ActionURL.buildURL('issues', 'list', ctx['EHRIssuesContainer']) + '" target="_blank">here</a>.<br><br></div>'

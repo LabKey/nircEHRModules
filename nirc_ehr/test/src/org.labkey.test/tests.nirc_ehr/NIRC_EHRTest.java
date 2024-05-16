@@ -168,8 +168,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @BeforeClass
     public static void setupProject() throws Exception
     {
-//        NIRC_EHRTest init = (NIRC_EHRTest) getCurrentTest();
-//        init.doSetup();
+        NIRC_EHRTest init = (NIRC_EHRTest) getCurrentTest();
+        init.doSetup();
     }
 
     private void doSetup() throws Exception
