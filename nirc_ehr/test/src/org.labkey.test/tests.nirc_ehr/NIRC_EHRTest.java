@@ -269,7 +269,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Arrivals"));
-        sleep(3000);
         lockForm();
 
         Ext4GridRef arrivals = _helper.getExt4GridForFormSection("Arrivals");
@@ -290,10 +289,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         view.addColumn("project");
         view.addColumn("arrivalProtocol");
         view.applyCustomView();
-        Assert.assertEquals("Invalid Arrival record", arrivedAnimal, table.getRowDataAsText(0, "Id"));
-        Assert.assertEquals("Invalid Arrival record", "C1", table.getRowDataAsText(0, "cage"));
-        Assert.assertEquals("Invalid Arrival record", "640991", table.getRowDataAsText(0, "project"));
-        Assert.assertEquals("Invalid Arrival record", "dummyprotocol", table.getRowDataAsText(0, "arrivalProtocol"));
+        Assert.assertEquals("Invalid Arrival record", Arrays.asList(arrivedAnimal), table.getRowDataAsText(0, "Id"));
+        Assert.assertEquals("Invalid Arrival record", Arrays.asList("C1"), table.getRowDataAsText(0, "cage"));
+        Assert.assertEquals("Invalid Arrival record", Arrays.asList("640991"), table.getRowDataAsText(0, "project"));
+        Assert.assertEquals("Invalid Arrival record", Arrays.asList("dummyprotocol"), table.getRowDataAsText(0, "arrivalProtocol"));
 
         table = viewQueryData("study", "birth");
         table.setFilter("Id", "Equals", arrivedAnimal);
@@ -334,10 +333,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToSchemaBrowser();
         DataRegionTable table = viewQueryData("study", "birth");
         table.setFilter("Id", "Equals", bornAnimal);
-        Assert.assertEquals("Invalid Birth record", bornAnimal, table.getRowDataAsText(0, "Id"));
-        Assert.assertEquals("Invalid Birth record", "C3", table.getRowDataAsText(0, "cage"));
-        Assert.assertEquals("Invalid Birth record", "795644", table.getRowDataAsText(0, "project"));
-        Assert.assertEquals("Invalid Birth record", "protocol101", table.getRowDataAsText(0, "birthProtocol"));
+        Assert.assertEquals("Invalid Birth record", Arrays.asList(bornAnimal), table.getRowDataAsText(0, "Id"));
+        Assert.assertEquals("Invalid Birth record", Arrays.asList("C3"), table.getRowDataAsText(0, "cage"));
+        Assert.assertEquals("Invalid Birth record", Arrays.asList("795644"), table.getRowDataAsText(0, "project"));
+        Assert.assertEquals("Invalid Birth record", Arrays.asList("protocol101"), table.getRowDataAsText(0, "birthProtocol"));
 
         table = viewQueryData("study", "assignment");
         table.setFilter("Id", "Equals", bornAnimal);
