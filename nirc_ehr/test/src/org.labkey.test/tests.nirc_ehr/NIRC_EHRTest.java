@@ -294,21 +294,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Assert.assertEquals("Invalid Arrival record", Arrays.asList("640991"), table.getRowDataAsText(0, "project"));
         Assert.assertEquals("Invalid Arrival record", Arrays.asList("dummyprotocol"), table.getRowDataAsText(0, "arrivalProtocol"));
 
-        table = viewQueryData("study", "birth");
-        table.setFilter("Id", "Equals", arrivedAnimal);
-        Assert.assertEquals("Birth record not created for arrival", 1, table.getDataRowCount());
-
-        table = viewQueryData("study", "assignment");
-        table.setFilter("Id", "Equals", arrivedAnimal);
-        Assert.assertEquals("Project assignment record not created for arrival", 1, table.getDataRowCount());
-
-        table = viewQueryData("study", "protocolAssignment");
-        table.setFilter("Id", "Equals", arrivedAnimal);
-        Assert.assertEquals("Protocol Assignment record not created for arrival", 1, table.getDataRowCount());
-
-        table = viewQueryData("study", "housing");
-        table.setFilter("Id", "Equals", arrivedAnimal);
-        Assert.assertEquals("Housing record not created for arrival", 1, table.getDataRowCount());
+        verifyRowCreated("study", "birth", arrivedAnimal, 1);
+        verifyRowCreated("study", "assignment", arrivedAnimal, 1);
+        verifyRowCreated("study", "protocolAssignment", arrivedAnimal, 1);
+        verifyRowCreated("study", "housing", arrivedAnimal, 1);
     }
 
     @Test
@@ -338,17 +327,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Assert.assertEquals("Invalid Birth record", Arrays.asList("795644"), table.getRowDataAsText(0, "project"));
         Assert.assertEquals("Invalid Birth record", Arrays.asList("protocol101"), table.getRowDataAsText(0, "birthProtocol"));
 
-        table = viewQueryData("study", "assignment");
-        table.setFilter("Id", "Equals", bornAnimal);
-        Assert.assertEquals("Project assignment record not created for birth", 1, table.getDataRowCount());
-
-        table = viewQueryData("study", "protocolAssignment");
-        table.setFilter("Id", "Equals", bornAnimal);
-        Assert.assertEquals("Protocol Assignment record not created for birth", 1, table.getDataRowCount());
-
-        table = viewQueryData("study", "housing");
-        table.setFilter("Id", "Equals", bornAnimal);
-        Assert.assertEquals("Housing record not created for birth", 1, table.getDataRowCount());
+        verifyRowCreated("study", "assignment", bornAnimal, 1);
+        verifyRowCreated("study", "protocolAssignment", bornAnimal, 1);
+        verifyRowCreated("study", "housing", bornAnimal, 1);
     }
 
     @Override
@@ -476,6 +457,14 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
             }
             return count;
         }
+    }
+
+    private void verifyRowCreated(String schema, String query, String animalId, int rowCount)
+    {
+        goToSchemaBrowser();
+        DataRegionTable table = viewQueryData(schema, query);
+        table.setFilter("Id", "Equals", animalId);
+        Assert.assertEquals("Record not created in " + schema + "." + query, rowCount, table.getDataRowCount());
     }
 
     private void submitFinal()
