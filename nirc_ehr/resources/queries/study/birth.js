@@ -69,22 +69,21 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
         if (!helper.isGeneratedByServer() && !helper.isValidateOnly()) {
 
-            // TODO: This is currently not working since room is required and cage is not
-            // //if cage also known as "location" is provided, we insert into housing.
-            // if (row.cage && row.Id && row.date) {
-            //     var housingRec = {
-            //         Id: row.Id,
-            //         date: row.date,
-            //         cage: row.cage || null,
-            //         taskid: row.taskid,
-            //         qcstate: row.qcstate
-            //     }
-            //
-            //     var housingErrors = triggerHelper.createBirthHousingRecord(row.Id, housingRec);
-            //     if (housingErrors) {
-            //         EHR.Server.Utils.addError(scriptErrors, 'Id', housingErrors, 'ERROR');
-            //     }
-            // }
+            // if 'cage', labeled as "Birth Location" is provided, then insert into housing.
+            if (row.cage && row.Id && row.date) {
+                var housingRec = {
+                    Id: row.Id,
+                    date: row.date,
+                    cage: row.cage,
+                    taskid: row.taskid,
+                    qcstate: row.qcstate
+                }
+
+                var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "birth");
+                if (housingErrors) {
+                    EHR.Server.Utils.addError(scriptErrors, 'Id', housingErrors, 'ERROR');
+                }
+            }
 
             // this allows demographic records in qcstates other than completed
             var extraDemographicsFieldMappings = {
