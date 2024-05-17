@@ -82,7 +82,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 qcstate: row.qcstate
             }
 
-            var housingErrors = triggerHelper.createArrivalHousingRecord(row.Id, housingRec);
+            var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "arrival");
             if (housingErrors) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', housingErrors, 'ERROR');
             }
