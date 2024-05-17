@@ -298,7 +298,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         verifyRowCreated("study", "birth", arrivedAnimal, 1);
         verifyRowCreated("study", "assignment", arrivedAnimal, 1);
         verifyRowCreated("study", "protocolAssignment", arrivedAnimal, 1);
-        verifyRowCreated("study", "demographics", arrivedAnimal, 1);
+        verifyRowCreated("study", "Demographics", arrivedAnimal, 1);
         verifyRowCreated("study", "housing", arrivedAnimal, 1);
     }
 
@@ -331,7 +331,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         verifyRowCreated("study", "assignment", bornAnimal, 1);
         verifyRowCreated("study", "protocolAssignment", bornAnimal, 1);
-        verifyRowCreated("study", "demographics", bornAnimal, 1);
+        verifyRowCreated("study", "Demographics", bornAnimal, 1);
         verifyRowCreated("study", "housing", bornAnimal, 1);
     }
 
