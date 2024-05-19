@@ -7,6 +7,7 @@ cost_center	Cost Center	value	title
 cost_type	Cost Type	value	title
 country	Country	value	title
 country_category	Country Category	value	title
+data_category	Data Category Field Values	value
 death_reason	Death Reason	value
 delivery_state	Delivery State	value	title
 editable_lookups	List of UI editable lookup values	value

@@ -884,6 +884,24 @@
                 <datatype>varchar</datatype>
                 <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
             </column>
+            <column columnName="code">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="route">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="volume">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="vol_units">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="amount_units">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="cases" tableDbType="TABLE">
@@ -952,6 +970,27 @@
             </column>
             <column columnName="enddate">
                 <datatype>timestamp</datatype>
+            </column>
+            <column columnName="code">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="route">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="volume">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="vol_units">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="amount_units">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="frequency">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>

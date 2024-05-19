@@ -1,11 +1,13 @@
 name
 ageclass
 alias_category
+amount_units
 card_format
 census_activity_status
 cost_type
 country
 country_category
+data_category
 death_reason
 delivery_state
 editable_lookups
@@ -34,9 +36,13 @@ questionnaire
 regulatory_stress_levels
 req_order_state
 req_order_type
+routes
 source
+snomed
 species
 species_codes
+treatment_frequency
 vendor_approval_code
 vendor_production_location
+volume_units
 weight_ranges
