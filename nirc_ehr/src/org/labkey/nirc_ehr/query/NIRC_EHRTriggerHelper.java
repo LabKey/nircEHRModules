@@ -96,13 +96,13 @@ public class NIRC_EHRTriggerHelper
         return map;
     }
 
-    public String createBirthHousingRecord(String id, Map<String, Object> row) throws QueryUpdateServiceException, DuplicateKeyException, SQLException, BatchValidationException, InvalidKeyException
+    public String createHousingRecord(String id, Map<String, Object> row, String formName) throws QueryUpdateServiceException, DuplicateKeyException, SQLException, BatchValidationException, InvalidKeyException
     {
         BatchValidationException errors = new BatchValidationException();
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
-        String room = ConvertHelper.convert(row.get("room"), String.class);
-        if (id == null || date == null || room == null)
-            return "Attempting to create a housing record with no id, date, or room";
+        String location = ConvertHelper.convert(row.get("cage"), String.class);
+        if (id == null || date == null || location == null)
+            return "Attempting to create a housing record with no id, date, or location";
 
         boolean updateRecord = false;
         Date enddate = ConvertHelper.convert(row.get("enddate"), Date.class);
@@ -124,11 +124,10 @@ public class NIRC_EHRTriggerHelper
         TableInfo ti = getTableInfo("study", "housing");
 
         String taskId = ConvertHelper.convert(row.get("taskid"), String.class);
-        if (taskId == null) {
-            return "Attempting to create a birth record with no taskid";
-        }
+        if (taskId == null)
+            return "Attempting to create " + formName + " record with no taskid";
 
-        // If updating an existing birth record with housing info, check if the housing record should be closed
+        // If updating an existing arrival record with housing info, check if the housing record should be closed
         if (enddate == null)
         {
             SimpleFilter nextFilter = new SimpleFilter(FieldKey.fromString("Id"), id);
@@ -137,50 +136,33 @@ public class NIRC_EHRTriggerHelper
             TableSelector ts = new TableSelector(ti, PageFlowUtil.set("date"), nextFilter, new Sort("date"));
             List<Date> dates = ts.getArrayList(Date.class);
             if (dates.size() > 0)
-            {
                 enddate = dates.get(0);
-            }
         }
 
         String qcstate = ConvertHelper.convert(row.get("qcstate"), String.class);
-        if (qcstate == null) {
-            return "Attempting to create a birth record with no qcstate";
-        }
+        if (qcstate == null)
+            return "Attempting to create " + formName + " record with no qcstate";
 
         // If there is already a housing record for this task, update that record
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
         filter.addCondition(FieldKey.fromString("taskid"), taskId);
         TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
         if (ts.exists())
-        {
             updateRecord = true;
-        }
 
         Map<String, Object> saveRow = new CaseInsensitiveHashMap<>();
         saveRow.put("Id", id);
         saveRow.put("date", date);
-        saveRow.put("room", room);
+        saveRow.put("cage", location);
         saveRow.put("taskId", taskId);
         saveRow.put("qcstate", qcstate);
         if (updateRecord)
-        {
             saveRow.put("objectid", ts.getMap().get("objectid"));
-        }
         else
-        {
             saveRow.put("objectid", new GUID().toString());
-        }
-
-        String cond = ConvertHelper.convert(row.get("cond"), String.class);
-        if (cond != null)
-            saveRow.put("cond", cond);
 
         if (enddate != null)
             saveRow.put("enddate", enddate);
-
-        String cage = ConvertHelper.convert(row.get("cage"), String.class);
-        if (cage != null)
-            saveRow.put("cage", cage);
 
         List<Map<String, Object>> rows = new ArrayList<>();
         rows.add(saveRow);
@@ -488,7 +470,7 @@ public class NIRC_EHRTriggerHelper
         BatchValidationException errors = new BatchValidationException();
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
         if (id == null || date == null)
-            return "Attempting to create a project assignment record with no id, date, or room";
+            return "Attempting to create a project assignment record with no id or date";
 
         TableInfo ti = getTableInfo("study", dataset);
 

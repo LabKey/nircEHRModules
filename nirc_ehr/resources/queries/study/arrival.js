@@ -10,8 +10,7 @@ function onInit(event, helper){
         skipAssignmentCheck: true,
     });
 }
-
-EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'arrival', function (helper, scriptErrors, row, oldRow) {
+EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'Arrival', function(helper, scriptErrors, row, oldRow) {
 
     if (row.eventDate) {
         row.date = row.eventDate;
@@ -30,10 +29,11 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
         // null (not undefined) required for call to java trigger helper
         row.dam = row['Id/demographics/dam'] || null;
-        row.sire =row['Id/demographics/sire'] || null;
+        row.sire = row['Id/demographics/sire'] || null;
         row.species = row['Id/demographics/species'] || null;
         row.birth = row['Id/demographics/birth'] || null;
         row.gender = row['Id/demographics/gender'] || null;
+        row.geographic_origin = row['Id/demographics/geographic_origin'] || null;
 
         if (row.QCStateLabel) {
             row.qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
@@ -72,25 +72,24 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             }
         }
 
-        // TODO: This is currently not working since room is required and cage is not
-        //if cage also known as "location" is provided, we insert into housing.
-        // if (row.cage && row.Id && row.date) {
-        //     var housingRec = {
-        //         Id: row.Id,
-        //         date: row.date,
-        //         cage: row.cage,
-        //         taskid: row.taskid,
-        //         qcstate: row.qcstate
-        //     }
-        //
-        //     var housingErrors = triggerHelper.createBirthHousingRecord(row.Id, housingRec);
-        //     if (housingErrors) {
-        //         EHR.Server.Utils.addError(scriptErrors, 'Id', housingErrors, 'ERROR');
-        //     }
-        // }
+        // if 'cage', labeled as "Initial Location" is provided, then insert into housing.
+        if (row.cage && row.Id && row.date) {
+            var housingRec = {
+                Id: row.Id,
+                date: row.date,
+                cage: row.cage,
+                taskid: row.taskid,
+                qcstate: row.qcstate
+            }
+
+            var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "arrival");
+            if (housingErrors) {
+                EHR.Server.Utils.addError(scriptErrors, 'Id', housingErrors, 'ERROR');
+            }
+        }
 
         if(!oldRow) {
-            //if not already present, we insert into demographics
+            //if not already present, insert into demographics
             helper.getJavaHelper().createDemographicsRecord(row.Id, row, extraDemographicsFieldMappings);
         }
         else {
@@ -110,6 +109,12 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             if (row.species && row.species !== data.species )
             {
                 obj.species = row.species;
+                hasUpdates = true;
+            }
+
+            if (row.geographic_origin && row.geographic_origin !== data.geographic_origin )
+            {
+                obj.geographic_origin = row.geographic_origin;
                 hasUpdates = true;
             }
 
