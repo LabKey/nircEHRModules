@@ -60,7 +60,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         if (idMap[row.Id]) {
 
             // check if death record already exists for this animal
-            if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && row.QCStateLabel.toUpperCase() === 'IN PROGRESS') {
+            if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
             }
             // check if the animal is at the center
@@ -68,7 +68,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal is not at the center.', 'ERROR');
             }
 
-            if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel) {
+            if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel === 'Completed') {
 
                 if (validIds.indexOf(row.id) !== -1) {
 

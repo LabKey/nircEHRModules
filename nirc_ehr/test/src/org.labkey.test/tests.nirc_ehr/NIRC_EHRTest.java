@@ -437,9 +437,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         //impersonate as a vet user who is a "EHR Basic Submitter" (vet_bs@test.com)
 
-        //go to Dumbster module
+        //verify death notification email was sent from Dumbster module.
+        //Note: since this death notification is being sent from a trigger script, you can't generate a notification on the fly from the Notification Admin page.
 
-        //verify death notification email was sent
         //click on the necropsy link from the "email" and verify that the necropsy form is displayed with Death data filled in
 
         //verify that 'Submit for Review' button is visible

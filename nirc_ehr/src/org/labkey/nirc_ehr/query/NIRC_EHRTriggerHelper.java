@@ -356,7 +356,7 @@ public class NIRC_EHRTriggerHelper
         //check whether Death Notification is enabled
         if (!NotificationService.get().isActive(new NIRCDeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
         {
-            _log.info("Death notification service is not enabled, will not send death notification.");
+            _log.info("NIRC Death notification service is not enabled, will not send death notification.");
             return;
         }
 
@@ -395,7 +395,7 @@ public class NIRC_EHRTriggerHelper
                 html.append("Death date not found. Please contact system administrator.").append("<br>");
                 return;
             }
-            html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been marked as dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br><br>");
+            html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been declared dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br><br>");
 
             //append animal details
             appendAnimalDetails(html, animalId, container);
