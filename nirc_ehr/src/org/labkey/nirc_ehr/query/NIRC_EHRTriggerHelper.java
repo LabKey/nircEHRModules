@@ -125,7 +125,7 @@ public class NIRC_EHRTriggerHelper
 
         String taskId = ConvertHelper.convert(row.get("taskid"), String.class);
         if (taskId == null)
-            return "Attempting to create an " + formName + " record with no taskid";
+            return "Attempting to create " + formName + " record with no taskid";
 
         // If updating an existing arrival record with housing info, check if the housing record should be closed
         if (enddate == null)
@@ -141,7 +141,7 @@ public class NIRC_EHRTriggerHelper
 
         String qcstate = ConvertHelper.convert(row.get("qcstate"), String.class);
         if (qcstate == null)
-            return "Attempting to create an " + formName + " record with no qcstate";
+            return "Attempting to create " + formName + " record with no qcstate";
 
         // If there is already a housing record for this task, update that record
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
