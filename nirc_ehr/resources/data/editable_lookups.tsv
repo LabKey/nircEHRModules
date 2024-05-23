@@ -4,12 +4,14 @@ alias_category	Colony Management	Alias Category
 amount_units	Clinical	Amount Units	Used in drugs, treatments given and treatments ordered datasets.
 card_format	Colony Management	Card Format
 census_activity_status	Colony Management	Census Activity Status
+conc_units	Clinical	Concentration Units	Used in drug and treatment datasets.
 cost_type	Colony Management	Cost Type
 country	Colony Management	Country
 country_category	Colony Management	Country Category
 data_category	Clinical	Data Categories	Used in datasets.
 death_reason	Colony Management	Death Reason
 delivery_state	Colony Management	Delivery State
+dosage_units	Clinical	Dosage Units	Used in drug and treatment datasets.
 esig_events	Colony Management	Esig Events
 euthanasia_type	Colony Management	Euthanasia Type
 exemption_category	Colony Management	Exemption Category

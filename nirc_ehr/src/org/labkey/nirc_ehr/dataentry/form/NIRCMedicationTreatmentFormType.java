@@ -26,6 +26,8 @@ public class NIRCMedicationTreatmentFormType extends NIRCBaseTaskFormType
         ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
 
         for (FormSection s : getFormSections())
         {

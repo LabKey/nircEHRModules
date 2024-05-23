@@ -4,12 +4,14 @@ alias_category
 amount_units
 card_format
 census_activity_status
+conc_units
 cost_type
 country
 country_category
 data_category
 death_reason
 delivery_state
+dosage_units
 editable_lookups
 esig_events
 euthanasia_type

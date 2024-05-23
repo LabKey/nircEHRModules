@@ -899,6 +899,18 @@
             <column columnName="amount_units">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="concentration">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="conc_units">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="dosage">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="dosage_units">
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="category">
                 <datatype>varchar</datatype>
             </column>
@@ -984,6 +996,18 @@
                 <datatype>varchar</datatype>
             </column>
             <column columnName="amount_units">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="concentration">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="conc_units">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="dosage">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="dosage_units">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="frequency">
