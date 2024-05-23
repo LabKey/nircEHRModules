@@ -33,6 +33,7 @@ import org.labkey.test.categories.EHR;
 import org.labkey.test.components.CustomizeView;
 import org.labkey.test.components.ext4.Window;
 import org.labkey.test.components.ui.grids.QueryGrid;
+import org.labkey.test.pages.ehr.AnimalHistoryPage;
 import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
 import org.labkey.test.pages.ehr.NotificationAdminPage;
@@ -67,6 +68,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String PROJECT_NAME = "NIRC";
     private static final String PROJECT_TYPE = "NIRC EHR";
     SimpleDateFormat _dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static String  NIRC_BASIC_SUBMITTER = "ac_bs@nirctest.com";
+    private static String NIRC_BASIC_SUBMITTER_VET = "vet_bs@nirctest.com";
+    private  static String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
+
+    private static String deadAnimalId = "D5454";
+    private static String departedAnimalId = "H6767";
+    private static String aliveAnimalId = "A4545";
 
     @Override
     public void importStudy()
@@ -280,7 +288,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         arrivals.setGridCell(1, "project", "640991");
         arrivals.setGridCell(1, "arrivalProtocol", "dummyprotocol");
         arrivals.setGridCellJS(1, "Id/demographics/birth", now.minusDays(7).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
-        submitFinal();
+        submitForm("Submit Final", "Finalize");
 
         goToSchemaBrowser();
         DataRegionTable table = viewQueryData("study", "arrival");
@@ -319,7 +327,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         births.setGridCell(1, "cage", "C3");
         births.setGridCell(1, "project", "795644");
         births.setGridCell(1, "birthProtocol", "protocol101");
-        submitFinal();
+        submitForm("Submit Final", "Finalize");
 
         goToSchemaBrowser();
         DataRegionTable table = viewQueryData("study", "birth");
@@ -345,13 +353,38 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     public void addDeathNecropsyUsersAndPermissions()
     {
         //create animal care basic submitter user (this user can 'Submit Death')
-        createUser("ac_bs@test.com", "EHR Basic Submitters", null);
+        createUser(NIRC_BASIC_SUBMITTER, "EHR Basic Submitters", null);
 
         //create a vet user with 'EHR Basic Submitter' role (this user can 'Submit for Review')
-        createUser("vet_bs@test.com", "EHR Basic Submitters", "EHR Veterinarian");
+        createUser(NIRC_BASIC_SUBMITTER_VET, "EHR Basic Submitters", "EHR Veterinarian");
 
         //create a vet user with 'EHR Full Submitter' role (this user can 'Submit Final')
-        createUser("vet_fs@test.com", "EHR Full Submitters", "EHR Veterinarian");
+        createUser(NIRC_FULL_SUBMITTER_VET, "EHR Full Submitters", "EHR Veterinarian");
+    }
+
+    public void createSubjectsForDeathForm() throws IOException, CommandException
+    {
+        goToEHRFolder();
+        goToSchemaBrowser();
+        log("Creating animals");
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "birth", "lsid",
+                new String[]{"Id", "Date", "gender", "QCStateLabel"},
+                new Object[][]{
+                        {aliveAnimalId, LocalDateTime.now().minusDays(30), "f", "Completed"},
+                        {deadAnimalId, LocalDateTime.now().minusDays(30), "m", "Completed"},
+                        {departedAnimalId, LocalDateTime.now().minusDays(30), "m", "Completed"},
+                }
+        ), getExtraContext());
+
+        log("Marking an animal dead");
+        InsertRowsCommand deaths = new InsertRowsCommand("study", "deaths");
+        deaths.addRow(Map.of("Id", deadAnimalId, "date", LocalDateTime.now().minusDays(10), "reason", "4"));
+        deaths.execute(getApiHelper().getConnection(), getContainerPath());
+
+        log("Marking an animal departed");
+        InsertRowsCommand departure = new InsertRowsCommand("study", "departure");
+        departure.addRow(Map.of("Id", departedAnimalId, "date", LocalDateTime.now().minusDays(1), "destination", "Oregon NPRC"));
+        departure.execute(getApiHelper().getConnection(), getContainerPath());
     }
 
     private void createUser(String userEmail, String groupName, @Nullable String permission)
@@ -364,30 +397,43 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     }
 
     @Test
-    public void testDeathNecropsyForm()
+    public void testDeathNecropsyForm() throws IOException, CommandException
     {
-//        enableNotification("status_org.labkey.nirc_ehr.notification.NIRCDeathNotification");
+        enableNotification("status_org.labkey.nirc_ehr.NIRCDeathNotification");
         addDeathNecropsyUsersAndPermissions();
+        createSubjectsForDeathForm();
 
-        //Go to EHR page > Enter Data > Death/Necropsy
+        log("Go to EHR page > Enter Data > Death/Necropsy");
+        impersonate(NIRC_BASIC_SUBMITTER);
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Death/Necropsy"));
 
-        //impersonate as basic submitter user (ac_bs@test.com)
+        waitForElement(Locator.name("Id"));
+        setFormElement(Locator.name("Id"), deadAnimalId);
+        waitForText("Id: ERROR: Death record already exists for this animal.");
 
-        //verify that only 'Submit Death' button is visible, and 'Submit for Review' and 'Submit Final' buttons are not visible.
+        setFormElement(Locator.name("Id"), departedAnimalId);
+        waitForText("Id: ERROR: Animal is not at the center.");
 
-        //Enter data in the Death section
-        //1. Try entering Id of an already dead animal, verify error message near the submit buttons and 'Submit Death' btn stays disabled
-        //2. Try entering Id of animal that's shipped, verify error message near the submit buttons and 'Submit Death' btn stays disabled
+        setFormElement(Locator.name("Id"), aliveAnimalId);
+        setFormElement(Locator.name("reason"), "Euthaniasia (project)");
 
-        //3. Now enter alive animal (animal 44444 has all the correct data for this test)
-        //verify that 'Submit Death' button is enabled, and submit the form
-        //you should be redirected to the main Data Entry page
+        Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit for Review")));
+        Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit Final")));
 
-        //go to Animal History > enter animal that's marked as dead > General > Demographics > verify that animal is displayed with Status 'Dead'
+        submitForm("Submit Death", "Confirm");
 
-        //stop impersonation
+        AnimalHistoryPage historyPage = AnimalHistoryPage.beginAt(this);
+        historyPage.searchSingleAnimal(aliveAnimalId);
+        waitForText(WAIT_FOR_PAGE, "Dead");
+        stopImpersonating();
+
+        NotificationAdminPage adminPage = NotificationAdminPage.beginAt(this);
+        adminPage.clickRunReportInBrowser("NIRC Death Notification");
+
 
         //wait for 1 minute (since the notification is set to run after one min after a Death record is submitted)
+
 
         //impersonate as a vet user who is a "EHR Basic Submitter" (vet_bs@test.com)
 
@@ -470,22 +516,22 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Assert.assertEquals("Record not created in " + schema + "." + query, rowCount, table.getDataRowCount());
     }
 
-    private void submitFinal()
+    private void submitForm(String buttonText, String windowTitle)
     {
-        Locator submitFinalBtn = Locator.linkWithText("Submit Final");
+        Locator submitFinalBtn = Locator.linkWithText(buttonText);
         shortWait().until(ExpectedConditions.elementToBeClickable(submitFinalBtn));
         Window<?> msgWindow;
         try
         {
             submitFinalBtn.findElement(getDriver()).click();
-            msgWindow = new Window.WindowFinder(this.getDriver()).withTitleContaining("Finalize").waitFor();
+            msgWindow = new Window.WindowFinder(this.getDriver()).withTitleContaining(windowTitle).waitFor();
         }
         catch (NoSuchElementException e)
         {
             //retry
             sleep(500);
             submitFinalBtn.findElement(getDriver()).click();
-            msgWindow = new Window.WindowFinder(this.getDriver()).withTitleContaining("Finalize").waitFor();
+            msgWindow = new Window.WindowFinder(this.getDriver()).withTitleContaining(windowTitle).waitFor();
         }
         msgWindow.clickButton("Yes");
     }
