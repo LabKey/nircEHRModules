@@ -43,7 +43,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         Id: row.Id,
         death: null,
         calculated_status: 'Alive',
-        QCStateLabel: 'Completed',
+        QCState: helper.getJavaHelper().getQCStateForLabel('Completed').getRowId(),
     });
 
     console.log('removing demographics death date for animal:' + row.Id);
@@ -68,7 +68,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal is not at the center.', 'ERROR');
             }
 
-            if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel === 'Completed') {
+            if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
 
                 if (validIds.indexOf(row.id) !== -1) {
 
@@ -77,7 +77,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                         Id: row.Id,
                         death: row.date,
                         calculated_status: 'Dead',
-                        QCStateLabel: row.QCStateLabel,
+                        QCState: helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId()
                     });
 
                     console.log('updating demographics death date for animal: ' + row.Id);

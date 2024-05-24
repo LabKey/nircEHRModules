@@ -369,7 +369,7 @@ public class NIRC_EHRTriggerHelper
             Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new NIRCDeathNotification(), container);
             if (recipients.size() == 0)
             {
-                _log.warn("No recipients set, skipping death notification");
+                _log.warn("No NIRC recipients set, skipping death notification");
                 return;
             }
 
