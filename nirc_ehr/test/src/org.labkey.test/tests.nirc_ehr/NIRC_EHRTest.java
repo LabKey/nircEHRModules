@@ -37,6 +37,7 @@ import org.labkey.test.components.ui.grids.QueryGrid;
 import org.labkey.test.pages.ehr.AnimalHistoryPage;
 import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
+import org.labkey.test.pages.ehr.EnterDataPage;
 import org.labkey.test.pages.ehr.NotificationAdminPage;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
@@ -451,8 +452,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Assigning the reviewer");
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
         setFormElement(Locator.tagWithNameContaining("input", "ehr-usersandgroups"), NIRC_FULL_SUBMITTER_VET);
-//        _ext4Helper.selectComboBoxItem(Locator.tagWithNameContaining("input", "ehr-usersandgroups"),
-//                Ext4Helper.TextMatchTechnique.CONTAINS, NIRC_FULL_SUBMITTER_VET);
         submitForReview.clickButton("Submit");
         stopImpersonating();
 
@@ -464,18 +463,23 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         goToEHRFolder();
         impersonate(NIRC_FULL_SUBMITTER_VET);
-        waitAndClickAndWait(Locator.linkContainingText("My Review Tasks"));
-        waitAndClickAndWait(Locator.linkWithText("Death/Necropsy"));
+        EnterDataPage enterDataPage = EnterDataPage.beginAt(this, getContainerPath());
+        enterDataPage.clickAllTasksTab();
+        waitAndClick(Locator.linkWithText("Death/Necropsy"));
+        switchToWindow(1);
         submitForm("Submit Final", "Finalize");
+        switchToMainWindow();
         stopImpersonating();
 
         log("Verify rows were inserted in appropriate datasets");
+        goToEHRFolder();
         verifyRowCreated("study", "weight", aliveAnimalId, 1);
 
         log("Verify animal is marked as dead");
         AnimalHistoryPage historyPage = AnimalHistoryPage.beginAt(this);
         historyPage.searchSingleAnimal(aliveAnimalId);
         waitForText(WAIT_FOR_PAGE, "Dead");
+        waitForText("23 kg"); //checking latest weight is updated.
 
         log("Verify error message is display for dead animal");
         gotoEnterData();
