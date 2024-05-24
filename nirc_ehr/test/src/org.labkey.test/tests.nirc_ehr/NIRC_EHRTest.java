@@ -219,6 +219,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         EHRAdminPage.beginAt(this,getContainerPath());
         NotificationAdminPage notificationAdminPage = EHRAdminPage.clickNotificationService(this);
         notificationAdminPage.setNotificationUserAndReplyEmail(DATA_ADMIN_USER);
+        notificationAdminPage.addManageUsers("org.labkey.nirc_ehr.NIRCDeathNotification", "EHR Administrators");
         notificationAdminPage.enableRequestAdminAlerts(notification);
     }
 
@@ -359,7 +360,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         createUser(NIRC_BASIC_SUBMITTER_VET, "EHR Basic Submitters", "EHR Veterinarian");
 
         //create a vet user with 'EHR Full Submitter' role (this user can 'Submit Final')
-        createUser(NIRC_FULL_SUBMITTER_VET, "EHR Full Submitters", "EHR Veterinarian");
+        createUser(NIRC_FULL_SUBMITTER_VET, "EHR Administrators", "EHR Veterinarian"); //'EHR Full Submitter' role doesn't allow updating Demographics dataset, so setting user as a 'EHR Administrator'
     }
 
     public void createSubjectsForDeathForm() throws IOException, CommandException
@@ -399,8 +400,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @Test
     public void testDeathNecropsyForm() throws IOException, CommandException
     {
-        enableNotification("status_org.labkey.nirc_ehr.NIRCDeathNotification");
         addDeathNecropsyUsersAndPermissions();
+        enableNotification("status_org.labkey.nirc_ehr.NIRCDeathNotification");
         createSubjectsForDeathForm();
 
         log("Go to EHR page > Enter Data > Death/Necropsy");
