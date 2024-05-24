@@ -52,7 +52,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -379,6 +378,19 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 }
         ), getExtraContext());
 
+        log("Inserting rows in assignments, protocolAssignment and housing");
+        InsertRowsCommand protocol = new InsertRowsCommand("study", "protocolAssignment");
+        protocol.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "protocol", "protocol101", "QCStateLabel", "Completed"));
+        protocol.execute(getApiHelper().getConnection(), getContainerPath());
+
+        InsertRowsCommand project = new InsertRowsCommand("study", "assignment");
+        project.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "project", "640991", "QCStateLabel", "Completed"));
+        project.execute(getApiHelper().getConnection(), getContainerPath());
+
+        InsertRowsCommand housing = new InsertRowsCommand("study", "housing");
+        housing.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "cage", "C4", "QCStateLabel", "Completed"));
+        housing.execute(getApiHelper().getConnection(), getContainerPath());
+
         log("Marking an animal dead");
         InsertRowsCommand deaths = new InsertRowsCommand("study", "deaths");
         deaths.addRow(Map.of("Id", deadAnimalId, "date", LocalDateTime.now().minusDays(10), "reason", "4"));
@@ -432,7 +444,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         EmailRecordTable notifications = new EmailRecordTable(this);
         waitForTextWithRefresh(WAIT_FOR_PAGE + WAIT_FOR_JAVASCRIPT, "Death Notification: " + aliveAnimalId); //wait for more than a min
         notifications.getMessage("Death Notification: " + aliveAnimalId).getBody().
-                contains("Animal '" + aliveAnimalId +"' has been declared dead on '" + LocalDateTime.now().format(_dateFormat) + "'.");
+                contains("Animal '" + aliveAnimalId + "' has been declared dead on '" + LocalDateTime.now().format(_dateFormat) + "'.");
         notifications.clickMessage(notifications.getMessageWithSubjectContaining("Death Notification: " + aliveAnimalId));
         String url = Locator.linkWithText("Click here to record Necropsy").findElement(notifications).getAttribute("href");
 
@@ -480,6 +492,24 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         historyPage.searchSingleAnimal(aliveAnimalId);
         waitForText(WAIT_FOR_PAGE, "Dead");
         waitForText("23 kg"); //checking latest weight is updated.
+
+        goToSchemaBrowser();
+        DataRegionTable table = viewQueryData("study", "housing");
+        table.setFilter("Id", "Equals", aliveAnimalId);
+        Assert.assertTrue("End date is not updated for study.housing", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
+
+        log("Verify end date in study.assignment");
+        goToSchemaBrowser();
+        table = viewQueryData("study", "assignment");
+        table.setFilter("Id", "Equals", aliveAnimalId);
+        Assert.assertTrue("End date is not updated for study.assignment", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
+
+        log("Verify end date in study.protocolAssignment");
+        goToSchemaBrowser();
+        table = viewQueryData("study", "protocolAssignment");
+        table.setFilter("Id", "Equals", aliveAnimalId);
+        Assert.assertTrue("End date is not updated for study.protocolAssignment", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
+
     }
 
     @Override
