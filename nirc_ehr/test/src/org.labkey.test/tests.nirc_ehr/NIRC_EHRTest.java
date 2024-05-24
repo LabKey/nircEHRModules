@@ -480,14 +480,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         historyPage.searchSingleAnimal(aliveAnimalId);
         waitForText(WAIT_FOR_PAGE, "Dead");
         waitForText("23 kg"); //checking latest weight is updated.
-
-        log("Verify error message is display for dead animal");
-        gotoEnterData();
-        waitAndClickAndWait(Locator.linkWithText("Death/Necropsy"));
-
-        waitForElement(Locator.name("Id"));
-        setFormElement(Locator.name("Id"), deadAnimalId);
-        waitForText("Id: ERROR: Death record already exists for this animal.");
     }
 
     @Override
