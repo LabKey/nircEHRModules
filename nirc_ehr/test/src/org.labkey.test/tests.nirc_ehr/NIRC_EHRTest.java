@@ -31,6 +31,7 @@ import org.labkey.test.TestFileUtils;
 import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
 import org.labkey.test.components.CustomizeView;
+import org.labkey.test.components.dumbster.EmailRecordTable;
 import org.labkey.test.components.ext4.Window;
 import org.labkey.test.components.ui.grids.QueryGrid;
 import org.labkey.test.pages.ehr.AnimalHistoryPage;
@@ -67,7 +68,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 {
     private static final String PROJECT_NAME = "NIRC";
     private static final String PROJECT_TYPE = "NIRC EHR";
-    SimpleDateFormat _dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static String  NIRC_BASIC_SUBMITTER = "ac_bs@nirctest.com";
     private static String NIRC_BASIC_SUBMITTER_VET = "vet_bs@nirctest.com";
     private  static String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
@@ -410,9 +411,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClickAndWait(Locator.linkWithText("Death/Necropsy"));
 
         waitForElement(Locator.name("Id"));
-        setFormElement(Locator.name("Id"), deadAnimalId);
-        waitForText("Id: ERROR: Death record already exists for this animal.");
-
         setFormElement(Locator.name("Id"), departedAnimalId);
         waitForText("Id: ERROR: Animal is not at the center.");
 
@@ -421,44 +419,71 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit for Review")));
         Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit Final")));
-
         submitForm("Submit Death", "Confirm");
+        stopImpersonating();
 
+        log("Trigger notifications");
+        goToEHRFolder();
+        NotificationAdminPage adminPage = NotificationAdminPage.beginAt(this);
+        adminPage.clickManuallyTriggerEmail("NIRC Death Notification");
+
+        goToModule("Dumbster");
+        EmailRecordTable notifications = new EmailRecordTable(this);
+        waitForTextWithRefresh(WAIT_FOR_PAGE + WAIT_FOR_JAVASCRIPT, "Death Notification: " + aliveAnimalId); //wait for more than a min
+        notifications.getMessage("Death Notification: " + aliveAnimalId).getBody().
+                contains("Animal '" + aliveAnimalId +"' has been declared dead on '" + LocalDateTime.now().format(_dateFormat) + "'.");
+        notifications.clickMessage(notifications.getMessageWithSubjectContaining("Death Notification: " + aliveAnimalId));
+        String url = Locator.linkWithText("Click here to record Necropsy").findElement(notifications).getAttribute("href");
+
+        log("Entering Necropsy");
+        impersonate(NIRC_BASIC_SUBMITTER_VET);
+        beginAt(url);
+        waitForElement(Locator.name("necropsyWeight"));
+        setFormElement(Locator.name("necropsyWeight"), "23");
+
+        log("Entering Tissue Disposition");
+        Ext4GridRef tissueDisposition = _helper.getExt4GridForFormSection("Tissue Disposition");
+        _helper.addRecordToGrid(tissueDisposition);
+        tissueDisposition.setGridCell(1, "necropsyDispositionCode", "Frozen");
+        tissueDisposition.setGridCell(1, "necropsyTissue", "Pancreas");
+        waitAndClick(_helper.getDataEntryButton("Submit for Review"));
+
+        log("Assigning the reviewer");
+        Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
+        setFormElement(Locator.tagWithNameContaining("input", "ehr-usersandgroups"), NIRC_FULL_SUBMITTER_VET);
+//        _ext4Helper.selectComboBoxItem(Locator.tagWithNameContaining("input", "ehr-usersandgroups"),
+//                Ext4Helper.TextMatchTechnique.CONTAINS, NIRC_FULL_SUBMITTER_VET);
+        submitForReview.clickButton("Submit");
+        stopImpersonating();
+
+        log("Verify rows were inserted in appropriate datasets");
+        goToEHRFolder();
+        verifyRowCreated("study", "necropsy", aliveAnimalId, 1);
+        verifyRowCreated("study", "grossPathology", aliveAnimalId, 9);
+        verifyRowCreated("study", "tissueDisposition", aliveAnimalId, 1);
+
+        goToEHRFolder();
+        impersonate(NIRC_FULL_SUBMITTER_VET);
+        waitAndClickAndWait(Locator.linkContainingText("My Review Tasks"));
+        waitAndClickAndWait(Locator.linkWithText("Death/Necropsy"));
+        submitForm("Submit Final", "Finalize");
+        stopImpersonating();
+
+        log("Verify rows were inserted in appropriate datasets");
+        verifyRowCreated("study", "weight", aliveAnimalId, 1);
+
+        log("Verify animal is marked as dead");
         AnimalHistoryPage historyPage = AnimalHistoryPage.beginAt(this);
         historyPage.searchSingleAnimal(aliveAnimalId);
         waitForText(WAIT_FOR_PAGE, "Dead");
-        stopImpersonating();
 
-        NotificationAdminPage adminPage = NotificationAdminPage.beginAt(this);
-        adminPage.clickRunReportInBrowser("NIRC Death Notification");
+        log("Verify error message is display for dead animal");
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Death/Necropsy"));
 
-
-        //wait for 1 minute (since the notification is set to run after one min after a Death record is submitted)
-
-
-        //impersonate as a vet user who is a "EHR Basic Submitter" (vet_bs@test.com)
-
-        //verify death notification email was sent from Dumbster module.
-        //Note: since this death notification is being sent from a trigger script, you can't generate a notification on the fly from the Notification Admin page.
-
-        //click on the necropsy link from the "email" and verify that the necropsy form is displayed with Death data filled in
-
-        //verify that 'Submit for Review' button is visible
-
-        //Fill out necropsy, gross pathology, and tissue disposition sections
-        //submit for review, and assign to vet_fs@test.com
-        //verify data in study.necropsy, grossPathology, and tissueDisposition datasets
-
-        //stop impersonation
-        //impersonate as a vet user who is a "EHR Full Submitter" (vet_fs@test.com)
-        //Go to EHR page > Enter Data > My tasks
-        //Click on task Title -  this should take user to the Death/Necropsy data entry form
-        //'Submit Final' button should be visible
-        //click Submit Final
-
-        //verify data in study.weight is inserted for this dead animal (submit final sets the QC State to "Completed", aka makes data public to be then available to view from Demographics as Most Recent Weight)
-
-        //verify that animal's record is closed, meaning 'end date' is set in study.assignments, study.protocolAssignments, and study.housing as the date of death
+        waitForElement(Locator.name("Id"));
+        setFormElement(Locator.name("Id"), deadAnimalId);
+        waitForText("Id: ERROR: Death record already exists for this animal.");
     }
 
     @Override
