@@ -73,7 +73,7 @@ exports.init = function (EHR) {
 
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'deaths', function(event, helper) {
         helper.setScriptOptions({
-            datasetsToClose: ['Assignment', 'Protocol Assignment' , 'Housing']
+            datasetsToClose: ['Assignment', 'Protocol Assignments' , 'Housing']
         });
     });
 }

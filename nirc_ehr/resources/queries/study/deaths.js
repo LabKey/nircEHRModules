@@ -9,7 +9,7 @@ function onInit(event, helper){
         allowShippedIds: false,
         allowDeadIds: false,
         requiresStatusRecalc: false,
-        datasetsToClose: ['Assignment', 'Protocol Assignment' , 'Housing']
+        datasetsToClose: ['Assignment', 'Protocol Assignments' , 'Housing']
     });
     helper.decodeExtraContextProperty('deathsInTransaction');
 
