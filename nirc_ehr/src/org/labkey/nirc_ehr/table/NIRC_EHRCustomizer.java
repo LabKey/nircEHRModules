@@ -144,7 +144,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             if ("gender".equalsIgnoreCase(col.getName()) && null == col.getFk())
             {
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
-                col.setLabel("Sex");
+                col.setLabel("Gender");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "gender_codes", "code", "meaning"));
             }
             if ("cage".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("cage"))
