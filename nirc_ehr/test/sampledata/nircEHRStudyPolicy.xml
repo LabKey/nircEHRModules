@@ -70,5 +70,17 @@
     <ns:datasetPermission datasetName="tissueDisposition" groupName="EHR Full Updaters" role="org.labkey.ehr.security.EHRFullUpdaterRole"/>
     <ns:datasetPermission datasetName="tissueDisposition" groupName="EHR Request Admins" role="org.labkey.ehr.security.EHRRequestAdminRole"/>
     <ns:datasetPermission datasetName="tissueDisposition" groupName="EHR Requestors" role="org.labkey.ehr.security.EHRRequestorRole"/>
+    <ns:datasetPermission datasetName="departure" groupName="EHR Administrators" role="org.labkey.ehr.security.EHRDataAdminRole"/>
+    <ns:datasetPermission datasetName="departure" groupName="EHR Basic Submitters" role="org.labkey.ehr.security.EHRBasicSubmitterRole"/>
+    <ns:datasetPermission datasetName="departure" groupName="EHR Full Submitters" role="org.labkey.ehr.security.EHRFullSubmitterRole"/>
+    <ns:datasetPermission datasetName="departure" groupName="EHR Full Updaters" role="org.labkey.ehr.security.EHRFullUpdaterRole"/>
+    <ns:datasetPermission datasetName="departure" groupName="EHR Request Admins" role="org.labkey.ehr.security.EHRRequestAdminRole"/>
+    <ns:datasetPermission datasetName="departure" groupName="EHR Requestors" role="org.labkey.ehr.security.EHRRequestorRole"/>
+    <ns:datasetPermission datasetName="protocolAssignment" groupName="EHR Administrators" role="org.labkey.ehr.security.EHRDataAdminRole"/>
+    <ns:datasetPermission datasetName="protocolAssignment" groupName="EHR Basic Submitters" role="org.labkey.ehr.security.EHRBasicSubmitterRole"/>
+    <ns:datasetPermission datasetName="protocolAssignment" groupName="EHR Full Submitters" role="org.labkey.ehr.security.EHRFullSubmitterRole"/>
+    <ns:datasetPermission datasetName="protocolAssignment" groupName="EHR Full Updaters" role="org.labkey.ehr.security.EHRFullUpdaterRole"/>
+    <ns:datasetPermission datasetName="protocolAssignment" groupName="EHR Request Admins" role="org.labkey.ehr.security.EHRRequestAdminRole"/>
+    <ns:datasetPermission datasetName="protocolAssignment" groupName="EHR Requestors" role="org.labkey.ehr.security.EHRRequestorRole"/>
 </ns:perDatasetPermissions>
 </ns:studySecurityPolicy>
