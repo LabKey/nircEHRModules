@@ -10,6 +10,7 @@ import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ehr.EHRService;
+import org.labkey.api.ehr.security.EHRDataEntryPermission;
 import org.labkey.api.exp.api.StorageProvisioner;
 import org.labkey.api.exp.property.Domain;
 import org.labkey.api.gwt.client.FacetingBehaviorType;
@@ -19,7 +20,6 @@ import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.ExprColumn;
 import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
-import org.labkey.api.query.UserIdQueryForeignKey;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.study.DatasetTable;
 import org.labkey.api.util.StringExpressionFactory;
@@ -48,7 +48,61 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 ti.addTriggerFactory(new NIRC_EHRTriggerScriptFactory());
             }
+
+            if (matches(ti, "ehr", "tasks") || matches(table, "ehr", "my_tasks"))
+            {
+                customizeTasks(ti);
+            }
         }
+    }
+
+    private void customizeTasks(AbstractTableInfo ti)
+    {
+        DetailsURL detailsURL = DetailsURL.fromString("/ehr/dataEntryFormDetails.view?formType=${formtype}&taskid=${taskid}");
+        ti.setDetailsURL(detailsURL);
+
+        var titleCol = ti.getMutableColumn("title");
+        if (titleCol != null)
+        {
+            titleCol.setURL(detailsURL);
+        }
+
+        var rowIdCol = ti.getMutableColumn("rowid");
+        if (rowIdCol != null)
+        {
+            rowIdCol.setURL(detailsURL);
+        }
+
+        var updateCol = ti.getMutableColumn("updateTitle");
+        if (updateCol == null)
+        {
+            updateCol = new WrappedColumn(ti.getColumn("title"), "updateTitle");
+            ti.addColumn(updateCol);
+        }
+
+        var updateTaskId = ti.getMutableColumn("updateTaskId");
+        if (updateTaskId == null)
+        {
+            updateTaskId = new WrappedColumn(ti.getColumn("rowid"), "updateTaskId");
+            ti.addColumn(updateTaskId);
+        }
+
+        if (ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRDataEntryPermission.class))
+        {
+            updateCol.setURL(DetailsURL.fromString("/ehr/dataEntryForm.view?formType=${formtype}&taskid=${taskid}"));
+            updateTaskId.setURL(DetailsURL.fromString("/ehr/dataEntryForm.view?formType=${formtype}&taskid=${taskid}"));
+        }
+        else
+        {
+            updateCol.setURL(detailsURL);
+            updateTaskId.setURL(detailsURL);
+        }
+
+        updateCol.setLabel("Title");
+        updateCol.setHidden(true);
+
+        updateTaskId.setLabel("Task Id");
+        updateTaskId.setHidden(true);
     }
 
     public void doTableSpecificCustomizations(AbstractTableInfo ti)
@@ -75,11 +129,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
     {
         for (var col : ti.getMutableColumns())
         {
-            if ("performedby".equalsIgnoreCase(col.getName()) && null == col.getFk())
-            {
-                col.setLabel("Performed By");
-                col.setFk(new UserIdQueryForeignKey(ti.getUserSchema(), true));
-            }
             if ("species".equalsIgnoreCase(col.getName()) && null == col.getFk())
             {
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
@@ -144,6 +193,39 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                 col.setLabel("Units");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "numeric_unit", "value", "title"));
+            }
+            if ("performedby".equalsIgnoreCase(col.getName()))
+            {
+                col.setLabel("Performed By");
+
+                UserSchema us = getEHRUserSchema(ti, "core");
+                if (us != null)
+                {
+                    col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                            .table("users")
+                            .key("DisplayName")
+                            .display("DisplayName")));
+                }
+            }
+            if ("taskid".equalsIgnoreCase(col.getName()))
+            {
+                col.setURL(DetailsURL.fromString("/ehr/dataEntryFormDetails.view?formType=${taskid/formtype}&taskId=${taskid}"));
+            }
+            if ("container".equalsIgnoreCase(col.getName()))
+            {
+                col.setHidden(true);
+            }
+            if ("date".equalsIgnoreCase(col.getName()) && !ti.getName().equals("drug"))
+            {
+                col.setFormat("Date");
+            }
+            if ("enddate".equalsIgnoreCase(col.getName()) && !ti.getName().equals("encounters"))
+            {
+                col.setFormat("Date");
+            }
+            if ("reviewdate".equalsIgnoreCase(col.getName()))
+            {
+                col.setFormat("Date");
             }
         }
     }
