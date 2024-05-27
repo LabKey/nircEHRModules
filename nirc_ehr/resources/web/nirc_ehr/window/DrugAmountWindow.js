@@ -62,22 +62,7 @@ Ext4.define('NIRC_EHR.window.DrugAmountWindow', {
             width: 80
         }];
 
-        var storeId = ['ehr_lookups', 'snomed', 'code', 'meaning'].join('||');
-        this.snomedStore = Ext4.create('LABKEY.ext4.data.Store', {
-            type: 'labkey-store',
-            schemaName: 'ehr_lookups',
-            queryName: 'snomed',
-            columns: 'code,meaning',
-            sort: 'meaning',
-            storeId: storeId,
-            autoLoad: true,
-            getRecordForCode: function(code){
-                var recIdx = this.findExact('code', code);
-                if (recIdx != -1){
-                    return this.getAt(recIdx);
-                }
-            }
-        });
+        this.snomedStore = NIRC_EHR._snomedStore;
         LDK.Assert.assertTrue('SNOMED store is not done loading', !this.snomedStore.isLoading());
 
         Ext4.Array.forEach(this.getTargetRecords(), function(record, recordIdx){
@@ -260,21 +245,7 @@ Ext4.define('NIRC_EHR.window.DrugAmountWindow', {
         codes = Ext4.unique(codes);
 
         this.formularyStore = EHR.DataEntryUtils.getFormularyStore();
-        this.snomedStore = Ext4.create('LABKEY.ext4.data.Store', {
-            type: 'labkey-store',
-            schemaName: 'ehr_lookups',
-            queryName: 'snomed',
-            columns: 'code,meaning',
-            sort: 'meaning',
-            storeId: ['ehr_lookups', 'snomed', 'code', 'meaning'].join('||'),
-            autoLoad: true,
-            getRecordForCode: function(code){
-                var recIdx = this.findExact('code', code);
-                if (recIdx != -1){
-                    return this.getAt(recIdx);
-                }
-            }
-        });
+        this.snomedStore = NIRC_EHR._snomedStore;
         LDK.Assert.assertTrue('Formulary store is not done loading', !this.formularyStore.isLoading());
         LDK.Assert.assertTrue('SNOMED store is not done loading', !this.snomedStore.isLoading());
 

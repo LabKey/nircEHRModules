@@ -8,6 +8,7 @@ EHR.model.DataModelManager.registerMetadata('TreatmentSchedule', {
             allowBlank: true
         },
         code: {
+            allowBlank: false,
             inheritFromParent: false,
             editorConfig: {
                 xtype: 'labkey-combo',
@@ -46,5 +47,36 @@ EHR.model.DataModelManager.registerMetadata('TreatmentSchedule', {
                 width: 90
             }
         },
+        type: {
+            hidden: true
+        },
+        attachmentFile: {
+            hidden: true
+        },
+        performedby: {
+            allowBlank: true,
+            nullable: true,
+            lookup: {
+                schemaName: 'core',
+                queryName: 'users',
+                keyColumn: 'UserId',
+                displayColumn: 'DisplayName',
+                columns: 'UserId,DisplayName,FirstName,LastName',
+                sort: 'Type,DisplayName'
+            },
+            defaultValue: LABKEY.Security.currentUser.id
+        }
+    },
+    byQuery: {
+        'study.drug': {
+            date: {
+                header: 'Date/Time',
+            }
+        },
+        'study.treatment_order': {
+            enddate: {
+                allowBlank: true,
+            }
+        }
     }
 });

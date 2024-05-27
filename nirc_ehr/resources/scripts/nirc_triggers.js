@@ -70,4 +70,16 @@ exports.init = function (EHR) {
             removeTimeFromDate: false,
         });
     });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'drug', function(event, helper) {
+        helper.setScriptOptions({
+            allowDeadIds: true,
+        });
+    });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'treatment_order', function(event, helper) {
+        helper.setScriptOptions({
+            allowDeadIds: true,
+        });
+    });
 }

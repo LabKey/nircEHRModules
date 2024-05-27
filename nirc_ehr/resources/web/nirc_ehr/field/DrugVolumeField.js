@@ -8,6 +8,32 @@ Ext4.define('NIRC_EHR.field.DrugVolumeField', {
 
     initComponent: function(){
         this.callParent(arguments);
+        this.getSnomedStore();
+    },
+
+    getSnomedStore: function(){
+        if (NIRC_EHR._snomedStore)
+            return NIRC_EHR._snomedStore;
+
+        var storeId = ['ehr_lookups', 'snomed', 'code', 'meaning'].join('||');
+
+        NIRC_EHR._snomedStore = Ext4.create('LABKEY.ext4.data.Store', {
+            type: 'labkey-store',
+            schemaName: 'ehr_lookups',
+            queryName: 'snomed',
+            columns: 'code,meaning',
+            sort: 'meaning',
+            storeId: storeId,
+            autoLoad: true,
+            getRecordForCode: function(code){
+                var recIdx = this.findExact('code', code);
+                if (recIdx != -1){
+                    return this.getAt(recIdx);
+                }
+            }
+        });
+
+        return NIRC_EHR._snomedStore;
     },
 
     onTriggerClick: function(){

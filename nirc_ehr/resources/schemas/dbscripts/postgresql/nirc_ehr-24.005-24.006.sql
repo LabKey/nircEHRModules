@@ -9,3 +9,4 @@ SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;treatment_frequenc
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;volume_units;/data/volume_units.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;conc_units;/data/conc_units.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;dosage_units;/data/dosage_units.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;editable_lookups;/data/editable_lookups.tsv');
