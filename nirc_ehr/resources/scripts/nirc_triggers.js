@@ -82,4 +82,10 @@ exports.init = function (EHR) {
             allowDeadIds: true,
         });
     });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'deaths', function(event, helper) {
+        helper.setScriptOptions({
+            datasetsToClose: ['Assignment', 'Protocol Assignments' , 'Housing']
+        });
+    });
 }
