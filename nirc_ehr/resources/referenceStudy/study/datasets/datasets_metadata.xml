@@ -255,6 +255,24 @@
                 <columnTitle>Units</columnTitle>
                 <datatype>integer</datatype>
             </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="tube_type">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="tube_vol">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="sampletype">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="num_tubes">
+                <datatype>integer</datatype>
+            </column>
+            <column columnName="reason">
+                <datatype>varchar</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="breeder" tableDbType="TABLE">
@@ -285,6 +303,33 @@
                 <datatype>varchar</datatype>
                 <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
             </column>
+        </columns>
+    </table>
+    <table tableName="clinical_observations" tableDbType="TABLE">
+        <tableTitle>Blood Draws</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="area">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="observation">
+                <datatype>varchar</datatype>
+            </column>
+
         </columns>
     </table>
     <table tableName="clinremarks" tableDbType="TABLE">
@@ -805,6 +850,12 @@
             <column columnName="type">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="procedure">
+                <datatype>integer</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="serology" tableDbType="TABLE">
@@ -1060,6 +1111,9 @@
                 <columnTitle>Units</columnTitle>
                 <datatype>integer</datatype>
             </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
         </columns>
         <tableTitle>Vital Signs</tableTitle>
     </table>
@@ -1084,6 +1138,9 @@
             <column columnName="units">
                 <columnTitle>Units</columnTitle>
                 <datatype>integer</datatype>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>
