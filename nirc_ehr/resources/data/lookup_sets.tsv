@@ -27,6 +27,8 @@ necropsy_specimen_condition	Specimen Condition	value	title
 necropsy_tissue	Tissues	value	title
 numeric_unit	Numeric Units	value	title
 pregnancy_result	Pregnancy Results	value
+problem_list_category	Problem List Category	value
+problem_list_subcategory	Problem List Sub-Category	value
 protocol_category	Protocol Category	value	title
 protocol_state	Protocol State	value	title
 protocol_type	Protocol Type	value	title
