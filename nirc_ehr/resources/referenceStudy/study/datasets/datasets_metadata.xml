@@ -353,6 +353,22 @@
             <column columnName="hx">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="p">
+                <columnTitle>Plan</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="vetreview">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="vetreviewdate">
+                <datatype>timestamp</datatype>
+            </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+            </column>
+            <column columnName="dateFinalized">
+                <datatype>timestamp</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="demographics" tableDbType="TABLE">
@@ -1101,6 +1117,12 @@
             </column>
             <column columnName="pulseRate">
                 <columnTitle>Pulse Rate</columnTitle>
+                <datatype>double</datatype>
+            </column>
+            <column columnName="ekg">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="pulseOximetry">
                 <datatype>double</datatype>
             </column>
             <column columnName="type">

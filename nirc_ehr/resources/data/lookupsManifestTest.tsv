@@ -2,6 +2,12 @@ name
 ageclass
 alias_category
 amount_units
+app_score
+bcs_score
+blood_draw_reason
+blood_draw_tube_type
+blood_sample_type
+blood_tube_volumes
 card_format
 census_activity_status
 conc_units
@@ -20,6 +26,7 @@ expense_class
 gender_codes
 geographic_origins
 housing_reason
+hyd_score
 id_history_type
 necropsy_disposition_codes
 necropsy_exam_reason
@@ -29,6 +36,8 @@ necropsy_physical_condition
 necropsy_specimen_condition
 necropsy_tissue
 numeric_unit
+observation_types
+observation_areas
 pregnancy_result
 protocol_category
 protocol_state
@@ -43,6 +52,7 @@ source
 snomed
 species
 species_codes
+stool_score
 treatment_frequency
 vendor_approval_code
 vendor_production_location

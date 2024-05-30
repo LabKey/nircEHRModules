@@ -1,5 +1,9 @@
 setname	label	keyfield	titleColumn
 alias_category	Alias Category	value	title
+app_score	Appetite Score	value
+bcs_score	BCS Store	value	title
+blood_draw_reason	Blood Draw Reason	value
+blood_sample_type	Blood Sample Types	value
 card_format	Card Format	value	title
 census_activity_status	Census Activity Status	value	title
 clinremarks_category	Clinremarks Category	value	title
@@ -16,6 +20,7 @@ euthanasia_type	Euthanasia Type	value	title
 exemption_category	Exemption Category	value	title
 expense_class	Expense Class	value	description
 housing_reason	Housing Reason	value
+hyd_score	Hyd Score	value
 id_history_type	Id History Type	value	title
 keyword	Keyword	value	title
 necropsy_disposition_codes	Tissue Disposition Codes	value	title
@@ -26,6 +31,7 @@ necropsy_physical_condition	Physical Condition	value	title
 necropsy_specimen_condition	Specimen Condition	value	title
 necropsy_tissue	Tissues	value	title
 numeric_unit	Numeric Units	value	title
+observation_areas	Observation Areas	value
 pregnancy_result	Pregnancy Results	value
 protocol_category	Protocol Category	value	title
 protocol_state	Protocol State	value	title

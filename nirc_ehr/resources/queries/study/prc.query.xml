@@ -1,7 +1,7 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="clinremarks" tableDbType="TABLE" useColumnOrder="true">
+            <table tableName="prc" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
@@ -10,6 +10,15 @@
                             <fkTable>data_category</fkTable>
                             <fkColumnName>value</fkColumnName>
                             <fkDisplayColumnName useRawValue="true"/>
+                        </fk>
+                    </column>
+                    <column columnName="procedure">
+                        <columnTitle>Procedure</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>procedures</fkTable>
+                            <fkColumnName>rowid</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
                         </fk>
                     </column>
                 </columns>
