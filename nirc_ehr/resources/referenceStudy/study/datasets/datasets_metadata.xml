@@ -571,6 +571,10 @@
             <column columnName="enddate">
                 <datatype>timestamp</datatype>
             </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
         </columns>
     </table>
     <table tableName="inbreeding" tableDbType="TABLE">
