@@ -48,6 +48,7 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
         {
             s.addConfigSource("ClinicalDefaults");
             s.addConfigSource("ClinicalCase");
+            s.addConfigSource("TreatmentSchedule");
 
             if (s instanceof SimpleFormSection && !s.getName().equals("tasks"))
                 s.setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);
@@ -57,6 +58,9 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 ((AbstractFormSection)s).setAllowBulkAdd(false);
             }
         }
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalCase.js"));
