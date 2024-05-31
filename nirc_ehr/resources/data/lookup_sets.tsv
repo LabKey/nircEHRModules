@@ -23,6 +23,7 @@ housing_reason	Housing Reason	value
 hyd_score	Hyd Score	value
 id_history_type	Id History Type	value	title
 keyword	Keyword	value	title
+stool_score	Stool Score	value
 necropsy_disposition_codes	Tissue Disposition Codes	value	title
 necropsy_exam_reason	Necropsy Reason	value	title
 necropsy_organ_appearance	Appearance	value	title
