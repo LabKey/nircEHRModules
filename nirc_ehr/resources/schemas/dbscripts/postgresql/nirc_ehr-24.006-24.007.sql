@@ -1,5 +1,8 @@
 SELECT core.executeJavaUpgradeCode('reloadFolder');
 
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/clinremarks;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/vitals;truncate');
+
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;app_score;/data/app_score.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;bcs_score;/data/bcs_score.tsv');
