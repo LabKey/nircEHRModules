@@ -3,6 +3,8 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="vitals" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
+                    <column columnName="Id" />
+                    <column columnName="date" />
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
@@ -12,6 +14,18 @@
                             <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
+                    <column columnName="bloodPressure" />
+                    <column columnName="temp" />
+                    <column columnName="heartRate" />
+                    <column columnName="respRate" />
+                    <column columnName="pulseRate" />
+                    <column columnName="ekg">
+                            <columnTitle>EKG</columnTitle>
+                    </column>
+                    <column columnName="pulseOximetry">
+                            <columnTitle>Pulse Oximetry</columnTitle>
+                    </column>
+
                 </columns>
             </table>
         </tables>

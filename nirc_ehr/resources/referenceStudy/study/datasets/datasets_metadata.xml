@@ -306,7 +306,7 @@
         </columns>
     </table>
     <table tableName="clinical_observations" tableDbType="TABLE">
-        <tableTitle>Blood Draws</tableTitle>
+        <tableTitle>Clinical Observations</tableTitle>
         <columns>
             <column columnName="Id">
                 <datatype>varchar</datatype>

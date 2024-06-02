@@ -3,6 +3,8 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="prc" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
+                    <column columnName="Id" />
+                    <column columnName="date" />
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>

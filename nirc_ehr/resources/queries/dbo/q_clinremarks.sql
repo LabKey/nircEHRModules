@@ -6,7 +6,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
             ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
                 || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
        anmEvt.EVENT_ID.EVENT_ID                                                  AS category,
-       anmEvt.DIAGNOSIS                                                          AS hx,
+       anmEvt.DIAGNOSIS                                                          AS vetreview,
        anmCmt.TEXT                                                               AS remark,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP)        AS modified
 FROM ANIMAL_EVENT anmEvt

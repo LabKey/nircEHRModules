@@ -42,6 +42,7 @@ import org.labkey.nirc_ehr.dataentry.form.NIRCAliasFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCArrivalFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCAssignmentFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCBirthFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCBulkClinicalFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDeathNecropsyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCExemptionsFormType;
@@ -179,6 +180,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCAssignmentFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCArrivalFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCBirthFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCBulkClinicalFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCDepartureFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCDeathNecropsyFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCHousingFormType.class, this));
