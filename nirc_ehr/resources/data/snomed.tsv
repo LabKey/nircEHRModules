@@ -1,0 +1,357 @@
+Code	Meaning
+NIRC-001	Acepromazine
+NIRC-002	Acetaminophen
+NIRC-003	Adequan
+NIRC-004	Albendazole
+NIRC-005	Albon suspension
+NIRC-006	Albuterol
+NIRC-007	Alfaxalone
+NIRC-008	Alfentanil
+NIRC-009	Alprazolam
+NIRC-010	Aluminum Hydroxide
+NIRC-011	Amikacin Sulfate
+NIRC-012	Aminophylline
+NIRC-013	Amiodarone
+NIRC-014	Amitriptyline
+NIRC-015	Amoxicillin
+NIRC-016	Amoxicillin / Clavulanic Acid
+NIRC-017	Amoxi-Mast
+NIRC-018	Ampicillin
+NIRC-019	Ampicillin/Sulbactam
+NIRC-020	Artemether
+NIRC-021	Aspirin
+NIRC-022	Atenolol Suspension
+NIRC-023	Atipamezole HCl
+NIRC-024	Atracurium
+NIRC-025	Atropine Sulfate
+NIRC-026	Azathioprine
+NIRC-027	Azithromycin
+NIRC-028	Barium Sulfate
+NIRC-029	Belatacept
+NIRC-030	Benzoyl Peroxide Shampoo
+NIRC-031	Betamethasone Dipropionate
+NIRC-032	Bethanechol
+NIRC-033	Bio-Sponge
+NIRC-034	Biozide Gel
+NIRC-035	Bismuth Subsalicylate
+NIRC-036	Budesonide
+NIRC-037	Bupivacaine HCl
+NIRC-038	Bupivacaine HCl And Epinephrine
+NIRC-039	Bupivacaine SR (Nocita)
+NIRC-040	Buprenorphine
+NIRC-041	Buprenorphine SR
+NIRC-042	Busulfan
+NIRC-043	Butorphanol Tartrate
+NIRC-044	Calcium citrate powder
+NIRC-045	Calcium gluconate 23%
+NIRC-046	Carprofen, injectable
+NIRC-047	Carprofen, oral
+NIRC-048	Carvedilol
+NIRC-049	Cd3-Immunotoxin
+NIRC-050	Cefazolin
+NIRC-051	Cefdinir
+NIRC-052	Cefovecin (Convenia)
+NIRC-053	Cefpodoxime
+NIRC-054	Ceftiofur crystalline free acid (CFFA)
+NIRC-055	Ceftriaxone
+NIRC-056	Cefuroxime
+NIRC-057	Cephalexin
+NIRC-058	Chloramphenicol
+NIRC-059	Chlorhexidine spray (Duoxo®)
+NIRC-060	Chloroquine
+NIRC-061	Chlorpromazine
+NIRC-062	Chlorthalidone
+NIRC-063	Cimetidine
+NIRC-064	Ciprofloxacin
+NIRC-065	Cisapride
+NIRC-066	Clay
+NIRC-067	Clindamycin
+NIRC-068	Clobetasol Propionate
+NIRC-069	Clomipramine
+NIRC-070	Clopidogrel
+NIRC-071	Cloprostenol
+NIRC-072	Colchicine
+NIRC-073	Collodial Oatmeal
+NIRC-074	Cyanocobalamin (Vitamin B12)
+NIRC-075	Cyclomydril
+NIRC-076	Cyclophosphamide
+NIRC-077	Cyclosporine
+NIRC-078	Cyproheptadine
+NIRC-079	DA2PP Vaccine (Distemper, Adenovirus Type 2, Parvovirus, Parainfluenza)
+NIRC-080	Definity
+NIRC-081	Denv Vaccine
+NIRC-082	Derma Caps
+NIRC-083	Deslorelin
+NIRC-084	Dexamethasone
+NIRC-085	Dexamethasone SP
+NIRC-086	Dexmedetomidine HCl
+NIRC-087	Dextromethorphan
+NIRC-088	Dextrose
+NIRC-089	Diazepam
+NIRC-090	Diclofenac Sodium Ophthalmic Solution
+NIRC-091	Diet, Ensure Liquid Nutrition
+NIRC-092	Diet, Ensure Soaked Biscuits
+NIRC-093	Diet, Juice Soaked Biscuits
+NIRC-094	Diet, Misc, Nos
+NIRC-095	Diet, Water Soaked Biscuits
+NIRC-096	Digoxin
+NIRC-097	Dimethicone Barrier Cream
+NIRC-098	Dinoprost (PGF2 alpha)
+NIRC-099	Diphenhydramine, injectable
+NIRC-100	Diphenhydramine, oral
+NIRC-101	Diphenoxylate
+NIRC-102	Dobutamine
+NIRC-103	Docusate Sodium
+NIRC-104	Dopamine
+NIRC-105	Doxapram
+NIRC-106	Doxipen
+NIRC-107	Doxycycline
+NIRC-108	Draxxin
+NIRC-109	Dronabinol
+NIRC-110	Drug, Nos
+NIRC-111	Ear cleaning solution
+NIRC-112	Enalapril
+NIRC-113	Enrofloxacin, injectable
+NIRC-114	Enrofloxacin, oral
+NIRC-115	Enulose
+NIRC-116	Epinephrine [1:1000, 1 mg/mL]
+NIRC-117	Epoetin
+NIRC-118	Epsom salt bag
+NIRC-119	Erythromycin
+NIRC-120	Essential 6 Spot On
+NIRC-121	Famotidine, injectable
+NIRC-122	Famotidine, oral
+NIRC-123	Fenbendazole
+NIRC-124	Fentanyl
+NIRC-125	Fenugreek
+NIRC-126	Finasteride
+NIRC-127	Florfenicol
+NIRC-128	Fluconazole
+NIRC-129	Flumazenil
+NIRC-130	Flunixin meglumine
+NIRC-131	Fluoxetine
+NIRC-132	Flurbiprofen
+NIRC-133	Fosphenytoin
+NIRC-134	FSH
+NIRC-135	Furosemide
+NIRC-136	FVRCP vaccine (Feline Viral Rhinotracheitis, Calicivirus, Panleukopenia)
+NIRC-137	Gabapentin
+NIRC-138	Gentamicin
+NIRC-139	Gentamicin/ betamethasone spray
+NIRC-140	Glipizide
+NIRC-141	Glucosamine/Chondroitin Ds
+NIRC-142	Glucosamine/Chondroitin/Msm
+NIRC-143	Glycopyrrolate
+NIRC-144	Golytely
+NIRC-145	Granulex
+NIRC-146	Griseofulvin
+NIRC-147	Guanfacine
+NIRC-148	Haloperidol decanoate (depot)
+NIRC-149	Haloperidol lactate
+NIRC-150	Heparin Sodium
+NIRC-151	Hetastarch
+NIRC-152	Human Chorionic Gonadotropin
+NIRC-153	Humilac
+NIRC-154	Hydrocortisone cream
+NIRC-155	Hydrogel
+NIRC-156	Hydromorphone
+NIRC-157	Hydromorphone Injectable Hcl
+NIRC-158	Hypertonic Saline
+NIRC-159	Ibuprofen
+NIRC-160	Indocyanine Green
+NIRC-161	Influenza Vaccine
+NIRC-162	Insulin
+NIRC-163	Insulin (rapid, short, and intermediate acting)
+NIRC-164	Insulin, Degludec
+NIRC-165	Insulin, Glargine
+NIRC-166	Iodoquinolol
+NIRC-167	Iohexol (Omnipaque)
+NIRC-168	Iron Dextran
+NIRC-169	Isoflurane
+NIRC-170	Isoniazid
+NIRC-171	Isoproterenol
+NIRC-172	Isovue-300
+NIRC-173	Isovue-370. T
+NIRC-174	Itraconazole
+NIRC-175	Ivermectin 1% Injectable
+NIRC-176	Kaolin & Pectin
+NIRC-177	Karo syrup
+NIRC-178	Ketaloric Trimethamine Ophthalmic Solution
+NIRC-179	Ketamine Injectable
+NIRC-180	Ketoconazole
+NIRC-181	Ketoprofen Injectable
+NIRC-182	Ketorolac
+NIRC-183	Lactated ringers solution
+NIRC-184	Leuprolide
+NIRC-185	Levetiracetam
+NIRC-186	Lidocaine + epinephrine
+NIRC-187	Lidocaine Hydrochloride
+NIRC-188	Loperamide Hydrochloride
+NIRC-189	Loratadine
+NIRC-190	Lorazepam
+NIRC-191	L-Tryptophan
+NIRC-192	L-Lysine
+NIRC-193	Magnesium hydroxide
+NIRC-194	Mannitol
+NIRC-195	Maropitant Citrate
+NIRC-196	Mct Oil
+NIRC-197	Measles, Mumps, Rubella Vaccine (MMR)
+NIRC-198	Mebendazole
+NIRC-199	Medetomidine Hcl
+NIRC-200	Medihoney
+NIRC-201	Medroxyprogesterone acetate (Depo-Provera)
+NIRC-202	Mefloquine
+NIRC-203	Megestrol Acetate
+NIRC-204	Melengestrol Acetate
+NIRC-205	Meloxicam, injectable
+NIRC-206	Meloxicam, oral
+NIRC-207	Meloxicam, sustained release
+NIRC-208	Menotropins
+NIRC-209	Mesalamine
+NIRC-210	Metamucil Powder
+NIRC-211	Metformin
+NIRC-212	Methotrexate
+NIRC-213	Methylene Blue
+NIRC-214	Methylprednisolone acetate (Depo-Medrol)
+NIRC-215	Methylprednisolone sodium succinate (Solu-medrol)
+NIRC-216	Metoclopramide
+NIRC-217	Metronidazole, injectable
+NIRC-218	Metronidazole, oral
+NIRC-219	Miconahex + Triz
+NIRC-220	Midazolam
+NIRC-221	Mifepristone
+NIRC-222	Minocycline HCl
+NIRC-223	Mirtazapine
+NIRC-224	Misoprostol
+NIRC-225	Morphine
+NIRC-226	Moxidectin
+NIRC-227	Moxifloxacin Opthalmic
+NIRC-228	Multivitamin Preparation, Nos
+NIRC-229	Mylanta
+NIRC-230	Nalbuphine
+NIRC-231	Naloxone
+NIRC-232	Naltrexone
+NIRC-233	Nembutal
+NIRC-234	Neo/Poly/Bac W/Dexamethasone
+NIRC-235	Neomycin Sulfate
+NIRC-236	Neomycin/Bacitracin/Polymyxin
+NIRC-237	Neostigmine
+NIRC-238	Nitazoxanide
+NIRC-239	Normasol
+NIRC-240	Nystatin
+NIRC-241	N-acetylcysteine
+NIRC-242	Olanzapine
+NIRC-243	Omeprazole
+NIRC-244	Ondansetron
+NIRC-245	Ophthalmic Eye Wash
+NIRC-246	Oral rehydration salts (oral electrolytes)
+NIRC-247	Oxacillin
+NIRC-248	Oxycodone Hydrochloride
+NIRC-249	Oxygen
+NIRC-250	Oxymorphone Hydrochloride
+NIRC-251	Oxytetracycline
+NIRC-252	Oxytocin
+NIRC-253	Packed red blood cells
+NIRC-254	Pancuronium
+NIRC-255	Pantoprazole (Protonix)
+NIRC-256	Paromomycin
+NIRC-257	Penicillin G Procaine
+NIRC-258	Pentobarbital (euthanasia solution)
+NIRC-259	Pentobarbitol Sodium
+NIRC-260	Phenazopyridine
+NIRC-261	Phenobarbital
+NIRC-262	Phenylephrine
+NIRC-263	Phenytoin
+NIRC-264	Phytonadione (Vitamin K1)
+NIRC-265	Pimobendan
+NIRC-266	Pioglitazone
+NIRC-267	Plasma
+NIRC-268	Platelet rich plasma (PRP)
+NIRC-269	Polymyxin B
+NIRC-270	Polymyxin B Sulfate and Bacitracin ophthalmic ointment
+NIRC-271	Potassium chloride 10%, injectable
+NIRC-272	Potassium Gluconate
+NIRC-273	Potassium, oral
+NIRC-274	Prang
+NIRC-275	Praziquantel
+NIRC-276	Prazosin
+NIRC-277	Prednisolone
+NIRC-278	Prednisolone Sodium Succinate
+NIRC-279	Prednisone
+NIRC-280	Primaquine
+NIRC-281	Probiotic, B. Infantis
+NIRC-282	Probiotic, Capsule
+NIRC-283	Probiotic, L. Reuteri
+NIRC-284	Probiotic, Paste
+NIRC-285	Probiotic, Visbiome
+NIRC-286	Prochlorperazine
+NIRC-287	Propofol
+NIRC-288	Propranolol
+NIRC-289	Psyllium Seed
+NIRC-290	Putrescine
+NIRC-291	Pyrantel pamoate
+NIRC-292	Quinine
+NIRC-293	Rabies Vaccine, Killed Virus, 1 year
+NIRC-294	Rabies Vaccine, Killed Virus, 3 year
+NIRC-295	Rabies Vaccine, Modified Live Virus
+NIRC-296	Ranitidine
+NIRC-297	Rapamycin
+NIRC-298	Robenacoxib (Onsior)
+NIRC-299	Rocuronium Bromide
+NIRC-300	Ropivacaine
+NIRC-301	S-adenosyl-L-methionine (SAMe) + milk thistle extract
+NIRC-302	Sevoflurane
+NIRC-303	Shampoo, Chlorhexidine
+NIRC-304	Shampoo, Epi-Soothe
+NIRC-305	Shampoo, medicated other
+NIRC-306	Silver sulfadiazine (SSD) Cream
+NIRC-307	Simethicone
+NIRC-308	Sodium Bicarbonate
+NIRC-309	Sodium Chloride
+NIRC-310	Spironolactone
+NIRC-311	Succinylcholine
+NIRC-312	Sucralfate
+NIRC-313	Sufentanil
+NIRC-314	Sulfadimethoxine
+NIRC-315	Sulfamethoxazole/Trimethoprim
+NIRC-316	Sulfasalazine
+NIRC-317	Tacrolimus
+NIRC-318	Terbutaline
+NIRC-319	Terbutaline Sulfate Injectable
+NIRC-320	Tetanus Toxoid Vaccine
+NIRC-321	Tetracaine ophthalmic solution
+NIRC-322	Tetracycline
+NIRC-323	Theophylline
+NIRC-324	Thiabendazole
+NIRC-325	Tiletamine/Zolazepam Injectable (Telazol)
+NIRC-326	Tinidazole
+NIRC-327	Tobramycin Opthalmic
+NIRC-328	Tramadol
+NIRC-329	Tranexamic acid (TEA)
+NIRC-330	Trazadone
+NIRC-331	Triamcinilone Acetate
+NIRC-332	Trimethoprim/Sulfa
+NIRC-333	Triple Antibiotic Ointment
+NIRC-334	Tryptophan
+NIRC-335	Tuberculin mammalian
+NIRC-336	Tulathromycin
+NIRC-337	Tylan Injectable
+NIRC-338	Tylosin
+NIRC-339	Ursodiol
+NIRC-340	Valbazen
+NIRC-341	Valganciclovir Hydrochloride
+NIRC-342	Vancomycin
+NIRC-343	Vanguard DM (Distemper-Measles vaccine)
+NIRC-344	Vecuronium
+NIRC-345	Venlafaxine
+NIRC-346	Vetericyn Plus Spray
+NIRC-347	Vitamin B Complex
+NIRC-348	Vitamin C
+NIRC-349	Vitamin D3
+NIRC-350	Vitamin K1
+NIRC-351	Water Soaked Chow
+NIRC-352	Whole blood
+NIRC-353	Xylazine Injectable
+NIRC-354	Yohimbine
+NIRC-355	Zenpep
+NIRC-35p	Post-Op Rounds

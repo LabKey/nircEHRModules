@@ -47,6 +47,7 @@ import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCExemptionsFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCFlagsFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCHousingFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCMedicationTreatmentFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCNotesFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCPregnancyFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCProjectFormType;
@@ -78,7 +79,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.005;
+        return 24.006;
     }
 
     @Override
@@ -181,6 +182,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCDepartureFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCDeathNecropsyFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCHousingFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCMedicationTreatmentFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCProjectFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCProtocolFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCPregnancyFormType.class, this));
