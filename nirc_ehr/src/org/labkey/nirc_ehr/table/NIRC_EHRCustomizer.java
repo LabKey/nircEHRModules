@@ -123,6 +123,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.allowSameDay);
         }
+        if (matches(ti, "study", "treatment_order"))
+        {
+            EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.allowSameDay);
+        }
     }
 
     public void doSharedCustomization(AbstractTableInfo ti)

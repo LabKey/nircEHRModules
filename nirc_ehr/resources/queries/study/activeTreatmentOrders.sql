@@ -17,4 +17,4 @@ SELECT
     description,
     remark
 FROM treatment_order
-WHERE isActive = true
+WHERE enddate IS NULL OR enddate >= NOW() -- calculated col. isActive is false when the enddate is in the future, so using this condition instead

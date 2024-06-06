@@ -19,7 +19,7 @@ public class NIRCHousingFormType extends NIRCBaseTaskFormType
         super(ctx, owner, NAME, "Housing Transfers", "Colony Management", Arrays.asList(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCHousingFormSection()
+                new NIRCHousingFormSection(true, false)
         ));
     }
 

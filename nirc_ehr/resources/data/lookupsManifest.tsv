@@ -30,6 +30,8 @@ necropsy_specimen_condition
 necropsy_tissue
 numeric_unit
 pregnancy_result
+problem_list_category
+problem_list_subcategory
 protocol_category
 protocol_state
 protocol_type

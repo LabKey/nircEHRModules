@@ -29,6 +29,8 @@ necropsy_specimen_condition	Colony Management	Necropsy Specimen Condition
 necropsy_tissue	Colony Management	Necropsy Tissue
 numeric_unit	Colony Management	Numeric Unit
 pregnancy_result	Colony Management	Pregancy Result
+problem_list_category	Clinical	Problem List Category	Used in problem list dataset. Set when opening a case.
+problem_list_subcategory	Clinical	Problem List Subcategory	Used in problem list to categorize problems.
 protocol_category	Colony Management	Protocol Category
 protocol_state	Colony Management	Protocol State
 protocol_type	Colony Management	Protocol Type
