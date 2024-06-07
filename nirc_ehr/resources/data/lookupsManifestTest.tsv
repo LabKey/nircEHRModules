@@ -36,7 +36,6 @@ necropsy_physical_condition
 necropsy_specimen_condition
 necropsy_tissue
 numeric_unit
-observation_types
 observation_areas
 pregnancy_result
 protocol_category

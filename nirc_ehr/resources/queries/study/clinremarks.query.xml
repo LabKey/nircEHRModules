@@ -5,9 +5,6 @@
                 <columns>
                     <column columnName="Id" />
                     <column columnName="date" />
-                    <column columnName="enddate">
-                        <columnTitle>End Date</columnTitle>
-                    </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
@@ -25,9 +22,6 @@
                     </column>
                     <column columnName="vetreviewdate">
                             <columnTitle>Vet Review Date</columnTitle>
-                    </column>
-                    <column columnName="dateFinalized">
-                        <columnTitle>Date Finalized</columnTitle>
                     </column>
                 </columns>
             </table>

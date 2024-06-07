@@ -2,6 +2,7 @@ EHR.model.DataModelManager.registerMetadata('BulkClinical', {
     allQueries: {
         category: {
             defaultValue: 'Clinical',
+            hidden: true
         },
         project: {
             hidden: true,
@@ -32,7 +33,28 @@ EHR.model.DataModelManager.registerMetadata('BulkClinical', {
             },
             hx: {
                 hidden: true
-            }
+            },
+            remark: {
+                allowBlank: true
+            },
         },
+        'study.clinical_observations': {
+            category: {
+                hidden: false
+            },
+            remark: {
+                allowBlank: true
+            },
+        },
+        'study.blood': {
+            units: {
+                hidden: true
+            },
+        },
+        'study.vitals': {
+            units: {
+                hidden: true
+            },
+        }
     }
 });
