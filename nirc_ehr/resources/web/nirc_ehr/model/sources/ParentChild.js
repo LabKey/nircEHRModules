@@ -7,6 +7,14 @@ EHR.model.DataModelManager.registerMetadata('ParentChild', {
             columnConfig: {
                 editable: false
             }
+        },
+        caseid: {
+            inheritFromParent: true,
+            editable: false,
+            hidden: true,
+            columnConfig: {
+                editable: false
+            }
         }
     }
 });
