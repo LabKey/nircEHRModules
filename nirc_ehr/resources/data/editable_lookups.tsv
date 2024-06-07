@@ -1,9 +1,13 @@
 Value	Category	title	description
 ageclass	Colony Management	Age Class	Categories of age, such as infant or adult, by species. Used in various reports grouping animals by age class.
 alias_category	Colony Management	Alias Category
+alopecia_score	Clinical	Alopecia Score	Clinical observation fixed values.
+alopecia_type	Clinical	Alopecia Type	Clinical observation fixed values.
+alopecia_regrowth	Clinical	Alopecia Regrowth	Clinical observation fixed values.
 amount_units	Clinical	Amount Units	Used in drugs, treatments given and treatments ordered datasets.
 app_score	Clinical	Appetite Score	Clinical observation fixed values.
 bcs_score	Clinical	Body Condition Score	Clinical observation fixed values.
+behavior_types	Clinical	Behavior Types	Clinical observation fixed values.
 blood_draw_reason	Clinical	Blood Draw Reason	Used in blood draw datasets.
 blood_draw_tube_type	Clinical	Blood Draw Tube Type	Used in blood draw datasets.
 blood_sample_type	Clinical	Blood Sample Types	Used in blood draw datasets.
@@ -27,6 +31,8 @@ geographic_origins	Colony Management	Geographic Origins	Used in demographics dat
 housing_reason	Housing	Housing Move Reason	Used in housing dataset for location transfers.
 hyd_score	Clinical	Hydration Score	Clinical observation fixed values.
 id_history_type	Colony Management	Id History Type
+incision_score	Clinical	Incision Score	Clinical observation fixed values.
+mens_score	Clinical	Menses Score	Clinical observation fixed values.
 necropsy_disposition_codes	Colony Management	Necropsy Disposition Codes
 necropsy_exam_reason	Colony Management	Necropsy Exam Reason
 necropsy_organ_appearance	Colony Management	Necropsy Organ Appearance
