@@ -14,6 +14,9 @@ exports.init = function (EHR) {
 
         EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('ehr_lookups', 'cage', EHR.Server.TriggerManager.Events.BEFORE_UPSERT);
         EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('study', 'assignment', EHR.Server.TriggerManager.Events.BEFORE_UPSERT);
+        EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('study', 'clinremarks', EHR.Server.TriggerManager.Events.BEFORE_UPSERT);
+        EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('study', 'clinremarks', EHR.Server.TriggerManager.Events.AFTER_UPSERT);
+        EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('study', 'blood', EHR.Server.TriggerManager.Events.BEFORE_UPSERT);
     });
 
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'assignment', function(event, helper) {

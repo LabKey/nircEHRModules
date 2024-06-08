@@ -1,7 +1,17 @@
 Value	Category	title	description
 ageclass	Colony Management	Age Class	Categories of age, such as infant or adult, by species. Used in various reports grouping animals by age class.
 alias_category	Colony Management	Alias Category
+alopecia_score	Clinical	Alopecia Score	Clinical observation fixed values.
+alopecia_type	Clinical	Alopecia Type	Clinical observation fixed values.
+alopecia_regrowth	Clinical	Alopecia Regrowth	Clinical observation fixed values.
 amount_units	Clinical	Amount Units	Used in drugs, treatments given and treatments ordered datasets.
+app_score	Clinical	Appetite Score	Clinical observation fixed values.
+bcs_score	Clinical	Body Condition Score	Clinical observation fixed values.
+behavior_types	Clinical	Behavior Types	Clinical observation fixed values.
+blood_draw_reason	Clinical	Blood Draw Reason	Used in blood draw datasets.
+blood_draw_tube_type	Clinical	Blood Draw Tube Type	Used in blood draw datasets.
+blood_sample_type	Clinical	Blood Sample Types	Used in blood draw datasets.
+blood_tube_volumes	Clinical	Blood Tube Volumes	Used in blood draw datasets.
 card_format	Colony Management	Card Format
 census_activity_status	Colony Management	Census Activity Status
 conc_units	Clinical	Concentration Units	Used in drug and treatment datasets.
@@ -19,7 +29,10 @@ expense_class	Colony Management	Expense Class
 gender_codes	Colony Management	Gender Codes	Used in demographics dataset.
 geographic_origins	Colony Management	Geographic Origins	Used in demographics dataset.
 housing_reason	Housing	Housing Move Reason	Used in housing dataset for location transfers.
+hyd_score	Clinical	Hydration Score	Clinical observation fixed values.
 id_history_type	Colony Management	Id History Type
+incision_score	Clinical	Incision Score	Clinical observation fixed values.
+mens_score	Clinical	Menses Score	Clinical observation fixed values.
 necropsy_disposition_codes	Colony Management	Necropsy Disposition Codes
 necropsy_exam_reason	Colony Management	Necropsy Exam Reason
 necropsy_organ_appearance	Colony Management	Necropsy Organ Appearance
@@ -28,6 +41,8 @@ necropsy_physical_condition	Colony Management	Necropsy Physical Condition
 necropsy_specimen_condition	Colony Management	Necropsy Specimen Condition
 necropsy_tissue	Colony Management	Necropsy Tissue
 numeric_unit	Colony Management	Numeric Unit
+observation_types	Clinical	Clin remarks observation types
+observation_areas	Clinical	Observation Areas	Clinical observation areas.
 pregnancy_result	Colony Management	Pregancy Result
 problem_list_category	Clinical	Problem List Category	Used in problem list dataset. Set when opening a case.
 problem_list_subcategory	Clinical	Problem List Subcategory	Used in problem list to categorize problems.
@@ -43,6 +58,7 @@ routes	Clinical	Treatment Routes	Used in drug and treatment datasets.
 species	Colony Management	Species
 snomed	Research	Treatments	List of animal treatments.
 species_codes	Colony Management	Species Codes
+stool_score	Clinical	Stool Score
 treatment_frequency	Clinical	Treatment Frequency	Used in treatment and drug datasets.
 vendor_approval_code	Colony Management	Vendor Approval Code
 vendor_production_location	Colony Management	Vendor Production Location
