@@ -3,13 +3,25 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="clinremarks" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
+                    <column columnName="Id" />
+                    <column columnName="date" />
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>clinremarks_category</fkTable>
+                            <fkTable>data_category</fkTable>
                             <fkColumnName>value</fkColumnName>
+                            <fkDisplayColumnName useRawValue="true"/>
                         </fk>
+                    </column>
+                    <column columnName="p">
+                            <columnTitle>Plan</columnTitle>
+                    </column>
+                    <column columnName="vetreview">
+                            <columnTitle>Vet Review</columnTitle>
+                    </column>
+                    <column columnName="vetreviewdate">
+                            <columnTitle>Vet Review Date</columnTitle>
                     </column>
                 </columns>
             </table>

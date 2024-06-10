@@ -255,6 +255,28 @@
                 <columnTitle>Units</columnTitle>
                 <datatype>integer</datatype>
             </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="tube_type">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="tube_vol">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="sampletype">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="num_tubes">
+                <datatype>integer</datatype>
+            </column>
+            <column columnName="reason">
+                <datatype>varchar</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="breeder" tableDbType="TABLE">
@@ -287,6 +309,34 @@
             </column>
         </columns>
     </table>
+    <table tableName="clinical_observations" tableDbType="TABLE">
+        <tableTitle>Clinical Observations</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="category">
+                <columnTitle>Type</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="area">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="observation">
+                <datatype>varchar</datatype>
+            </column>
+
+        </columns>
+    </table>
     <table tableName="clinremarks" tableDbType="TABLE">
         <tableTitle>Clinical Remarks</tableTitle>
         <columns>
@@ -307,6 +357,22 @@
             </column>
             <column columnName="hx">
                 <datatype>varchar</datatype>
+            </column>
+            <column columnName="p">
+                <columnTitle>Plan</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="vetreview">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="vetreviewdate">
+                <datatype>timestamp</datatype>
+            </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+            </column>
+            <column columnName="dateFinalized">
+                <datatype>timestamp</datatype>
             </column>
         </columns>
     </table>
@@ -567,6 +633,10 @@
             <column columnName="enddate">
                 <datatype>timestamp</datatype>
             </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
         </columns>
     </table>
     <table tableName="inbreeding" tableDbType="TABLE">
@@ -805,6 +875,16 @@
             <column columnName="type">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="procedure">
+                <datatype>integer</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="serology" tableDbType="TABLE">
@@ -936,6 +1016,9 @@
                 <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
             </column>
             <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="caseCategory">
                 <columnTitle>Case category</columnTitle>
                 <datatype>varchar</datatype>
             </column>
@@ -959,6 +1042,27 @@
                 <columnTitle>Attachment File</columnTitle>
                 <datatype>varchar</datatype>
                 <rangeURI>http://cpas.fhcrc.org/exp/xml#fileLink</rangeURI>
+            </column>
+            <column columnName="problemCategory">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="problemSubcategory">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="plan">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="vetreview">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#VetReview</propertyURI>
+            </column>
+            <column columnName="vetreviewdate">
+                <datatype>timestamp</datatype>
+                <propertyURI>urn:ehr.labkey.org/#VetReviewDate</propertyURI>
+            </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
             </column>
         </columns>
     </table>
@@ -1016,6 +1120,10 @@
             <column columnName="category">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
         </columns>
     </table>
     <table tableName="vitals" tableDbType="TABLE">
@@ -1052,6 +1160,12 @@
                 <columnTitle>Pulse Rate</columnTitle>
                 <datatype>double</datatype>
             </column>
+            <column columnName="ekg">
+                <datatype>double</datatype>
+            </column>
+            <column columnName="pulseOximetry">
+                <datatype>double</datatype>
+            </column>
             <column columnName="type">
                 <columnTitle>Type</columnTitle>
                 <datatype>varchar</datatype>
@@ -1059,6 +1173,13 @@
             <column columnName="units">
                 <columnTitle>Units</columnTitle>
                 <datatype>integer</datatype>
+            </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
             </column>
         </columns>
         <tableTitle>Vital Signs</tableTitle>
@@ -1084,6 +1205,13 @@
             <column columnName="units">
                 <columnTitle>Units</columnTitle>
                 <datatype>integer</datatype>
+            </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>
