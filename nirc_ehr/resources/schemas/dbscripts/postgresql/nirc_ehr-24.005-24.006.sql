@@ -9,4 +9,16 @@ SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;treatment_frequenc
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;volume_units;/data/volume_units.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;conc_units;/data/conc_units.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;dosage_units;/data/dosage_units.tsv');
+
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;alopecia_type;/data/alopecia_type.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;alopecia_score;/data/alopecia_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;alopecia_regrowth;/data/alopecia_regrowth.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;att_score;/data/att_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;fecal_smear_score;/data/fecal_smear_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;incision_score;/data/incision_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;mens_score;/data/mens_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;sib_score;/data/sib_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;stool_score;/data/stool_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;turgor_score;/data/turgor_score.tsv');
+
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;editable_lookups;/data/editable_lookups.tsv');

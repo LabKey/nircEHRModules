@@ -1,23 +1,10 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="weight" tableDbType="TABLE" useColumnOrder="true">
-                <tableUrl />
-                <insertUrl />
-                <importUrl />
-                <updateUrl />
-                <deleteUrl />
+            <table tableName="prc" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
                     <column columnName="Id" />
                     <column columnName="date" />
-                    <column columnName="weight">
-                        <columnTitle>Weight (kg)</columnTitle>
-                        <formatString>0.###</formatString>
-                        <nullable>true</nullable>
-                    </column>
-                    <column columnName="units">
-                        <isHidden>true</isHidden>
-                    </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
@@ -27,8 +14,14 @@
                             <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
-                    <column columnName="performedBy">
-                        <columnTitle>Performed By</columnTitle>
+                    <column columnName="procedure">
+                        <columnTitle>Procedure</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>procedures</fkTable>
+                            <fkColumnName>rowid</fkColumnName>
+                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                        </fk>
                     </column>
                 </columns>
             </table>
