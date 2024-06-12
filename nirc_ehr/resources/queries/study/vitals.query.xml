@@ -1,23 +1,10 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="weight" tableDbType="TABLE" useColumnOrder="true">
-                <tableUrl />
-                <insertUrl />
-                <importUrl />
-                <updateUrl />
-                <deleteUrl />
+            <table tableName="vitals" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
                     <column columnName="Id" />
                     <column columnName="date" />
-                    <column columnName="weight">
-                        <columnTitle>Weight (kg)</columnTitle>
-                        <formatString>0.###</formatString>
-                        <nullable>true</nullable>
-                    </column>
-                    <column columnName="units">
-                        <isHidden>true</isHidden>
-                    </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
@@ -27,9 +14,18 @@
                             <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
-                    <column columnName="performedBy">
-                        <columnTitle>Performed By</columnTitle>
+                    <column columnName="bloodPressure" />
+                    <column columnName="temp" />
+                    <column columnName="heartRate" />
+                    <column columnName="respRate" />
+                    <column columnName="pulseRate" />
+                    <column columnName="ekg">
+                            <columnTitle>EKG</columnTitle>
                     </column>
+                    <column columnName="pulseOximetry">
+                            <columnTitle>Pulse Oximetry</columnTitle>
+                    </column>
+
                 </columns>
             </table>
         </tables>

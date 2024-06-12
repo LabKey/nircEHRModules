@@ -1,5 +1,14 @@
 setname	label	keyfield	titleColumn
 alias_category	Alias Category	value	title
+alopecia_type	Alopecia Type	value
+alopecia_score	Alopecia Type	value
+alopecia_regrowth	Alopecia Regrowth	value
+app_score	Appetite Score	value
+att_score	Attitude Score	valu
+bcs_score	BCS Store	value	title
+behavior_types	Behavior Types	value
+blood_draw_reason	Blood Draw Reason	value
+blood_sample_type	Blood Sample Types	value
 card_format	Card Format	value	title
 census_activity_status	Census Activity Status	value	title
 clinremarks_category	Clinremarks Category	value	title
@@ -15,9 +24,13 @@ esig_events	ESig Events	value	title
 euthanasia_type	Euthanasia Type	value	title
 exemption_category	Exemption Category	value	title
 expense_class	Expense Class	value	description
+fecal_smear_score	Fecal Smear Scores	value
 housing_reason	Housing Reason	value
+hyd_score	Hyd Score	value
 id_history_type	Id History Type	value	title
+incision_score	Incision Score	value
 keyword	Keyword	value	title
+mens_score	Mens Score	value
 necropsy_disposition_codes	Tissue Disposition Codes	value	title
 necropsy_exam_reason	Necropsy Reason	value	title
 necropsy_organ_appearance	Appearance	value	title
@@ -26,7 +39,10 @@ necropsy_physical_condition	Physical Condition	value	title
 necropsy_specimen_condition	Specimen Condition	value	title
 necropsy_tissue	Tissues	value	title
 numeric_unit	Numeric Units	value	title
+observation_areas	Observation Areas	value
 pregnancy_result	Pregnancy Results	value
+problem_list_category	Problem List Category	value
+problem_list_subcategory	Problem List Sub-Category	value
 protocol_category	Protocol Category	value	title
 protocol_state	Protocol State	value	title
 protocol_type	Protocol Type	value	title
@@ -35,6 +51,9 @@ questionnaire	Questionnaire	value	title
 regulatory_stress_levels	Regulatory Stress Levels	value	title
 req_order_state	Req Order State	value	title
 req_order_type	Req Order Type	value	title
+sib_score	SIB Score	value
+stool_score	Stool Score	value
+turgor_score	Turgor Score	value
 termination_reason_codes	Termination Reason Codes Codes	value	title
 vendor_approval_code	Vendor Approval Code	value	title
 vendor_production_location	Vendor Production Location	value	title
