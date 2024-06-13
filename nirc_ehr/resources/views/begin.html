@@ -130,7 +130,7 @@
                 ]
             });
 
-            Ext4.create('LDK.panel.NavPanel', {
+            let menuCfg2 = {
                 width: 270,
                 renderTo: 'ehrMenu2_' + webpart.wrapperDivId,
                 sections: [
@@ -149,32 +149,27 @@
                         ]
                     }
                 ]
-            });
+            }
 
             if (ctx['EHRStudyContainerInfo'].effectivePermissions.indexOf(EHR.Security.Permissions.VET) > -1) {
-
-                Ext4.create('LDK.panel.NavPanel', {
+                menuCfg2.sections.push({
                     width: 270,
-                    renderTo: 'ehrMenu3_' + webpart.wrapperDivId,
-                    sections: [
+                    header: 'Pathology',
+                    itemDefaults: {
+                        linkCls: 'none',
+                        style: 'font-weight: bold;'
+                    },
+                    items: [
                         {
-                            header: 'Pathology',
-                            itemDefaults: {
-                                linkCls: 'none',
-                                style: 'font-weight: bold;'
-                            },
-                            items: [
-                                {
-                                    name: 'Necropsies',
-                                    url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=ehr&query.queryName=necropsyTasks'
-                                },
-                            ]
-                        }
+                            name: 'Necropsies',
+                            url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=ehr&query.queryName=necropsyTasks'
+                        },
                     ]
                 });
             }
+            Ext4.create('LDK.panel.NavPanel', menuCfg2);
 
-            let menuCfg = {
+            let menuCfg3 = {
                 width: 330,
                 renderTo: 'ehrMenu3_' + webpart.wrapperDivId,
                 sections: [{
@@ -202,7 +197,7 @@
             };
 
             if (LABKEY.Security.currentUser.isAdmin) {
-                menuCfg.sections.push({
+                menuCfg3.sections.push({
                     header: 'Admin',
                     itemDefaults: {
                         linkCls: 'none',
@@ -215,7 +210,7 @@
                 });
             }
 
-            Ext4.create('LDK.panel.NavPanel', menuCfg);
+            Ext4.create('LDK.panel.NavPanel', menuCfg3);
 
         }
     }
