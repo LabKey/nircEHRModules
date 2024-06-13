@@ -1,10 +1,8 @@
 EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
     allQueries: {
         performedby: {
-            allowBlank: false,
-            getInitialValue: function(val, rec){
-                return val || LABKEY.Security.currentUser.displayName;
-            },
+            // allowBlank: false,
+            defaultValue: null,
             lookup: {
                 schemaName: 'core',
                 queryName: 'users',
@@ -32,7 +30,8 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
         },
         'study.necropsy': {
             performedby: {
-                hidden: false
+                hidden: false,
+                allowBlank: true
             },
             necropsyWeight: {
                 label: 'Weight (kg)'

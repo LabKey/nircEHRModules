@@ -6,11 +6,7 @@ var idMap = {};
 var deathIdMap = {};
 
 function onInit(event, helper){
-    helper.setScriptOptions({
-        allowShippedIds: false,
-        allowDeadIds: false,
-        requiresStatusRecalc: false,
-    });
+
     helper.decodeExtraContextProperty('deathsInTransaction');
 
     // Cache valid Ids for check on each row
