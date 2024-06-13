@@ -26,6 +26,13 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
         'study.deaths': {
             qcstate: {
                 hidden: true
+            },
+            date: {
+                xtype: 'xdatetime',
+                editorConfig: {
+                    dateFormat: 'Y-m-d',
+                    timeFormat: 'H:i'
+                },
             }
         },
         'study.necropsy': {
@@ -38,7 +45,10 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
             },
             date: {
                 label: 'Exam Date',
+                xtype: 'xdatetime',
                 editorConfig: {
+                    dateFormat: 'Y-m-d',
+                    timeFormat: 'H:i',
                     listeners: {
                         change: function (combo, rec) {
                             const panel = combo.up('ehr-dataentrypanel');

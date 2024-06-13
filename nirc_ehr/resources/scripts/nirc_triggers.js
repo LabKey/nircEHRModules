@@ -93,7 +93,15 @@ exports.init = function (EHR) {
             allowShippedIds: false,
             allowDeadIds: false,
             requiresStatusRecalc: false,
-            allowRequestsInPast: true
+            allowRequestsInPast: true,
+            removeTimeFromDate: false
+        });
+    });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'necropsy', function(event, helper) {
+
+        helper.setScriptOptions({
+            removeTimeFromDate: false
         });
     });
 }
