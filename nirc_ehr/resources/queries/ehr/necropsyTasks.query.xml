@@ -2,7 +2,7 @@
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="necropsyTasks" tableDbType="TABLE">
-                <tableTitle>Necropsy Tasks</tableTitle>
+                <tableTitle>Necropsies</tableTitle>
                 <columns></columns>
             </table>
         </tables>

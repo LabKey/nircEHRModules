@@ -1,7 +1,6 @@
 SELECT
     taskid,
-    title,
-    formType,
+    updateTitle AS form,
     assignedTo,
     created,
     createdBy,
