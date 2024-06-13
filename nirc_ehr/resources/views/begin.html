@@ -151,6 +151,29 @@
                 ]
             });
 
+            if (ctx['EHRStudyContainerInfo'].effectivePermissions.indexOf(EHR.Security.Permissions.VET) > -1) {
+
+                Ext4.create('LDK.panel.NavPanel', {
+                    width: 270,
+                    renderTo: 'ehrMenu3_' + webpart.wrapperDivId,
+                    sections: [
+                        {
+                            header: 'Pathology',
+                            itemDefaults: {
+                                linkCls: 'none',
+                                style: 'font-weight: bold;'
+                            },
+                            items: [
+                                {
+                                    name: 'Necropsies',
+                                    url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=ehr&query.queryName=necropsyTasks'
+                                },
+                            ]
+                        }
+                    ]
+                });
+            }
+
             let menuCfg = {
                 width: 330,
                 renderTo: 'ehrMenu3_' + webpart.wrapperDivId,
