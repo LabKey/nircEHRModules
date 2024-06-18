@@ -85,6 +85,9 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             }
 
             // check if the animal is pending review on Death record
+            // Note: Upon 'Submit Death', the QCState will get set to 'REQUEST: PENDING', and upon 'Submit for Review',
+            // the QCState will get set to 'Review Required' - this way we can distinguish between the two states in the Death/Necropsy workflow. And if the user
+            // tries to submit a Death record for an animal that already exists with one of these two QCStates, below error message will be displayed.
             if (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
                     (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                             deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
