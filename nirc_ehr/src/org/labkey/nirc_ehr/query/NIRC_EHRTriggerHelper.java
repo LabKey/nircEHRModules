@@ -546,4 +546,10 @@ public class NIRC_EHRTriggerHelper
 
         return null;
     }
+
+    public int getUserId (String displayName)
+    {
+        User u = UserManager.getUserByDisplayName(displayName);
+        return null != u ? u.getUserId() : -1;
+    }
 }

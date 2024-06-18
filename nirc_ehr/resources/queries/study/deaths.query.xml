@@ -18,7 +18,14 @@
                         </fk>
                     </column>
                     <column columnName="remark"/>
-                    <column columnName="performedby"/>
+                    <column columnName="performedby">
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>UserId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
                     <column columnName="project">
                         <isHidden>true</isHidden>
                     </column>

@@ -1,18 +1,8 @@
 EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
     allQueries: {
         performedby: {
-            // allowBlank: false,
-            defaultValue: null,
-            lookup: {
-                schemaName: 'core',
-                queryName: 'users',
-                keyColumn: 'DisplayName',
-                displayColumn: 'DisplayName',
-                columns: 'UserId,DisplayName,FirstName,LastName',
-                sort: 'Type,DisplayName'
-            },
-            editorConfig: {
-                anyMatch: true,
+            formEditorConfig: {
+                anyMatch: false,
                 listConfig: {
                     innerTpl: '{[LABKEY.Utils.encodeHtml(values.DisplayName + (values.LastName ? " (" + values.LastName + (values.FirstName ? ", " + values.FirstName : "") + ")" : ""))]}',
                     getInnerTpl: function(){
@@ -33,6 +23,9 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                     dateFormat: 'Y-m-d',
                     timeFormat: 'H:i'
                 },
+            },
+            performedby: {
+                allowBlank: false,
             }
         },
         'study.necropsy': {

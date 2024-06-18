@@ -74,9 +74,6 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         //only allow death record to be created if animal is in demographics table
         if (idMap[row.Id]) {
 
-            console.log("row.QCStateLabel.toUpperCase()= " + row.QCStateLabel.toUpperCase());
-            console.log("******idMap[row.Id].QCStateLabel = " + idMap[row.Id].QCStateLabel );
-
             // check if death record already exists for this animal
             if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
@@ -88,7 +85,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             }
 
             // check if the animal is pending review on Death record
-            if(row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
+            if (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
                     (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                             deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record is pending review for this animal', 'ERROR');
