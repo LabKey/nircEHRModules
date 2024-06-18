@@ -1,16 +1,5 @@
 EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
     allQueries: {
-        performedby: {
-            formEditorConfig: {
-                anyMatch: false,
-                listConfig: {
-                    innerTpl: '{[LABKEY.Utils.encodeHtml(values.DisplayName + (values.LastName ? " (" + values.LastName + (values.FirstName ? ", " + values.FirstName : "") + ")" : ""))]}',
-                    getInnerTpl: function(){
-                        return this.innerTpl;
-                    }
-                }
-            }
-        }
     },
     byQuery: {
         'study.deaths': {

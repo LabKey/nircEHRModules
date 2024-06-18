@@ -12,17 +12,17 @@ EHR.model.DataModelManager.registerMetadata('Default', {
         performedby: {
             allowBlank: true,
             nullable: true,
-            lookup: {
-                schemaName: 'core',
-                queryName: 'users',
-                keyColumn: 'UserId',
-                displayColumn: 'DisplayName',
-                columns: 'UserId,DisplayName,FirstName,LastName',
-                sort: 'Type,DisplayName'
-            },
-            defaultValue: LABKEY.Security.currentUser.UserId,
             editorConfig: {
-                anyMatch: true,
+                xtype: 'combo',
+                displayField: 'DisplayName',
+                valueField: 'UserId',
+                forceSelection: true,
+                store: {
+                    type: 'labkey-store',
+                    schemaName: 'core',
+                    sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                    autoLoad: true
+                },
                 listConfig: {
                     innerTpl: '{[LABKEY.Utils.encodeHtml(values.DisplayName + (values.LastName ? " (" + values.LastName + (values.FirstName ? ", " + values.FirstName : "") + ")" : ""))]}',
                     getInnerTpl: function(){
