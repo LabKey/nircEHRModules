@@ -207,7 +207,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 {
                     col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
                             .table("users")
-                            .key("DisplayName")
+                            .key("UserId")
                             .display("DisplayName")));
                 }
             }

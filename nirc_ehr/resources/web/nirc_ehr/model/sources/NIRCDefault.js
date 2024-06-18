@@ -15,12 +15,21 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             lookup: {
                 schemaName: 'core',
                 queryName: 'users',
-                keyColumn: 'DisplayName',
+                keyColumn: 'UserId',
                 displayColumn: 'DisplayName',
                 columns: 'UserId,DisplayName,FirstName,LastName',
                 sort: 'Type,DisplayName'
             },
-            defaultValue: LABKEY.Security.currentUser.displayName
+            defaultValue: LABKEY.Security.currentUser.UserId,
+            editorConfig: {
+                anyMatch: true,
+                listConfig: {
+                    innerTpl: '{[LABKEY.Utils.encodeHtml(values.DisplayName + (values.LastName ? " (" + values.LastName + (values.FirstName ? ", " + values.FirstName : "") + ")" : ""))]}',
+                    getInnerTpl: function(){
+                        return this.innerTpl;
+                    }
+                }
+            }
         }
     },
     byQuery: {
