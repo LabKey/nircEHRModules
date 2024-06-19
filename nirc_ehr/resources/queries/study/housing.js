@@ -2,6 +2,8 @@ require("ehr/triggers").initScript(this);
 var prevAnimalId;
 var prevDate;
 
+let triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
+
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'housing', function (helper, scriptErrors, row, oldRow) {
 
         if (helper.isETL()) {
@@ -45,5 +47,13 @@ function onComplete(event, errors, helper){
         }
     }
 };
+
+function onUpsert(helper, scriptErrors, row, oldRow){
+    if (!helper.isETL()) {
+        if (row.Id) {
+            triggerHelper.generateOrchardFile(row.Id);
+        }
+    }
+}
 
 

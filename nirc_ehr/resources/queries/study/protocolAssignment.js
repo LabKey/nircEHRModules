@@ -132,3 +132,11 @@ function getProtocolIdByName(protocolName) {
         }
     }
 }
+
+function onUpsert(helper, scriptErrors, row, oldRow){
+    if (!helper.isETL()) {
+        if (row.Id) {
+            triggerHelper.generateOrchardFile(row.Id);
+        }
+    }
+}

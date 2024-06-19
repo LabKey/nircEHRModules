@@ -17,6 +17,7 @@ import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
 import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
@@ -411,6 +412,12 @@ public class NIRC_EHRTriggerHelper
             _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
             TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
         });
+    }
+
+    public void generateOrchardFile(final String animalId) throws Exception
+    {
+        NIRCOrchardFileGenerator orchardFileGenerator = new NIRCOrchardFileGenerator(_container, _user);
+        orchardFileGenerator.generateOrchardFile(_container, animalId);
     }
 
     private void appendAnimalDetails(StringBuilder html, String id, final Container container)

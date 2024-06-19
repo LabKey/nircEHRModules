@@ -6,6 +6,8 @@
 
 require("ehr/triggers").initScript(this);
 
+let triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
+
 function onInit(event, helper){
     helper.setScriptOptions({
         allowAnyId: true,
@@ -50,6 +52,12 @@ function onUpsert(helper, scriptErrors, row, oldRow){
                 row.sire = '';
                 row.dam = '';
             }
+        }
+    }
+
+    if (!helper.isETL()) {
+        if (row.Id) {
+            triggerHelper.generateOrchardFile(row.Id);
         }
     }
 }
