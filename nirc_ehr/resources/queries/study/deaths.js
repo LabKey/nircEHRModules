@@ -84,10 +84,12 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal is not at the center.', 'ERROR');
             }
 
-            // check if the animal is pending review on Death record
-            // Note: Upon 'Submit Death', the QCState will get set to 'REQUEST: PENDING', and upon 'Submit for Review',
-            // the QCState will get set to 'Review Required' - this way we can distinguish between the two states in the Death/Necropsy workflow. And if the user
-            // tries to submit a Death record for an animal that already exists with one of these two QCStates, below error message will be displayed.
+            // Check if an animal that's being entered is pending any request/review.
+            // Note 1: When trying to enter a new record for an animal, the QCState = 'IN PROGRESS'.
+            // Note 2: Upon 'Submit Death', the QCState will get set to 'REQUEST: PENDING', and upon 'Submit Necropsy for Review',
+            // the QCState will get set to 'Review Required' - this way we can distinguish between the two states in the Death/Necropsy workflow.
+            // If a user tries to submit a new Death record (identified by QCState = 'IN PROGRESS') for an animal that
+            // already has a pending request/review status in study.deaths, then below error message will be displayed.
             if (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
                     (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                             deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {

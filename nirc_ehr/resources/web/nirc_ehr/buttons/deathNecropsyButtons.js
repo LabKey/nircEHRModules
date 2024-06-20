@@ -12,9 +12,14 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
     requiredQC: 'Request: Pending',
     targetQC: 'Request: Pending',
     handler: function(submitDeathBtn){
-        Ext4.Msg.confirm('Confirm', 'You are about to submit a death record. This will send an email notification to the appropriate parties. Submit death?', function(val){
+        Ext4.Msg.confirm('Confirm', 'You are about to submit a death record (any necropsy info entered will be discarded during this step). This will send an email notification to the appropriate parties to enter Necropsy. Submit death?', function(val){
             if (val == 'yes') {
                 var panel = submitDeathBtn.up('ehr-dataentrypanel');
+                panel.storeCollection.clientStores.each((store) => {
+                    if (store.storeId && (store.storeId.indexOf('necropsy') > -1) || store.storeId.indexOf('grossPathology') > -1 ||  store.storeId.indexOf('tissueDisposition') > -1) {
+                        store.removeAll();
+                    }
+                });
                 panel.onSubmit(submitDeathBtn);
             }
         }, this);
@@ -23,7 +28,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
 });
 
 EHR.DataEntryUtils.registerDataEntryFormButton('DEATH_NECROPSY_VET_REVIEW', {
-    text: 'Submit for Review',
+    text: 'Submit Necropsy for Review',
     name: 'review',
     requiredQC: 'Review Required',
     targetQC: 'Review Required',

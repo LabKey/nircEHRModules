@@ -25,15 +25,6 @@
                             <fkDisplayColumnName>cage</fkDisplayColumnName>
                         </fk>
                     </column>
-                    <column columnName="project">
-                        <columnTitle>Project</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr</fkDbSchema>
-                            <fkTable>project</fkTable>
-                            <fkColumnName>project</fkColumnName>
-                            <fkDisplayColumnName>name</fkDisplayColumnName>
-                        </fk>
-                    </column>
                     <column columnName="birthProtocol">
                         <columnTitle>Protocol</columnTitle>
                         <fk>

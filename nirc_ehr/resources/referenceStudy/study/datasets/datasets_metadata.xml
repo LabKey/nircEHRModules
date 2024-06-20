@@ -7,10 +7,6 @@
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#TaskId</propertyURI>
             </column>
-            <column columnName="project">
-                <datatype>integer</datatype>
-                <propertyURI>urn:ehr.labkey.org/#Project</propertyURI>
-            </column>
             <column columnName="parentid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#ParentId</propertyURI>
@@ -119,6 +115,10 @@
             </column>
             <column columnName="enddate">
                 <datatype>timestamp</datatype>
+            </column>
+            <column columnName="project">
+                <datatype>integer</datatype>
+                <propertyURI>urn:ehr.labkey.org/#Project</propertyURI>
             </column>
         </columns>
     </table>
@@ -655,10 +655,6 @@
             </column>
             <column columnName="coefficient">
                 <datatype>double</datatype>
-            </column>
-            <column columnName="project">
-                <datatype>integer</datatype>
-                <propertyURI>urn:ehr.labkey.org/#Project</propertyURI>
             </column>
             <column columnName="enddate">
                 <datatype>timestamp</datatype>
