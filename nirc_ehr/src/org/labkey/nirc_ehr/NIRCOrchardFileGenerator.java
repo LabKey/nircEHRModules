@@ -1,17 +1,28 @@
 package org.labkey.nirc_ehr;
 
 import org.labkey.api.data.Container;
+import org.labkey.api.data.DbScope;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.ehr.EHRService;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.module.ModuleProperty;
+import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.QueryService;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.security.User;
+import org.labkey.api.study.StudyService;
 import org.labkey.api.util.JobRunner;
+import org.labkey.api.util.PageFlowUtil;
+import org.labkey.api.writer.PrintWriters;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +32,7 @@ public class NIRCOrchardFileGenerator
     private User _user = null;
 
     public static final String NIRCOrchardFileLocation = "NIRCOrchardFileLocation";
+    private static final String orchardFileName = "orchardFile.txt";
 
     public NIRCOrchardFileGenerator(Container c, User u)
     {
@@ -36,26 +48,40 @@ public class NIRCOrchardFileGenerator
         {
             return;
         }
-        try
+        try (DbScope.Transaction transaction = StudyService.get().getDatasetSchema().getScope().ensureTransaction())
         {
-            // call the orchard data query
-            JobRunner.getDefault().execute(TimeUnit.MINUTES.toMillis(1), () -> {
+            // Add post commit task to run provider update in another thread once this transaction is complete.
+            transaction.addCommitTask(() ->
+            {
+                JobRunner.getDefault().execute(() ->
+                {
+                    TableInfo ti = getTableInfo("study", "orchardData");
+                    SimpleFilter filter = new SimpleFilter();
+                    filter.addCondition(FieldKey.fromString("Id"), animalId);
+                    StringBuilder sb = new StringBuilder();
 
-                TableInfo ti = getTableInfo("study", "orchardData");
-                SimpleFilter filter = new SimpleFilter();
-                filter.addCondition("Id", animalId);
-                new TableSelector(ti, ti.getColumnNameSet()).forEachResults(rs -> {
-                    // Generate the Orchard file
-                    // ...
+                    new TableSelector(ti, PageFlowUtil.set("Id", "date", "birth", "protocols")).forEachResults(rs -> {
+                        sb.append(rs.getString("Id"));
+                        sb.append(rs.getDate("date"));
+                        sb.append(rs.getDate("birth"));
+                        sb.append(rs.getString("protocols"));
+                        sb.append(System.lineSeparator());
+                    });
+
+                    try (PrintWriter writer = PrintWriters.getPrintWriter(new File(orchardFileLocation + File.separator + orchardFileName))) {
+                        writer.write(sb.toString());
+                    }
+                    catch (IOException e)
+                    {
+                        throw new RuntimeException("Error generating Orchard file", e);
+                    }
                 });
+            }, DbScope.CommitTaskOption.POSTCOMMIT);
 
-            });
+            transaction.commit();
+        }
 
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error generating Orchard file", e);
-        }
+
     }
 
     public String getOrchardFileLocation(Container c)
