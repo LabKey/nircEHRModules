@@ -93,6 +93,10 @@
             <column columnName="CITES">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="project">
+                <datatype>integer</datatype>
+                <propertyURI>urn:ehr.labkey.org/#Project</propertyURI>
+            </column>
             <column columnName="arrivalProtocol">
                 <datatype>varchar</datatype>
             </column>
@@ -223,6 +227,10 @@
                 <datatype>timestamp</datatype>
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="project">
+                <datatype>integer</datatype>
+                <propertyURI>urn:ehr.labkey.org/#Project</propertyURI>
             </column>
             <column columnName="birthProtocol">
                 <datatype>varchar</datatype>
