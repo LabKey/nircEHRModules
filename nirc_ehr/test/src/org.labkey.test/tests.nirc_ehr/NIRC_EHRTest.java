@@ -46,7 +46,9 @@ import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 import org.labkey.test.util.ext4cmp.Ext4GridRef;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.BufferedReader;
@@ -463,9 +465,19 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         log("Assigning the reviewer");
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
-        setFormElement(Locator.tagWithNameContaining("input", "assignedTo"), _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
-        waitForElementToBeVisible(Locator.button("Submit"));
-        submitForReview.clickButton("Submit");
+
+        // Make sure to find the element in submitForReview window.
+        WebElement assignedToElement = Locator.tagWithNameContaining("input", "assignedTo").findWhenNeeded(submitForReview);
+        setFormElement(assignedToElement, _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
+
+        // Entering the text leaves the selection list visible, send 'Enter' to remove it.
+        assignedToElement.sendKeys(Keys.ENTER);
+
+        // The 'button' is actually a link tag.
+        WebElement submitButton = Locator.tagWithText("a", "Submit").findWhenNeeded(submitForReview);
+        scrollIntoView(submitButton);
+        doAndWaitForPageToLoad(()->submitButton.click());
+
         stopImpersonating();
 
         log("Verify rows were inserted in appropriate datasets");
