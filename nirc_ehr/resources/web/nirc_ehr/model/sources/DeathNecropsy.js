@@ -15,12 +15,14 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
             },
             performedby: {
                 allowBlank: false,
+                defaultValue: LABKEY.Security.currentUser.id.toString()
             }
         },
         'study.necropsy': {
             performedby: {
                 hidden: false,
-                allowBlank: true
+                allowBlank: true,
+                defaultValue: LABKEY.Security.currentUser.id.toString()
             },
             necropsyWeight: {
                 label: 'Weight (kg)'
