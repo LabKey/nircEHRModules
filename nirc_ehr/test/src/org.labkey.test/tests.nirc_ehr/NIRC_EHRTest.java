@@ -378,7 +378,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 }
         ), getExtraContext());
 
-        log("Inserting rows in assignments, protocolAssignment and housing");
+        log("Insert ing rows in assignments, protocolAssignment and housing");
         InsertRowsCommand protocol = new InsertRowsCommand("study", "protocolAssignment");
         protocol.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "protocol", "protocol101", "QCStateLabel", "Completed"));
         protocol.execute(getApiHelper().getConnection(), getContainerPath());
@@ -462,8 +462,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClick(_helper.getDataEntryButton("Submit Necropsy for Review"));
 
         log("Assigning the reviewer");
-        Window<?> submitForReview = new Window<>("Submit Necropsy For Review", getDriver());
-        setFormElement(Locator.tagWithNameContaining("input", "ehr-usersandgroups"), NIRC_FULL_SUBMITTER_VET);
+        Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
+        setFormElement(Locator.tagWithNameContaining("input", "assignedTo"), _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
         submitForReview.clickButton("Submit");
         stopImpersonating();
 
