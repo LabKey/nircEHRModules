@@ -78,25 +78,22 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
             }
-
             // check if the animal is at the center
-            if (idMap[row.Id].calculated_status.toUpperCase() === 'SHIPPED') {
+            else if (idMap[row.Id].calculated_status.toUpperCase() === 'SHIPPED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal is not at the center.', 'ERROR');
             }
-
             // Check if an animal that's being entered is pending any request/review.
             // Note 1: When trying to enter a new record for an animal, the QCState = 'IN PROGRESS'.
             // Note 2: Upon 'Submit Death', the QCState will get set to 'REQUEST: PENDING', and upon 'Submit Necropsy for Review',
             // the QCState will get set to 'Review Required' - this way we can distinguish between the two states in the Death/Necropsy workflow.
             // If a user tries to submit a new Death record (identified by QCState = 'IN PROGRESS') for an animal that
             // already has a pending request/review status in study.deaths, then below error message will be displayed.
-            if (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
+            else if (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
                     (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                             deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record is pending review for this animal', 'ERROR');
             }
-
-            if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
+            else if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
 
                 if (validIds.indexOf(row.id) !== -1) {
 
