@@ -464,6 +464,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Assigning the reviewer");
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
         setFormElement(Locator.tagWithNameContaining("input", "assignedTo"), _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
+        waitForElementToBeVisible(Locator.button("Submit"));
         submitForReview.clickButton("Submit");
         stopImpersonating();
 
