@@ -12,6 +12,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
         performedby: {
             allowBlank: true,
             nullable: true,
+            defaultValue: LABKEY.Security.currentUser.id.toString(),
             editorConfig: {
                 xtype: 'combo',
                 displayField: 'DisplayName',

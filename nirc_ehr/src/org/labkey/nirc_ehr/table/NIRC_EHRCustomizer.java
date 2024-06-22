@@ -3,14 +3,19 @@ package org.labkey.nirc_ehr.table;
 import org.labkey.api.data.AbstractTableInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
+import org.labkey.api.data.DataColumn;
+import org.labkey.api.data.DisplayColumn;
+import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.HtmlDisplayColumnFactory;
 import org.labkey.api.data.JdbcType;
 import org.labkey.api.data.MutableColumnInfo;
+import org.labkey.api.data.RenderContext;
 import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.security.EHRDataEntryPermission;
+import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.exp.api.StorageProvisioner;
 import org.labkey.api.exp.property.Domain;
 import org.labkey.api.gwt.client.FacetingBehaviorType;
@@ -18,13 +23,19 @@ import org.labkey.api.ldk.table.AbstractTableCustomizer;
 import org.labkey.api.query.AliasedColumn;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.ExprColumn;
+import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.study.DatasetTable;
+import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringExpressionFactory;
+import org.labkey.api.view.ActionURL;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Calendar;
+import java.util.Set;
 
 public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 {
@@ -53,6 +64,141 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 customizeTasks(ti);
             }
+
+            if (matches(ti, "nirc_ehr", "necropsyTasks"))
+            {
+                addNecropsyReportLink(ti);
+                addNecropsyEnterDataLink(ti);
+            }
+            else if (matches(ti, "study", "necropsy") ||
+                    matches(ti, "study", "grossPathology") ||
+                    matches(ti, "study", "tissueDisposition"))
+            {
+                addNecropsyReportLink(ti);
+            }
+        }
+    }
+
+    private void addNecropsyEnterDataLink(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("enterNecropsyData") == null)
+        {
+            WrappedColumn enterNecropsy = new WrappedColumn(ti.getColumn("taskid"), "enterNecropsyData");
+            enterNecropsy.setLabel("Enter Data");
+            enterNecropsy.setDisplayColumnFactory(new DisplayColumnFactory()
+            {
+                @Override
+                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                {
+                    return new DataColumn(colInfo){
+
+                        @Override
+                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        {
+                            if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRVeterinarianPermission.class))
+                                return;
+
+                            String taskid = (String)getBoundColumn().getValue(ctx);
+
+                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            linkAction.addParameter("formType", "Necropsy");
+                            linkAction.addParameter("taskid", taskid);
+
+                            ActionURL returnUrl = new ActionURL("query", "executeQuery", ti.getUserSchema().getContainer());
+                            returnUrl.addParameter("schemaName", "nirc_ehr");
+                            returnUrl.addParameter("queryName", "necropsyTasks");
+                            linkAction.addParameter("returnUrl", returnUrl.toString());
+
+                            String href = linkAction.toString();
+                            out.write(PageFlowUtil.link("Enter/Update Necropsy").href(href).target("_blank").toString());
+
+                        }
+
+                        @Override
+                        public void addQueryFieldKeys(Set<FieldKey> keys)
+                        {
+                            super.addQueryFieldKeys(keys);
+                            keys.add(getBoundColumn().getFieldKey());
+                        }
+
+                        @Override
+                        public boolean isSortable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isFilterable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isEditable()
+                        {
+                            return false;
+                        }
+                    };
+                }
+            });
+            ti.addColumn(enterNecropsy);
+        }
+    }
+
+    private void addNecropsyReportLink(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("viewNecropsy") == null && ti.getColumn("taskid") != null)
+        {
+            WrappedColumn viewNecropsy = new WrappedColumn(ti.getColumn("taskid"), "viewNecropsy");
+            viewNecropsy.setLabel("Report");
+            viewNecropsy.setDisplayColumnFactory(new DisplayColumnFactory()
+            {
+                @Override
+                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                {
+                    return new DataColumn(colInfo){
+
+                        @Override
+                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        {
+                            String taskid = (String)getBoundColumn().getValue(ctx);
+
+                            ActionURL linkAction = new ActionURL("ehr", "dataEntryFormDetails", ti.getUserSchema().getContainer());
+                            linkAction.addParameter("formType", "Necropsy");
+                            linkAction.addParameter("taskid", taskid);
+
+                            String href = linkAction.toString();
+                            out.write(PageFlowUtil.link("View Report").href(href).target("_blank").toString());
+                        }
+
+                        @Override
+                        public void addQueryFieldKeys(Set<FieldKey> keys)
+                        {
+                            super.addQueryFieldKeys(keys);
+                            keys.add(getBoundColumn().getFieldKey());
+                        }
+
+                        @Override
+                        public boolean isSortable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isFilterable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isEditable()
+                        {
+                            return false;
+                        }
+                    };
+                }
+            });
+            ti.addColumn(viewNecropsy);
         }
     }
 

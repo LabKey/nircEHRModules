@@ -2,6 +2,7 @@
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="necropsyTasks" tableDbType="TABLE">
+                <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer"/>
                 <tableTitle>Necropsies</tableTitle>
                 <columns>
                     <column columnName="status">

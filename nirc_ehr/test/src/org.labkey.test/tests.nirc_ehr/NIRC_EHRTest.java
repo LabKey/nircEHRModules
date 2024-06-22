@@ -380,7 +380,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 }
         ), getExtraContext());
 
-        log("Insert ing rows in assignments, protocolAssignment and housing");
+        log("Inserting rows in assignments, protocolAssignment and housing");
         InsertRowsCommand protocol = new InsertRowsCommand("study", "protocolAssignment");
         protocol.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "protocol", "protocol101", "QCStateLabel", "Completed"));
         protocol.execute(getApiHelper().getConnection(), getContainerPath());
