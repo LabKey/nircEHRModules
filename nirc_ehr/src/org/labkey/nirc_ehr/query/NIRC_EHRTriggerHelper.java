@@ -12,12 +12,10 @@ import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.ConvertHelper;
 import org.labkey.api.data.Results;
 import org.labkey.api.data.ResultsImpl;
-import org.labkey.api.data.Selector;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
-import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
@@ -35,12 +33,11 @@ import org.labkey.api.util.GUID;
 import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.nirc_ehr.NIRCDeathNotification;
+import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -178,29 +175,6 @@ public class NIRC_EHRTriggerHelper
 
         if (errors.hasErrors())
             throw errors;
-
-        return null;
-    }
-
-    public String deleteDatasetRecord(String dataset, String taskid) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException
-    {
-        if (dataset == null || taskid == null)
-        {
-             return "Failed deleting record. Incomplete information.";
-        }
-
-        TableInfo ti = getTableInfo("study", dataset);
-        if (ti == null)
-        {
-            return "Failed deleting record. Table not found: study." + dataset;
-        }
-
-        List<Map<String, Object>> lsids = Arrays.asList(new TableSelector(ti, Collections.singleton("lsid"), new SimpleFilter(FieldKey.fromString("taskid"), taskid), null).getMapArray());
-
-        if (ti.getUpdateService() != null && lsids.size() > 0)
-        {
-            ti.getUpdateService().deleteRows(_user, _container, lsids, null, null);
-        }
 
         return null;
     }
