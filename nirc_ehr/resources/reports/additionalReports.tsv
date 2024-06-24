@@ -1,8 +1,8 @@
 reportname	category	reporttype	reporttitle	visible	containerpath	schemaname	queryname	viewname	report	datefieldname	todayonly	queryhaslocation	sort_order	QCStateLabelFieldName	description
 MHC	Genetics	query	MHC	TRUE		study	MHC				FALSE	FALSE		qcstate/publicdata	This report shows MHC type
 assignment	Colony Management	query	Protocol Assignment	TRUE		study	protocolAssignment				FALSE	FALSE		qcstate/publicdata	This report shows protocol assignments
-grossPathology	Pathology	query	Gross Pathology	TRUE		study	histopathology				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
-tissueDisposition	Pathology	query	Tissue Disposition	TRUE		study	histopathology				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
+grossPathology	Pathology	query	Gross Pathology	TRUE		study	grossPathology				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
+tissueDisposition	Pathology	query	Tissue Disposition	TRUE		study	tissueDisposition				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
 obs	Clinical	query	Observations	TRUE		study	obs			date	FALSE	FALSE		qcstate/publicdata	This report displays observations for the selected animal
 foster	Reproductive Management	query	Fostering	TRUE		study	foster				FALSE	FALSE		qcstate/publicdata	This is for animal fostering data
 projects	Colony Management	query	Project Assignment	TRUE		study	assignment				FALSE	FALSE		qcstate/publicdata	This is for project assignments

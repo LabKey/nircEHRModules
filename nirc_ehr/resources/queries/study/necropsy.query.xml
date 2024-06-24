@@ -34,6 +34,9 @@
                             <fkColumnName>value</fkColumnName>
                         </fk>
                     </column>
+                    <column columnName="necropsyWeight">
+                        <columnTitle>Weight</columnTitle>
+                    </column>
                     <column columnName="project">
                         <isHidden>true</isHidden>
                     </column>
