@@ -45,7 +45,7 @@ exports.init = function (EHR) {
             var shouldAdd = true;
             if (row.objectid){
                 LABKEY.ExtAdapter.each(assignmentsInTransaction, function(r){
-                    if (r.objectid == row.objectid){
+                    if (r.objectid === row.objectid){
                         shouldAdd = false;
                         return false;
                     }
@@ -87,8 +87,21 @@ exports.init = function (EHR) {
     });
 
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'deaths', function(event, helper) {
+
         helper.setScriptOptions({
-            datasetsToClose: ['Assignment', 'Protocol Assignments' , 'Housing']
+            datasetsToClose: ['Assignment', 'Protocol Assignments' , 'Housing'],
+            allowShippedIds: false,
+            allowDeadIds: false,
+            requiresStatusRecalc: false,
+            allowRequestsInPast: true,
+            removeTimeFromDate: false
+        });
+    });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'necropsy', function(event, helper) {
+
+        helper.setScriptOptions({
+            removeTimeFromDate: false
         });
     });
 }
