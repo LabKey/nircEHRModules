@@ -1,11 +1,11 @@
 package org.labkey.nirc_ehr;
 
+import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.DbScope;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
-import org.labkey.api.ehr.EHRService;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.module.ModuleProperty;
@@ -18,13 +18,10 @@ import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.PrintWriters;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
 
 public class NIRCOrchardFileGenerator
 {
@@ -50,21 +47,22 @@ public class NIRCOrchardFileGenerator
         }
         try (DbScope.Transaction transaction = StudyService.get().getDatasetSchema().getScope().ensureTransaction())
         {
-            // Add post commit task to run provider update in another thread once this transaction is complete.
             transaction.addCommitTask(() ->
             {
                 JobRunner.getDefault().execute(() ->
                 {
                     TableInfo ti = getTableInfo("study", "orchardData");
                     SimpleFilter filter = new SimpleFilter();
-                    filter.addCondition(FieldKey.fromString("Id"), animalId);
+                    filter.addCondition(FieldKey.fromString("Id"), Arrays.asList(animalId.split(",")), CompareType.CONTAINS_ONE_OF);
                     StringBuilder sb = new StringBuilder();
 
-                    new TableSelector(ti, PageFlowUtil.set("Id", "date", "birth", "protocols")).forEachResults(rs -> {
+                    new TableSelector(ti, PageFlowUtil.set("Id", "date", "birth", "protocols", "housingDate", "cage", "room"), filter, null).forEachResults(rs -> {
                         sb.append(rs.getString("Id"));
                         sb.append(rs.getDate("date"));
                         sb.append(rs.getDate("birth"));
                         sb.append(rs.getString("protocols"));
+                        sb.append(rs.getString("cage"));
+                        sb.append(rs.getString("room"));
                         sb.append(System.lineSeparator());
                     });
 

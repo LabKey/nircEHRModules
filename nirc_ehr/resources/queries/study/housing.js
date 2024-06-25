@@ -3,6 +3,7 @@ var prevAnimalId;
 var prevDate;
 
 let triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
+let animalIds = [];
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'housing', function (helper, scriptErrors, row, oldRow) {
 
@@ -39,21 +40,18 @@ function onComplete(event, errors, helper){
                         date: EHR.Server.Utils.datetimeToString(updateRows[i].row.date),  //stringify to serialize properly
                         objectid: updateRows[i].row.objectid
                     });
+                    if (animalIds.indexOf(updateRows[i].row.Id) === -1) {
+                        animalIds.push(updateRows[i].row.Id);
+                    }
                 }
             }
             if (idsToClose.length){
                 helper.getJavaHelper().closeHousingRecords(idsToClose);
             }
-        }
-    }
-};
-
-function onUpsert(helper, scriptErrors, row, oldRow){
-    if (!helper.isETL()) {
-        if (row.Id) {
-            triggerHelper.generateOrchardFile(row.Id);
+            if (!helper.isETL() && animalIds.length) {
+                triggerHelper.generateOrchardFile(animalIds);
+            }
         }
     }
 }
-
 

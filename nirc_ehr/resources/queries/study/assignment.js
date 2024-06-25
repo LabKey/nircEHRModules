@@ -3,7 +3,6 @@ var projectData = {};
 var prevAnimalId;
 var prevDate;
 var count = 0;
-let triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 
 function getLastAssignment(id){
     var batchLatestEnddate;
@@ -88,12 +87,4 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
     }
 
 });
-
-function onUpsert(helper, scriptErrors, row, oldRow){
-    if (!helper.isETL()) {
-        if (row.Id) {
-            triggerHelper.generateOrchardFile(row.Id);
-        }
-    }
-}
 

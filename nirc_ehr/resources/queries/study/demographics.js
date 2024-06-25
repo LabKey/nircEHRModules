@@ -7,6 +7,7 @@
 require("ehr/triggers").initScript(this);
 
 let triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
+let animalIds = [];
 
 function onInit(event, helper){
     helper.setScriptOptions({
@@ -54,10 +55,22 @@ function onUpsert(helper, scriptErrors, row, oldRow){
             }
         }
     }
+}
 
-    if (!helper.isETL()) {
-        if (row.Id) {
-            triggerHelper.generateOrchardFile(row.Id);
+function onComplete(event, errors, helper){
+
+    if (!helper.isValidateOnly() && !helper.isETL()) {
+        var updateRows = helper.getRows();
+        if (updateRows && updateRows.length > 0) {
+            for (var i = 0; i < updateRows.length; i++) {
+                if (animalIds.indexOf(updateRows[i].row.Id) === -1) {
+                    animalIds.push(updateRows[i].row.Id);
+                }
+            }
+
+            if (animalIds.length) {
+                triggerHelper.generateOrchardFile(animalIds);
+            }
         }
     }
 }

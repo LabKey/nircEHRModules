@@ -3,6 +3,7 @@ SELECT
     d.date,
     d.birth,
     d.Id.activeAssignments.protocols,
+    h.date as housingDate,
     h.cage,
     h.room
 FROM demographics d
