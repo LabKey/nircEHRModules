@@ -48,8 +48,9 @@ function onComplete(event, errors, helper){
             if (idsToClose.length){
                 helper.getJavaHelper().closeHousingRecords(idsToClose);
             }
-            if (!helper.isETL() && animalIds.length) {
-                triggerHelper.generateOrchardFile(animalIds);
+
+            if (!helper.isETL() && updateRows[0].row.taskid) {
+                triggerHelper.generateOrchardFile(updateRows[0].row.taskid);
             }
         }
     }

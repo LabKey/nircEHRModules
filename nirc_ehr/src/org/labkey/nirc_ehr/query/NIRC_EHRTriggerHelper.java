@@ -12,13 +12,10 @@ import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.ConvertHelper;
 import org.labkey.api.data.Results;
 import org.labkey.api.data.ResultsImpl;
-import org.labkey.api.data.Selector;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
-import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
-import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
@@ -36,8 +33,10 @@ import org.labkey.api.util.GUID;
 import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.nirc_ehr.NIRCDeathNotification;
+import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
+import org.labkey.nirc_ehr.NIRC_EHRManager;
+import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -414,10 +413,10 @@ public class NIRC_EHRTriggerHelper
         });
     }
 
-    public void generateOrchardFile(final String animalId) throws Exception
+    public void generateOrchardFile(final String taskid) throws Exception
     {
-        NIRCOrchardFileGenerator orchardFileGenerator = new NIRCOrchardFileGenerator(_container, _user);
-        orchardFileGenerator.generateOrchardFile(_container, animalId);
+        NIRCOrchardFileGenerator orchardFileGenerator = NIRC_EHRManager.getOrchardFileGenerator();
+        orchardFileGenerator.generateOrchardFile(_container, _user, taskid);
     }
 
     private void appendAnimalDetails(StringBuilder html, String id, final Container container)

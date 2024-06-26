@@ -21,23 +21,17 @@ import org.labkey.api.writer.PrintWriters;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class NIRCOrchardFileGenerator
 {
-    private Container _container = null;
-    private User _user = null;
-
     public static final String NIRCOrchardFileLocation = "NIRCOrchardFileLocation";
     private static final String orchardFileName = "orchardFile.txt";
 
-    public NIRCOrchardFileGenerator(Container c, User u)
-    {
-        _container = c;
-        _user = u;
-    }
-
-    public void generateOrchardFile(Container c, String animalId)
+    public void generateOrchardFile(Container c, User u, String taskid)
     {
         String orchardFileLocation = getOrchardFileLocation(c);
         // Generate the Orchard file
@@ -45,41 +39,13 @@ public class NIRCOrchardFileGenerator
         {
             return;
         }
+
         try (DbScope.Transaction transaction = StudyService.get().getDatasetSchema().getScope().ensureTransaction())
         {
-            transaction.addCommitTask(() ->
-            {
-                JobRunner.getDefault().execute(() ->
-                {
-                    TableInfo ti = getTableInfo("study", "orchardData");
-                    SimpleFilter filter = new SimpleFilter();
-                    filter.addCondition(FieldKey.fromString("Id"), Arrays.asList(animalId.split(",")), CompareType.CONTAINS_ONE_OF);
-                    StringBuilder sb = new StringBuilder();
-
-                    new TableSelector(ti, PageFlowUtil.set("Id", "date", "birth", "protocols", "housingDate", "cage", "room"), filter, null).forEachResults(rs -> {
-                        sb.append(rs.getString("Id"));
-                        sb.append(rs.getDate("date"));
-                        sb.append(rs.getDate("birth"));
-                        sb.append(rs.getString("protocols"));
-                        sb.append(rs.getString("cage"));
-                        sb.append(rs.getString("room"));
-                        sb.append(System.lineSeparator());
-                    });
-
-                    try (PrintWriter writer = PrintWriters.getPrintWriter(new File(orchardFileLocation + File.separator + orchardFileName))) {
-                        writer.write(sb.toString());
-                    }
-                    catch (IOException e)
-                    {
-                        throw new RuntimeException("Error generating Orchard file", e);
-                    }
-                });
-            }, DbScope.CommitTaskOption.POSTCOMMIT);
-
+            // This will add a post commit task to write the file. The post commit task will only be added once for every taskid
+            transaction.addCommitTask(new FileWriteTask(c, u, taskid, orchardFileLocation), DbScope.CommitTaskOption.POSTCOMMIT);
             transaction.commit();
         }
-
-
     }
 
     public String getOrchardFileLocation(Container c)
@@ -93,16 +59,95 @@ public class NIRCOrchardFileGenerator
         return mp.getEffectiveValue(c);
     }
 
-    private TableInfo getTableInfo(String schemaName, String queryName)
+    private static class FileWriteTask implements Runnable
     {
-        UserSchema us = QueryService.get().getUserSchema(_user, _container, schemaName);
-        if (us == null)
-            throw new IllegalArgumentException("Unable to find schema: " + schemaName);
+        private final Container c;
+        private final User u;
+        private final String taskid;
+        private final String orchardFileLocation;
 
-        TableInfo ti = us.getTable(queryName);
-        if (ti == null)
-            throw new IllegalArgumentException("Unable to find table: " + schemaName + "." + queryName);
+        public FileWriteTask(Container c, User u, String taskid, String orchardFileLocation)
+        {
+            this.c = c;
+            this.u = u;
+            this.taskid = taskid;
+            this.orchardFileLocation = orchardFileLocation;
+        }
 
-        return ti;
+        @Override
+        public void run()
+        {
+            JobRunner.getDefault().execute(() ->
+            {
+                String filterList = String.join(",", getAnimalIds(c, u, taskid));
+
+                TableInfo ti = getTableInfo(c, u, "study", "orchardData");
+                SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), filterList, CompareType.CONTAINS_ONE_OF);
+                StringBuilder sb = new StringBuilder();
+
+                new TableSelector(ti, PageFlowUtil.set("Id", "date", "birth", "protocols", "housingDate", "cage", "room"), filter, null).forEachResults(rs -> {
+                    sb.append(rs.getString("Id"));
+                    sb.append(rs.getDate("date"));
+                    sb.append(rs.getDate("birth"));
+                    sb.append(rs.getString("protocols"));
+                    sb.append(rs.getString("cage"));
+                    sb.append(rs.getString("room"));
+                    sb.append(System.lineSeparator());
+                });
+
+                try (PrintWriter writer = PrintWriters.getPrintWriter(new File(orchardFileLocation + File.separator + orchardFileName))) {
+                    writer.write(sb.toString());
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException("Error generating Orchard file", e);
+                }
+            });
+        }
+
+        // Overwritten to prevent duplicate tasks being added for a given taskid
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj instanceof FileWriteTask fwt)
+            {
+                return taskid.equals(fwt.taskid);
+            }
+
+            return super.equals(obj);
+        }
+
+        // Overwritten to prevent duplicate tasks being added for a given taskid
+        @Override
+        public int hashCode()
+        {
+            return Objects.hash(taskid);
+        }
+
+        private TableInfo getTableInfo(Container c, User u, String schemaName, String queryName)
+        {
+            UserSchema us = QueryService.get().getUserSchema(u, c, schemaName);
+            if (us == null)
+                throw new IllegalArgumentException("Unable to find schema: " + schemaName);
+
+            TableInfo ti = us.getTable(queryName);
+            if (ti == null)
+                throw new IllegalArgumentException("Unable to find table: " + schemaName + "." + queryName);
+
+            return ti;
+        }
+
+        // Gets a list of animal ids for a given taskid using the query orchardIdsForTaskid
+        private List<String> getAnimalIds(Container c, User u, String taskid)
+        {
+            TableInfo ti = getTableInfo(c, u, "study", "orchardIdsForTaskid");
+            TableSelector selector = new TableSelector(ti, null, null);
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("MYTASKID", taskid);
+            selector.setNamedParameters(params);
+
+            return selector.getArrayList(String.class);
+        }
     }
 }

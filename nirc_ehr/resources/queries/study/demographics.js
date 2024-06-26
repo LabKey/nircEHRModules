@@ -58,19 +58,10 @@ function onUpsert(helper, scriptErrors, row, oldRow){
 }
 
 function onComplete(event, errors, helper){
-
     if (!helper.isValidateOnly() && !helper.isETL()) {
         var updateRows = helper.getRows();
-        if (updateRows && updateRows.length > 0) {
-            for (var i = 0; i < updateRows.length; i++) {
-                if (animalIds.indexOf(updateRows[i].row.Id) === -1) {
-                    animalIds.push(updateRows[i].row.Id);
-                }
-            }
-
-            if (animalIds.length) {
-                triggerHelper.generateOrchardFile(animalIds);
-            }
+        if (updateRows && updateRows.length > 0 && updateRows[0].row.taskid) {
+            triggerHelper.generateOrchardFile(updateRows[0].row.taskid);
         }
     }
 }
