@@ -48,18 +48,20 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             row.qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
         }
 
-        if (row.project && row.Id && row.date) {
+        if (row.Id && row.date) {
 
             let assignmentRec = {
                 Id: row.Id,
                 date: row.date,
-                project: row.project,
                 taskid: row.taskid,
                 remark: row.remark,
                 qcstate: row.qcstate
             }
 
-            triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+            if (row.project) {
+                assignmentRec['project'] = row.project;
+                triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+            }
 
             if (row.birthProtocol) {
                 assignmentRec['protocol'] = row.birthProtocol;

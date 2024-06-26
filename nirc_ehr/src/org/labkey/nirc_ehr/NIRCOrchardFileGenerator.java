@@ -21,6 +21,7 @@ import org.labkey.api.writer.PrintWriters;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,10 +80,8 @@ public class NIRCOrchardFileGenerator
         {
             JobRunner.getDefault().execute(() ->
             {
-                String filterList = String.join(",", getAnimalIds(c, u, taskid));
-
                 TableInfo ti = getTableInfo(c, u, "study", "orchardData");
-                SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), filterList, CompareType.CONTAINS_ONE_OF);
+                SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), Arrays.asList(getAnimalIds(c, u, taskid).toArray(new String[0])), CompareType.IN);
                 StringBuilder sb = new StringBuilder();
 
                 new TableSelector(ti, PageFlowUtil.set("Id", "date", "birth", "protocols", "housingDate", "cage", "room"), filter, null).forEachResults(rs -> {
