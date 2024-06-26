@@ -49,7 +49,10 @@ function onComplete(event, errors, helper){
                 helper.getJavaHelper().closeHousingRecords(idsToClose);
             }
 
-            if (!helper.isETL() && updateRows[0].row.taskid) {
+            if (updateRows && updateRows.length > 0 &&
+                    updateRows[0].row.taskid &&
+                    updateRows[0].row.QCStateLabel &&
+                    EHR.Server.Security.getQCStateByLabel(updateRows[0].row.QCStateLabel).PublicData) {
                 triggerHelper.generateOrchardFile(updateRows[0].row.taskid);
             }
         }

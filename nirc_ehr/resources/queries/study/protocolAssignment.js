@@ -134,7 +134,10 @@ function onComplete(event, errors, helper){
 
     if (!helper.isValidateOnly() && !helper.isETL()) {
         var updateRows = helper.getRows();
-        if (updateRows && updateRows.length > 0 && updateRows[0].row.taskid) {
+        if (updateRows && updateRows.length > 0 &&
+                updateRows[0].row.taskid &&
+                updateRows[0].row.QCStateLabel &&
+                EHR.Server.Security.getQCStateByLabel(updateRows[0].row.QCStateLabel).PublicData) {
             triggerHelper.generateOrchardFile(updateRows[0].row.taskid);
         }
     }
