@@ -593,8 +593,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void verifyOrchardFileGenerated(String animalId)
     {
-        Assert.assertTrue("Edited animal is not present in the file ",
-                TestFileUtils.getFileContents(orchardFileLocation + "/orchardFile.txt").contains(animalId));
+        waitFor(() ->TestFileUtils.getFileContents(orchardFileLocation + "/orchardFile.txt").contains(animalId), WAIT_FOR_PAGE);
     }
 
     private void submitForm(String buttonText, String windowTitle)
