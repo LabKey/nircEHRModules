@@ -9,6 +9,7 @@ public class NIRCDeathFormSection extends ParentFormPanelSection
     public NIRCDeathFormSection()
     {
         super("study", "deaths", "Death");
+        setSupportFormSort(false);
     }
 
     public JSONObject toJSON(DataEntryFormContext ctx, boolean includeFormElements)

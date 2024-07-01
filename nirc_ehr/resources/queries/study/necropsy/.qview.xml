@@ -5,9 +5,15 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="category"/>
-        <column name="remark"/>
+        <column name="accessionNumber"/>
+        <column name="examReason"/>
+        <column name="specimenCondition"/>
+        <column name="physicalCondition"/>
+        <column name="necropsyWeight"/>
+        <column name="relevantHistory"/>
+        <column name="grossAbnormalities"/>
         <column name="diagnosis"/>
-        <column name="attachmentFile"/>
+        <column name="identification"/>
+        <column name="remark"/>
     </columns>
 </customView>

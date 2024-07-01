@@ -130,7 +130,7 @@
                 ]
             });
 
-            Ext4.create('LDK.panel.NavPanel', {
+            let menuCfg2 = {
                 width: 270,
                 renderTo: 'ehrMenu2_' + webpart.wrapperDivId,
                 sections: [
@@ -149,9 +149,27 @@
                         ]
                     }
                 ]
-            });
+            }
 
-            let menuCfg = {
+            if (ctx['EHRStudyContainerInfo'].effectivePermissions.indexOf(EHR.Security.Permissions.VET) > -1) {
+                menuCfg2.sections.push({
+                    width: 270,
+                    header: 'Pathology',
+                    itemDefaults: {
+                        linkCls: 'none',
+                        style: 'font-weight: bold;'
+                    },
+                    items: [
+                        {
+                            name: 'Necropsy Requests',
+                            url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=nirc_ehr&query.queryName=necropsyTasks'
+                        },
+                    ]
+                });
+            }
+            Ext4.create('LDK.panel.NavPanel', menuCfg2);
+
+            let menuCfg3 = {
                 width: 330,
                 renderTo: 'ehrMenu3_' + webpart.wrapperDivId,
                 sections: [{
@@ -179,7 +197,7 @@
             };
 
             if (LABKEY.Security.currentUser.isAdmin) {
-                menuCfg.sections.push({
+                menuCfg3.sections.push({
                     header: 'Admin',
                     itemDefaults: {
                         linkCls: 'none',
@@ -192,7 +210,7 @@
                 });
             }
 
-            Ext4.create('LDK.panel.NavPanel', menuCfg);
+            Ext4.create('LDK.panel.NavPanel', menuCfg3);
 
         }
     }

@@ -15,6 +15,7 @@ public class NIRCNecropsyFormSection extends SimpleFormPanelSection
     public NIRCNecropsyFormSection(boolean isChild)
     {
         super("study", "necropsy", "Necropsy");
+        setSupportFormSort(false);
         if (isChild)
         {
             addExtraProperty("parentQueryName", "deaths");
