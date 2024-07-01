@@ -23,10 +23,10 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.api.reader.Readers;
 import org.labkey.remoteapi.CommandException;
+import org.labkey.remoteapi.core.SaveModulePropertiesCommand;
 import org.labkey.remoteapi.query.InsertRowsCommand;
 import org.labkey.remoteapi.security.CreateUserResponse;
 import org.labkey.test.Locator;
-import org.labkey.test.ModulePropertyValue;
 import org.labkey.test.TestFileUtils;
 import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.EHR;
@@ -39,6 +39,7 @@ import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
 import org.labkey.test.pages.ehr.EnterDataPage;
 import org.labkey.test.pages.ehr.NotificationAdminPage;
+import org.labkey.test.params.ModuleProperty;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.Ext4Helper;
@@ -54,7 +55,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +76,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static String deadAnimalId = "D5454";
     private static String departedAnimalId = "H6767";
     private static String aliveAnimalId = "A4545";
+    private static String orchardFileLocation;
 
     @Override
     public void importStudy()
@@ -163,10 +164,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @LogMethod
     protected void populateInitialData() throws Exception
     {
-        List<ModulePropertyValue> props = new ArrayList<>();
-        props.add(new ModulePropertyValue("EHR", "/" + getProjectName(), "EHRCustomModule", "NIRC_EHR"));
         goToProjectHome();
-        setModuleProperties(props);
+        List<ModuleProperty> props = List.of(
+                new ModuleProperty("EHR", "/" + getProjectName(), "EHRCustomModule", "NIRC_EHR"),
+                new ModuleProperty("NIRC_EHR", "/", "NIRCOrchardFileLocation", orchardFileLocation)
+        );
+        SaveModulePropertiesCommand command = new SaveModulePropertiesCommand(props);
+        command.execute(createDefaultConnection(), "/");
 
         beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "populateLookupData", Map.of("manifest", "lookupsManifestTest")));
 
@@ -194,6 +198,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void doSetup() throws Exception
     {
+        setOrchardFileLocation();
         initProject(PROJECT_TYPE);
         goToEHRFolder();
         createTestSubjects();
@@ -203,6 +208,18 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         populateLocations();
     }
 
+    private void setOrchardFileLocation()
+    {
+        try
+        {
+            orchardFileLocation = TestFileUtils.ensureTestTempDir().getAbsolutePath();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+    }
     private void enableSiteNotification()
     {
         log("Enabling the notification at the site level");
@@ -310,6 +327,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         verifyRowCreated("study", "protocolAssignment", arrivedAnimal, 1);
         verifyRowCreated("study", "demographics", arrivedAnimal, 1);
         verifyRowCreated("study", "housing", arrivedAnimal, 1);
+
+        log("Verifying Orchard file is created");
+        verifyOrchardFileGenerated(arrivedAnimal);
     }
 
     @Test
@@ -343,6 +363,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         verifyRowCreated("study", "protocolAssignment", bornAnimal, 1);
         verifyRowCreated("study", "housing", bornAnimal, 1);
         verifyRowCreated("study", "demographics", bornAnimal, 1);
+
+        log("Verifying Orchard file is created");
+        verifyOrchardFileGenerated(bornAnimal);
     }
 
     @Override
@@ -566,6 +589,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         DataRegionTable table = viewQueryData(schema, query);
         table.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Record not created in " + schema + "." + query, rowCount, table.getDataRowCount());
+    }
+
+    private void verifyOrchardFileGenerated(String animalId)
+    {
+        Assert.assertTrue("Edited animal is not present in the file ",
+                TestFileUtils.getFileContents(orchardFileLocation + "/orchardFile.txt").contains(animalId));
     }
 
     private void submitForm(String buttonText, String windowTitle)
