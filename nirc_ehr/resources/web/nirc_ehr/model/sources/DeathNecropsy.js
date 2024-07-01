@@ -1,44 +1,38 @@
 EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
     allQueries: {
-        performedby: {
-            allowBlank: false,
-            defaultValue: LABKEY.Security.currentUser.displayName,
-            lookup: {
-                schemaName: 'core',
-                queryName: 'users',
-                keyColumn: 'DisplayName',
-                displayColumn: 'DisplayName',
-                columns: 'UserId,DisplayName,FirstName,LastName',
-                sort: 'Type,DisplayName'
-            },
-            editorConfig: {
-                anyMatch: true,
-                listConfig: {
-                    innerTpl: '{[LABKEY.Utils.encodeHtml(values.DisplayName + (values.LastName ? " (" + values.LastName + (values.FirstName ? ", " + values.FirstName : "") + ")" : ""))]}',
-                    getInnerTpl: function(){
-                        return this.innerTpl;
-                    }
-                }
-            }
-        }
     },
     byQuery: {
         'study.deaths': {
             qcstate: {
                 hidden: true
+            },
+            date: {
+                xtype: 'xdatetime',
+                editorConfig: {
+                    dateFormat: 'Y-m-d',
+                    timeFormat: 'H:i'
+                },
+            },
+            performedby: {
+                allowBlank: false,
+                defaultValue: LABKEY.Security.currentUser.id.toString()
             }
         },
         'study.necropsy': {
             performedby: {
                 hidden: false,
-                defaultValue: LABKEY.Security.currentUser.displayName
+                allowBlank: true,
+                defaultValue: LABKEY.Security.currentUser.id.toString()
             },
             necropsyWeight: {
                 label: 'Weight (kg)'
             },
             date: {
                 label: 'Exam Date',
+                xtype: 'xdatetime',
                 editorConfig: {
+                    dateFormat: 'Y-m-d',
+                    timeFormat: 'H:i',
                     listeners: {
                         change: function (combo, rec) {
                             const panel = combo.up('ehr-dataentrypanel');
