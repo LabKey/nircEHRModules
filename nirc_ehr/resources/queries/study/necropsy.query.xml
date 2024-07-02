@@ -34,6 +34,9 @@
                             <fkColumnName>value</fkColumnName>
                         </fk>
                     </column>
+                    <column columnName="necropsyWeight">
+                        <columnTitle>Weight</columnTitle>
+                    </column>
                     <column columnName="project">
                         <isHidden>true</isHidden>
                     </column>
@@ -41,7 +44,15 @@
                         <isHidden>true</isHidden>
                     </column>
                     <column columnName="performedby">
-                        <columnTitle>Performed By</columnTitle>
+                        <fk>
+                            <fkDbSchema>core</fkDbSchema>
+                            <fkTable>Users</fkTable>
+                            <fkColumnName>userId</fkColumnName>
+                            <fkDisplayColumnName>DisplayName</fkDisplayColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="taskid">
+                        <isHidden>true</isHidden>
                     </column>
                 </columns>
             </table>
