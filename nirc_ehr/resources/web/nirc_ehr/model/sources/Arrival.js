@@ -29,7 +29,14 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                 columnConfig: {
                     fixed: true,
                     width: 200
-                }
+                },
+                allowBlank: false
+            },
+            'Id/demographics/birth': {
+                allowBlank: false
+            },
+            'Id/demographics/gender': {
+                allowBlank: false
             },
             'Id/demographics/geographic_origin': {
                 columnConfig: {

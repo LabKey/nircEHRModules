@@ -30,10 +30,11 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
                     fixed: true,
                     width: 200
                 },
+                allowBlank: false
             },
             project: {
                 xtype: 'combo',
-                nullable: false,
+                allowBlank: false,
                 lookup: {
                     schemaName: 'ehr',
                     queryName: 'project',
@@ -44,7 +45,21 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
             birthProtocol: {
                 columnConfig: {
                     width: 200
-                }
+                },
+                allowBlank: false
+            },
+            'Id/demographics/birth': {
+                allowBlank: false
+            },
+            'Id/demographics/gender': {
+                allowBlank: false
+            },
+            'Id/demographics/species': {
+                columnConfig: {
+                    fixed: true,
+                    width: 200
+                },
+                allowBlank: false
             },
         }
     }
