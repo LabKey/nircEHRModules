@@ -5,19 +5,29 @@ import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.ehr.dataentry.SimpleFormSection;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
+import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.Queryable;
+import org.labkey.api.security.permissions.AdminPermission;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCBloodDrawFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCaseTemplateFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCasesFormPanelSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalRemarksFormPanelSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCHousingFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCVitalsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
+import org.labkey.nirc_ehr.security.EHRVetTechPermission;
+import org.labkey.nirc_ehr.security.EHRVetTechRole;
 
 import java.util.Arrays;
+import java.util.Set;
 
 public class NIRCCasesFormType extends NIRCBaseTaskFormType
 {
@@ -31,14 +41,19 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
-                new NIRCCasesFormPanelSection("Clinical Case"),
-                // new NIRCClinicalObservationsFormSection(...),//TODO: add
+                new NIRCCasesFormPanelSection("Clinical Case",
+                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVetTechPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
+                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks"),
+                new NIRCClinicalObservationsFormSection(),
+                new NIRCVitalsFormSection(),
                 new NIRCWeightFormSection(true, false, true, "cases"),
                 new NIRCTreatmentOrderFormSection(true, "cases"),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
-                new NIRCHousingFormSection(true, true, true, "cases")
-                // new NIRCProcedureFormSection(...),//TODO: add
-                // new NIRCBloodDrawsFormSection(...),//TODO: add
+                new NIRCHousingFormSection(true, true, true, "cases"),
+                new NIRCProcedureFormSection(),
+                new NIRCBloodDrawFormSection(true, true, true)
         ));
 
         setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);
