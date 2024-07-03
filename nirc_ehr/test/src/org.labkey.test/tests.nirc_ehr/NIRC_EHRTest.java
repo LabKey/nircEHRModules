@@ -164,6 +164,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @LogMethod
     protected void populateInitialData() throws Exception
     {
+        FileUtils.deleteQuietly(orchardFileLocation);
+        FileUtils.forceMkdir(orchardFileLocation);
         List<ModuleProperty> props = List.of(
                 new ModuleProperty("EHR", "/" + getProjectName(), "EHRCustomModule", "NIRC_EHR"),
                 new ModuleProperty("NIRC_EHR", "/", "NIRCOrchardFileLocation", orchardFileLocation)
