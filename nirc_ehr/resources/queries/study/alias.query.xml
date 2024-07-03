@@ -10,9 +10,6 @@
                 <columns>
                     <column columnName="Id"/>
                     <column columnName="date"/>
-                    <column columnName="project">
-                        <isHidden>true</isHidden>
-                    </column>
                     <column columnName="category">
                         <columnTitle>Type</columnTitle>
                         <fk>

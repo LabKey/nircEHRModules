@@ -3,13 +3,10 @@ require("ehr/triggers").initScript(this);
 var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 var validIds = [];
 var idMap = {};
+var deathIdMap = {};
 
 function onInit(event, helper){
-    helper.setScriptOptions({
-        allowShippedIds: false,
-        allowDeadIds: false,
-        requiresStatusRecalc: false,
-    });
+
     helper.decodeExtraContextProperty('deathsInTransaction');
 
     // Cache valid Ids for check on each row
@@ -31,6 +28,25 @@ function onInit(event, helper){
         },
         failure: function (error) {
             console.log("error getting demographics data in death trigger onInit()\n" + error);
+        }
+    });
+
+    LABKEY.Query.selectRows({
+        requiredVersion: 9.1,
+        schemaName: 'study',
+        queryName: 'deaths',
+        columns: ['Id', 'QCState/Label'],
+        scope: this,
+        success: function (results) {
+            if (!results || !results.rows || results.rows.length < 1)
+                return;
+
+            for(var i=0; i < results.rows.length; i++) {
+                deathIdMap[results.rows[i]["Id"]["value"]] = {QCStateLabel: results.rows[i]["QCState/Label"]["value"]};
+            }
+        },
+        failure: function (error) {
+            console.log("error getting death data in death trigger onInit()\n" + error);
         }
     });
 }
@@ -63,11 +79,21 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
             }
             // check if the animal is at the center
-            if (idMap[row.Id].calculated_status.toUpperCase() === 'SHIPPED') {
+            else if (idMap[row.Id].calculated_status.toUpperCase() === 'SHIPPED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal is not at the center.', 'ERROR');
             }
-
-            if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
+            // Check if an animal that's being entered is pending any request/review.
+            // Note 1: When trying to enter a new record for an animal, the QCState = 'IN PROGRESS'.
+            // Note 2: Upon 'Submit Death', the QCState will get set to 'REQUEST: PENDING', and upon 'Submit Necropsy for Review',
+            // the QCState will get set to 'Review Required' - this way we can distinguish between the two states in the Death/Necropsy workflow.
+            // If a user tries to submit a new Death record (identified by QCState = 'IN PROGRESS') for an animal that
+            // already has a pending request/review status in study.deaths, then below error message will be displayed.
+            else if (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
+                    (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
+                            deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
+                EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record is pending review for this animal', 'ERROR');
+            }
+            else if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
 
                 if (validIds.indexOf(row.id) !== -1) {
 
