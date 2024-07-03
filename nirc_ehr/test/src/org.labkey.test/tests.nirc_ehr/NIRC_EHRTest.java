@@ -76,7 +76,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static String deadAnimalId = "D5454";
     private static String departedAnimalId = "H6767";
     private static String aliveAnimalId = "A4545";
-    private static String orchardFileLocation;
+    private static final String orchardFileLocation = TestFileUtils.getTestTempDir();
 
     @Override
     public void importStudy()
