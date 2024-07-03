@@ -52,7 +52,17 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             },
             'enddate': {
                 hidden: true
-            }
+            },
+            reason: {
+                defaultValue: null,
+                allowBlank: false,
+                columnConfig: {
+                    width: 180
+                },
+                lookup: {
+                    filterArray: [LABKEY.Filter.create('date_disabled', null, LABKEY.Filter.Types.ISBLANK)]
+                }
+            },
         },
         'study.arrival': {
             initialRoom: {

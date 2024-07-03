@@ -15,6 +15,7 @@
                     </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
+                        <nullable>false</nullable>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>exemption_category</fkTable>
