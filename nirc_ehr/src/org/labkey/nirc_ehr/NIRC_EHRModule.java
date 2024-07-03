@@ -35,6 +35,7 @@ import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.DefaultSchema;
 import org.labkey.api.query.QuerySchema;
 import org.labkey.api.resource.Resource;
+import org.labkey.api.security.roles.RoleManager;
 import org.labkey.api.util.NetworkDrive;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
@@ -61,6 +62,7 @@ import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
+import org.labkey.nirc_ehr.security.EHRVetTechRole;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 
 import java.io.File;
@@ -81,7 +83,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.009;
+        return 24.009; //TODO: Update version to 24.0010
     }
 
     @Override
@@ -163,6 +165,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerActionOverride("enterData", this, "views/enterData.html");
 
         ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment", "protocolAssignment"));
+        RoleManager.registerRole(new EHRVetTechRole());
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());

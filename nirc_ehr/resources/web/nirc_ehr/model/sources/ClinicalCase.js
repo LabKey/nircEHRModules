@@ -36,7 +36,7 @@ EHR.model.DataModelManager.registerMetadata('ClinicalCase', {
                 }
             },
             category: {
-                getInitialValue: function(v, rec){
+                getInitialValue: function (v, rec){
                     return 'Clinical'
                 },
                 editable: false,
@@ -48,17 +48,17 @@ EHR.model.DataModelManager.registerMetadata('ClinicalCase', {
             problemCategory: {
                 editorConfig: {
                     listeners: {
-                        select: function(field, recs){
+                        select: function (field, recs) {
                             if (!recs || recs.length !== 1)
                                 return;
 
                             var record = EHR.DataEntryUtils.getBoundRecord(field);
-                            if (record){
+                            if (record) {
                                 var rec = recs[0];
                                 var meta = record.store.model.prototype.fields.get('problemSubcategory');
                                 var storeId = LABKEY.ext4.Util.getLookupStoreId(meta);
                                 var store = Ext4.StoreMgr.get(storeId);
-                                if (store){
+                                if (store) {
                                     store.filterArray = [LABKEY.Filter.create('category', rec.get('value'))];
                                     store.load();
                                 }

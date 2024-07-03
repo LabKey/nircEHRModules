@@ -52,19 +52,6 @@ EHR.model.DataModelManager.registerMetadata('TreatmentSchedule', {
         },
         attachmentFile: {
             hidden: true
-        },
-        performedby: {
-            allowBlank: true,
-            nullable: true,
-            lookup: {
-                schemaName: 'core',
-                queryName: 'users',
-                keyColumn: 'UserId',
-                displayColumn: 'DisplayName',
-                columns: 'UserId,DisplayName,FirstName,LastName',
-                sort: 'Type,DisplayName'
-            },
-            defaultValue: LABKEY.Security.currentUser.id
         }
     },
     byQuery: {
