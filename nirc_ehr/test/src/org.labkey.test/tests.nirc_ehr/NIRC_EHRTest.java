@@ -16,6 +16,7 @@
 
 package org.labkey.test.tests.nirc_ehr;
 
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -76,7 +77,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static String deadAnimalId = "D5454";
     private static String departedAnimalId = "H6767";
     private static String aliveAnimalId = "A4545";
-    private static final String orchardFileLocation = TestFileUtils.getTestTempDir();
+    private static final File orchardFileLocation = TestFileUtils.getTestTempDir();
 
     @Override
     public void importStudy()
@@ -168,7 +169,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         FileUtils.forceMkdir(orchardFileLocation);
         List<ModuleProperty> props = List.of(
                 new ModuleProperty("EHR", "/" + getProjectName(), "EHRCustomModule", "NIRC_EHR"),
-                new ModuleProperty("NIRC_EHR", "/", "NIRCOrchardFileLocation", orchardFileLocation)
+                new ModuleProperty("NIRC_EHR", "/", "NIRCOrchardFileLocation", orchardFileLocation.getAbsolutePath())
         );
         SaveModulePropertiesCommand command = new SaveModulePropertiesCommand(props);
         command.execute(createDefaultConnection(), "/");
@@ -199,7 +200,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void doSetup() throws Exception
     {
-        setOrchardFileLocation();
         initProject(PROJECT_TYPE);
         goToEHRFolder();
         createTestSubjects();
@@ -209,18 +209,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         populateLocations();
     }
 
-    private void setOrchardFileLocation()
-    {
-        try
-        {
-            orchardFileLocation = TestFileUtils.ensureTestTempDir().getAbsolutePath();
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
-    }
     private void enableSiteNotification()
     {
         log("Enabling the notification at the site level");
