@@ -9,8 +9,8 @@ var nextProjectNum = -1;
 
 function onInit(event, helper){
 
-    //ETL'd data has values in the 'project' column that is meaningless to the client,
-    //but since 'project' is a required field, find the highest num in the existing data and add 1 for data entry.
+    //ETL'd data has integer values in the 'project' column that is meaningless to the client,
+    //but since 'project' is a required field, find the highest num in the existing data and add 1 for inserting new Projects.
     LABKEY.Query.executeSql({
         schemaName: 'ehr',
         sql: 'SELECT MAX(project) AS latestProjectNum FROM ehr.project',
