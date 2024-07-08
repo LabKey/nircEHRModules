@@ -21,6 +21,9 @@ import org.labkey.api.writer.PrintWriters;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +33,6 @@ import java.util.Objects;
 public class NIRCOrchardFileGenerator
 {
     public static final String NIRCOrchardFileLocation = "NIRCOrchardFileLocation";
-    private static final String orchardFileName = "orchardFile.txt";
 
     public void generateOrchardFile(Container c, User u, String taskid)
     {
@@ -83,14 +85,39 @@ public class NIRCOrchardFileGenerator
                 TableInfo ti = getTableInfo(c, u, "study", "orchardData");
                 SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), Arrays.asList(getAnimalIds(c, u, taskid).toArray(new String[0])), CompareType.IN);
                 StringBuilder sb = new StringBuilder();
+                String curDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+                SimpleDateFormat orcFormat = new SimpleDateFormat("yyyyMMdd");
+                String orchardFileName = "orchardFile" + curDate + ".txt";
 
-                new TableSelector(ti, PageFlowUtil.set("Id", "date", "birth", "protocols", "housingDate", "cage", "room"), filter, null).forEachResults(rs -> {
-                    sb.append(rs.getString("Id"));
-                    sb.append(rs.getDate("date"));
-                    sb.append(rs.getDate("birth"));
-                    sb.append(rs.getString("protocols"));
+                sb.append("MSH|^~\\&|LabKey|ARS|Orchard|Lab|");
+                sb.append(curDate);
+                sb.append("||ADT^A01|12345|P|2.3");
+                sb.append(System.lineSeparator());
+
+                new TableSelector(ti, PageFlowUtil.set("Id", "gender", "birth", "species", "protocol", "PI", "Vet", "cage", "alive"), filter, null).forEachResults(rs -> {
+                    sb.append("PID|1|");
+                    sb.append(rs.getString("Id")).append("|");
+                    sb.append(rs.getString("Id")).append("||");
+                    sb.append(rs.getString("Id")).append("^").append(rs.getString("species")).append("||");
+                    sb.append(orcFormat.format(rs.getDate("birth"))).append("|");
+                    if (Objects.equals(rs.getString("gender"), "2"))
+                        sb.append("F");
+                    else if (Objects.equals(rs.getString("gender"), "3"))
+                        sb.append("M");
+                    else sb.append("U");
+                    sb.append("||NHP|"); //could change if more species
                     sb.append(rs.getString("cage"));
-                    sb.append(rs.getString("room"));
+                    sb.append("^New Iberia^LA^70506|||||||||||");
+                    sb.append(rs.getString("species")).append("|");
+                    sb.append(rs.getString("protocol")).append("|||||||");
+                    if (Objects.equals(rs.getString("alive"), "Alive"))
+                        sb.append("N");
+                    else
+                        sb.append("Y");
+                    sb.append(System.lineSeparator());
+                    sb.append("ZCP|Veterinarian|").append(rs.getString("Vet")).append("|");
+                    sb.append(System.lineSeparator());
+                    sb.append("PD1||||").append(rs.getString("PI")).append("|");
                     sb.append(System.lineSeparator());
                 });
 
