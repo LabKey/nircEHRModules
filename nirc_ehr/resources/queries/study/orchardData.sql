@@ -3,8 +3,7 @@ SELECT
     d.date,
     d.birth,
     d.Id.activeAssignments.protocols,
-    h.date as housingDate,
-    h.cage,
-    h.room
+    d.Id.curLocation.cage,
+    d.Id.curLocation.room,
+    d.Id.curLocation.date as housingDate,
 FROM demographics d
-LEFT JOIN housing h ON d.Id = h.Id
