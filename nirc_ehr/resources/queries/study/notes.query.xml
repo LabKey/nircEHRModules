@@ -21,6 +21,7 @@
                     </column>
                     <column columnName="remark">
                         <columnTitle>Note</columnTitle>
+                        <nullable>false</nullable>
                     </column>
                     <column columnName="attachmentFile">
                         <isHidden>true</isHidden>
