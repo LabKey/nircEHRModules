@@ -57,6 +57,9 @@
                             <fkColumnName>meaning</fkColumnName>
                         </fk>
                     </column>
+                    <column columnName="origin">
+                        <nullable>false</nullable>
+                    </column>
                 </columns>
             </table>
         </tables>
