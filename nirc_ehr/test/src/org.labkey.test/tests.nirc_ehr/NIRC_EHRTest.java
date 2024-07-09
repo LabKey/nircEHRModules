@@ -48,7 +48,9 @@ import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 import org.labkey.test.util.ext4cmp.Ext4GridRef;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.BufferedReader;
@@ -442,7 +444,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         setFormElement(Locator.name("Id"), aliveAnimalId);
         setFormElement(Locator.name("reason"), "Euthaniasia (project)");
 
-        Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit for Review")));
+        Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit Necropsy for Review")));
         Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit Final")));
         submitForm("Submit Death", "Confirm");
         stopImpersonating();
@@ -471,12 +473,23 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         _helper.addRecordToGrid(tissueDisposition);
         tissueDisposition.setGridCell(1, "necropsyDispositionCode", "Frozen");
         tissueDisposition.setGridCell(1, "necropsyTissue", "Pancreas");
-        waitAndClick(_helper.getDataEntryButton("Submit for Review"));
+        waitAndClick(_helper.getDataEntryButton("Submit Necropsy for Review"));
 
         log("Assigning the reviewer");
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
-        setFormElement(Locator.tagWithNameContaining("input", "ehr-usersandgroups"), NIRC_FULL_SUBMITTER_VET);
-        submitForReview.clickButton("Submit");
+
+        // Make sure to find the element in submitForReview window.
+        WebElement assignedToElement = Locator.tagWithNameContaining("input", "assignedTo").findWhenNeeded(submitForReview);
+        setFormElement(assignedToElement, _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
+
+        // Entering the text leaves the selection list visible, send 'Enter' to remove it.
+        assignedToElement.sendKeys(Keys.ENTER);
+
+        // The 'button' is actually a link tag.
+        WebElement submitButton = Locator.tagWithText("a", "Submit").findWhenNeeded(submitForReview);
+        scrollIntoView(submitButton);
+        doAndWaitForPageToLoad(()->submitButton.click());
+
         stopImpersonating();
 
         log("Verify rows were inserted in appropriate datasets");

@@ -10,12 +10,15 @@ import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.ConvertHelper;
+import org.labkey.api.data.DbScope;
 import org.labkey.api.data.Results;
 import org.labkey.api.data.ResultsImpl;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.study.StudyService;
+import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
@@ -360,57 +363,64 @@ public class NIRC_EHRTriggerHelper
             return;
         }
 
-        JobRunner.getDefault().execute(TimeUnit.MINUTES.toMillis(1), () -> {
-            final Container container = _container;
-            final User user = _user;
-            String subject = "Death Notification: " + animalId;
+        try (DbScope.Transaction transaction = StudyService.get().getDatasetSchema().getScope().ensureTransaction())
+        {
+            // Add a post commit task to run provider update in another thread once this transaction is complete.
+            transaction.addCommitTask(() ->
+                    JobRunner.getDefault().execute(() -> {
+                        final Container container = _container;
+                        final User user = _user;
+                        String subject = "Death Notification: " + animalId;
 
-            // get recipients
-            Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new NIRCDeathNotification(), container);
-            if (recipients.size() == 0)
-            {
-                _log.warn("No NIRC recipients set, skipping death notification");
-                return;
-            }
+                        // get recipients
+                        Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new NIRCDeathNotification(), container);
+                        if (recipients.size() == 0)
+                        {
+                            _log.warn("No NIRC recipients set, skipping death notification");
+                            return;
+                        }
 
-            //get death info
-            TableInfo deaths = getTableInfo("study", "deaths");
-            TableSelector deathsTs = new TableSelector(deaths, PageFlowUtil.set("Id", "date", "taskid"), new SimpleFilter(FieldKey.fromString("Id"), animalId), null);
-            final Mutable<Date> deathDate = new MutableObject<>();
-            final Mutable<String> taskId = new MutableObject<>();
-            deathsTs.forEach(rs -> {
-                if (rs.getString("date") != null)
-                {
-                    Date date = ConvertHelper.convert(rs.getString("date"), Date.class);
-                    deathDate.setValue(date);
-                    taskId.setValue(rs.getString("taskid"));
-                }
-            });
+                        //get death info
+                        TableInfo deaths = getTableInfo("study", "deaths");
+                        TableSelector deathsTs = new TableSelector(deaths, PageFlowUtil.set("Id", "date", "taskid"), new SimpleFilter(FieldKey.fromString("Id"), animalId), null);
+                        final Mutable<Date> deathDate = new MutableObject<>();
+                        final Mutable<String> taskId = new MutableObject<>();
+                        deathsTs.forEach(rs -> {
+                            if (rs.getString("date") != null)
+                            {
+                                Date date = ConvertHelper.convert(rs.getString("date"), Date.class);
+                                deathDate.setValue(date);
+                                taskId.setValue(rs.getString("taskid"));
+                            }
+                        });
 
-            //construct html for email notification
-            final StringBuilder html = new StringBuilder();
-            if (deathDate.getValue() == null)
-            {
-                _log.error("NIRC death notification job found no death date for animal " + animalId + " in container " + _container.getPath());
-                html.append("Death date not found. Please contact system administrator.").append("<br>");
-                return;
-            }
-            html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been declared dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br><br>");
+                        //construct html for email notification
+                        final StringBuilder html = new StringBuilder();
+                        if (deathDate.getValue() == null)
+                        {
+                            _log.error("NIRC death notification job found no death date for animal " + animalId + " in container " + _container.getPath());
+                            html.append("Death date not found. Please contact system administrator.").append("<br>");
+                            return;
+                        }
+                        html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been declared dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br><br>");
 
-            //append animal details
-            appendAnimalDetails(html, animalId, container);
+                        //append animal details
+                        appendAnimalDetails(html, animalId, container);
 
-            //append link to Necropsy form
-            String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" +
-                    container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskId.getValue();
-            html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
+                        //append link to Necropsy form
+                        String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" +
+                                container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskId.getValue();
+                        html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
 
-            html.append("Click here to record Necropsy</a><br>");
+                        html.append("Click here to record Necropsy</a><br>");
 
-            // send Death Notification
-            _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
-            TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
-        });
+                        // send Death Notification
+                        _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
+                        TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
+                    }), DbScope.CommitTaskOption.POSTCOMMIT);
+
+            transaction.commit();
+        }
     }
 
     public void generateOrchardFile(final String taskid) throws Exception
@@ -551,5 +561,11 @@ public class NIRC_EHRTriggerHelper
             throw errors;
 
         return null;
+    }
+
+    public int getUserId (String displayName)
+    {
+        User u = UserManager.getUserByDisplayName(displayName);
+        return null != u ? u.getUserId() : -1;
     }
 }
