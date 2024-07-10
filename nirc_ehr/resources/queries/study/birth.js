@@ -19,23 +19,6 @@ function onInit(event, helper){
     helper.decodeExtraContextProperty('birthsInTransaction');
 }
 
-EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_DELETE, 'study', 'birth', function(helper, scriptErrors, row, oldRow) {
-    if (!helper.isETL() && !helper.isValidateOnly()) {
-        // cleanup on delete
-        if (row.taskid){
-
-            var deleteErrors = triggerHelper.deleteDatasetRecord('demographics', row.taskid);
-            if (deleteErrors){
-                EHR.Server.Utils.addError(scriptErrors, 'Id', deleteErrors, 'ERROR');
-            }
-            deleteErrors = triggerHelper.deleteDatasetRecord('housing', row.taskid);
-            if (deleteErrors){
-                EHR.Server.Utils.addError(scriptErrors, 'Id', deleteErrors, 'ERROR');
-            }
-        }
-    }
-});
-
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'birth', function(helper, scriptErrors, row, oldRow) {
 
     if (!oldRow && row.Id && triggerHelper.birthExists(row.Id)) {
