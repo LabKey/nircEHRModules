@@ -47,31 +47,29 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 taskid: row.taskid
             }
 
-            console.log("Creating Birth record");
-
             var birthErrors = triggerHelper.saveBirthRecord(row.Id, birthInfo);
             if (birthErrors){
                 EHR.Server.Utils.addError(scriptErrors, 'birth', birthErrors, 'ERROR');
             }
         }
 
-        if (row.project && row.Id && row.date) {
+        if (row.Id && row.date) {
 
             let assignmentRec = {
                 Id: row.Id,
                 date: row.date,
-                project: row.project,
                 taskid: row.taskid,
                 remark: row.remark,
                 qcstate: row.qcstate
             }
 
-            console.log("Creating Assignment record");
-            triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+            if (row.project) {
+                assignmentRec['project'] = row.project;
+                triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+            }
 
             if (row.arrivalProtocol) {
                 assignmentRec['protocol'] = row.arrivalProtocol;
-                console.log("Creating Protocol Assignment record");
                 triggerHelper.createAssignmentRecord("protocolAssignment", row.Id, assignmentRec);
             }
         }
@@ -86,7 +84,6 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 qcstate: row.qcstate,
                 reason: 'Non-quarantine Arrival'
             }
-            console.log("Creating Housing record");
 
             var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "arrival");
             if (housingErrors) {

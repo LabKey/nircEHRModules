@@ -13,13 +13,10 @@ import org.labkey.api.data.ConvertHelper;
 import org.labkey.api.data.DbScope;
 import org.labkey.api.data.Results;
 import org.labkey.api.data.ResultsImpl;
-import org.labkey.api.data.Selector;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
-import org.labkey.api.study.StudyService;
-import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
@@ -33,15 +30,18 @@ import org.labkey.api.security.UserManager;
 import org.labkey.api.security.UserPrincipal;
 import org.labkey.api.settings.AppProps;
 import org.labkey.api.settings.LookAndFeelProperties;
+import org.labkey.api.study.StudyService;
 import org.labkey.api.util.GUID;
 import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.nirc_ehr.NIRCDeathNotification;
+import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
+import org.labkey.nirc_ehr.NIRC_EHRManager;
+import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,7 +49,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class NIRC_EHRTriggerHelper
 {
@@ -181,29 +180,6 @@ public class NIRC_EHRTriggerHelper
 
         if (errors.hasErrors())
             throw errors;
-
-        return null;
-    }
-
-    public String deleteDatasetRecord(String dataset, String taskid) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException
-    {
-        if (dataset == null || taskid == null)
-        {
-             return "Failed deleting record. Incomplete information.";
-        }
-
-        TableInfo ti = getTableInfo("study", dataset);
-        if (ti == null)
-        {
-            return "Failed deleting record. Table not found: study." + dataset;
-        }
-
-        List<Map<String, Object>> lsids = Arrays.asList(new TableSelector(ti, Collections.singleton("lsid"), new SimpleFilter(FieldKey.fromString("taskid"), taskid), null).getMapArray());
-
-        if (ti.getUpdateService() != null && lsids.size() > 0)
-        {
-            ti.getUpdateService().deleteRows(_user, _container, lsids, null, null);
-        }
 
         return null;
     }
@@ -421,6 +397,12 @@ public class NIRC_EHRTriggerHelper
 
             transaction.commit();
         }
+    }
+
+    public void generateOrchardFile(final String taskid) throws Exception
+    {
+        NIRCOrchardFileGenerator orchardFileGenerator = NIRC_EHRManager.getOrchardFileGenerator();
+        orchardFileGenerator.generateOrchardFile(_container, _user, taskid);
     }
 
     private void appendAnimalDetails(StringBuilder html, String id, final Container container)
