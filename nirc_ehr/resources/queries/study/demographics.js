@@ -6,6 +6,9 @@
 
 require("ehr/triggers").initScript(this);
 
+let triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
+let animalIds = [];
+
 function onInit(event, helper){
     helper.setScriptOptions({
         allowAnyId: true,
@@ -50,6 +53,28 @@ function onUpsert(helper, scriptErrors, row, oldRow){
                 row.sire = '';
                 row.dam = '';
             }
+        }
+    }
+}
+
+function onComplete(event, errors, helper){
+    if (!helper.isValidateOnly() && !helper.isETL()) {
+        var updateRows = helper.getRows();
+
+        // When closing previous records, we don't need to update the orchard file. Use the same flag as demographics providers.
+        var skipAnnounceChangedParticipants = false;
+        var extraContext = helper.getProperty('extraContext');
+        if (extraContext) {
+            skipAnnounceChangedParticipants = extraContext.skipAnnounceChangedParticipants;
+        }
+
+        if (updateRows && updateRows.length > 0 &&
+                updateRows[0].row.taskid &&
+                updateRows[0].row.QCStateLabel &&
+                EHR.Server.Security.getQCStateByLabel(updateRows[0].row.QCStateLabel).PublicData &&
+                !skipAnnounceChangedParticipants
+        ) {
+            triggerHelper.generateOrchardFile(updateRows[0].row.taskid);
         }
     }
 }

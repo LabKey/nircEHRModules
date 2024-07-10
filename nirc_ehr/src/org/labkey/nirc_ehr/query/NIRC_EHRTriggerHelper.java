@@ -35,6 +35,9 @@ import org.labkey.api.util.GUID;
 import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.nirc_ehr.NIRCDeathNotification;
+import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
+import org.labkey.nirc_ehr.NIRC_EHRManager;
+import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 
 import java.sql.SQLException;
@@ -393,6 +396,12 @@ public class NIRC_EHRTriggerHelper
 
             transaction.commit();
         }
+    }
+
+    public void generateOrchardFile(final String taskid) throws Exception
+    {
+        NIRCOrchardFileGenerator orchardFileGenerator = NIRC_EHRManager.getOrchardFileGenerator();
+        orchardFileGenerator.generateOrchardFile(_container, _user, taskid);
     }
 
     private void appendAnimalDetails(StringBuilder html, String id, final Container container)
