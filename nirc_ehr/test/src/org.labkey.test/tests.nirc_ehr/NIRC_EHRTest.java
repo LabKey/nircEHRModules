@@ -56,6 +56,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -595,10 +600,38 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void verifyOrchardFileGenerated(String animalId)
     {
-        File orchardFile =  new File(orchardFileLocation + "/orchardFile.txt");
+        String prefix = "orchardFile";
+        final String[] largestTimestamp = {"0"};
+
+        try {
+            // Use Files.walkFileTree to traverse the directory
+            Files.walkFileTree(orchardFileLocation.toPath(), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    // Check if the file name starts with "orchardFile"
+                    if (file.getFileName().toString().startsWith(prefix)) {
+                        String fileName = file.getFileName().toString();
+                        String timestamp = fileName.substring(prefix.length(), fileName.indexOf(".txt"));
+                        if (timestamp.compareTo(largestTimestamp[0]) > 0) {
+                            largestTimestamp[0] = timestamp;
+                        }
+
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (largestTimestamp[0].equals("0")) {
+            Assert.fail("Orchard file is not created");
+        }
+
+        File orchardFile =  new File(orchardFileLocation + "/orchardFile" + largestTimestamp[0] + ".txt");
         waitFor(() -> orchardFile.exists(), WAIT_FOR_PAGE);
         Assert.assertTrue("Edited animal is not present in the orchard file",
-               TestFileUtils.getFileContents(orchardFile).startsWith(animalId));
+               TestFileUtils.getFileContents(orchardFile).contains(animalId));
     }
 
     private void submitForm(String buttonText, String windowTitle)
