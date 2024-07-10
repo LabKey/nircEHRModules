@@ -9,6 +9,7 @@
                 <property name="columnTitle" value="Days In This Location"/>
             </properties>
         </column>
+        <column name="reason" />
         <column name="remark" />
         <column name="qcstate"/>
     </columns>
