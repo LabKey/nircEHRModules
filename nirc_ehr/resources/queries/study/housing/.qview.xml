@@ -8,6 +8,7 @@
         <column name="enddate"/>
         <column name="room" />
         <column name="cage" />
+        <column name="reason" />
         <column name="remark"/>
     </columns>
 </customView>
