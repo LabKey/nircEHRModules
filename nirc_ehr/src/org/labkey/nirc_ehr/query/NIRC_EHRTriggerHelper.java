@@ -38,7 +38,6 @@ import org.labkey.nirc_ehr.NIRCDeathNotification;
 import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
 import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
-import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
