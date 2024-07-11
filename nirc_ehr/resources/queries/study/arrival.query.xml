@@ -57,6 +57,15 @@
                             <fkColumnName>meaning</fkColumnName>
                         </fk>
                     </column>
+                    <column columnName="acquisitionType">
+                        <nullable>false</nullable>
+                        <columnTitle>Acquisition Type</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>acquisition_type</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
                 </columns>
             </table>
         </tables>

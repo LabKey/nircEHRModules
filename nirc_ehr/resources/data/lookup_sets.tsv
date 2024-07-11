@@ -1,4 +1,5 @@
 setname	label	keyfield	titleColumn
+acquisition_type	Acquisition Type	value
 alias_category	Alias Category	value	title
 alopecia_type	Alopecia Type	value
 alopecia_score	Alopecia Type	value

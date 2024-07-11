@@ -69,6 +69,12 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                     width: 150
                 },
             },
+            acquisitionType: {
+                columnConfig: {
+                    fixed: true,
+                    width: 150
+                },
+            },
         }
     }
 });
