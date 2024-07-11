@@ -1,4 +1,4 @@
-SELECT * FROM (SELECT
+SELECT
     t.taskid,
     d.Id AS animalId,
     t.updateTitle AS form,
@@ -18,5 +18,4 @@ SELECT * FROM (SELECT
         END AS statusOrder
 FROM ehr.tasks t
 LEFT JOIN study.deaths d ON d.taskid = t.taskid
-WHERE formType = 'Necropsy') n
-ORDER BY n.statusOrder ASC
+WHERE formType = 'Necropsy'
