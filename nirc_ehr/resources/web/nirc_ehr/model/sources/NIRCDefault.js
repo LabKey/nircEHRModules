@@ -40,6 +40,16 @@ EHR.model.DataModelManager.registerMetadata('Default', {
     },
     byQuery: {
         'study.housing': {
+            // having to add performedby here for housing because it is getting overridden in EHR's default.js.
+            performedby: {
+                allowBlank: false,
+                lookup: {
+                    schemaName: 'core',
+                    queryName: 'users',
+                    keyColumn: 'UserId',
+                    displayColumn: 'DisplayName'
+                }
+            },
             room: {
                 allowBlank: true,
                 hidden: true
@@ -89,6 +99,11 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 columnConfig: {
                     width: 400
                 }
+            }
+        },
+        'study.weight': {
+            performedby: {
+                defaultValue: LABKEY.Security.currentUser.id.toString()
             }
         }
     }
