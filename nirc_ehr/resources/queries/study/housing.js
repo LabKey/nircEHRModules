@@ -2,6 +2,9 @@ require("ehr/triggers").initScript(this);
 var prevAnimalId;
 var prevDate;
 
+let triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
+let animalIds = [];
+
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'housing', function (helper, scriptErrors, row, oldRow) {
 
         if (helper.isETL()) {
@@ -37,13 +40,31 @@ function onComplete(event, errors, helper){
                         date: EHR.Server.Utils.datetimeToString(updateRows[i].row.date),  //stringify to serialize properly
                         objectid: updateRows[i].row.objectid
                     });
+                    if (animalIds.indexOf(updateRows[i].row.Id) === -1) {
+                        animalIds.push(updateRows[i].row.Id);
+                    }
                 }
             }
             if (idsToClose.length){
                 helper.getJavaHelper().closeHousingRecords(idsToClose);
             }
+
+            // When closing previous records, we don't need to update the orchard file. Use the same flag as demographics providers.
+            var skipAnnounceChangedParticipants = false;
+            var extraContext = helper.getProperty('extraContext');
+            if (extraContext) {
+                skipAnnounceChangedParticipants = extraContext.skipAnnounceChangedParticipants;
+            }
+
+            if (updateRows && updateRows.length > 0 &&
+                    updateRows[0].row.taskid &&
+                    updateRows[0].row.QCStateLabel &&
+                    EHR.Server.Security.getQCStateByLabel(updateRows[0].row.QCStateLabel).PublicData &&
+                    !skipAnnounceChangedParticipants
+            ) {
+                triggerHelper.generateOrchardFile(updateRows[0].row.taskid);
+            }
         }
     }
-};
-
+}
 
