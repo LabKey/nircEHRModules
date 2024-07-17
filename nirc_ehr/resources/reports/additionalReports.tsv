@@ -10,6 +10,7 @@ chemistry	Clinical	query	Chemistry	TRUE		study	chemistryResults				FALSE	FALSE		
 alias	Colony Management	query	Aliases	true		study	demographicsAliases				false	false		qcstate/publicdata	This report shows the animal aliases
 activeTreatments	Clinical	query	Active Treatment Orders	true		study	activeTreatmentOrders				false	false		qcstate/publicdata	This report shows active treatment orders
 allTreatments	Clinical	query	All Treatment Orders	true		study	treatment_order				false	false		qcstate/publicdata	This report shows all treatment orders
+FileRepository	General	js	File Repository	true		study	FileRepository				false	false		qcstate/publicdata	File Repository for uploading and viewing animal related files
 behaviorCases
 behaviorRemarks															
 bloodSchedule															
