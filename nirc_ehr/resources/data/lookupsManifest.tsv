@@ -2,11 +2,12 @@ name
 acquisition_type
 ageclass
 alias_category
-amount_units
-app_score
 alopecia_type
 alopecia_score
 alopecia_regrowth
+amount_units
+app_score
+arrival_type
 att_score
 bcs_score
 behavior_types

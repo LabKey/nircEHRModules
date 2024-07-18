@@ -5,6 +5,7 @@ alopecia_type	Alopecia Type	value
 alopecia_score	Alopecia Type	value
 alopecia_regrowth	Alopecia Regrowth	value
 app_score	Appetite Score	value
+arrival_type	Arrival Type	value
 att_score	Attitude Score	valu
 bcs_score	BCS Store	value	title
 behavior_types	Behavior Types	value

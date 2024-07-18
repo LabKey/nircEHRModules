@@ -82,7 +82,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 cage: row.cage,
                 taskid: row.taskid,
                 qcstate: row.qcstate,
-                reason: 'Non-quarantine Arrival'
+                reason: row.arrivalType
             }
 
             var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "arrival");

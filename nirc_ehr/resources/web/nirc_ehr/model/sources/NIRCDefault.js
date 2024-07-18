@@ -99,9 +99,17 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 columnConfig: {
                     width: 400
                 }
-            }
+            },
+            performedby: {
+                defaultValue: LABKEY.Security.currentUser.id.toString()
+            },
         },
         'study.weight': {
+            performedby: {
+                defaultValue: LABKEY.Security.currentUser.id.toString()
+            }
+        },
+        'study.flags': {
             performedby: {
                 defaultValue: LABKEY.Security.currentUser.id.toString()
             }
