@@ -55,6 +55,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 hidden: true
             },
             'cage': {
+                allowBlank: false,
                 columnConfig: {
                     fixed: true,
                     width: 150

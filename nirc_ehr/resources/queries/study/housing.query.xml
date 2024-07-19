@@ -16,7 +16,6 @@
                     </column>
                     <column columnName="cage">
                         <columnTitle>Location</columnTitle>
-                        <nullable>false</nullable>
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${cage}&amp;</url>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
@@ -37,7 +36,6 @@
                     </column>
                     <column columnName="reason">
                         <columnTitle>Reason For Move</columnTitle>
-                        <nullable>false</nullable>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>housing_reason</fkTable>
