@@ -29,10 +29,9 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 
     if (!helper.isETL()) {
 
-        if (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
+        if (deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                 deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED') {
 
-            console.log("request pending...");
             if (!row.examReason)
                 EHR.Server.Utils.addError(scriptErrors, 'examReason', "'Reason for Examination' is required", 'ERROR');
             if (!row.specimenCondition)
