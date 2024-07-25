@@ -470,8 +470,15 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Entering Necropsy");
         impersonate(NIRC_BASIC_SUBMITTER_VET);
         beginAt(url);
+        Ext4GridRef necropsy = _helper.getExt4GridForFormSection("Necropsy");
+        necropsy.expand();
         waitForElement(Locator.name("necropsyWeight"));
         setFormElement(Locator.name("necropsyWeight"), "23");
+        scrollIntoView(Locator.linkContainingText("More Actions"));
+//        _ext4Helper.selectComboBoxItem(Locator.name("examReason"), "Natural Death");
+//        _ext4Helper.selectComboBoxItem(Locator.name("specimenCondition"), "Fresh");
+//        _ext4Helper.selectComboBoxItem(Locator.name("physicalCondition"), "Excellent");
+//        setFormElement(Locator.textarea("diagnosis"), "Dead");
 
         log("Entering Tissue Disposition");
         Ext4GridRef tissueDisposition = _helper.getExt4GridForFormSection("Tissue Disposition");
