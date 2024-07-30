@@ -65,6 +65,16 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 customizeTasks(ti);
             }
 
+            if (matches(ti, "ehr_lookups", "rooms"))
+            {
+                customizeRooms(ti);
+            }
+
+            if (matches(ti, "ehr_lookups", "floors"))
+            {
+                customizeFloors(ti);
+            }
+
             if (matches(ti, "nirc_ehr", "necropsyTasks"))
             {
                 addNecropsyReportLink(ti);
@@ -199,6 +209,52 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 }
             });
             ti.addColumn(viewNecropsy);
+        }
+    }
+
+    private void customizeRooms(AbstractTableInfo ti)
+    {
+        ColumnInfo roomCol = ti.getColumn("name");
+        ColumnInfo floorCol = ti.getColumn("floor");
+        if (roomCol != null && ti.getColumn("fullRoom") == null)
+        {
+            SQLFragment sql = new SQLFragment("(SELECT COALESCE(r.room, 'Room N/A') || ', ' || COALESCE(r.floor, 'Floor N/A') || ', ' || COALESCE(r.building, 'Building N/A') \n" +
+                    "        FROM (\n" +
+                    "            SELECT \n").append(roomCol.getValueSql(ExprColumn.STR_TABLE_ALIAS));
+            sql.append(" AS room,\n" +
+                    "    ff.name as floor,\n" +
+                    "    bb.description as building\n" +
+                    "    FROM ehr_lookups.floors ff \n" +
+                    "    JOIN ehr_lookups.buildings bb ON ff.building = bb.name\n" +
+                    "    WHERE ff.floor =\n").append(floorCol.getValueSql(ExprColumn.STR_TABLE_ALIAS));
+            sql.append("        ) r\n" +
+                    "    )");
+
+            ExprColumn col = new ExprColumn(ti, "fullRoom", sql, JdbcType.VARCHAR, roomCol, floorCol);
+            col.setLabel("Full Room");
+            ti.addColumn(col);
+        }
+    }
+
+    private void customizeFloors(AbstractTableInfo ti)
+    {
+        ColumnInfo floorCol = ti.getColumn("name");
+        ColumnInfo bldgCol = ti.getColumn("building");
+        if (floorCol != null && ti.getColumn("fullFloor") == null)
+        {
+            SQLFragment sql = new SQLFragment("(SELECT COALESCE(r.floor, 'Floor N/A') || ', ' || COALESCE(r.building, 'Building N/A') \n" +
+                    "        FROM (\n" +
+                    "            SELECT " + ExprColumn.STR_TABLE_ALIAS + ".name\n");
+            sql.append(" AS floor,\n" +
+                    "    bb.description as building\n" +
+                    "    FROM ehr_lookups.buildings bb \n" +
+                    "    WHERE bb.name = " + ExprColumn.STR_TABLE_ALIAS + ".building\n");
+            sql.append("        ) r\n" +
+                    "    )");
+
+            ExprColumn col = new ExprColumn(ti, "fullFloor", sql, JdbcType.VARCHAR, floorCol, bldgCol);
+            col.setLabel("Full Floor");
+            ti.addColumn(col);
         }
     }
 

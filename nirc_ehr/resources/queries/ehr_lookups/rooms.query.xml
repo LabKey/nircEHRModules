@@ -10,7 +10,7 @@
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>floors</fkTable>
                             <fkColumnName>floor</fkColumnName>
-                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                            <fkDisplayColumnName>fullFloor</fkDisplayColumnName>
                         </fk>
                     </column>
                 </columns>

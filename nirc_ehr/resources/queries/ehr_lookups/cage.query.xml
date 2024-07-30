@@ -10,7 +10,7 @@
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>rooms</fkTable>
                             <fkColumnName>room</fkColumnName>
-                            <fkDisplayColumnName>name</fkDisplayColumnName>
+                            <fkDisplayColumnName>fullRoom</fkDisplayColumnName>
                         </fk>
                     </column>
                     <column columnName="cage">
