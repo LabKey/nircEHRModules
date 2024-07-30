@@ -304,8 +304,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         arrivals.setGridCell(1, "arrivalProtocol", "dummyprotocol");
         arrivals.setGridCell(1, "arrivalType", "Non-quarantine Arrival");
         arrivals.setGridCell(1, "acquisitionType", "Non-quarantine Arrival");
-        arrivals.setGridCell(1, "species", "Macaca mulatta RHM");
-        arrivals.setGridCell(1, "sex", "female");
+        arrivals.setGridCell(1, "Id/demographics/species", "Macaca mulatta RHM");
+        arrivals.setGridCell(1, "Id/demographics/gender", "female");
         arrivals.setGridCell(1, "sourceFacility", "Yerkes Regional PRC");
         arrivals.setGridCellJS(1, "Id/demographics/birth", now.minusDays(7).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
         arrivals.setGridCellJS(1, "Id/demographics/geographic_origin", "USA");
