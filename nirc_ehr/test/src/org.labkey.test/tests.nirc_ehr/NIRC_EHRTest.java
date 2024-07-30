@@ -303,7 +303,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         arrivals.setGridCell(1, "project", "640991");
         arrivals.setGridCell(1, "arrivalProtocol", "dummyprotocol");
         arrivals.setGridCell(1, "arrivalType", "Non-quarantine Arrival");
-        arrivals.setGridCell(1, "acquisitionType", "Non-quarantine Arrival");
+        arrivals.setGridCell(1, "acquisitionType", "Lab Transfer (Wild Born)");
         arrivals.setGridCell(1, "Id/demographics/species", "Macaca mulatta RHM");
         arrivals.setGridCell(1, "Id/demographics/gender", "female");
         arrivals.setGridCell(1, "sourceFacility", "Yerkes Regional PRC");
