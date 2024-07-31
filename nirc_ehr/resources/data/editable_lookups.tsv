@@ -1,4 +1,5 @@
 Value	Category	title	description
+acquisition_type	Colony Management	Acquisition Type	Types of acquisition for Arrivals.
 ageclass	Colony Management	Age Class	Categories of age, such as infant or adult, by species. Used in various reports grouping animals by age class.
 alias_category	Colony Management	Alias Category
 alopecia_score	Clinical	Alopecia Score	Clinical observation fixed values.

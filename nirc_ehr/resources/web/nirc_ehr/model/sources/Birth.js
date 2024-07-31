@@ -20,12 +20,14 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
     byQuery: {
         'study.birth': {
             'Id/demographics/species': {
+                allowBlank: false,
                 columnConfig: {
                     fixed: true,
                     width: 250
                 }
             },
             'cage': {
+                allowBlank: false,
                 columnConfig: {
                     fixed: true,
                     width: 200
@@ -33,7 +35,7 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
             },
             project: {
                 xtype: 'combo',
-                nullable: false,
+                allowBlank: false,
                 lookup: {
                     schemaName: 'ehr',
                     queryName: 'project',
@@ -44,8 +46,15 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
             birthProtocol: {
                 columnConfig: {
                     width: 200
-                }
+                },
+                allowBlank: false
             },
+            'Id/demographics/birth': {
+                allowBlank: false
+            },
+            'Id/demographics/gender': {
+                allowBlank: false
+            }
         }
     }
 });

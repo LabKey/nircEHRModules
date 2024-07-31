@@ -12,6 +12,22 @@
                     <column columnName="date">
                         <columnTitle>Arrival Date</columnTitle>
                     </column>
+                    <column columnName="arrivalType">
+                        <columnTitle>Arrival Type</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>arrival_type</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="acquisitionType">
+                        <columnTitle>Acquisition Type</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>acquisition_type</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
                     <column columnName="attachmentFile">
                         <isHidden>true</isHidden>
                     </column>
