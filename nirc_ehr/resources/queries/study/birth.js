@@ -19,23 +19,6 @@ function onInit(event, helper){
     helper.decodeExtraContextProperty('birthsInTransaction');
 }
 
-EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_DELETE, 'study', 'birth', function(helper, scriptErrors, row, oldRow) {
-    if (!helper.isETL() && !helper.isValidateOnly()) {
-        // cleanup on delete
-        if (row.taskid){
-
-            var deleteErrors = triggerHelper.deleteDatasetRecord('demographics', row.taskid);
-            if (deleteErrors){
-                EHR.Server.Utils.addError(scriptErrors, 'Id', deleteErrors, 'ERROR');
-            }
-            deleteErrors = triggerHelper.deleteDatasetRecord('housing', row.taskid);
-            if (deleteErrors){
-                EHR.Server.Utils.addError(scriptErrors, 'Id', deleteErrors, 'ERROR');
-            }
-        }
-    }
-});
-
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'birth', function(helper, scriptErrors, row, oldRow) {
 
     if (!oldRow && row.Id && triggerHelper.birthExists(row.Id)) {
@@ -48,18 +31,20 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             row.qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
         }
 
-        if (row.project && row.Id && row.date) {
+        if (row.Id && row.date) {
 
             let assignmentRec = {
                 Id: row.Id,
                 date: row.date,
-                project: row.project,
                 taskid: row.taskid,
                 remark: row.remark,
                 qcstate: row.qcstate
             }
 
-            triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+            if (row.project) {
+                assignmentRec['project'] = row.project;
+                triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+            }
 
             if (row.birthProtocol) {
                 assignmentRec['protocol'] = row.birthProtocol;
@@ -76,7 +61,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                     date: row.date,
                     cage: row.cage,
                     taskid: row.taskid,
-                    qcstate: row.qcstate
+                    qcstate: row.qcstate,
+                    reason: 'Husbandry'
                 }
 
                 var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "birth");

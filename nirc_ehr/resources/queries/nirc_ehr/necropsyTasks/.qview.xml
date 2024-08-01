@@ -11,7 +11,7 @@
         <column name="status"/>
     </columns>
     <sorts>
-        <sort column="modified" descending="true"/>
-        <sort column="status" descending="false"/>
+        <sort column="statusOrder" descending="false"/>
+        <sort column="modified" descending="false"/>
     </sorts>
 </customView>

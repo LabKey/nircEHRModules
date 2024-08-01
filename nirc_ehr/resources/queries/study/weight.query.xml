@@ -20,6 +20,7 @@
                     </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
+                        <isHidden>true</isHidden>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>data_category</fkTable>

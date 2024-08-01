@@ -6,6 +6,7 @@ var prevDate;
 var missing = [];
 
 var count = 0;
+let animalIds = [];
 
 var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 
@@ -108,10 +109,6 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
 });
 
-function onComplete(event, helper){
-    if (missing.length > 0)
-        console.log("Missing Protocols: " + missing);
-}
 
 function getProtocolIdByName(protocolName) {
     var protocols = Object.keys(protocolData);
@@ -129,6 +126,29 @@ function getProtocolIdByName(protocolName) {
         pName = protocolData[protocols[i]] ;
         if (pName && protocolName.trim().toLowerCase().indexOf(pName.toString().toLowerCase()) === 0) {
             return protocols[i];
+        }
+    }
+}
+
+function onComplete(event, errors, helper){
+
+    if (!helper.isValidateOnly() && !helper.isETL()) {
+        var updateRows = helper.getRows();
+
+        // When closing previous records, we don't need to update the orchard file. Use the same flag as demographics providers.
+        var skipAnnounceChangedParticipants = false;
+        var extraContext = helper.getProperty('extraContext');
+        if (extraContext) {
+            skipAnnounceChangedParticipants = extraContext.skipAnnounceChangedParticipants;
+        }
+
+        if (updateRows && updateRows.length > 0 &&
+                updateRows[0].row.taskid &&
+                updateRows[0].row.QCStateLabel &&
+                EHR.Server.Security.getQCStateByLabel(updateRows[0].row.QCStateLabel).PublicData &&
+                !skipAnnounceChangedParticipants
+        ) {
+            triggerHelper.generateOrchardFile(updateRows[0].row.taskid);
         }
     }
 }

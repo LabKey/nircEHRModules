@@ -53,18 +53,20 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             }
         }
 
-        if (row.project && row.Id && row.date) {
+        if (row.Id && row.date) {
 
             let assignmentRec = {
                 Id: row.Id,
                 date: row.date,
-                project: row.project,
                 taskid: row.taskid,
                 remark: row.remark,
                 qcstate: row.qcstate
             }
 
-            triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+            if (row.project) {
+                assignmentRec['project'] = row.project;
+                triggerHelper.createAssignmentRecord("assignment", row.Id, assignmentRec);
+            }
 
             if (row.arrivalProtocol) {
                 assignmentRec['protocol'] = row.arrivalProtocol;
@@ -79,7 +81,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 date: row.date,
                 cage: row.cage,
                 taskid: row.taskid,
-                qcstate: row.qcstate
+                qcstate: row.qcstate,
+                reason: row.arrivalType
             }
 
             var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "arrival");
