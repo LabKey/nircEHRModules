@@ -61,7 +61,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                     date: row.date,
                     cage: row.cage,
                     taskid: row.taskid,
-                    qcstate: row.qcstate
+                    qcstate: row.qcstate,
+                    reason: 'Husbandry'
                 }
 
                 var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "birth");

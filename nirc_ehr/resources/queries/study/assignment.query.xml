@@ -13,6 +13,9 @@
                     <column columnName="performedBy">
                         <columnTitle>Performed By</columnTitle>
                     </column>
+                    <column columnName="taskid">
+                        <isHidden>true</isHidden>
+                    </column>
                 </columns>
             </table>
         </tables>

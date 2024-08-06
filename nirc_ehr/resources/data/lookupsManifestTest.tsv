@@ -1,12 +1,13 @@
 name
+acquisition_type
 ageclass
 alias_category
-amount_units
-app_score
 alopecia_type
 alopecia_score
 alopecia_regrowth
-att_score
+amount_units
+app_score
+arrival_type
 bcs_score
 behavior_types
 blood_draw_reason
