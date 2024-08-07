@@ -39,11 +39,11 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                 }
             }
         },
-        'study.procedure': {
+        'study.prc': {
             category: {
                 defaultValue: 'Clinical',
                 hidden: true
-            }
+            },
         },
         'study.clinremarks': {
             category: {
@@ -71,7 +71,8 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
         },
         'study.blood': {
             reason: {
-                defaultValue: 'Clinical'
+                defaultValue: 'Clinical',
+                hidden: true
             },
             performedby: {
                 hidden: false,
@@ -192,6 +193,16 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                         autoLoad: true
                     }
                 }
+            },
+            category: {
+                defaultValue: 'Clinical',
+                hidden: true
+            }
+        },
+        'study.vitals': {
+            category: {
+                defaultValue: 'Clinical',
+                hidden: true
             }
         }
     }
