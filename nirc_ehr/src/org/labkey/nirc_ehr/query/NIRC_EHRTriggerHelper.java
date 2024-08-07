@@ -101,6 +101,7 @@ public class NIRC_EHRTriggerHelper
         BatchValidationException errors = new BatchValidationException();
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
         String location = ConvertHelper.convert(row.get("cage"), String.class);
+        String reason = ConvertHelper.convert(row.get("reason"), String.class);
         if (id == null || date == null || location == null)
             return "Attempting to create a housing record with no id, date, or location";
 
@@ -156,6 +157,7 @@ public class NIRC_EHRTriggerHelper
         saveRow.put("cage", location);
         saveRow.put("taskId", taskId);
         saveRow.put("qcstate", qcstate);
+        saveRow.put("reason", reason);
         if (updateRecord)
             saveRow.put("objectid", ts.getMap().get("objectid"));
         else

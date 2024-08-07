@@ -40,11 +40,22 @@ EHR.model.DataModelManager.registerMetadata('Default', {
     },
     byQuery: {
         'study.housing': {
+            // having to add performedby here for housing because it is getting overridden in EHR's default.js.
+            performedby: {
+                allowBlank: false,
+                lookup: {
+                    schemaName: 'core',
+                    queryName: 'users',
+                    keyColumn: 'UserId',
+                    displayColumn: 'DisplayName'
+                }
+            },
             room: {
                 allowBlank: true,
                 hidden: true
             },
             'cage': {
+                allowBlank: false,
                 columnConfig: {
                     fixed: true,
                     width: 150
@@ -52,7 +63,17 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             },
             'enddate': {
                 hidden: true
-            }
+            },
+            reason: {
+                defaultValue: null,
+                allowBlank: false,
+                columnConfig: {
+                    width: 180
+                },
+                lookup: {
+                    filterArray: [LABKEY.Filter.create('date_disabled', null, LABKEY.Filter.Types.ISBLANK)]
+                }
+            },
         },
         'study.arrival': {
             initialRoom: {
@@ -79,6 +100,19 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 columnConfig: {
                     width: 400
                 }
+            },
+            performedby: {
+                defaultValue: LABKEY.Security.currentUser.id.toString()
+            },
+        },
+        'study.weight': {
+            performedby: {
+                defaultValue: LABKEY.Security.currentUser.id.toString()
+            }
+        },
+        'study.flags': {
+            performedby: {
+                defaultValue: LABKEY.Security.currentUser.id.toString()
             }
         }
     }
