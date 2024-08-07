@@ -35,10 +35,8 @@ import org.labkey.test.components.CustomizeView;
 import org.labkey.test.components.dumbster.EmailRecordTable;
 import org.labkey.test.components.ext4.Window;
 import org.labkey.test.components.ui.grids.QueryGrid;
-import org.labkey.test.pages.ehr.AnimalHistoryPage;
 import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
-import org.labkey.test.pages.ehr.EnterDataPage;
 import org.labkey.test.pages.ehr.NotificationAdminPage;
 import org.labkey.test.params.ModuleProperty;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
@@ -48,9 +46,7 @@ import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 import org.labkey.test.util.ext4cmp.Ext4GridRef;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.BufferedReader;
@@ -63,7 +59,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +75,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static String  NIRC_BASIC_SUBMITTER = "ac_bs@nirctest.com";
     private static String NIRC_BASIC_SUBMITTER_VET_TECH = "vet_tech_bs@nirctest.com";
+    private static String NIRC_FULL_SUBMITTER_VET_TECH = "vet_tech_fs@nirctest.com";
     private  static String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
 
     private static String deadAnimalId = "D5454";
@@ -375,14 +371,20 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     public void addUsersAndPermissions()
     {
-        //create animal care basic submitter user (ex. this user can 'Submit Death')
+        //create animal care basic submitter user (ex. this user can 'Submit Death' in Death/Necropsy)
         createUser(NIRC_BASIC_SUBMITTER, "EHR Basic Submitters", null);
 
-        //create a vet user with 'EHR Basic Submitter' group (ex. this user can 'Submit Necropsy for Review')
+        //create a vet tech user with 'EHR Basic Submitters' group (ex. this user can 'Submit Necropsy for Review' in Death/Necropsy)
         createUser(NIRC_BASIC_SUBMITTER_VET_TECH, "EHR Basic Submitters", "EHR Veterinarian Technician");
 
-        //create a vet user with 'EHR Full Submitter' group (ex. this user can 'Submit Final')
+        //create a vet tech user with 'EHR Full Updaters' group (ex. this user can 'Submit for Review' and 'Submit Final' in cases)
+        createUser(NIRC_FULL_SUBMITTER_VET_TECH, "EHR Full Updaters", "EHR Veterinarian Technician");
+
+        //create a vet user with 'EHR Full Updaters' group (ex. this user can 'Submit Final' in Death/Necropsy)
         createUser(NIRC_FULL_SUBMITTER_VET, "EHR Full Updaters", "EHR Veterinarian");
+
+        _permissionsHelper.setPermissions(FULL_UPDATER.getGroup(), "EHR Clinical Entry");
+
     }
 
     public void createSubjectsForDeathForm() throws IOException, CommandException
@@ -549,6 +551,29 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 //        table.setFilter("Id", "Equals", aliveAnimalId);
 //        Assert.assertTrue("End date is not updated for study.protocolAssignment", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
 
+    }
+
+    @Test
+    public void testClinicalCasesWorkflow()
+    {
+        //TODO: Test Basic Clinical Workflow
+        //Go to NIRC/EHR main page
+        //Impersonate as NIRC_FULL_SUBMITTER_VET_TECH
+        //Navigate to Enter Data > Clinical Cases
+        //Fill out Clinical Case section with Id, Date, Open Remark
+        //Fill out Clinical Remarks section with Date, Remark
+        //'Submit Final'
+        //Stop impersonation
+        //Go to NIRC/EHR main page
+        //Impersonate as NIRC_FULL_SUBMITTER_VET
+        //Go to 'Active Clinical Cases'
+        //Click on 'Case Update' link
+        //Fill out Close Date
+        //'Submit Final'
+        //Go to NIRC/EHR main page
+        //Go to 'Active Clinical Cases'
+        //Verify that the case is no longer present/is closed
+        //Stop impersonation
     }
 
     @Override

@@ -1,0 +1,23 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="caseCheck"/>
+        <column name="Id"/>
+        <column name="date"/>
+        <column name="reviewdate"/>
+        <column name="enddate"/>
+        <column name="Id/demographics/mostRecentHx"/>
+        <column name="problemCategory"/>
+        <column name="problemSubcategory"/>
+        <column name="Id/curLocation/daysInRoom"/>
+        <column name="openRemark"/>
+        <column name="plan"/>
+        <column name="closeRemark"/>
+    </columns>
+    <filters>
+        <filter column="enddate" operator="isblank"/>
+        <filter column="category" operator="eq" value="Clinical"/>
+    </filters>
+    <sorts>
+        <sort column="date" descending="true"/>
+    </sorts>
+</customView>

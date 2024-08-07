@@ -1,6 +1,7 @@
 package org.labkey.nirc_ehr.table;
 
 import org.labkey.api.data.AbstractTableInfo;
+import org.labkey.api.data.BaseColumnInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.DataColumn;
@@ -14,6 +15,8 @@ import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ehr.EHRService;
+import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
+import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.ehr.security.EHRDataEntryPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.exp.api.StorageProvisioner;
@@ -76,7 +79,86 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 addNecropsyReportLink(ti);
             }
+            else if (matches(ti, "study", "cases"))
+            {
+                customizeCases(ti);
+            }
         }
+    }
+
+    private void customizeCases(AbstractTableInfo ti)
+    {
+        if (ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
+        {
+            appendCaseCheckCol(ti, "caseCheck", "Case Update", "Case Update");
+        }
+    }
+
+    private void appendCaseCheckCol(AbstractTableInfo ti, String name, String linkLabel, String colLabel)
+    {
+        if (ti.getColumn(name) != null)
+            return;
+
+        var ci = new WrappedColumn(ti.getColumn("Id"), name);
+        ci.setDisplayColumnFactory(new DisplayColumnFactory()
+        {
+            @Override
+            public DisplayColumn createRenderer(final ColumnInfo colInfo)
+            {
+                return new DataColumn(colInfo){
+
+                    @Override
+                    public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                    {
+                        String taskid = (String)ctx.get("taskid");
+                        String category = (String)ctx.get("category");
+                        ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                        if (category == null || category.equals("Clinical"))
+                        {
+                            if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
+                                return;
+
+                            linkAction.addParameter("formType", "Clinical Cases");
+                        }
+
+                        linkAction.addParameter("taskid", taskid);
+                        String href = linkAction.toString();
+                        out.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
+                    }
+
+                    @Override
+                    public void addQueryFieldKeys(Set<FieldKey> keys)
+                    {
+                        super.addQueryFieldKeys(keys);
+                        keys.add(FieldKey.fromString("taskid"));
+                        keys.add(FieldKey.fromString("category"));
+                    }
+
+                    @Override
+                    public boolean isSortable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isFilterable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isEditable()
+                    {
+                        return false;
+                    }
+                };
+            }
+        });
+        ci.setIsUnselectable(false);
+        ci.setLabel(colLabel);
+        ci.setWidth("50px");
+
+        ti.addColumn(ci);
     }
 
     private void addNecropsyEnterDataLink(AbstractTableInfo ti)

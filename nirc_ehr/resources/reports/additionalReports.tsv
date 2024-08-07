@@ -14,7 +14,7 @@ FileRepository	General	js	File Repository	true		study	FileRepository				false	fa
 behaviorCases
 behaviorRemarks															
 bloodSchedule															
-cases															
+cases	Clinical	query	Active Clinical Cases	true		study	cases	Active Clinical Cases		date	false	false		qcstate/publicdata	This displays active clinical cases
 clinMedicationSchedule															
 clinObsBehavior															
 dietSchedule															
