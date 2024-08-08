@@ -20,6 +20,21 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
                         store.removeAll();
                     }
                 });
+
+                // get and set 'NIRC Veterinarians' as the assignedTo value
+                var assignedToCombo = panel.down('ehr-usersandgroupscombo');
+                if (assignedToCombo) {
+                    var assignedToStore = assignedToCombo.getStore();
+                    if (assignedToStore.count() > 0) {
+                        var assignedToRec = assignedToStore.findRecord('DisplayName', 'NIRC Veterinarians');
+                        if (assignedToRec) {
+                            var taskStore = panel.storeCollection.getServerStoreForQuery('ehr', 'tasks');
+                            taskStore.getAt(0).set('assignedto', assignedToRec.get('UserId'));
+                            panel.storeCollection.transformServerToClient();
+                        }
+                    }
+                }
+
                 panel.onSubmit(submitDeathBtn);
             }
         }, this);
