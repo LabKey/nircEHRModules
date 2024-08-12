@@ -6,16 +6,16 @@ import org.labkey.api.security.permissions.ReadPermission;
 import org.labkey.api.security.permissions.UpdatePermission;
 import org.labkey.api.security.roles.AbstractRole;
 
-public class EHRVetTechRole extends AbstractRole
+public class NIRCEHRVetTechRole extends AbstractRole
 {
-    public EHRVetTechRole()
+    public NIRCEHRVetTechRole()
     {
         super("EHR Veterinarian Technician", "Users with this role are permitted to submit and update records but not close, approve, or delete them.",
                 ReadPermission.class,
                 InsertPermission.class,
                 UpdatePermission.class,
                 EHRDataEntryPermission.class,
-                EHRVetTechPermission.class
+                NIRCEHRVetTechPermission.class
         );
     }
 }

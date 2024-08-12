@@ -39,7 +39,7 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
         List<FieldKey> keys = super.getFieldKeys(ti);
 
         // only Vets and Folder Admins can see the enddate ('Close date') field to be able to close the case.
-        if (!isVet && (isVetTech || !isFolderAdmin))
+        if (!isVet && (!isFolderAdmin || isVetTech))
         {
             keys.remove(FieldKey.fromString("enddate"));
         }

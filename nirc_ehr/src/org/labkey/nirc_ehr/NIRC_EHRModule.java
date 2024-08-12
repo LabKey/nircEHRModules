@@ -62,7 +62,7 @@ import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
-import org.labkey.nirc_ehr.security.EHRVetTechRole;
+import org.labkey.nirc_ehr.security.NIRCEHRVetTechRole;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 
 import java.io.File;
@@ -166,7 +166,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerActionOverride("enterData", this, "views/enterData.html");
 
         ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment", "protocolAssignment"));
-        RoleManager.registerRole(new EHRVetTechRole());
+        RoleManager.registerRole(new NIRCEHRVetTechRole());
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());

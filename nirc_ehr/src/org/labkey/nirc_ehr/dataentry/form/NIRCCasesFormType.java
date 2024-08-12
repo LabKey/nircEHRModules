@@ -23,8 +23,8 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCVitalsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
-import org.labkey.nirc_ehr.security.EHRVetTechPermission;
-import org.labkey.nirc_ehr.security.EHRVetTechRole;
+import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
+import org.labkey.nirc_ehr.security.NIRCEHRVetTechRole;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -42,7 +42,7 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
                 new NIRCCasesFormPanelSection("Clinical Case",
-                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVetTechPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks"),
