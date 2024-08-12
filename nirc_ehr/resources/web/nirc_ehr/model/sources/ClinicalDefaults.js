@@ -161,7 +161,7 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             },
             performedby: {
                 hidden: false,
-                defaultValue: LABKEY.Security.currentUser.displayName,
+                defaultValue: LABKEY.Security.currentUser.id.toString(),
                 editorConfig: {
                     store: {
                         type: 'labkey-store',

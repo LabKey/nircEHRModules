@@ -19,6 +19,7 @@ import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.ehr.security.EHRDataEntryPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
+import org.labkey.api.ehr.table.FixedWidthDisplayColumn;
 import org.labkey.api.exp.api.StorageProvisioner;
 import org.labkey.api.exp.property.Domain;
 import org.labkey.api.gwt.client.FacetingBehaviorType;
@@ -30,7 +31,9 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
 import org.labkey.api.query.UserSchema;
+import org.labkey.api.study.Dataset;
 import org.labkey.api.study.DatasetTable;
+import org.labkey.api.study.StudyService;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
@@ -83,6 +86,52 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 customizeCases(ti);
             }
+            else if (matches(ti, "study", "demographics"))
+            {
+                customizeDemographics(ti);
+            }
+        }
+    }
+
+    private void customizeDemographics(AbstractTableInfo ti)
+    {
+        String hxName = "mostRecentHx";
+        if (null == ti.getColumn(hxName) && null != ti.getColumn("Id"))
+        {
+            ColumnInfo idCol = ti.getColumn("Id");
+            assert idCol != null;
+
+            int datasetId = StudyService.get().getDatasetIdByName(ti.getUserSchema().getContainer(), "clinRemarks");
+            Dataset dataset = StudyService.get().getDataset(ti.getUserSchema().getContainer(), datasetId);
+            String realTableName = dataset.getDomain().getStorageTableName();
+
+            SQLFragment sql = new SQLFragment("(SELECT " + ti.getSqlDialect().getGroupConcat(new SQLFragment("r.hx"), true, false, new SQLFragment(getChr(ti) + "(10)")).getSqlCharSequence() + " FROM studydataset." + realTableName +
+                    " r WHERE r.participantId = " + ExprColumn.STR_TABLE_ALIAS + ".participantId AND r.hx IS NOT NULL AND r.date = (SELECT max(date) as expr FROM studydataset." + realTableName + " r2 "
+                    + " WHERE r2.participantId = r.participantId AND r2.hx is not null))"
+            );
+            ExprColumn latestHx = new ExprColumn(ti, hxName, sql, JdbcType.VARCHAR, idCol);
+            latestHx.setLabel("Most Recent Hx");
+            latestHx.setDisplayColumnFactory(new DisplayColumnFactory()
+            {
+                @Override
+                public DisplayColumn createRenderer(ColumnInfo colInfo)
+                {
+                    return new FixedWidthDisplayColumn(colInfo, 100);
+                }
+            });
+
+            latestHx.setWidth("200");
+            ti.addColumn(latestHx);
+        }
+
+        if (ti.getColumn("mostRecentClinicalObservations") == null)
+        {
+            UserSchema us = getUserSchema(ti, "study");
+            var col = getWrappedCol(us, ti, "mostRecentClinicalObservations", "mostRecentObservationsClinical", "Id", "Id");
+            col.setLabel("Most Recent Clinical Observations");
+            col.setDescription("Displays the most recent set of clinical observations for this animal");
+            col.setDisplayWidth("150");
+            ti.addColumn(col);
         }
     }
 
@@ -473,6 +522,16 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             if ("reviewdate".equalsIgnoreCase(col.getName()))
             {
                 col.setFormat("Date");
+            }
+            if ("caseid".equalsIgnoreCase(col.getName()))
+            {
+                col.setLabel("Case");
+                if (col.getFk() == null)
+                {
+                    UserSchema us = getEHRUserSchema(ti, "study");
+                    if (us != null)
+                        col.setFk(new QueryForeignKey(us, null, "cases", "objectid", "category"));
+                }
             }
         }
     }

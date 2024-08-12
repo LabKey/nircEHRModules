@@ -265,10 +265,6 @@
             <column columnName="quantity">
                 <datatype>double</datatype>
             </column>
-            <column columnName="units">
-                <columnTitle>Units</columnTitle>
-                <datatype>integer</datatype>
-            </column>
             <column columnName="caseid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
@@ -348,7 +344,10 @@
             <column columnName="observation">
                 <datatype>varchar</datatype>
             </column>
-
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
         </columns>
     </table>
     <table tableName="clinremarks" tableDbType="TABLE">
@@ -1007,6 +1006,10 @@
             </column>
             <column columnName="category">
                 <datatype>varchar</datatype>
+            </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
             </column>
         </columns>
     </table>
