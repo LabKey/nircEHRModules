@@ -21,12 +21,12 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
                     }
                 });
 
-                // get and set 'NIRC Veterinarians' as the assignedTo value
+                // get and set 'Veterinarians' as the assignedTo value
                 var assignedToCombo = panel.down('ehr-usersandgroupscombo');
                 if (assignedToCombo) {
                     var assignedToStore = assignedToCombo.getStore();
                     if (assignedToStore.count() > 0) {
-                        var assignedToRec = assignedToStore.findRecord('DisplayName', 'NIRC Veterinarians');
+                        var assignedToRec = assignedToStore.findRecord('DisplayName', 'Veterinarians');
                         if (assignedToRec) {
                             var taskStore = panel.storeCollection.getServerStoreForQuery('ehr', 'tasks');
                             taskStore.getAt(0).set('assignedto', assignedToRec.get('UserId'));
