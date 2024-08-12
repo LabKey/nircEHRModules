@@ -216,8 +216,9 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
     {
         ColumnInfo roomCol = ti.getColumn("name");
         ColumnInfo floorCol = ti.getColumn("floor");
-        if (roomCol != null && ti.getColumn("fullRoom") == null)
+        if (roomCol != null && floorCol != null && ti.getColumn("fullRoom") == null)
         {
+//            ((PropertyColumn) roomCol).setParentIsObjectId(true);
             SQLFragment sql = new SQLFragment("(SELECT COALESCE(r.room, 'Room N/A') || ', ' || COALESCE(r.floor, 'Floor N/A') || ', ' || COALESCE(r.building, 'Building N/A') \n" +
                     "        FROM (\n" +
                     "            SELECT \n").append(roomCol.getValueSql(ExprColumn.STR_TABLE_ALIAS));
@@ -240,7 +241,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
     {
         ColumnInfo floorCol = ti.getColumn("name");
         ColumnInfo bldgCol = ti.getColumn("building");
-        if (floorCol != null && ti.getColumn("fullFloor") == null)
+        if (floorCol != null && bldgCol != null && ti.getColumn("fullFloor") == null)
         {
             SQLFragment sql = new SQLFragment("(SELECT COALESCE(r.floor, 'Floor N/A') || ', ' || COALESCE(r.building, 'Building N/A') \n" +
                     "        FROM (\n" +

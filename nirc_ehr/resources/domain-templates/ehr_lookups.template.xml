@@ -49,9 +49,6 @@
                 <dat:column columnName="floor">
                     <dat:rangeURI>string</dat:rangeURI>
                 </dat:column>
-                <dat:column columnName="outdoor">
-                    <dat:rangeURI>boolean</dat:rangeURI>
-                </dat:column>
             </dat:columns>
         </table>
     </template>

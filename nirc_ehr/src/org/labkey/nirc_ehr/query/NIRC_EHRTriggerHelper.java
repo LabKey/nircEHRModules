@@ -553,4 +553,14 @@ public class NIRC_EHRTriggerHelper
 
         return ts.getRowCount();
     }
+
+    public long totalRecords(String schemaName, String queryName, String columnName, String value)
+    {
+        TableInfo ti = getTableInfo(schemaName, queryName);
+
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString(columnName), value);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set(columnName), filter, null);
+
+        return ts.getRowCount();
+    }
 }
