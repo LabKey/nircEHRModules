@@ -1,20 +1,14 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="cage" tableDbType="TABLE">
+            <table tableName="cage" tableDbType="TABLE" useColumnOrder="true">
                 <tableTitle>Cages</tableTitle>
                 <columns>
-                    <column columnName="room">
-                        <columnTitle>Room</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>rooms</fkTable>
-                            <fkColumnName>room</fkColumnName>
-                            <fkDisplayColumnName>fullRoom</fkDisplayColumnName>
-                        </fk>
-                    </column>
                     <column columnName="cage">
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${location}&amp;</url>
+                    </column>
+                    <column columnName="room">
+                        <columnTitle>Room</columnTitle>
                     </column>
                     <column columnName="location">
                         <isHidden>true</isHidden>
