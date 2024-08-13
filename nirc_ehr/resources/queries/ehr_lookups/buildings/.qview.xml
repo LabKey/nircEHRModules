@@ -3,6 +3,5 @@
         <column name="name"/>
         <column name="description"/>
         <column name="area"/>
-        <column name="outdoor"/>
     </columns>
 </customView>

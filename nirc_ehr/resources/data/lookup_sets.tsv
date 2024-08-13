@@ -10,6 +10,7 @@ behavior_types	Behavior Types	value
 blood_draw_reason	Blood Draw Reason	value
 blood_sample_type	Blood Sample Types	value
 card_format	Card Format	value	title
+cage_type	Cage Type	value	title
 census_activity_status	Census Activity Status	value	title
 clinremarks_category	Clinremarks Category	value	title
 cost_center	Cost Center	value	title
@@ -29,6 +30,7 @@ housing_reason	Housing Reason	value
 hyd_score	Hyd Score	value
 id_history_type	Id History Type	value	title
 incision_score	Incision Score	value
+indoor_outdoor	Indoor/Outdoor	value
 keyword	Keyword	value	title
 mens_score	Mens Score	value
 necropsy_disposition_codes	Tissue Disposition Codes	value	title

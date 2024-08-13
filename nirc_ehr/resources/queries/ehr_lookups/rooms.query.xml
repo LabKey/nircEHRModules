@@ -1,20 +1,21 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="rooms" tableDbType="TABLE">
+            <table tableName="rooms" tableDbType="TABLE" useColumnOrder="true">
+                <javaCustomizer class="org.labkey.ehr.table.DefaultEHRCustomizer" />
                 <tableTitle>Rooms</tableTitle>
                 <columns>
+                    <column columnName="name" />
+                    <column columnName="floor" />
                     <column columnName="room">
                         <isHidden>true</isHidden>
+                        <shownInInsertView>false</shownInInsertView>
+                        <shownInUpdateView>false</shownInUpdateView>
                     </column>
-                    <column columnName="floor">
-                        <columnTitle>Floor</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>floors</fkTable>
-                            <fkColumnName>floor</fkColumnName>
-                            <fkDisplayColumnName>fullFloor</fkDisplayColumnName>
-                        </fk>
+                    <column columnName="area">
+                        <isHidden>true</isHidden>
+                        <shownInInsertView>false</shownInInsertView>
+                        <shownInUpdateView>false</shownInUpdateView>
                     </column>
                 </columns>
             </table>

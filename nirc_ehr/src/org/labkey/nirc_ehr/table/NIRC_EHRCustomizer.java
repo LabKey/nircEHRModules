@@ -366,7 +366,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                 col.setLabel("Room");
-                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "rooms", "room", "name"));
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "rooms", "room", "fullRoom"));
                 col.setURL(StringExpressionFactory.createURL("/nirc_ehr/cageDetails.view?room=${room}"));
             }
             if ("building".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("buildings"))
@@ -379,7 +379,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                 col.setLabel("Floor");
-                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "floors", "floor", "name"));
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "floors", "floor", "fullFloor"));
             }
             if ("area".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("areas"))
             {

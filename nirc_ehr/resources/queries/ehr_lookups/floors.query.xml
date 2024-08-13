@@ -1,9 +1,11 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="floors" tableDbType="TABLE">
+            <table tableName="floors" tableDbType="TABLE" useColumnOrder="true">
                 <tableTitle>Floors</tableTitle>
+                <javaCustomizer class="org.labkey.ehr.table.DefaultEHRCustomizer" />
                 <columns>
+                    <column columnName="name" />
                     <column columnName="building">
                         <columnTitle>Building</columnTitle>
                         <fk>
@@ -12,6 +14,11 @@
                             <fkColumnName>name</fkColumnName>
                             <fkDisplayColumnName>description</fkDisplayColumnName>
                         </fk>
+                    </column>
+                    <column columnName="floor">
+                        <isHidden>true</isHidden>
+                        <shownInInsertView>false</shownInInsertView>
+                        <shownInUpdateView>false</shownInUpdateView>
                     </column>
                 </columns>
             </table>

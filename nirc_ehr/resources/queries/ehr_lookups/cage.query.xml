@@ -16,6 +16,18 @@
                     <column columnName="cage">
                         <url>/nirc_ehr/cageDetails.view?room=${room}&amp;cage=${location}&amp;</url>
                     </column>
+                    <column columnName="location">
+                        <isHidden>true</isHidden>
+                        <shownInDetailsView>false</shownInDetailsView>
+                    </column>
+                    <column columnName="indoor_outdoor">
+                        <columnTitle>Indoor/Outdoor</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>indoor_outdoor</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
                 </columns>
             </table>
         </tables>

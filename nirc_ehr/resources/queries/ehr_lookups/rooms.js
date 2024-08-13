@@ -1,18 +1,27 @@
 var LABKEY = require("labkey");
+var console = require("console");
 
 var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 
 function onUpsert(row, oldRow, errors){
     if (extraContext.dataSource != "etl") {
+        if (!row.name) {
+            errors['name'] = 'Room name is required.';
+            return;
+        }
+
+        if (!row.floor) {
+            errors['floor'] = 'Floor is required.';
+            return;
+        }
+
         if (!row.room) {
             if (oldRow && oldRow.room && oldRow.room[0]) {
                 row.room = oldRow.room[0];
                 return;
             }
 
-            row.location = row.room;
-            if (row.cage)
-                row.location += '-' + row.cage;
+            row.room = row.name + '-' + row.floor;
         }
     }
 }
