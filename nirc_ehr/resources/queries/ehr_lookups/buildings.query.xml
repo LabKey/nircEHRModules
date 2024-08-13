@@ -14,6 +14,12 @@
                             <fkDisplayColumnName>description</fkDisplayColumnName>
                         </fk>
                     </column>
+                    <column columnName="name">
+                        <isHidden>true</isHidden>
+                        <shownInDetailsView>false</shownInDetailsView>
+                        <shownInInsertView>false</shownInInsertView>
+                        <shownInUpdateView>false</shownInUpdateView>
+                    </column>
                 </columns>
             </table>
         </tables>

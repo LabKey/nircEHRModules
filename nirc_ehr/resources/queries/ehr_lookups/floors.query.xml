@@ -19,6 +19,7 @@
                         <isHidden>true</isHidden>
                         <shownInInsertView>false</shownInInsertView>
                         <shownInUpdateView>false</shownInUpdateView>
+                        <shownInDetailsView>false</shownInDetailsView>
                     </column>
                 </columns>
             </table>
