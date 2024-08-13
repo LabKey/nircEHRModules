@@ -45,6 +45,8 @@ numeric_unit	Colony Management	Numeric Unit
 observation_types	Clinical	Clin remarks observation types
 observation_areas	Clinical	Observation Areas	Clinical observation areas.
 pregnancy_result	Colony Management	Pregancy Result
+procedure_category	Clinical	Procedure Category	Used in procedures to group procedures.
+procedures	Clinical	Procedures	List of animal procedures.F
 problem_list_category	Clinical	Problem List Category	Used in problem list dataset. Set when opening a case.
 problem_list_subcategory	Clinical	Problem List Subcategory	Used in problem list to categorize problems.
 protocol_category	Colony Management	Protocol Category
