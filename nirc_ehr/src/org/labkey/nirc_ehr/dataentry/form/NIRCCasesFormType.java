@@ -46,13 +46,13 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks"),
-                new NIRCClinicalObservationsFormSection(),
-                new NIRCVitalsFormSection(true, "cases"),
-                new NIRCWeightFormSection(true, false, true, "cases"),
-                new NIRCTreatmentOrderFormSection(true, "cases"),
-                new NIRCTreatmentGivenFormSection(true, "cases"),
-                new NIRCHousingFormSection(true, true, true, "cases"),
                 new NIRCProcedureFormSection(true, "cases"),
+                new NIRCClinicalObservationsFormSection(),
+                new NIRCTreatmentGivenFormSection(true, "cases"),
+                new NIRCTreatmentOrderFormSection(true, "cases"),
+                new NIRCWeightFormSection(true, false, true, "cases"),
+                new NIRCVitalsFormSection(true, "cases"),
+                new NIRCHousingFormSection(true, true, true, "cases"),
                 new NIRCBloodDrawFormSection(true, true, true)
         ));
 

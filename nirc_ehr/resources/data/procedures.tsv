@@ -1,376 +1,130 @@
-Name	Generic Name	Category	Is Major?	Involves Incision?	Recovery Days	# Default Followup Days	Default Analgesia Rx	Default Antibiotic Rx	Default Remark (Non-Surgical Procedures Only)	Active
-AAV Cisterna Magna Infusion and Sample Collection		Surgery	false	false	7	3	Analgesia - Carprofen	None		true
-AAV Infusion and Sample Collection		Surgery	false	false	0	3	None	None		true
-Achilles Tendon Repair		Procedure							Intubated with ___ ID cuffed ET tube, maintained on 1.5% isoflurane and 1 L/min oxygen. Prepared skin with PVI, lavaged with sterile saline. Prepared skin with PVI, aseptically draped. Incised over the caudolateral surface of the tendon, 5 cm. Identified the gastronemius, superficial digital flexor, and common tendon. Freshened tendon edges and apposed with 2-0 PDS with a far-near near-far pattern. Lavaged, closed fascia with 3-0 Monocryl SI. Freshened skin edges, closed with 3-0 Monocryl SI. Placed a padded bandage and fiberglas cast. Administered analgesics. Good recovery from anesthesia.	true
-Amniocentesis		Surgery	false	false	3	3	None	None		true
-Amniotic Fluid Drawn		Procedure								true
-Amniotic Inoculation		Procedure								true
-Anesthesia procedure, CMU (NC)		Surgery	false	false	3	0	None	None		true
-Anesthesia procedure, CMU Staff (NC)		Surgery	false	false						true
-Anesthesia procedure, Research Staff (NC)		Surgery	false	false	3	0	None	None		true
-Anesthesia Study		Surgery	false	false	3	0	None	None		true
-Anesthesia Study with Ultrasound and Resveratrol Infusion		Surgery	false	false	3	1	None	None		true
-Animal Inoculation		Procedure								true
-Anterior chamber tap, bilateral		Surgery	false	false	7	7	None	None		true
-Anterior chamber tap, unilateral		Surgery	false	false						true
-Aorto-Iliac Shunt		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Apply Dressing		Procedure								true
-Arterial Blood Collection		Surgery	false	false	1	0	None	None		true
-Arthrocentesis		Procedure							The skin was clipped with #40 clipper blades,  aseptically prepared and draped. Synovial fluid for cytology and culture was sterilely collected using a 22 g needles attached to a 3 cc syringe.	true
-Arthrocentesis with Intraarticular injection		Procedure							The skin was clipped with #40 clipper blades,  aseptically prepared and draped. Synovial fluid for cytology and culture was sterilely collected using a 22 g needles attached to a 3 cc syringe. Following sample collection, the joint was injected with 0.1 cc of 0.5% bupivacaine and 0.5 cc/1 mg dexamethasone.	true
-Artificial Insemination		Surgery	false	false	1	0	None	None		true
-Aspiration gastric contents		Procedure								true
-Biopsy		Pathology	false	false						true
-Bone fracture repaired		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Bone Marrow Aspirate, Femur, Needle	Bone Marrow Aspirate	Surgery	true	true	7	1	Analgesia - Biopsies	None		true
-Bone Marrow Aspirate, Humerus	Bone Marrow Aspirate	Surgery	false	true	7	1	Analgesia - Biopsies	None		true
-Bone Marrow Aspirate, Left Femur	Bone Marrow Aspirate	Surgery	false	true	7	1	Analgesia - Biopsies	None		true
-Bone Marrow Aspirate, Left Humerus	Bone Marrow Aspirate	Surgery	false	true	7	1	Analgesia - Biopsies	None		true
-Bone Marrow Aspirate, Right Femur	Bone Marrow Aspirate	Surgery	false	true	7	1	Analgesia - Biopsies	None		true
-Bone Marrow Aspirate, Right Humerus	Bone Marrow Aspirate	Surgery	false	true	7	1	Analgesia - Biopsies	None		true
-Bone Marrow Biopsy		Procedure							The skin over the (iliac crest, trochanteric fossa of the femur, or craniodorsal humerus) was aseptically prepared. A skin incision was made using a scalpel blade.  A bone marrow biopsy needle was inserted through the cortex. Following removal of the stylet, ____ cc’s of marrow was aspirated. The stylet was replaced, and the needle removed. Direct pressurewais applied to the site for 30-60 seconds following removal of the needle. The skin incision was closed with tissue adhesive.	true
-Bottle feed		Procedure								true
-Bronchial reactivity test		Surgery	false	false	7	0	None	None		true
-Bronchoalveolar Lavage	Bronchalveolar lavage	Surgery	false	false	3	0	None	None		true
-Bronchoalveolar lavage - no staff, data entry only	Bronchalveolar lavage	Surgery	false	false	3	0	None	None		true
-Bronchoalveolar lavage - Super BAL	Bronchalveolar lavage	Surgery	false	false	3	0	None	None		true
-Bronchoalveolar lavage - Unilateral	Bronchalveolar lavage	Surgery	false	false	3	0	None	None		true
-Bronchoscopy		Surgery	false	false	3	0	None	None		true
-Cage change		Procedure								true
-Cardiac Ischemia		Surgery	false	false	30	7	None	None		true
-Carotid Artery Infusion		Surgery	false	true	14	7	Analgesia - Standard	None		true
-Cerebral Spinal Fluid Collection from cistem magnum		Procedure							The patient was placed in lateral recumbancy. The skin from the occipital protuberance to the level of C3 was clipped, cleaned, and aseptically draped,. The neck was flexed 90 to 100 degrees at the cisternal region. Care was taken to keep the head parallel to the table. The wings of the atlas were palpated to ensure superimposition. Collection was done (puncture may be made in the center of the triangle formed by the wings of the atlas and the occiput. Alternatively, a midline puncture, halfway between the occiput and the cranial end of the spinous process of C2). The needle was inserted at 90 degrees, and gradually advanced through the various tissue layers. Dura penetration was confirmed by observation of CSF in the hub of the needle. Samples (volume and type) were collected and the needle was gently withdrawn.	true
-Cerebral Spinal Fluid Collection from the lumbar region		Procedure							The patient was placed in lateral recumbency. The area was clipped, cleaned, prepared, and aseptically draped. The lumbar spine was gently flexed to open the interarcuate space between L4 and L5. The spinous process caudal to this space was palpated, and the needle inserted at the caudal lateral edge of the spinous process.  The needle was gently advanced until the vertebral arch was encountered, then walked cranially to the interarcuate space. The needle was advanced through the ligament and spinal canal and (sample volume) was collected. The needle was retracted following fluid collection.	true
-Cerebrospinal fluid aspirate		Surgery	false	false	3	1	Analgesia - Carprofen	None		true
-Cervix, Cannulation		Surgery	false	false	7	3	None	None		true
-Cesarean Section		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Cesarean Section + MiniPump Removal		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 2d		true
-Cesarean Section + Vascular Catheter Removed		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Chorio-Decidual Infusion		Procedure								true
-Clinical Diagnostic Procedure		Surgery	false	false						true
-Collar Check		Procedure								true
-Collar Placement		Procedure								true
-Collar Rmvl		Procedure								true
-Colon biopsy, endoscopic		Surgery	false	false	7	3	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Colon biopsy, laparoscopic		Surgery	true	true	30	7	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Colon Resection and Anastomosis		Surgery	true	true	60	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Colonoscopy		Surgery	false	false	7	3	Analgesia - Biopsies	None		true
-Complete		Procedure								true
-Complete Therapeutic Caudectomy		Procedure							A tourniquet was placed proximal to the transaction site but not tightened.The skin is clipped and cleaned, and the desired intravertebral transection site identified. A local block is placed proximal to the site. The skin was prepared with PVI, and aseptically draped. The tourniquet was tightened by the anesthetist. A  double V incision was made on the skin distal to the site. The V was oriented to create dorsal and ventral skin flaps that are longer than the desired tail length. The medial and lateral caudal arteries and veins just proximal to the incision site were identified and ligated. The soft tissue just distal to the intervertebral space was incised and the distal tail disarticulate. Bleeding was controlled with direct pressure (or circumferential ligature around the distal end of the remaining tail or re-ligate the caudal vessels). Subcutaneous tissue and muscle were apposed over the exposed vertebrae with interrupted approximating sutures of ______. The skin edges were apposed with _________.	true
-Cranial Fiducial Marker Placement		Surgery	true	true	3	7	Analgesia - Standard	None		true
-Craniotomy		Surgery	true	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-CT Scan		Procedure								true
-Cystocentesis		Surgery	false	false	1	0	None	None		true
-Datalogger Abdominal Temperature Probe Removal		Surgery	true	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 2d		true
-Datalogger probe placement, intra-abdominal		Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 2d		true
-DEXA Scan		Procedure								true
-Diagnostic		Procedure								true
-Digit amputation		Surgery	false	true	7	1	Analgesia - Standard	None		true
-Dressing, apply		Procedure								true
-Drug Pharmacokinetic Study		Surgery	false	false	3	1	None	None		true
-Duodenal resection and anastomosis		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Duodenoscopy		Surgery	false	false	7	3	Analgesia - Biopsies	None		true
-Dx Rads Bilateral INJ, w/Cont Media		Procedure								true
-Dx Rads INJ w/Cont Media		Procedure								true
-Dx Rads PO w/Cont Media		Procedure								true
-Dx Rads Positive INJ, w/Cont Media		Procedure								true
-Dye marking		Procedure								true
-ECG Study		Surgery	false	false	0	0	None	None		true
-Echocardiography		Surgery	false	false	3	0	None	None		true
-Ejaculation		Procedure								true
-Electroretinography		Surgery	false	false	0	0	None	None		true
-Electroretinography (NC)		Surgery	false	false	0	0	None	None		true
-Embryo transplant and tubal ligation, unilateral		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Embryo Transplant Left, Surgical	Embryo Transplant	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Embryo Transplant Right, Surgical	Embryo Transplant	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Embryo Transplant,  Laparoscopic	Embryo Transplant, Laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Endometrial transplant		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Endometrial transplant biopsy		Surgery	false	true	7	7	Analgesia - Standard	None		true
-Enucleation		Procedure							The skin clipped, cleaned, aseptically prepared, and sterilely draped. An incision was made 1-2 cm laterally from the junction of the upper and lower eyelid margins. Using thumb forceps, the conjunctiva was grasped near the limbus. A 360 degree perilimbal incision was made. Using curved Metzenbaum’s, s the conjunctiva, Tenon’s capsule, and extraocular muscle were separated from the sclera. The lacrimal gland was excised. Once the globe attachments were freed, the globe was gently retracted. The optic nerve was served with curved Metzendaum scissors. Hemorrhage was controlled with gentle pressure. Approximagely 3-4 mm of the eyelid margins were removed, to the medial canthus. The angularis oculi vein located superficial and medial to the medial canthal tendon was avoided. The conjunctiva, orbital septum and Tenon’s capsule were closed with 3-0 ________. The subcutaneous tissue was apposed with 4-0 _______. The lid margins were closed with _______.	true
-Eye right enucleation		Surgery	true	true	7	7	Analgesia - Standard	None		true
-Fat & Liver Biopsy, Laparoscopic + Muscle Biopsy		Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Fat Biopsy		Surgery	false	true	30	7	Analgesia - Standard	None		true
-Femoral A-V Shunt	Femoral A-V Shunt	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Enrofloxacin 5d		true
-femoral artery catheterization and removal	Femoral Artery Catheter, unilateral and removal	Surgery	true	true	7	7	Analgesia - Standard	None		true
-Femoral Artery, Left, Catheterized	Femoral Artery Catheter, unilateral	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Femoral artery, right catheterized	Femoral Artery Catheter, unilateral	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Femoral Shunt Removal	Femoral A-V Shunt Removal	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Femoral Vein, Left, Catheterized	Femoral Vein Catheter, unilateral	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Femoral vein, right, catheterized	Femoral Vein Catheter, unilateral	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Fenfluramine challenge	Fenfluramine challenge	Surgery	false	false	3	1	None	None		true
-Fetal Surgery - Fetal Vascular Catheterization	Fetal Surgery - Fetal Vascular Catheterization	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Fetal Surgery - Maternal Catheterization	Fetal Surgery - Maternal Catheterization	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Fetectomy	Fetectomy	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Fimbria Biopsy,  Laparoscopic	Fimbria Biopsy,  Laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Fimbriaectomy, Unilateral, Laparoscopic	Fimbriaectomy, Unilateral, Laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-First Day I		Procedure							Collected fecal culture, submitted.	true
-First Day II		Procedure							Collected ____ cc''s blood for iSTAT, rectal fecal culture. iSTAT abnormalities: (enter abnormals). Placed 22 g IV catheter in the ______ vein. Administered crystalloids and (medication and additives).	true
-First Day III		Procedure							Collected ____ cc''s blood for iSTAT, rectal fecal culture. iSTAT abnormalities: (enter abnormals). Placed 22 g IV catheter in the ______ vein. Administered crystalloids and hetastarch IV. Administered (medication and additives).	true
-Gastric bypass + biopsies	Gastric bypass + biopsies	Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Gastric bypass - Training only	Gastric bypass - Training only	Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Gastric bypass pre-necropsy biopsies	Gastric bypass pre-necropsy biopsies	Surgery	true	true	0	0	None	None		true
-Gastric bypass SHAM + biopsies	Gastric bypass SHAM + biopsies	Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Gastroscopy	Gastroscopy	Surgery	false	false	7	3	None	None		true
-Gastrotomy	Gastrotomy	Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Gene Gun Immunization	Gene Gun Immunization	Surgery	false	false	3	3	None	None		true
-Glucose Clamp	Glucose Clamp	Surgery	false	false	3	1	None	None		true
-Glucose Clamp DVM	Glucose Clamp	Surgery	false	false	3	1	None	None		true
-Glucose Clamp Study	Glucose Clamp	Surgery	false	false	3	1	None	None		true
-Glucose Tolerance Test		Procedure								true
-HbA1C test		Procedure								true
-Heelstick lancet		Procedure								true
-Hepatic Biopsy		Procedure							Administered 0.5 cc/0.15 mg buprenorphine IM, 0.1 cc bupivicaine and 0.1 cc lidocaine at site. Prepared skin aseptically, stabe incision with #11 blade, 18 g x 1 cm hepatic biopsy, sample submitted to pathology. Good recovery from anesthesia, monitored post procedure then returned to social group.	true
-Herniorrhaphy Incisional	Herniorrhaphy	Surgery	true	true	14	7	Analgesia - Standard	None		true
-Herniorrhaphy inguinal left	Herniorrhaphy	Surgery	true	true	14	7	Analgesia - Standard	None		true
-Herniorrhaphy inguinal right	Herniorrhaphy	Surgery	true	true	14	7	Analgesia - Standard	None		true
-Herniorrhaphy umbilical	Herniorrhaphy	Surgery	true	true	14	7	Analgesia - Standard	None		true
-Hormone Implant Insertion	Hormone Implant	Surgery	false	true	3	2				true
-Hormone Implant Insertion/Removal	Hormone Implant	Surgery	false	true	3	2				true
-Hormone Implant Removal	Hormone Implant	Surgery	false	true	3	2				true
-Hormone Packet and Pellet Placement	Hormone Packet and Pellet Placement	Surgery	false	true	3	2	None	None		true
-Hourly Operating Room		Surgery	false	false	0	0	None	None		true
-Hourly Surgeon		Surgery	false	false	0	0	None	None		true
-Hourly Surgery Anesthesia (including PAM)		Surgery	false	false	0	0	None	None		true
-Hysterectomy		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Hysterosalpingectomy		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Hysterosalpingectomy +  Pump/port Removal		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Hysterosalpingectomy + endometrial transplant		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Hysterosalpingoophorectomy		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Hysterotomy		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-ICV injection		Surgery	false	true	14	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-ID monitor of fetus		Procedure								true
-Ileal resection and anastomosis		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Incision repair		Surgery	false	true	7	7	None	None		true
-Infant Intubation		Surgery	false	false	2	0	None	None		true
-Insulin Tolerance Test		Procedure								true
-Interplacental connecting vessel		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Interplacental Connecting Vessel SHAM		Surgery	true	false						true
-Intra-CSF injection, cisterna magna		Surgery	false	false	3	3	Analgesia - Carprofen	None		true
-Intracranial Injection Support		Surgery	false	true	14	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Intracranial Virus Injection		Surgery	true	true	14	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Intraluteal Injection		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Intraovarian catheter removal		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Intraovarian Catheterization, & Bilateral + Mini Pump, Bilateral		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Intraovarian Catheterization, Unilateral + Mini Pump, Unilateral		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Intraovarian injection		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Intrapartum Doppler monitor of fetus		Procedure								true
-Intraperitoneal Injection		Surgery	false	false	3	1	None	None		true
-Intravitreal Injection		Surgery	true	false	3	7	None	None		true
-Intravitreal Injection Bilateral		Surgery	true	false	3	7	None	None		true
-Intubation		Procedure								true
-IUD implant, laparotomy		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-IV catheter placement and data entry		Surgery	false	false	3	0	None	None		true
-Jacket, Apply		Procedure								true
-Jacket, Maintain		Procedure								true
-Jacket, Remove		Procedure								true
-Jejunal resection and anastomosis		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Laminaria Placement		Surgery	false	false	1	1	None	None		true
-Laparoscopic Adipose Tissue Biopsies		Surgery	true	true	7	7	Analgesia - Standard	None		true
-Laparoscopic Tru-Cut Uterine Biopsy		Surgery	true	true	7	7	Analgesia - Standard	None		true
-Laparoscopy, Exploratory		Surgery	false	true	7	7	Analgesia - Standard	None		true
-Laparotomy exploratory		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Limited		Procedure								true
-Limited Visual		Procedure								true
-Liver and muscle biopsy, infant, with drug infusion		Surgery	true	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Liver Biopsy, Laparoscopic		Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Liver Biopsy, Percutaneous		Surgery	false	true	7	7	Analgesia - Standard	None		true
-Liver biopsy, percutaneous and muscle biopsy		Surgery	true	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Luteectomy, Left, Unilateral	Luteectomy, unilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Luteectomy, Right, Unilateral	Luteectomy, unilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Lymph Node and Skin Biopsy - FITC		Surgery	false	true	7	7	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Lymph Node and Skin Biopsy - FITC (infant)		Surgery	false	true	7	7	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Lymph Node Biopsy, Left Axillary	Lymph node biopsy	Surgery	false	true	7	7	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Lymph Node Biopsy, Left Inguinal	Lymph node biopsy	Surgery	false	true	7	7	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Lymph Node Biopsy, Right Axillary	Lymph node biopsy	Surgery	false	true	7	7	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Lymph Node Biopsy, Right Inguinal	Lymph node biopsy	Surgery	false	true	7	7	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Lymph Node Biopsy, Two Sites		Surgery	false	true	7	7	Analgesia - Biopsies	Antibiotics - Cefazolin 5d		true
-Mastectomy		Surgery	true	true	14	7	Analgesia - Standard	None		true
-Maternal - Fetal Catheterization		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Maternal-Fetal Sedation and Monitoring		Surgery	false	false	3	0	None	None		true
-Maternal-Fetal Sedation Control		Surgery	false	false	2	0	None	None		true
-Menstrual blood collection (control), laparoscopic		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Menstrual blood collection and abdominal seeding, laparoscopic		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Microchip placement		Surgery	false	false	1	1	None	None		true
-Middle Cerebral Artery Occlusion		Surgery	true	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3 doses		true
-Mini Pump Change		Surgery	false	true	3	3	None	Antibiotics - Cefazolin 2d		true
-Minipump Implant		Surgery	false	true	3	3	None	Antibiotics - Cefazolin 2d		true
-Minipump Removal		Surgery	false	true	3	3	None	Antibiotics - Cefazolin 2d		true
-Minor Laceration		Procedure							Clipped and cleaned wound, lavaged with sterile saline. Freshened wound edges. Apposed subcutaneous tissue with ____ and skin with ____.	true
-Mock Orchidectomy		Surgery	false	false						true
-Monitoring Temperature		Procedure								true
-MRI		Procedure								true
-MRI 0.5 hour	MRI	Surgery	false	false	3	0	None	None		true
-MRI 1 hour	MRI	Surgery	false	false	3	0	None	None		true
-MRI 1.5 hour	MRI	Surgery	false	false	3	0	None	None		true
-MRI 2 hours	MRI	Surgery	false	false	3	0	None	None		true
-MRI 2.5 hour	MRI	Surgery	false	false	3	0	None	None		true
-MRI 3 hours	MRI	Surgery	false	false	3	0	None	None		true
-Muscle biopsy		Surgery	false	true	7	3	Analgesia - Biopsies	None		true
-Muscle imaging with ultrasound		Surgery	false	false	3	0	None	None		true
-Muscle imaging with ultrasound (no molecular imaging)		Surgery	false	false	3	0	None	None		true
-Nasal (only) swab		Procedure								true
-Nasal Flush		Procedure							The patient was anesthetized and intubated with a cuffed _____ ID ET tube. Gauze sponges were placed in the oral pharynx and around the tube. The distance from the external nares to the medial canthus was measured, and mark the catheter. Sterile saline was infused (for a diagnostic flush, infuse 5-10 cc’s of sterile saline, then collect the residual fluid and submit for culture and cytology. For therapeutic flush, use a a 35 cc syringe and infuse 150 to 300 cc’s of saline into the nasal cavity). An otoscope was used to visualize the proximal nasal passages during the procedure.	true
-Nasal gastric swab		Procedure								true
-Nasal/gastric gavage		Procedure								true
-Naso-gastric lavage		Surgery	false	false	3	0	None	None		true
-Necropsy & Histopathology Grade 1: Fetus and Neonate Only		Pathology	false	false						true
-Necropsy & Histopathology Grade 2: Standard		Pathology	false	false						true
-Necropsy & Histopathology Grade 3: Complex Dissections		Pathology	false	false						true
-Necropsy By Non-DCM Pathologist		Pathology	false	false						true
-Necropsy Grade 1: Fetus and Neonate Only		Pathology	false	false						true
-Necropsy Grade 2: Standard		Pathology	false	false						true
-Necropsy Grade 3: Complex Dissections		Pathology	false	false						true
-Neonate sedation and monitoring		Surgery	false	false	2	0	None	None		true
-Neonate sedation protocol control		Surgery	false	false	2	0	None	None		true
-Oophorectomy Bilateral		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Oophorectomy bilateral, Laparoscopic		Surgery	false	true	30	7	Analgesia - Standard	None		true
-Oophorectomy left	Oophorectomy, unilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Oophorectomy right	Oophorectomy, unilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Oophorectomy unilateral + Salpingoophorectomy unilateral		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Oophorectomy Unilateral + Salpingoophorectomy Unilateral, Laparoscopic		Surgery	false	true	30	7	Analgesia - Standard	None		true
-Oophorectomy unilateral and intraovarian catheter removal, laparoscopic + minipump removal		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Oophorectomy, bilateral, laparoscopic and minipump removal		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Oophorectomy, Left Unilateral, Laparoscopic	Oophorectomy, unilateral, laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Oophorectomy, Right Unilateral, Laparoscopic	Oophorectomy, unilateral, laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Oophorectomy, unilateral, laparoscopic and minipump removal	Oophorectomy, unilateral, laparoscopic and minipump removal	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Oral gavage		Surgery	false	false	3	0	None	None		true
-Oral Mucosa Biopsies		Surgery	false	false	3	1	None	None		true
-Orchidectomy bilateral	Orchidectomy, bilateral	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Orchidectomy left	Orchidectomy, unilateral	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Orchidectomy right	Orchidectomy, unilateral	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Ovarian Epithelial Resection, Laparoscopic		Surgery	false	true	30	7	Analgesia - Standard	None		true
-Ovarian Evaluation, Laparoscopic	Ovarian Evaluation, Laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Ovarian Follicle Aspiration, Multiple Follicles	Ovarian Follicle Aspiration, Multiple Follicles	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Ovarian Follicle Aspiration, Multiple, Laparoscopic	Ovarian Follicle Aspiration, Multiple, Laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Ovarian Follicle Aspiration, Single Follicles		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Ovarian Follicle Aspiration, Single Laparsocopic		Surgery	false							true
-Ovarian Follicle Aspiration, Subcutaneous		Surgery	false	false	3	7	None	None		true
-Ovarian Follicle Explant, Subcutaneous		Surgery	false	true	7	7	Analgesia - Standard	None		true
-Ovarian Follicle Injection, Laparoscopic	Ovarian Follicle Injection, Laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Ovarian Follicle Injection, Left	Ovarian Follicle Injection	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Ovarian Follicle Injection, Right	Ovarian Follicle Injection	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Ovarian Follicle Irrigation, Single, Laparotomy	Ovarian Follicle Injection	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Ovarian Irradiation & Oophorectomy Unilateral		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Ovarian Irradiation, Bilateral		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Ovarian Irradiation, Bilateral (Sham)		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Ovarian Surface Epithelium Ablation - Laparotomy		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Ovarian Tissue Transplant, Intramuscular		Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Ovarian Tissue Transplant, Subcutaneous		Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Ovarian transplant		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Ovarian Transplant Retrieval		Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Ovarian Transplant Retrieval, multiple sites		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Overtime Hourly Surgeon		Surgery	false	false	0	0	None	None		true
-Overtime Hourly Surgical Assistant		Surgery	false	false	0	0	None	None		true
-Oviduct Catheterization + Oophorectomy, Contralateral		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Oviduct Catheterization + Salpingoophorectomy, Contralateral		Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Oviduct catheterization, left	Oviduct catheterization	Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Oviduct catheterization, right	Oviduct catheterization	Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Oviductal fluid aspiration, no surgery staff		Surgery	false	false	0	0	None	None		true
-Palpation		Procedure								true
-Palpation, bimanual		Procedure								true
-Partial Therapeutic Caudectomy		Procedure							The distal tail is wrapped with gauze and tape and the skin is aseptically prepared. A tourniquet is placed proximal to the transaction site. Determine the desired intravertebral transaction site and ake a double V incision in the skin distal to the site. The V is oriented to create dorsal and ventral skin flaps that are longer than the desired tail length. Identify and ligate the medial and lateral caudal arteries and veins just proximal to the incision site. Incise the soft tissue just distal to the intervertebral space and disarticulate the distal tail. If bleeding occurs, place a circumferential ligature around the distal end of the remaining tail or re-ligate the caudal vessels. Appose subcutaneous tissue and muscle over the exposed vertebrae with interrupted approximating sutures. Appose the skin edges with approximating sutures.	true
-Physical Exam Complete		Procedure								true
-Physical Exam Limited		Procedure								true
-Pilot project - major surgery		Surgery	true	true	30	7	Analgesia - Standard	None		true
-pK study (vitals, blood draw, dosing)		Surgery	false	false	0	0	None	None		true
-Procedure for Staff Training		Procedure								true
-Procedure for Staff Training (Surgical)		Surgery	true	true	0	0	None	None		true
-Pulmonary Function Test (noninvasive)		Surgery	false	false	7	0	None	None		true
-Puncture & Drainage		Procedure								true
-Radiographs		Procedure							Following sedation, (View) and (view) of the (area) were taken.	true
-Remove animal appendage from cage		Procedure								true
-Repeat iSTAT		Procedure							Collected ____ cc''s blood for iSTAT.  iSTAT abnormalities: (enter abnormalities and plan).	true
-Research Procedure - Other		Procedure								true
-Retinal Photography	Retinal Photography	Surgery	false	false	3	0	None	None		true
-Retinal Photography (NC)	Retinal Photography	Surgery	false	false	3	0	None	None		true
-Rhabdomyolysis		Procedure								true
-Roux En Y, Pre-necropsy biopsies		Surgery	true	true	30	0	None	None		true
-Salpingectomy bilateral		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Salpingectomy left	Salpingectomy, unilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Salpingectomy right	Salpingectomy, unilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Salpingectomy, Bilateral, Laparoscopic		Surgery	false	true	30	7	Analgesia - Standard	None		true
-Salpingectomy, Unilateral, Laparoscopic		Surgery	false	true	30	7	Analgesia - Standard	None		true
-Salpingoophorectomy bilateral, Laparoscopic		Surgery	false	true	30	7	Analgesia - Standard	None		true
-Salpingoophorectomy Left	Salpingoophorectomy, unilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Salpingoophorectomy Right	Salpingoophorectomy, unilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Salpingoophorectomy, Bilateral		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Salpingoophorectomy, Left unilateral, Laparoscopic	Salpingoophorectomy, unilateral, Laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Salpingoophorectomy, Right Unilateral, Laparoscopic	Salpingoophorectomy, unilateral, Laparoscopic	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Sample (Specimen Collection)		Surgery	false							true
-Sedate, catheter, and monitor		Surgery	false	false	3	0	None	None		true
-Sedation		Procedure								true
-Sedation, intubation, and monitoring		Surgery	false	false	3	0	None	None		true
-Sex determination		Procedure								true
-Skin biopsy		Procedure								true
-Skin biopsy		Surgery	false	true	3	3	None	None		true
-Small and large intestine biopsy, laparoscopic		Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Spec Clltn: Urine cystocentesis		Procedure								true
-Special Run Surgical Sterilization Fee		Surgery	false	false	0	0	None	None		true
-SPF Surveillance		Procedure								true
-Splenectomy		Surgery	true	true	30	7	Analgesia - Standard	None		true
-Subclavian vein, left, catheterization	Subclavian vein catheterization	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Subclavian vein, right, catheterization	Subclavian vein catheterization	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Subclavian vein, right, catheterized + Subclavian vein, left, catheter removed	Subclavian vein catheterization, contralateral catheter removal	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Subcutaneous graft excision (sham)		Surgery	false	true	7	7	Analgesia - Standard	None		true
-Subcutaneous graft placement (sham)		Surgery	false	true	7	7	Analgesia - Standard	None		true
-Subretinal Injection		Surgery	false	false	7	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Surgery Cancelled (Anesthesia & OR Setup)		Surgery	false	false	0	0	None	None		true
-Surgical Equipment Rental/day		Surgery	false	false	0	0	None	None		true
-Surgical Sterilization Fee		Surgery	false	false	0	0	None	None		true
-Surgical wound I		Procedure							Clipped and cleaned wound, lavaged with sterile saline. Freshened wound edges. Apposed muscle with _______, subcutaneous tissue with ____ and skin with ____. Placed dry/dry bandage.	true
-Surgical wound II		Procedure							Intubated with ____  ID cuffed ET tube, maintained on 1.5% isoflurane and 1 L/min oxygen. Placed line block of 0.5% bupivacaine and 2% lidocaine. Prepared skin with PVI, aseptically draped. (Insert surgical description) Lavaged, closed subcutaneous tissue with 4-0 Monocryl SI. Freshened skin edges, closed skin with 4-0 Monocryl SI. Administered buprenorphine IM. Good recovery.	true
-Swivel-Tether change		Procedure								true
-Tail amputation		Surgery	false	true	7	7	Analgesia - Standard	None		true
-Tattoo		Procedure								true
-TB Test Intradermal		Procedure								true
-Tb Test Results		Procedure								true
-TB Test Serologic		Procedure								true
-Technician Exam		Procedure								true
-Telemetry Device Explant	Telemetry Device Explant	Surgery	false	true	30	7	Analgesia - Standard	None		true
-Telemetry Device Explant w/o ECG	Telemetry Device Explant	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Telemetry Device Implant	Telemetry Device Implant	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Telemetry Device Implant (w/o ECG)	Telemetry Device Implant	Surgery	false	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Tendon Repair		Procedure							Intubated with ___ ID cuffed ET tube, maintained on 1.5% isoflurane and 1 L/min oxygen. Prepared skin with PVI, lavaged with sterile saline. Prepared skin with PVI, aseptically draped. Incised over the caudolateral surface of the tendon, 5 cm. Identified the (insert names) muscles. Freshened edges and apposed tendon with 2-0 PDS with a far-near near-far pattern. Lavaged, closed fascia with 3-0 Monocryl SI. Freshened skin edges, closed with 3-0 Monocryl SI. Placed a padded bandage and fiberglas cast. Administered analgesics. Good recovery.	true
-Testicular  biopsy, right	Testicular biopsy, unilateral	Surgery	false	true	7	3	Analgesia - Biopsies	None		true
-Testicular Biopsy - True Cut	Testicular biopsy, unilateral	Surgery	false	true	7	3	Analgesia - Biopsies	None		true
-Testicular biopsy, left	Testicular biopsy, unilateral	Surgery	false	true	7	3	Analgesia - Biopsies	None		true
-Thoracic Duct Catheterization	Thoracic Duct Catheterization	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Thoracic Duct Re-Catheterization	Thoracic Duct Re-Catheterization	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Thymectomy	Thymectomy	Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Thymectomy (Sham)	Thymectomy (Sham)	Surgery	true	true	30	7	Analgesia - Standard	Antibiotics - Cefazolin 5d		true
-Tooth Extraction	Tooth Extraction	Surgery	false	true	7	3	Analgesia - Biopsies	None		true
-Tracheostomy	Tracheostomy	Surgery	true	true	7	7	None	None		true
-Tracheostomy + Pulmonary Function Test	Tracheostomy + Pulmonary Function Test	Surgery	true	true	7	7	None	None		true
-Transcervical cannulation of uterus with laparoscopy	Transcervical cannulation, laparoscopic	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Transcervical Cannulation of uterus with ultrasound	Transcervical cannulation, ultrasound	Surgery	false	false	5	5	None	None		true
-Transcervical cannulation of uterus with ultrasound and x-rays	Transcervical cannulation, ultrasound and radiographs	Surgery	false	false	5	5	None	None		true
-Transporting		Procedure								true
-Tubal ligation, bilateral	Tubal ligation, bilateral	Surgery	true	true	30	7	Analgesia - Standard	None		true
-Ultrasonic guidance of amniocentesis		Procedure								true
-Ultrasound + Amniocentesis + Minipump Change	Ultrasound + Amniocentesis + Minipump Change	Surgery	false	true	3	3	None	None		true
-ultrasound + mini pump change	ultrasound + mini pump change	Surgery	false	true	3	3	None	Antibiotics - Cefazolin 2d		true
-Ultrasound - Ovaries		Procedure								true
-Ultrasound - Pregnancy		Procedure							Patient sedated for ultrasound exam, BAR prior to sedation.  Fetus is/is not in vertex position. fHR is WNL. Placental attachment WNL.  BPD is XXX with an estimated GD XXXX, no indication of fetal distress, fetus in position for normal delivery.  Follow-up US scheduled for XXXXXX	true
-Ultrasound - Uterus		Procedure								true
-Ultrasound Study	Ultrasound Study	Surgery	false	false	3	0	None	None		true
-Ultrasound Study (gas anesthesia)	Ultrasound Study (gas anesthesia)	Surgery	false	false	3	0	None	None		true
-Ultrasound/Hypoxia Study (gas anesthesia)	Ultrasound/Hypoxia Study (gas anesthesia)	Surgery	false	false	3	1	None	None		true
-Unilateral Salpingoophorectomy with Ipsilateral Cornual Wedge Resection		Surgery	true	false						true
-Urine Collection		Procedure								true
-Uterine injection	Uterine injection	Surgery	false	false	3	1	None	None		true
-Vag Swab Cltn(by Lab)		Procedure								true
-Vag tampon insertion, initial		Procedure								true
-Vagina biopsy	Vagina biopsy	Surgery	false	false	7	3	Analgesia - Biopsies	Antibiotics - Cefazolin 3d		true
-Vaginal Prolapse Repair	Vaginal Prolapse Repair	Surgery	false	false	7	7	Analgesia - Standard	None		true
-Vaginal ring, insertion		Procedure								true
-Vaginal ring, removal		Procedure								true
-Vaginal tampon, final removal		Procedure								true
-Vaginal tampon, maintenance		Procedure								true
-Vaginoscopy	Vaginoscopy	Surgery	false	false	3	1	None	None		true
-Vascular catheter removal	Vascular catheter removal	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Vascular catheter revision	Vascular catheter revision	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Vascular Catheterization, double	Vascular Catheterization, double	Surgery	false	true	7	7	Analgesia - Standard	Antibiotics - Cefazolin 3d		true
-Vasectomy bilateral	Vasectomy bilateral	Surgery	false	true	7	7	Analgesia - Standard	None		true
-Visual Examination		Procedure								true
-Worming		Procedure								true
-Wound repair	Wound repair	Surgery	false	true	7	7	Analgesia - Standard	None		true
+Name
+Oral Dose Administration
+Oral Dose Administration - Alert
+Oral Dose Administration - Intubation
+Sublingual Dose Administration
+Intrarectal Dose Administration
+Intramuscular Dose Administration
+IM Dose Administration - Quadriceps
+IM Dose Administration - Deltoid
+Subcutaneous Dose Administration
+Intravenous Dose Administration
+Intravenous Dose Administration - Bolus
+Intravenous Dose Admin - Infusion
+Intraperitoneal Dose Administration
+Topical Dose Administration
+Inhalation Dose Administration
+Intranasal Dose Administration
+Intravaginal Dose Administration
+Body Weight
+Electrocardiogram
+Temperature Monitoring
+Heart Rate Monitoring
+Blood Pressure Monitoring
+WelshAllyn Vital Signs Montoring
+Respiration Monitoring
+Pulse Rate Monitoring
+Sedative Administration
+Ketamine Administration
+Diazepam Administration
+Telazol Administration
+Xylazine Administration
+Ketamine/Diazepam Administration
+Ketamine/Xylazine Administration
+Intramuscular Anesthesia
+Venipuncture
+Blood Collection
+Blood Collection - SST for serum
+Blood Collection - EDTA for plasma
+BC - Sodium Heparin for plasma
+Blood Collection - EDTA for PBMCs
+BC - Sodium Heparin for PBMCs
+Blood Collection - EDTA for Flow
+Blood Collection - EDTA for CBC
+Blood Collection - SST for Chemistry
+B C - Sodium Citrate for Coag
+B C - Sodium Citrate for plasma
+Urine Collection
+Urine Collection - Catheter
+Urine Collection - Pan catch
+Cervicovaginal Secretion Collection
+Stool Collection
+Rectal Swab Sample Collection
+Nasal Wash Sample Collection
+Saliva Sample Collection
+Wound Specimen Collection
+Tissue Collection
+Tissue Collection - Necropsy
+Bleeding Time Test
+Radiography
+Tuberculosis Skin Test
+Intradermal Skin Test
+Pole and Collar
+Squeeze Cage
+Primate Chair
+Chemical Restraint
+Hand Catch
+Daily Observations
+Apheresis
+Endoscopy Assistance
+Ultrasound Assistance
+Lymph Node Biopsy
+Liver Biopsy
+Skin Biopsy
+Behavioral Observations
+Continuous Observations
+30 - minute Observations
+SID Observations
+BID Observations
+Interval Observations (IST)
+Intravenous Anesthesia
+BC - Sodium Citrate for Coag
+BC - Sodium Citrate for plasma
+Follow-up Physical Exam
+Prestudy Physical Exam
+Ophthalmic Exam - Direct
+Ophthalmic Exam - Indirect
+Oophorectomy
+Wedge Liver Biopsy
+Skin Boipsy
+Liver Percutaneous Biopsy
+Hepatic Biopsy - Tru Cut
+Hepatic Biopsy - Menghini Technique
+Skeletal Muscle Biopsy
+Lung Biopsy
+White fat Biopsy
+Brown fat Biopsy
+Renal Biopsy
+Gastric Biopsy
+Intestinal Biopsy
+Cervical Biopsy
+Rectal Biopsy
+Urine Biopsy
+Vaginal Biopsy
+Testicular Biopsy
+Bone Marrow Biopsy
+Bone Marrow Aspirates
+Splenectomy
+Thoracocentesis
+Abdominocentesis
+Catheter/Canula Placement - Femoral
+Catheter/Canula Placement - Saphenous
+Cather/Canula Placement - Intestinal
+Catheter/Canula Placement - Portal
+Aspirate - Specify
+Abdominal Ultrasound
+Cardiac Ultrasound
+Thoracic Ultrasound
+Ultrasound - Specify
+Skin-Biopsy
+Embryo Transfer
+Oocyte Collection
+Electroejaculation
+Cesarian section
+Vasectomy
+Pulpectomy
+Pulpotomy
+wfrfr3
+Thoracocentesiss
+BC - Sodium Citrate for Coags
+BC - Sodium Citrate for plasmas
