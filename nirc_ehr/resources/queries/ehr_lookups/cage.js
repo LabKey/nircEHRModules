@@ -10,6 +10,11 @@ function onUpsert(row, oldRow, errors){
                 return;
             }
 
+            if (!row.room) {
+                errors['room'] = 'Room is required.';
+                return;
+            }
+
             row.location = row.room;
             if (row.cage)
                 row.location += '-' + row.cage;

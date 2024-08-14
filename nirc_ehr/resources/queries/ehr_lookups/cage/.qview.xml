@@ -2,6 +2,11 @@
     <columns>
         <column name="cage"/>
         <column name="room"/>
-        <column name="outdoor"/>
+        <column name="indoor_outdoor"/>
+        <column name="cage_type"/>
+        <column name="divider"/>
+        <column name="length"/>
+        <column name="width"/>
+        <column name="height"/>
     </columns>
 </customView>
