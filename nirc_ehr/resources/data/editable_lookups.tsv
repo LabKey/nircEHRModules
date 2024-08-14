@@ -13,6 +13,7 @@ blood_draw_reason	Clinical	Blood Draw Reason	Used in blood draw datasets.
 blood_draw_tube_type	Clinical	Blood Draw Tube Type	Used in blood draw datasets.
 blood_sample_type	Clinical	Blood Sample Types	Used in blood draw datasets.
 blood_tube_volumes	Clinical	Blood Tube Volumes	Used in blood draw datasets.
+cage_type	Colony Management	Cage Type	Used in cage details.
 card_format	Colony Management	Card Format
 census_activity_status	Colony Management	Census Activity Status
 conc_units	Clinical	Concentration Units	Used in drug and treatment datasets.
@@ -22,6 +23,7 @@ country_category	Colony Management	Country Category
 data_category	Clinical	Data Categories	Used in datasets.
 death_reason	Colony Management	Death Reason
 delivery_state	Colony Management	Delivery State
+divider_types	Colony Management	Divider Type	Used in cage details.
 dosage_units	Clinical	Dosage Units	Used in drug and treatment datasets.
 esig_events	Colony Management	Esig Events
 euthanasia_type	Colony Management	Euthanasia Type
@@ -33,6 +35,7 @@ housing_reason	Housing	Housing Move Reason	Used in housing dataset for location 
 hyd_score	Clinical	Hydration Score	Clinical observation fixed values.
 id_history_type	Colony Management	Id History Type
 incision_score	Clinical	Incision Score	Clinical observation fixed values.
+indoor_outdoor	Colony Management	Indoor/Outdoor	Cage details
 mens_score	Clinical	Menses Score	Clinical observation fixed values.
 necropsy_disposition_codes	Colony Management	Necropsy Disposition Codes
 necropsy_exam_reason	Colony Management	Necropsy Exam Reason

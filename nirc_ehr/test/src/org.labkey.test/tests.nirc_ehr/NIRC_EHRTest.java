@@ -198,6 +198,27 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 "Reports didn't finish loading", 60000);
     }
 
+    @Override
+    protected void populateRoomRecords() throws Exception
+    {
+        InsertRowsCommand insertCmd = new InsertRowsCommand("ehr_lookups", "rooms");
+        Map<String,Object> rowMap = new HashMap<>();
+        rowMap.put("name", ROOM_ID);
+        rowMap.put("floor", "floor1");
+        rowMap.put("housingType", 1);
+        rowMap.put("housingCondition", 1);
+        insertCmd.addRow(rowMap);
+
+        rowMap = new HashMap<>();
+        rowMap.put("name", ROOM_ID2);
+        rowMap.put("floor", "floor2");
+        rowMap.put("housingType", 1);
+        rowMap.put("housingCondition", 1);
+        insertCmd.addRow(rowMap);
+
+        insertCmd.execute(createDefaultConnection(), getContainerPath());
+    }
+
     @BeforeClass
     public static void setupProject() throws Exception
     {
@@ -243,9 +264,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToEHRFolder();
         log("Inserting values in rooms");
         InsertRowsCommand roomCmd = new InsertRowsCommand("ehr_lookups", "rooms");
-        roomCmd.addRow(Map.of("room", "R1"));
-        roomCmd.addRow(Map.of("room", "R2"));
-        roomCmd.addRow(Map.of("room", "R3"));
+        roomCmd.addRow(Map.of("name", "R1", "floor", "F1"));
+        roomCmd.addRow(Map.of("name", "R2", "floor", "F2"));
+        roomCmd.addRow(Map.of("name", "R3", "floor", "F3"));
         roomCmd.execute(getApiHelper().getConnection(), getContainerPath());
 
         log("Inserting values in cage");

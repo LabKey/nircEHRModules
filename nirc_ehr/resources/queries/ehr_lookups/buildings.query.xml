@@ -3,6 +3,7 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="buildings" tableDbType="TABLE">
                 <tableTitle>Buildings</tableTitle>
+                <javaCustomizer class="org.labkey.ehr.table.DefaultEHRCustomizer" />
                 <columns>
                     <column columnName="area">
                         <columnTitle>Area</columnTitle>
@@ -12,6 +13,12 @@
                             <fkColumnName>area</fkColumnName>
                             <fkDisplayColumnName>description</fkDisplayColumnName>
                         </fk>
+                    </column>
+                    <column columnName="name">
+                        <isHidden>true</isHidden>
+                        <shownInDetailsView>false</shownInDetailsView>
+                        <shownInInsertView>false</shownInInsertView>
+                        <shownInUpdateView>false</shownInUpdateView>
                     </column>
                 </columns>
             </table>

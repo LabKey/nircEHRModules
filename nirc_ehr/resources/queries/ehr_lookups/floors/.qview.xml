@@ -1,8 +1,6 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
     <columns>
-        <column name="floor"/>
         <column name="name"/>
         <column name="building"/>
-        <column name="outdoor"/>
     </columns>
 </customView>

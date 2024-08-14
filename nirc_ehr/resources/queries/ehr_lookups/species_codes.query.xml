@@ -1,7 +1,7 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="Demographicss" tableDbType="TABLE">
+            <table tableName="species_codes" tableDbType="TABLE">
                 <columns>
                     <column columnName="scientific_name">
                         <columnTitle>Scientific Name</columnTitle>
