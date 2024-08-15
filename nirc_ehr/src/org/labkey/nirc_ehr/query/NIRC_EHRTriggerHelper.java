@@ -548,6 +548,27 @@ public class NIRC_EHRTriggerHelper
         return null != u ? u.getUserId() : -1;
     }
 
+    public long totalHousingRecords(String location)
+    {
+        TableInfo ti = getTableInfo("study", "housing");
+
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("isActive"), true);
+        filter.addCondition(FieldKey.fromString("cage"), location);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("Id"), filter, null);
+
+        return ts.getRowCount();
+    }
+
+    public long totalRecords(String schemaName, String queryName, String columnName, String value)
+    {
+        TableInfo ti = getTableInfo(schemaName, queryName);
+
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString(columnName), value);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set(columnName), filter, null);
+
+        return ts.getRowCount();
+    }
+
     public boolean canCloseCase(String category)
     {
         if (_container.hasPermission(_user, EHRVeterinarianPermission.class))
