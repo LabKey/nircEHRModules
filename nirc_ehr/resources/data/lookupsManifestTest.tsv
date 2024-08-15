@@ -50,6 +50,8 @@ necropsy_tissue
 numeric_unit
 observation_areas
 pregnancy_result
+procedure_category
+procedures
 problem_list_category
 problem_list_subcategory
 protocol_category

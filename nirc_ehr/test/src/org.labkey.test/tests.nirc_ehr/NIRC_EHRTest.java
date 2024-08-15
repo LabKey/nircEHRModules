@@ -35,10 +35,8 @@ import org.labkey.test.components.CustomizeView;
 import org.labkey.test.components.dumbster.EmailRecordTable;
 import org.labkey.test.components.ext4.Window;
 import org.labkey.test.components.ui.grids.QueryGrid;
-import org.labkey.test.pages.ehr.AnimalHistoryPage;
 import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
-import org.labkey.test.pages.ehr.EnterDataPage;
 import org.labkey.test.pages.ehr.NotificationAdminPage;
 import org.labkey.test.params.ModuleProperty;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
@@ -48,9 +46,7 @@ import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 import org.labkey.test.util.ext4cmp.Ext4GridRef;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.BufferedReader;
@@ -78,7 +74,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String PROJECT_TYPE = "NIRC EHR";
     DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static String  NIRC_BASIC_SUBMITTER = "ac_bs@nirctest.com";
-    private static String NIRC_BASIC_SUBMITTER_VET = "vet_bs@nirctest.com";
+    private static String NIRC_BASIC_SUBMITTER_VET_TECH = "vet_tech_bs@nirctest.com";
+    private static String NIRC_FULL_SUBMITTER_VET_TECH = "vet_tech_fs@nirctest.com";
     private  static String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
 
     private static String deadAnimalId = "D5454";
@@ -235,6 +232,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         addExtensibleCols();
         enableSiteNotification();
         populateLocations();
+        addUsersAndPermissions();//create users and assign roles, created for Death/Necropsy form, but users can be repurposed for other forms.
     }
 
     private void enableSiteNotification()
@@ -323,13 +321,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         arrivals.setGridCell(1, "cage", "C1");
         arrivals.setGridCell(1, "project", "640991");
         arrivals.setGridCell(1, "arrivalProtocol", "dummyprotocol");
-        arrivals.setGridCell(1, "arrivalType", "Non-quarantine Arrival");
-        arrivals.setGridCell(1, "acquisitionType", "Lab Transfer (Wild Born)");
-        arrivals.setGridCell(1, "Id/demographics/species", "Macaca mulatta RHM");
-        arrivals.setGridCell(1, "Id/demographics/gender", "female");
-        arrivals.setGridCell(1, "sourceFacility", "Yerkes Regional PRC");
         arrivals.setGridCellJS(1, "Id/demographics/birth", now.minusDays(7).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
-        arrivals.setGridCellJS(1, "Id/demographics/geographic_origin", "USA");
         submitForm("Submit Final", "Finalize");
 
         goToSchemaBrowser();
@@ -398,16 +390,22 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //TODO: Implement this test once Quick Search is customized for NIRC
     }
 
-    public void addDeathNecropsyUsersAndPermissions()
+    public void addUsersAndPermissions()
     {
-        //create animal care basic submitter user (this user can 'Submit Death')
+        //create animal care basic submitter user (ex. this user can 'Submit Death' in Death/Necropsy)
         createUser(NIRC_BASIC_SUBMITTER, "EHR Basic Submitters", null);
 
-        //create a vet user with 'EHR Basic Submitter' role (this user can 'Submit for Review')
-        createUser(NIRC_BASIC_SUBMITTER_VET, "EHR Basic Submitters", "EHR Veterinarian");
+        //create a vet tech user with 'EHR Basic Submitters' group (ex. this user can 'Submit Necropsy for Review' in Death/Necropsy)
+        createUser(NIRC_BASIC_SUBMITTER_VET_TECH, "EHR Basic Submitters", "EHR Veterinarian Technician");
 
-        //create a vet user with 'EHR Full Submitter' role (this user can 'Submit Final')
-        createUser(NIRC_FULL_SUBMITTER_VET, "EHR Administrators", "EHR Veterinarian"); //'EHR Full Submitter' role doesn't allow updating Demographics dataset, so setting user as a 'EHR Administrator'
+        //create a vet tech user with 'EHR Full Updaters' group (ex. this user can 'Submit for Review' and 'Submit Final' in cases)
+        createUser(NIRC_FULL_SUBMITTER_VET_TECH, "EHR Full Updaters", "EHR Veterinarian Technician");
+
+        //create a vet user with 'EHR Full Updaters' group (ex. this user can 'Submit Final' in Death/Necropsy)
+        createUser(NIRC_FULL_SUBMITTER_VET, "EHR Full Updaters", "EHR Veterinarian");
+
+        _permissionsHelper.setPermissions(FULL_UPDATER.getGroup(), "EHR Clinical Entry");
+
     }
 
     public void createSubjectsForDeathForm() throws IOException, CommandException
@@ -448,19 +446,18 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         departure.execute(getApiHelper().getConnection(), getContainerPath());
     }
 
-    private void createUser(String userEmail, String groupName, @Nullable String permission)
+    private void createUser(String userEmail, String groupName, @Nullable String roleClass)
     {
         _userHelper.createUser(userEmail, false);
         goToEHRFolder();
-        if (permission != null)
-            _permissionsHelper.setUserPermissions(userEmail, permission);
+        if (roleClass != null)
+            _permissionsHelper.setUserPermissions(userEmail, roleClass);
         _permissionsHelper.addUserToProjGroup(userEmail, getProjectName(), groupName);
     }
 
     @Test
     public void testDeathNecropsyForm() throws IOException, CommandException
     {
-        addDeathNecropsyUsersAndPermissions();
         enableNotification("status_org.labkey.nirc_ehr.NIRCDeathNotification");
         createSubjectsForDeathForm();
 
@@ -577,6 +574,29 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     }
 
+    @Test
+    public void testClinicalCasesWorkflow()
+    {
+        //TODO: Test Basic Clinical Workflow
+        //Go to NIRC/EHR main page
+        //Impersonate as NIRC_FULL_SUBMITTER_VET_TECH
+        //Navigate to Enter Data > Clinical Cases
+        //Fill out Clinical Case section with Id, Date, Open Remark
+        //Fill out Clinical Remarks section with Date, Remark
+        //'Submit Final'
+        //Stop impersonation
+        //Go to NIRC/EHR main page
+        //Impersonate as NIRC_FULL_SUBMITTER_VET
+        //Go to 'Active Clinical Cases'
+        //Click on 'Case Update' link
+        //Fill out Close Date
+        //'Submit Final'
+        //Go to NIRC/EHR main page
+        //Go to 'Active Clinical Cases'
+        //Verify that the case is no longer present/is closed
+        //Stop impersonation
+    }
+
     @Override
     @Test
     public void testCalculatedAgeColumns()
@@ -666,7 +686,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         File orchardFile =  new File(orchardFileLocation + "/orchardFile" + largestTimestamp[0] + ".txt");
         waitFor(() -> orchardFile.exists(), WAIT_FOR_PAGE);
         Assert.assertTrue("Edited animal is not present in the orchard file",
-               TestFileUtils.getFileContents(orchardFile).contains(animalId));
+                TestFileUtils.getFileContents(orchardFile).contains(animalId));
     }
 
     private void submitForm(String buttonText, String windowTitle)

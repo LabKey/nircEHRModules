@@ -11,6 +11,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCGrossPathologyFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCNecropsyFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTissueDispositionFormSection;
+import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,16 +46,20 @@ public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
     protected List<String> getButtonConfigs()
     {
         List<String> defaultButtons = new ArrayList<String>();
+        boolean isVetTech = getCtx().getContainer().hasPermission(getCtx().getUser(), NIRCEHRVetTechPermission.class);
         boolean isVet = getCtx().getContainer().hasPermission(getCtx().getUser(), EHRVeterinarianPermission.class);
 
         defaultButtons.add("SAVEDRAFT");
         defaultButtons.add("DEATHSUBMIT");
 
-        if (isVet) {
+        if (isVetTech)
+        {
             defaultButtons.add("DEATH_NECROPSY_VET_REVIEW"); //submit for review
+        }
+        else if (isVet)
+        {
             defaultButtons.add("SUBMIT"); //submit final
         }
-
         return defaultButtons;
     }
 }

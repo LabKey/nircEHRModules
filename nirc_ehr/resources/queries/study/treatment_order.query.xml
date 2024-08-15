@@ -121,9 +121,6 @@
                     <column columnName="parentid">
                         <columnTitle>Parent ID</columnTitle>
                     </column>
-                    <column columnName="userid">
-                        <columnTitle>Ordered By</columnTitle>
-                    </column>
                 </columns>
             </table>
         </tables>

@@ -5,7 +5,7 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="type"/>
+        <column name="procedure"/>
         <column name="remark"/>
     </columns>
 </customView>

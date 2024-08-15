@@ -6,10 +6,9 @@
         <column name="Id"/>
         <column name="date"/>
         <column name="performedby"/>
-        <column name="category"/>
         <column name="description"/>
         <column name="remark"/>
-        <column name="history"/>
+        <column name="hx"/>
         <column name="QCState"/>
     </columns>
 </customView>

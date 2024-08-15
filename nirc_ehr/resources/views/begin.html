@@ -126,15 +126,7 @@
                         { name: 'Housing Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-housingQueries.view?' },
                         { name: 'Protocol and Project Queries', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-projectQueries.view?' }
                     ]
-                }
-                ]
-            });
-
-            let menuCfg2 = {
-                width: 270,
-                renderTo: 'ehrMenu2_' + webpart.wrapperDivId,
-                sections: [
-                    {
+                }, {
                         header: 'Entire Colony',
                         itemDefaults: {
                             linkCls: 'none',
@@ -147,27 +139,37 @@
                             { name: 'Room Utilization', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=ehr_lookups&query.queryName=roomUtilization' },
                             { name: 'More Reports', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-moreReports.view?' },
                         ]
+                    }]
+            });
+
+            Ext4.create('LDK.panel.NavPanel', {
+                width: 270,
+                renderTo: 'ehrMenu2_' + webpart.wrapperDivId,
+                sections: [
+                    {
+                        header: 'Daily Reports',
+                        itemDefaults: {
+                            linkCls: 'none',
+                            style: 'font-weight: bold;'
+                        },
+                        items: [
+                            {name: 'Active Clinical Cases', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:cases'},
+                          ]
+                    }, {
+                        header: 'Pathology',
+                        itemDefaults: {
+                            linkCls: 'none',
+                            style: 'font-weight: bold;'
+                        },
+                        items: [
+                            {
+                                name: 'Necropsy Requests',
+                                url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=nirc_ehr&query.queryName=necropsyTasks'
+                            },
+                        ]
                     }
                 ]
-            }
-
-            if (ctx['EHRStudyContainerInfo'].effectivePermissions.indexOf(EHR.Security.Permissions.VET) > -1) {
-                menuCfg2.sections.push({
-                    width: 270,
-                    header: 'Pathology',
-                    itemDefaults: {
-                        linkCls: 'none',
-                        style: 'font-weight: bold;'
-                    },
-                    items: [
-                        {
-                            name: 'Necropsy Requests',
-                            url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=nirc_ehr&query.queryName=necropsyTasks'
-                        },
-                    ]
-                });
-            }
-            Ext4.create('LDK.panel.NavPanel', menuCfg2);
+            });
 
             let menuCfg3 = {
                 width: 330,

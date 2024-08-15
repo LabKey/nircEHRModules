@@ -45,6 +45,7 @@ necropsy_tissue	Tissues	value	title
 numeric_unit	Numeric Units	value	title
 observation_areas	Observation Areas	value
 pregnancy_result	Pregnancy Results	value
+procedure_category	Category of procedures	value
 problem_list_category	Problem List Category	value
 problem_list_subcategory	Problem List Sub-Category	value
 protocol_category	Protocol Category	value	title

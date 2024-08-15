@@ -18,17 +18,6 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 displayField: 'DisplayName',
                 valueField: 'UserId',
                 forceSelection: true,
-                store: {
-                    type: 'labkey-store',
-                    schemaName: 'core',
-
-                    // 'performedby' is a text field in the dataset and its lookup to the userid is an int field - this mismatch causes it to disappear
-                    // from the display when a value is selected from the dropdown even though the 'userid' value gets saved as a text (this behavior was only seen
-                    // in the form panel but not in the grid panel).
-                    // casting it as a varchar when loading the store fixes this issue.
-                    sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
-                    autoLoad: true
-                },
                 listConfig: {
                     innerTpl: '{[LABKEY.Utils.encodeHtml(values.DisplayName + (values.LastName ? " (" + values.LastName + (values.FirstName ? ", " + values.FirstName : "") + ")" : ""))]}',
                     getInnerTpl: function(){
@@ -48,6 +37,19 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                     queryName: 'users',
                     keyColumn: 'UserId',
                     displayColumn: 'DisplayName'
+                },
+                editorConfig: {
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'core',
+
+                        // 'performedby' is a text field in the dataset and its lookup to the userid is an int field - this mismatch causes it to disappear
+                        // from the display when a value is selected from the dropdown even though the 'userid' value gets saved as a text (this behavior was only seen
+                        // in the form panel but not in the grid panel).
+                        // casting it as a varchar when loading the store fixes this issue.
+                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                        autoLoad: true
+                    }
                 }
             },
             room: {
@@ -102,16 +104,40 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 }
             },
             performedby: {
+                editorConfig: {
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'core',
+                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                        autoLoad: true
+                    }
+                },
                 defaultValue: LABKEY.Security.currentUser.id.toString()
             },
         },
         'study.weight': {
             performedby: {
+                editorConfig: {
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'core',
+                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                        autoLoad: true
+                    }
+                },
                 defaultValue: LABKEY.Security.currentUser.id.toString()
             }
         },
         'study.flags': {
             performedby: {
+                editorConfig: {
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'core',
+                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                        autoLoad: true
+                    }
+                },
                 defaultValue: LABKEY.Security.currentUser.id.toString()
             }
         }
