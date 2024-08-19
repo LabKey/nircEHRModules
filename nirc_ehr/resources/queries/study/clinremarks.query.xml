@@ -4,7 +4,12 @@
             <table tableName="clinremarks" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
                     <column columnName="Id" />
-                    <column columnName="date" />
+                    <column columnName="date">
+                        <formatString>Date</formatString>
+                    </column>
+                    <column columnName="hx">
+                        <columnTitle>History</columnTitle>
+                    </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
@@ -15,13 +20,22 @@
                         </fk>
                     </column>
                     <column columnName="p">
-                            <columnTitle>Plan</columnTitle>
+                        <columnTitle>Plan</columnTitle>
+                        <inputType>textarea</inputType>
+                        <inputRows>5</inputRows>
+                    </column>
+                    <column columnName="remark">
+                        <inputType>textarea</inputType>
+                        <inputRows>5</inputRows>
                     </column>
                     <column columnName="vetreview">
-                            <columnTitle>Vet Review</columnTitle>
+                        <columnTitle>Vet Review</columnTitle>
+                        <inputType>textarea</inputType>
+                        <inputRows>5</inputRows>
                     </column>
                     <column columnName="vetreviewdate">
-                            <columnTitle>Vet Review Date</columnTitle>
+                        <columnTitle>Vet Review Date</columnTitle>
+                        <formatString>Date</formatString>
                     </column>
                 </columns>
             </table>

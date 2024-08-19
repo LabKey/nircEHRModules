@@ -35,32 +35,18 @@ import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.DefaultSchema;
 import org.labkey.api.query.QuerySchema;
 import org.labkey.api.resource.Resource;
+import org.labkey.api.security.roles.RoleManager;
 import org.labkey.api.util.NetworkDrive;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
-import org.labkey.nirc_ehr.dataentry.form.NIRCAliasFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCArrivalFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCAssignmentFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCBirthFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCCasesFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCBulkClinicalFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCDeathNecropsyFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCDepartureFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCExemptionsFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCFlagsFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCHousingFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCMedicationTreatmentFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCNotesFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCPregnancyFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCProjectFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCProtocolFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCWeightFormType;
+import org.labkey.nirc_ehr.dataentry.form.*;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
+import org.labkey.nirc_ehr.security.NIRCEHRVetTechRole;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
 
 import java.io.File;
@@ -81,7 +67,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.010;
+        return 24.011;
     }
 
     @Override
@@ -164,6 +150,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerActionOverride("enterData", this, "views/enterData.html");
 
         ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment", "protocolAssignment"));
+        RoleManager.registerRole(new NIRCEHRVetTechRole());
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());
@@ -195,6 +182,10 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCExemptionsFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCNotesFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCCasesFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCBuildingFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCRoomFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCFloorFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCCageFormType.class, this));
     }
 
     @Override

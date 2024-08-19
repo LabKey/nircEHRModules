@@ -4,36 +4,11 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <template xsi:type="EHRLookupsTemplateType">
-        <table tableName="areas" tableDbType="TABLE">
-            <dat:tableTitle>Areas</dat:tableTitle>
-            <dat:columns>
-                <dat:column columnName="outdoor">
-                    <dat:rangeURI>boolean</dat:rangeURI>
-                </dat:column>
-            </dat:columns>
-        </table>
-    </template>
-
-    <template xsi:type="EHRLookupsTemplateType">
         <table tableName="buildings" tableDbType="TABLE">
             <dat:tableTitle>Buildings</dat:tableTitle>
             <dat:columns>
                 <dat:column columnName="area">
                     <dat:rangeURI>string</dat:rangeURI>
-                </dat:column>
-                <dat:column columnName="outdoor">
-                    <dat:rangeURI>boolean</dat:rangeURI>
-                </dat:column>
-            </dat:columns>
-        </table>
-    </template>
-
-    <template xsi:type="EHRLookupsTemplateType">
-        <table tableName="floors" tableDbType="TABLE">
-            <dat:tableTitle>Floors</dat:tableTitle>
-            <dat:columns>
-                <dat:column columnName="outdoor">
-                    <dat:rangeURI>boolean</dat:rangeURI>
                 </dat:column>
             </dat:columns>
         </table>
@@ -49,9 +24,6 @@
                 <dat:column columnName="floor">
                     <dat:rangeURI>string</dat:rangeURI>
                 </dat:column>
-                <dat:column columnName="outdoor">
-                    <dat:rangeURI>boolean</dat:rangeURI>
-                </dat:column>
             </dat:columns>
         </table>
     </template>
@@ -60,8 +32,8 @@
         <table tableName="cage" tableDbType="TABLE">
             <dat:tableTitle>Cages</dat:tableTitle>
             <dat:columns>
-                <dat:column columnName="outdoor">
-                    <dat:rangeURI>boolean</dat:rangeURI>
+                <dat:column columnName="indoor_outdoor">
+                    <dat:rangeURI>string</dat:rangeURI>
                 </dat:column>
             </dat:columns>
         </table>

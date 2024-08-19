@@ -14,6 +14,7 @@ blood_draw_reason
 blood_draw_tube_type
 blood_sample_type
 blood_tube_volumes
+cage_type
 card_format
 census_activity_status
 conc_units
@@ -23,6 +24,7 @@ country_category
 data_category
 death_reason
 delivery_state
+divider_types
 dosage_units
 editable_lookups
 esig_events
@@ -36,6 +38,7 @@ housing_reason
 hyd_score
 id_history_type
 incision_score
+indoor_outdoor
 mens_score
 necropsy_disposition_codes
 necropsy_exam_reason
@@ -47,6 +50,8 @@ necropsy_tissue
 numeric_unit
 observation_areas
 pregnancy_result
+procedure_category
+procedures
 problem_list_category
 problem_list_subcategory
 protocol_category
