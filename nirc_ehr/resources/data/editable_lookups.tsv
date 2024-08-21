@@ -1,5 +1,6 @@
 Value	Category	title	description
 acquisition_type	Colony Management	Acquisition Type	Types of acquisition for Arrivals.
+activity	Clinical	Activity	Activity recording during Clinical Obs.
 ageclass	Colony Management	Age Class	Categories of age, such as infant or adult, by species. Used in various reports grouping animals by age class.
 alias_category	Colony Management	Alias Category
 alopecia_score	Clinical	Alopecia Score	Clinical observation fixed values.
@@ -16,6 +17,7 @@ blood_tube_volumes	Clinical	Blood Tube Volumes	Used in blood draw datasets.
 cage_type	Colony Management	Cage Type	Used in cage details.
 card_format	Colony Management	Card Format
 census_activity_status	Colony Management	Census Activity Status
+clinical_obs_required	Clinical	Required Clinical Observations	Clinical Observations that are required.
 conc_units	Clinical	Concentration Units	Used in drug and treatment datasets.
 cost_type	Colony Management	Cost Type
 country	Colony Management	Country
@@ -65,8 +67,10 @@ species	Colony Management	Species
 snomed	Research	Treatments	List of animal treatments.
 species_codes	Colony Management	Species Codes
 stool_score	Clinical	Stool Score
+stool_types	Clinical	Stool Types
 treatment_frequency	Clinical	Treatment Frequency	Used in treatment and drug datasets.
 vendor_approval_code	Colony Management	Vendor Approval Code
 vendor_production_location	Colony Management	Vendor Production Location
 volume_units	Clinical	Volume Units	Used in drug and treatment datasets.
 weight_ranges	Clinical	Weight Ranges	Min/Max allowable weight per species. Used in various weight reports.
+yesno	Clinical	Yes/No Values	Used for yes/no values in various datasets

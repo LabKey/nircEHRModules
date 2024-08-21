@@ -1,5 +1,6 @@
 name
 acquisition_type
+activity
 ageclass
 alias_category
 alopecia_type
@@ -69,9 +70,11 @@ snomed
 species
 species_codes
 stool_score
+stool_types
 treatment_frequency
 turgor_score
 vendor_approval_code
 vendor_production_location
 volume_units
 weight_ranges
+yesno

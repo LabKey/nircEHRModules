@@ -1,12 +1,13 @@
 setname	label	keyfield	titleColumn
 acquisition_type	Acquisition Type	value
+activity	Activity	value
 alias_category	Alias Category	value	title
 alopecia_type	Alopecia Type	value
 alopecia_score	Alopecia Type	value
 alopecia_regrowth	Alopecia Regrowth	value
 app_score	Appetite Score	value
 arrival_type	Arrival Type	value
-att_score	Attitude Score	valu
+att_score	Attitude Score	value
 bcs_score	BCS Store	value	title
 behavior_types	Behavior Types	value
 blood_draw_reason	Blood Draw Reason	value
@@ -58,8 +59,10 @@ req_order_state	Req Order State	value	title
 req_order_type	Req Order Type	value	title
 sib_score	SIB Score	value
 stool_score	Stool Score	value
+stool_types	Stool Types	value
 turgor_score	Turgor Score	value
 termination_reason_codes	Termination Reason Codes Codes	value	title
 vendor_approval_code	Vendor Approval Code	value	title
 vendor_production_location	Vendor Production Location	value	title
 weight_ranges	Weight Ranges	value
+yesno	Yes/No Values	value

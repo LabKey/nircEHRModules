@@ -28,7 +28,9 @@ import org.labkey.api.ehr.history.DefaultAnimalRecordFlagDataSource;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ehr.history.DefaultNotesDataSource;
 import org.labkey.api.ehr.history.DefaultVitalsDataSource;
+import org.labkey.api.ehr.security.EHRDataAdminPermission;
 import org.labkey.api.ldk.ExtendedSimpleModule;
+import org.labkey.api.ldk.buttons.ShowEditUIButton;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
@@ -152,6 +154,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment", "protocolAssignment"));
         RoleManager.registerRole(new NIRCEHRVetTechRole());
 
+        EHRService.get().registerMoreActionsButton(new ShowEditUIButton(this, "ehr", "observation_types", EHRDataAdminPermission.class), "ehr", "observation_types");
+
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());
 
@@ -186,6 +190,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCRoomFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCFloorFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCCageFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCClinicalObservationsFormType.class, this));
     }
 
     @Override

@@ -100,6 +100,27 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 customizeDemographics(ti);
             }
+            else if (matches(table, "study", "clinical_observations"))
+            {
+                customizeClinicalObservations((AbstractTableInfo) table);
+            }
+        }
+    }
+
+    private void customizeClinicalObservations(AbstractTableInfo ti)
+    {
+        var categoryCol = ti.getMutableColumn("category");
+        if (categoryCol != null)
+        {
+            UserSchema us = getUserSchema(ti, "ehr");
+            if (us != null)
+            {
+                categoryCol.setFk(QueryForeignKey
+                        .from(ti.getUserSchema(), ti.getContainerFilter())
+                        .schema(us)
+                        .to("observation_types", "value", "value")
+                        .raw(true));
+            }
         }
     }
 
@@ -169,7 +190,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     @Override
                     public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
                     {
-                        String taskid = (String)ctx.get("taskid");
                         String category = (String)ctx.get("category");
                         ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                         if (category == null || category.equals("Clinical"))
@@ -180,7 +200,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("formType", "Clinical Cases");
                         }
 
-                        linkAction.addParameter("taskid", taskid);
+                        String caseId = (String)ctx.get("objectid");
+                        linkAction.addParameter("caseid", caseId);
                         String href = linkAction.toString();
                         out.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
                     }
@@ -189,7 +210,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     public void addQueryFieldKeys(Set<FieldKey> keys)
                     {
                         super.addQueryFieldKeys(keys);
-                        keys.add(FieldKey.fromString("taskid"));
+                        keys.add(FieldKey.fromString("objectid"));
                         keys.add(FieldKey.fromString("category"));
                     }
 

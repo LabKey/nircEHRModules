@@ -7,7 +7,9 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
                 || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS category,
        anmCmt.TEXT                                                               AS remark,
-       anmEvt.DIAGNOSIS                                                          AS diagnosis,
+       (CASE
+            WHEN anmEvt.DIAGNOSIS IS NOT NULL THEN (anmCmt.TEXT || ';' || anmEvt.DIAGNOSIS)
+            ELSE anmCmt.TEXT END) AS remark,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID

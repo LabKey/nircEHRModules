@@ -45,9 +45,11 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                 hidden: true
             },
             // procedure data is not categorized, so not using procedure_category based selection
-            // procedure: {
-            //
-            // }
+            procedure: {
+                columnConfig: {
+                    width: 250
+                }
+            }
         },
         'study.clinremarks': {
             category: {
@@ -197,10 +199,6 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                         autoLoad: true
                     }
                 }
-            },
-            category: {
-                defaultValue: 'Clinical',
-                hidden: true
             }
         },
         'study.vitals': {

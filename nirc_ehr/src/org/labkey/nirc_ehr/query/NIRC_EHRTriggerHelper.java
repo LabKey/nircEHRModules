@@ -17,9 +17,8 @@ import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
-import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
-import org.labkey.api.ehr.security.EHRDataAdminPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
+import org.labkey.api.exp.api.ExperimentService;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
@@ -574,5 +573,59 @@ public class NIRC_EHRTriggerHelper
         if (_container.hasPermission(_user, EHRVeterinarianPermission.class))
             return true;
         return false;
+    }
+
+    public void addClinicalObsForCases(Map<String, Object> row, String[] caseIds) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
+    {
+        boolean updateRecord = false;
+        BatchValidationException errors = new BatchValidationException();
+        TableInfo ti = getTableInfo("study", "clinical_observations");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), row.get("Id"));
+        filter.addCondition(FieldKey.fromString("taskid"), row.get("taskId"));
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
+        List<Map<String, Object>> rows = new ArrayList<>();
+
+        if (ts.exists())
+        {
+            updateRecord = true;
+        }
+        try (DbScope.Transaction transaction = ExperimentService.get().ensureTransaction())
+        {
+            for (String caseId : caseIds)
+            {
+                Map<String, Object> clinicalObsRow = new CaseInsensitiveHashMap<>();
+                clinicalObsRow.put("Id", row.get("Id"));
+                clinicalObsRow.put("date", row.get("date"));
+                clinicalObsRow.put("caseid", caseId);
+                clinicalObsRow.put("qcstate", row.get("qcstate"));
+                clinicalObsRow.put("category", row.get("category"));
+                clinicalObsRow.put("observation", row.get("observation"));
+                clinicalObsRow.put("remark", row.get("remark"));
+                clinicalObsRow.put("taskId", row.get("taskId"));
+
+                if (updateRecord)
+                {
+                    clinicalObsRow.put("objectid", ts.getMap().get("objectid"));
+                }
+                else
+                {
+                    clinicalObsRow.put("objectid", new GUID().toString());
+                }
+
+                rows.add(clinicalObsRow);
+
+            }
+            if (updateRecord)
+            {
+                ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+            }
+            else
+            {
+                ti.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+            }
+            if (errors.hasErrors())
+                throw errors;
+            transaction.commit();
+        }
     }
 }

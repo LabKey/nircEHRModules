@@ -344,6 +344,9 @@
             <column columnName="observation">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="isVerified">
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="caseid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
@@ -371,8 +374,19 @@
             <column columnName="hx">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="s">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="o">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="a">
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="p">
-                <columnTitle>Plan</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="p2">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="vetreview">

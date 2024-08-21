@@ -29,7 +29,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCClinicalRemarksFormSection(),
                 new NIRCProcedureFormSection(),
-                new NIRCClinicalObservationsFormSection(),
+                new NIRCClinicalObservationsFormSection(true),
                 new NIRCTreatmentGivenFormSection(),
                 new NIRCTreatmentOrderFormSection(),
                 new NIRCWeightFormSection(true, true),
