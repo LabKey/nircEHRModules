@@ -498,7 +498,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         String url = Locator.linkWithText("Click here to record Necropsy").findElement(notifications).getAttribute("href");
 
         log("Entering Necropsy");
-        impersonate(NIRC_BASIC_SUBMITTER);
+        impersonate(NIRC_BASIC_SUBMITTER_VET_TECH);
         beginAt(url);
         Ext4GridRef necropsy = _helper.getExt4GridForFormSection("Necropsy");
         necropsy.expand();
