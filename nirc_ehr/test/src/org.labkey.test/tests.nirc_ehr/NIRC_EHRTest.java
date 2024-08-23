@@ -782,12 +782,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         if (lockBtn.isDisplayed(getDriver()))
         {
             lockBtn.findElement(getDriver()).click();
-            shortWait().until(ExpectedConditions.invisibilityOf(lockBtn.findElement(getDriver())));
+            waitForElementToDisappear(lockBtn);
             if (!isElementPresent(unlockBtn))
             {
                 //Retry
                 lockBtn.findElement(getDriver()).click();
-                shortWait().until(ExpectedConditions.invisibilityOf(lockBtn.findElement(getDriver())));
+
             }
         }
     }
