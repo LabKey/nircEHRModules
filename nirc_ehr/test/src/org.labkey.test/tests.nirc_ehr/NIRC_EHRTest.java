@@ -779,16 +779,15 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     {
         Locator.XPathLocator lockBtn = Ext4Helper.Locators.ext4Button("Lock Entry");
         Locator.XPathLocator unlockBtn = Ext4Helper.Locators.ext4Button("Unlock Entry");
-        if (lockBtn.isDisplayed(getDriver()))
+        try
         {
             lockBtn.findElement(getDriver()).click();
             waitForElementToDisappear(lockBtn);
-            if (!isElementPresent(unlockBtn))
-            {
-                //Retry
-                lockBtn.findElement(getDriver()).click();
-
-            }
+            Assert.assertTrue("Form did not lock", isElementPresent(unlockBtn));
         }
+         catch (NoSuchElementException e)
+         {
+             log("Form is already unlocked");
+         }
     }
 }
