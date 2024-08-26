@@ -44,10 +44,30 @@
                             <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
+                    <column columnName="s">
+                        <columnTitle>Subjective</columnTitle>
+                        <inputType>textarea</inputType>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
+                    </column>
+                    <column columnName="o">
+                        <columnTitle>Objective</columnTitle>
+                        <inputType>textarea</inputType>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
+                    </column>
+                    <column columnName="a">
+                        <columnTitle>Assessment</columnTitle>
+                        <inputType>textarea</inputType>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
+                    </column>
                     <column columnName="p">
                         <columnTitle>Plan</columnTitle>
                         <inputType>textarea</inputType>
-                        <inputRows>5</inputRows>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
+                    </column>
+                    <column columnName="p2">
+                        <columnTitle>P2</columnTitle>
+                        <inputType>textarea</inputType>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
                     </column>
                     <column columnName="remark">
                         <inputType>textarea</inputType>

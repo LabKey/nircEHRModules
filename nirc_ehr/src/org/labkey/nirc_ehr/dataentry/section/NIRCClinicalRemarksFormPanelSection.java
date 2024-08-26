@@ -25,6 +25,7 @@ public class NIRCClinicalRemarksFormPanelSection extends ParentFormPanelSection
             setClientStoreClass("EHR.data.ChildClientStore");
             addExtraProperty("parentQueryName", parentQueryName);
         }
+
     }
 
     @Override

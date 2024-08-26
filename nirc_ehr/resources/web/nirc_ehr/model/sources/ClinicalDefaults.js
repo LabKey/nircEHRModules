@@ -73,7 +73,13 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                         autoLoad: true
                     }
                 }
-            }
+            },
+            p2: {
+                formEditorConfig: {
+                    xtype: 'nirc_ehr-plantextarea'
+                },
+                height: 75
+            },
         },
         'study.blood': {
             reason: {

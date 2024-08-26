@@ -28,6 +28,7 @@ EHR.model.DataModelManager.registerMetadata('ClinicalCase', {
     byQuery: {
         'study.cases': {
             Id: {
+                xtype: 'nirc_ehr-animalIdCases',
                 inheritFromParent: false,
                 editable: true,
                 hidden: false,

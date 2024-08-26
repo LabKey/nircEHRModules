@@ -23,6 +23,8 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
         this.isFolderAdmin = isFolderAdmin;
         setSupportFormSort(false);
 
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/AnimalIdCases.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/EditCase.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/SelectCaseButton.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SelectCasePanel.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/SelectCaseWindow.js"));

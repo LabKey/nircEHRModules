@@ -73,6 +73,8 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 ((AbstractFormSection)s).setAllowBulkAdd(false);
             }
         }
+        setStoreCollectionClass("NIRC_EHR.data.CaseStoreCollection");
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/CaseStoreCollection.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));

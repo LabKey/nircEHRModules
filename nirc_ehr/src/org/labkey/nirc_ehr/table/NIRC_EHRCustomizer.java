@@ -172,6 +172,25 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             appendCaseCheckCol(ti, "caseCheck", "Case Update", "Case Update");
         }
+
+        if (null == ti.getColumn("objectid") || null == ti.getColumn("lsid") || null == ti.getColumn("enddate"))
+            return;
+
+        String isActive = "isActive";
+        ColumnInfo isActiveCol = ti.getColumn(isActive);
+        if (isActiveCol != null)
+        {
+            ti.removeColumn(isActiveCol);
+        }
+
+        SQLFragment sql = new SQLFragment("(CASE " +
+                " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".lsid) IS NULL THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".enddate IS NOT NULL AND " + ExprColumn.STR_TABLE_ALIAS + ".enddate <= {fn curdate()}) THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                " ELSE " + ti.getSqlDialect().getBooleanTRUE() + " END)");
+        ExprColumn newCol = new ExprColumn(ti, isActive, sql, JdbcType.BOOLEAN, ti.getColumn("lsid"), ti.getColumn("enddate"));
+        newCol.setLabel("Is Active?");
+        ti.addColumn(newCol);
+
     }
 
     private void appendCaseCheckCol(AbstractTableInfo ti, String name, String linkLabel, String colLabel)
