@@ -48,4 +48,9 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             triggerHelper.addClinicalObsForCases(row, animalIdCasesMap[row.Id]); //Add clinical obs for all open cases associated with an animal
         }
     }
+
+    if (!row.observation && !row.remark){
+        EHR.Server.Utils.addError(scriptErrors, 'observation', 'Must enter an observation or remark', 'WARN');
+        EHR.Server.Utils.addError(scriptErrors, 'remark', 'Must enter an observation or remark', 'WARN');
+    }
 }

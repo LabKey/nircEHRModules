@@ -386,9 +386,6 @@
             <column columnName="p">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="p2">
-                <datatype>varchar</datatype>
-            </column>
             <column columnName="vetreview">
                 <datatype>varchar</datatype>
             </column>
@@ -1094,6 +1091,9 @@
             <column columnName="caseid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="formCasesLink">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>

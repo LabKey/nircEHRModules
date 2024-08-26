@@ -1,7 +1,6 @@
 package org.labkey.nirc_ehr.table;
 
 import org.labkey.api.data.AbstractTableInfo;
-import org.labkey.api.data.BaseColumnInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.DataColumn;
@@ -15,7 +14,6 @@ import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ehr.EHRService;
-import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.ehr.security.EHRDataEntryPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
@@ -614,10 +612,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             if ("container".equalsIgnoreCase(col.getName()))
             {
                 col.setHidden(true);
-            }
-            if ("date".equalsIgnoreCase(col.getName()) && !ti.getName().equals("drug"))
-            {
-                col.setFormat("Date");
             }
             if ("enddate".equalsIgnoreCase(col.getName()) && !ti.getName().equals("encounters"))
             {

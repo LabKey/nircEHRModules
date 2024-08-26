@@ -143,6 +143,12 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                         autoLoad: true
                     }
                 }
+            },
+            formCasesLink: {
+                xtype: 'nirc_ehr-editCases',
+                editorConfig: {
+                    readonly: true
+                }
             }
         },
         'study.clinremarks': {

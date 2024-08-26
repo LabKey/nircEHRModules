@@ -15,7 +15,7 @@ EHR.DataEntryUtils.registerGridButton('ADDREQUIREDCLINICALOBS', function(config)
                                 for (var i = 0; i < results.rows.length; i++) {
                                     var row = results.rows[i];
                                     if (row.value === 'Verified Id?' || row.value === 'Stool' || row.value === 'Activity' ||
-                                            row.value === 'App' || row.value === 'Hyd' || row.value === 'BCS') {
+                                            row.value === 'Appetite' || row.value === 'Hydration' || row.value === 'BCS') {
 
                                         var newRecord = grid.store.createModel({});
                                         newRecord.set({

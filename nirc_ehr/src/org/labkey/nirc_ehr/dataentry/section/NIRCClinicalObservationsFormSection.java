@@ -11,7 +11,7 @@ public class NIRCClinicalObservationsFormSection extends BaseFormSection
 
     public NIRCClinicalObservationsFormSection(boolean useDefaultBtns)
     {
-        super("study", "clinical_observations", LABEL, "ehr-clinicalobservationgridpanel", true, true, true);
+        super("study", "clinical_observations", LABEL, "ehr-clinicalobservationgridpanel", true, false, true);
 
         useDefaultButtons = useDefaultBtns;
         addClientDependency(ClientDependency.supplierFromPath("ehr/plugin/ClinicalObservationsCellEditing.js"));

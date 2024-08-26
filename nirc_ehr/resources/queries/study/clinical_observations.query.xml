@@ -12,6 +12,9 @@
                     </column>
                     <column columnName="date">
                     </column>
+                    <column columnName="category">
+                        <columnTitle>Category</columnTitle>
+                    </column>
                     <column columnName="area">
                         <columnTitle>Area</columnTitle>
                         <fk>
@@ -20,12 +23,11 @@
                             <fkColumnName>value</fkColumnName>
                         </fk>
                     </column>
-                    <column columnName="category">
-                        <columnTitle>Category</columnTitle>
-                    </column>
                     <column columnName="observation">
-                        <nullable>false</nullable>
                         <columnTitle>Observation/Score</columnTitle>
+                    </column>
+                    <column columnName="remark">
+                        <columnTitle>Remark</columnTitle>
                     </column>
                     <column columnName="caseId">
                         <columnTitle>Case</columnTitle>
