@@ -1,6 +1,7 @@
 package org.labkey.nirc_ehr.table;
 
 import org.labkey.api.data.AbstractTableInfo;
+import org.labkey.api.data.BaseColumnInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.DataColumn;
@@ -14,8 +15,11 @@ import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ehr.EHRService;
+import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
+import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.ehr.security.EHRDataEntryPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
+import org.labkey.api.ehr.table.FixedWidthDisplayColumn;
 import org.labkey.api.exp.api.StorageProvisioner;
 import org.labkey.api.exp.property.Domain;
 import org.labkey.api.gwt.client.FacetingBehaviorType;
@@ -27,7 +31,9 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
 import org.labkey.api.query.UserSchema;
+import org.labkey.api.study.Dataset;
 import org.labkey.api.study.DatasetTable;
+import org.labkey.api.study.StudyService;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
@@ -65,6 +71,16 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 customizeTasks(ti);
             }
 
+            if (matches(ti, "ehr_lookups", "rooms"))
+            {
+                customizeRooms(ti);
+            }
+
+            if (matches(ti, "ehr_lookups", "floors"))
+            {
+                customizeFloors(ti);
+            }
+
             if (matches(ti, "nirc_ehr", "necropsyTasks"))
             {
                 addNecropsyReportLink(ti);
@@ -76,7 +92,132 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 addNecropsyReportLink(ti);
             }
+            else if (matches(ti, "study", "cases"))
+            {
+                customizeCases(ti);
+            }
+            else if (matches(ti, "study", "demographics"))
+            {
+                customizeDemographics(ti);
+            }
         }
+    }
+
+    private void customizeDemographics(AbstractTableInfo ti)
+    {
+        String hxName = "mostRecentHx";
+        if (null == ti.getColumn(hxName) && null != ti.getColumn("Id"))
+        {
+            ColumnInfo idCol = ti.getColumn("Id");
+            assert idCol != null;
+
+            int datasetId = StudyService.get().getDatasetIdByName(ti.getUserSchema().getContainer(), "clinRemarks");
+            Dataset dataset = StudyService.get().getDataset(ti.getUserSchema().getContainer(), datasetId);
+            String realTableName = dataset.getDomain().getStorageTableName();
+
+            SQLFragment sql = new SQLFragment("(SELECT " + ti.getSqlDialect().getGroupConcat(new SQLFragment("r.hx"), true, false, new SQLFragment(getChr(ti) + "(10)")).getSqlCharSequence() + " FROM studydataset." + realTableName +
+                    " r WHERE r.participantId = " + ExprColumn.STR_TABLE_ALIAS + ".participantId AND r.hx IS NOT NULL AND r.date = (SELECT max(date) as expr FROM studydataset." + realTableName + " r2 "
+                    + " WHERE r2.participantId = r.participantId AND r2.hx is not null))"
+            );
+            ExprColumn latestHx = new ExprColumn(ti, hxName, sql, JdbcType.VARCHAR, idCol);
+            latestHx.setLabel("Most Recent Hx");
+            latestHx.setDisplayColumnFactory(new DisplayColumnFactory()
+            {
+                @Override
+                public DisplayColumn createRenderer(ColumnInfo colInfo)
+                {
+                    return new FixedWidthDisplayColumn(colInfo, 100);
+                }
+            });
+
+            latestHx.setWidth("200");
+            ti.addColumn(latestHx);
+        }
+
+        if (ti.getColumn("mostRecentClinicalObservations") == null)
+        {
+            UserSchema us = getUserSchema(ti, "study");
+            var col = getWrappedCol(us, ti, "mostRecentClinicalObservations", "mostRecentObservationsClinical", "Id", "Id");
+            col.setLabel("Most Recent Clinical Observations");
+            col.setDescription("Displays the most recent set of clinical observations for this animal");
+            col.setDisplayWidth("150");
+            ti.addColumn(col);
+        }
+    }
+
+    private void customizeCases(AbstractTableInfo ti)
+    {
+        if (ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
+        {
+            appendCaseCheckCol(ti, "caseCheck", "Case Update", "Case Update");
+        }
+    }
+
+    private void appendCaseCheckCol(AbstractTableInfo ti, String name, String linkLabel, String colLabel)
+    {
+        if (ti.getColumn(name) != null)
+            return;
+
+        var ci = new WrappedColumn(ti.getColumn("Id"), name);
+        ci.setDisplayColumnFactory(new DisplayColumnFactory()
+        {
+            @Override
+            public DisplayColumn createRenderer(final ColumnInfo colInfo)
+            {
+                return new DataColumn(colInfo){
+
+                    @Override
+                    public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                    {
+                        String taskid = (String)ctx.get("taskid");
+                        String category = (String)ctx.get("category");
+                        ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                        if (category == null || category.equals("Clinical"))
+                        {
+                            if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
+                                return;
+
+                            linkAction.addParameter("formType", "Clinical Cases");
+                        }
+
+                        linkAction.addParameter("taskid", taskid);
+                        String href = linkAction.toString();
+                        out.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
+                    }
+
+                    @Override
+                    public void addQueryFieldKeys(Set<FieldKey> keys)
+                    {
+                        super.addQueryFieldKeys(keys);
+                        keys.add(FieldKey.fromString("taskid"));
+                        keys.add(FieldKey.fromString("category"));
+                    }
+
+                    @Override
+                    public boolean isSortable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isFilterable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isEditable()
+                    {
+                        return false;
+                    }
+                };
+            }
+        });
+        ci.setIsUnselectable(false);
+        ci.setLabel(colLabel);
+        ci.setWidth("50px");
+
+        ti.addColumn(ci);
     }
 
     private void addNecropsyEnterDataLink(AbstractTableInfo ti)
@@ -202,6 +343,60 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         }
     }
 
+    private void customizeRooms(AbstractTableInfo ti)
+    {
+        ColumnInfo roomCol = ti.getColumn("name");
+        ColumnInfo floorCol = ti.getColumn("floor");
+        if (roomCol != null && floorCol != null && ti.getColumn("fullRoom") == null)
+        {
+            ExprColumn col = new ExprColumn(ti, new FieldKey(null, "fullRoom"), new SQLFragment("##ERROR"), JdbcType.VARCHAR, roomCol, floorCol) {
+                @Override
+                public SQLFragment getValueSql(String tableAlias)
+                {
+                    // Need to subclass and override this function due to issue using ExprColumn.STR_TABLE_ALIAS with extensible columns
+                    SQLFragment sql = new SQLFragment("(SELECT COALESCE(r.room, 'Room N/A') || ', ' || COALESCE(r.floor, 'Floor N/A') || ', ' || COALESCE(r.building, 'Building N/A') \n" +
+                            "        FROM (\n" +
+                            "            SELECT \n").append(roomCol.getValueSql(tableAlias));
+                    sql.append(" AS room,\n" +
+                            "    ff.name as floor,\n" +
+                            "    bb.description as building\n" +
+                            "    FROM ehr_lookups.floors ff \n" +
+                            "    JOIN ehr_lookups.buildings bb ON ff.building = bb.name\n" +
+                            "    WHERE ff.floor =\n").append(floorCol.getValueSql(tableAlias));
+                    sql.append("        ) r\n" +
+                            "    )");
+
+                    return sql;
+                }
+            };
+            col.setName("fullRoom");
+            col.setLabel("Full Room");
+            ti.addColumn(col);
+        }
+    }
+
+    private void customizeFloors(AbstractTableInfo ti)
+    {
+        ColumnInfo floorCol = ti.getColumn("name");
+        ColumnInfo bldgCol = ti.getColumn("building");
+        if (floorCol != null && bldgCol != null && ti.getColumn("fullFloor") == null)
+        {
+            SQLFragment sql = new SQLFragment("(SELECT COALESCE(r.floor, 'Floor N/A') || ', ' || COALESCE(r.building, 'Building N/A') \n" +
+                    "        FROM (\n" +
+                    "            SELECT " + ExprColumn.STR_TABLE_ALIAS + ".name\n");
+            sql.append(" AS floor,\n" +
+                    "    bb.description as building\n" +
+                    "    FROM ehr_lookups.buildings bb \n" +
+                    "    WHERE bb.name = " + ExprColumn.STR_TABLE_ALIAS + ".building\n");
+            sql.append("        ) r\n" +
+                    "    )");
+
+            ExprColumn col = new ExprColumn(ti, "fullFloor", sql, JdbcType.VARCHAR, floorCol, bldgCol);
+            col.setLabel("Full Floor");
+            ti.addColumn(col);
+        }
+    }
+
     private void customizeTasks(AbstractTableInfo ti)
     {
         DetailsURL detailsURL = DetailsURL.fromString("/ehr/dataEntryFormDetails.view?formType=${formtype}&taskid=${taskid}");
@@ -309,7 +504,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                 col.setLabel("Room");
-                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "rooms", "room", "name"));
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "rooms", "room", "fullRoom"));
                 col.setURL(StringExpressionFactory.createURL("/nirc_ehr/cageDetails.view?room=${room}"));
             }
             if ("building".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("buildings"))
@@ -322,7 +517,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                 col.setLabel("Floor");
-                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "floors", "floor", "name"));
+                col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "floors", "floor", "fullFloor"));
             }
             if ("area".equalsIgnoreCase(col.getName()) && !ti.getName().equalsIgnoreCase("areas"))
             {
@@ -346,15 +541,30 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             }
             if ("performedby".equalsIgnoreCase(col.getName()))
             {
-                col.setLabel("Performed By");
-
-                UserSchema us = getEHRUserSchema(ti, "core");
-                if (us != null)
+                if (ti.getName().equalsIgnoreCase("treatment_order") || ti.getName().equalsIgnoreCase("drug"))
                 {
-                    col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
-                            .table("users")
-                            .key("UserId")
-                            .display("DisplayName")));
+                    col.setLabel("Ordered By");
+                    UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                    if (us != null)
+                    {
+                        col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                                .table("veterinarians")
+                                .key("UserId")
+                                .display("DisplayName")));
+                    }
+                }
+                else
+                {
+                    col.setLabel("Performed By");
+
+                    UserSchema us = getEHRUserSchema(ti, "core");
+                    if (us != null)
+                    {
+                        col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                                .table("users")
+                                .key("UserId")
+                                .display("DisplayName")));
+                    }
                 }
             }
             if ("taskid".equalsIgnoreCase(col.getName()))
@@ -376,6 +586,16 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             if ("reviewdate".equalsIgnoreCase(col.getName()))
             {
                 col.setFormat("Date");
+            }
+            if ("caseid".equalsIgnoreCase(col.getName()))
+            {
+                col.setLabel("Case");
+                if (col.getFk() == null)
+                {
+                    UserSchema us = getEHRUserSchema(ti, "study");
+                    if (us != null)
+                        col.setFk(new QueryForeignKey(us, null, "cases", "objectid", "category"));
+                }
             }
         }
     }

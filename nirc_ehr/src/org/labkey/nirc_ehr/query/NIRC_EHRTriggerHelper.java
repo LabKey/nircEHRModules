@@ -17,6 +17,9 @@ import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
+import org.labkey.api.ehr.security.EHRDataAdminPermission;
+import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
@@ -543,5 +546,33 @@ public class NIRC_EHRTriggerHelper
     {
         User u = UserManager.getUserByDisplayName(displayName);
         return null != u ? u.getUserId() : -1;
+    }
+
+    public long totalHousingRecords(String location)
+    {
+        TableInfo ti = getTableInfo("study", "housing");
+
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("isActive"), true);
+        filter.addCondition(FieldKey.fromString("cage"), location);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("Id"), filter, null);
+
+        return ts.getRowCount();
+    }
+
+    public long totalRecords(String schemaName, String queryName, String columnName, String value)
+    {
+        TableInfo ti = getTableInfo(schemaName, queryName);
+
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString(columnName), value);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set(columnName), filter, null);
+
+        return ts.getRowCount();
+    }
+
+    public boolean canCloseCase(String category)
+    {
+        if (_container.hasPermission(_user, EHRVeterinarianPermission.class))
+            return true;
+        return false;
     }
 }
