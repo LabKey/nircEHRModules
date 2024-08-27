@@ -752,6 +752,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void submitForm(String buttonText, String windowTitle)
     {
+        //Give time for errors to disappear after validation
+        longWait().until(ExpectedConditions.invisibilityOfElementWithText(Locator.tag("div"), "The form has the following errors and warnings:"));
         Locator submitFinalBtn = Locator.linkWithText(buttonText);
         shortWait().until(ExpectedConditions.elementToBeClickable(submitFinalBtn));
         Window<?> msgWindow;
@@ -781,9 +783,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Locator.XPathLocator unlockBtn = Ext4Helper.Locators.ext4Button("Unlock Entry");
         try
         {
+            log("Locking the entry");
             lockBtn.findElement(getDriver()).click();
             waitForElementToDisappear(lockBtn);
-            Assert.assertTrue("Form did not lock", isElementPresent(unlockBtn));
+            Assert.assertTrue("Entry did not lock", isElementPresent(unlockBtn));
         }
          catch (NoSuchElementException e)
          {
