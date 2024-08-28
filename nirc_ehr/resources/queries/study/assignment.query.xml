@@ -8,7 +8,7 @@
                         <formatString>DateTime</formatString>
                     </column>
                     <column columnName="endDate"/>
-                    <column columnName="project"/>
+<!--                    <column columnName="project/name"/>-->
                     <column columnName="remark"/>
                     <column columnName="performedBy">
                         <columnTitle>Performed By</columnTitle>

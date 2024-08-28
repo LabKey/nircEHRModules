@@ -1,5 +1,6 @@
 package org.labkey.nirc_ehr.table;
 
+import org.jetbrains.annotations.NotNull;
 import org.labkey.api.data.AbstractTableInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
@@ -35,6 +36,7 @@ import org.labkey.api.study.StudyService;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
+import org.labkey.api.view.template.ClientDependency;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -166,6 +168,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
     private void customizeCases(AbstractTableInfo ti)
     {
+        appendCaseHistoryCol(ti);
+
         if (ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
         {
             appendCaseCheckCol(ti, "caseCheck", "Case Update", "Case Update");
@@ -189,6 +193,71 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         newCol.setLabel("Is Active?");
         ti.addColumn(newCol);
 
+    }
+
+    private void appendCaseHistoryCol(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("caseHistory") != null)
+            return;
+
+        var ci = new WrappedColumn(ti.getColumn("Id"), "caseHistory");
+        ci.setDisplayColumnFactory(new DisplayColumnFactory()
+        {
+            @Override
+            public DisplayColumn createRenderer(final ColumnInfo colInfo)
+            {
+                return new DataColumn(colInfo){
+
+                    @Override
+                    public @NotNull Set<ClientDependency> getClientDependencies()
+                    {
+                        Set<ClientDependency> dependencies = super.getClientDependencies();
+                        dependencies.add(ClientDependency.fromPath("nirc_ehr/window/NIRCClinicalHistoryWindow.js"));
+                        dependencies.add(ClientDependency.fromPath("nirc_ehr/window/NIRCCaseHistoryWindow.js"));
+                        return dependencies;
+                    }
+
+                    @Override
+                    public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                    {
+                        String objectid = (String)ctx.get("objectid");
+                        String id = (String)getBoundColumn().getValue(ctx);
+
+                        out.write(PageFlowUtil.link("Show Case Hx").onClick("NIRC_EHR.window.CaseHistoryWindow.showCaseHistory(" + PageFlowUtil.jsString(objectid) + ", " + PageFlowUtil.jsString(id) + ", this)").toString());
+                    }
+
+                    @Override
+                    public void addQueryFieldKeys(Set<FieldKey> keys)
+                    {
+                        super.addQueryFieldKeys(keys);
+                        keys.add(FieldKey.fromString("objectid"));
+                        keys.add(getBoundColumn().getFieldKey());
+                    }
+
+                    @Override
+                    public boolean isSortable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isFilterable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isEditable()
+                    {
+                        return false;
+                    }
+                };
+            }
+        });
+        ci.setIsUnselectable(false);
+        ci.setLabel("Case History");
+
+        ti.addColumn(ci);
     }
 
     private void appendCaseCheckCol(AbstractTableInfo ti, String name, String linkLabel, String colLabel)
@@ -730,12 +799,19 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             col.setURL(DetailsURL.fromString("/query/executeQuery.view?schemaName=ehr_lookups&queryName=flag_values&query.Id~eq=${Id}", ds.getContainerContext()));
             ds.addColumn(col);
         }
-        if (ds.getColumn("demographicsActiveAssignment") == null)
+        if (ds.getColumn("demographicsActiveProtocolAssignment") == null)
         {
-            var col21 = getWrappedCol(us, ds, "activeAssignments", "demographicsActiveAssignment", "Id", "Id");
-            col21.setLabel("Active Protocol Assignments");
-            col21.setDescription("Shows all protocols to which the animal is actively assigned on the current date");
-            ds.addColumn(col21);
+            var protAssignment = getWrappedCol(us, ds, "activeProtocolAssignments", "demographicsActiveProtocolAssignment", "Id", "Id");
+            protAssignment.setLabel("Active Protocol Assignments");
+            protAssignment.setDescription("Shows all protocols to which the animal is actively assigned on the current date");
+            ds.addColumn(protAssignment);
+        }
+        if (ds.getColumn("demographicsActiveProjectAssignment") == null)
+        {
+            var prjAssignment = getWrappedCol(us, ds, "activeProjectAssignments", "demographicsActiveProjectAssignment", "Id", "Id");
+            prjAssignment.setLabel("Active Project Assignments");
+            prjAssignment.setDescription("Shows all project to which the animal is actively assigned on the current date");
+            ds.addColumn(prjAssignment);
         }
         if (ds.getColumn("alias") == null)
         {
