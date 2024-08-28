@@ -2,7 +2,9 @@ package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
+import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.module.Module;
+import org.labkey.api.security.permissions.AdminPermission;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCBloodDrawFormSection;
@@ -14,6 +16,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCVitalsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
+import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
 
 import java.util.List;
 
@@ -27,7 +30,9 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
         super(ctx, owner, NAME, LABEL, "Clinical", List.of(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCClinicalRemarksFormSection(),
+                new NIRCClinicalRemarksFormSection(ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(),
                 new NIRCClinicalObservationsFormSection(true),
                 new NIRCTreatmentGivenFormSection(),
