@@ -4,6 +4,7 @@ import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
@@ -575,57 +576,62 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public void addClinicalObsForCases(Map<String, Object> row, String[] caseIds) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
-    {
-        boolean updateRecord = false;
-        BatchValidationException errors = new BatchValidationException();
-        TableInfo ti = getTableInfo("study", "clinical_observations");
-        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), row.get("Id"));
-        filter.addCondition(FieldKey.fromString("taskid"), row.get("taskId"));
-        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
-        List<Map<String, Object>> rows = new ArrayList<>();
-
-        if (ts.exists())
-        {
-            updateRecord = true;
-        }
-        try (DbScope.Transaction transaction = ExperimentService.get().ensureTransaction())
-        {
-            for (String caseId : caseIds)
-            {
-                Map<String, Object> clinicalObsRow = new CaseInsensitiveHashMap<>();
-                clinicalObsRow.put("Id", row.get("Id"));
-                clinicalObsRow.put("date", row.get("date"));
-                clinicalObsRow.put("caseid", caseId);
-                clinicalObsRow.put("qcstate", row.get("qcstate"));
-                clinicalObsRow.put("category", row.get("category"));
-                clinicalObsRow.put("observation", row.get("observation"));
-                clinicalObsRow.put("remark", row.get("remark"));
-                clinicalObsRow.put("taskId", row.get("taskId"));
-
-                if (updateRecord)
-                {
-                    clinicalObsRow.put("objectid", ts.getMap().get("objectid"));
-                }
-                else
-                {
-                    clinicalObsRow.put("objectid", new GUID().toString());
-                }
-
-                rows.add(clinicalObsRow);
-
-            }
-            if (updateRecord)
-            {
-                ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
-            }
-            else
-            {
-                ti.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
-            }
-            if (errors.hasErrors())
-                throw errors;
-            transaction.commit();
-        }
-    }
+    //Add clinical observations to all open cases for an animal so users don't need to add the same observation to each case individually
+    //TODO
+//    public void addClinicalObsForCases(Map<String, Object> clinicalObsRow, Map<String, Object> clinicalObsOldRow, List<Map<String, Object>> openCasesPerAnimal, @Nullable String currentCaseId) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
+//    {
+//        if (null != currentCaseId)
+//        {
+//            boolean updateRecord = false;
+//            BatchValidationException errors = new BatchValidationException();
+//            TableInfo ti = getTableInfo("study", "clinical_observations");
+//            SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), clinicalObsRow.get("Id"));
+//            List<Map<String, Object>> rows = new ArrayList<>();
+//
+//            // For each open case, add the clinical observation
+//            for (Map<String, Object> animalCase : openCasesPerAnimal)
+//            {
+//                String caseTaskId = (String) animalCase.get("taskid");
+//                String caseId = (String) animalCase.get("caseid");
+//
+//                Map<String, Object> clinObsRowToInsert = new CaseInsensitiveHashMap<>();
+//                clinObsRowToInsert.put("Id", clinicalObsRow.get("Id"));
+//                clinObsRowToInsert.put("date", clinicalObsRow.get("date"));
+//                clinObsRowToInsert.put("caseid", caseId);
+//                clinObsRowToInsert.put("qcstate", clinicalObsRow.get("qcstate"));
+//                clinObsRowToInsert.put("category", clinicalObsRow.get("category"));
+//                clinObsRowToInsert.put("observation", clinicalObsRow.get("observation"));
+//                clinObsRowToInsert.put("remark", clinicalObsRow.get("remark"));
+//                clinObsRowToInsert.put("taskId", caseTaskId);
+//                clinObsRowToInsert.put("performedby", clinicalObsRow.get("performedby"));
+//
+//                filter.addCondition(FieldKey.fromString("taskid"), caseTaskId);
+//                filter.addCondition(FieldKey.fromString("objectid"), clinicalObsOldRow.get("objectid"));
+//                TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
+//
+//                if (ts.exists())
+//                {
+//                    updateRecord = true;
+//                    clinObsRowToInsert.put("objectid", ts.getMap().get("objectid"));
+//                }
+//                else
+//                {
+//                    clinObsRowToInsert.put("objectid", new GUID().toString());
+//                }
+//
+//                rows.add(clinObsRowToInsert);
+//
+//                if (updateRecord)
+//                {
+//                    ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+//                }
+//                else
+//                {
+//                    ti.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+//                }
+//                if (errors.hasErrors())
+//                    throw errors;
+//            }
+//        }
+//    }
 }

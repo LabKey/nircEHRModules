@@ -23,24 +23,28 @@ public class NIRCClinicalObservationsFormSection extends BaseFormSection
     @Override
     public List<String> getTbarButtons()
     {
+        List<String> defaults = super.getTbarButtons();
+        defaults.add("ADDREQUIREDCLINICALOBS");
+
         if (!useDefaultButtons)
         {
-            List<String> defaults = super.getTbarButtons();
             defaults.clear();
-            defaults.add("ADDREQUIREDCLINICALOBS");
             defaults.add("ADDRECORD");
             defaults.add("DELETERECORD");
-            return defaults;
         }
-        else
-            return super.getTbarButtons();
+
+        return defaults;
+
     }
 
     @Override
     public List<String> getTbarMoreActionButtons()
     {
         List<String> moreActionButtons = super.getTbarMoreActionButtons();
-        moreActionButtons.clear();
+        if (!useDefaultButtons)
+        {
+            moreActionButtons.clear();
+        }
 
         return moreActionButtons;
     }

@@ -14,7 +14,7 @@ function onInit(event, helper){
     LABKEY.Query.selectRows({
         schemaName: 'study',
         queryName: 'cases',
-        columns: ['Id', 'caseid', 'enddate'],
+        columns: ['Id', 'caseid', 'taskid', 'enddate'],
         scope: this,
         sort: 'Id',
         success: function (results) {
@@ -23,18 +23,16 @@ function onInit(event, helper){
 
             for(var i=0; i < results.rows.length; i++) {
 
-                console.log("results.rows[i]: " + results.rows[i]["enddate"]);
                 // get all open cases associated with an animal
-                if (!results.rows[i]["enddate"]) {
-                    var animal = results.rows[i]["Id"]["value"];
-                    var caseId = results.rows[i]["caseid"]["value"];
+                if (null === results.rows[i]["enddate"]) {
+                    var animal = results.rows[i]["Id"];
                     if (!animalIdCasesMap[animal]) {
                         animalIdCasesMap[animal] = [];
-                    } else {
-                        animalIdCasesMap[animal].push(caseId);
                     }
+                    animalIdCasesMap[animal].push(results.rows[i]);
                 }
             }
+            // console.log("animalIdCasesMap: " + JSON.stringify(animalIdCasesMap));
         },
         failure: function (error) {
             console.log("error getting death data in death trigger onInit()\n" + error);
@@ -43,14 +41,26 @@ function onInit(event, helper){
 }
 
 function onUpsert(helper, scriptErrors, row, oldRow) {
-    if (row.Id) {
-        if (animalIdCasesMap[row.Id] && animalIdCasesMap[row.Id].length > 0) {
-            triggerHelper.addClinicalObsForCases(row, animalIdCasesMap[row.Id]); //Add clinical obs for all open cases associated with an animal
-        }
-    }
 
-    if (!row.observation && !row.remark){
-        EHR.Server.Utils.addError(scriptErrors, 'observation', 'Must enter an observation or remark', 'WARN');
-        EHR.Server.Utils.addError(scriptErrors, 'remark', 'Must enter an observation or remark', 'WARN');
+    if (!helper.isETL() && !helper.isGeneratedByServer()) {
+
+        if (!row.observation && !row.remark) {
+            EHR.Server.Utils.addError(scriptErrors, 'observation', 'Must enter an observation or remark', 'WARN');
+            EHR.Server.Utils.addError(scriptErrors, 'remark', 'Must enter an observation or remark', 'WARN');
+        }
+
+        if (row.category === "Verified Id?" && row.observation === "No" && !row.remark) {
+            EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'No' for 'Verified Id?', please enter Remark", "WARN");
+        }
+
+        // if (!helper.isValidateOnly()) {
+        //     if (row.Id) {
+        //         if (animalIdCasesMap[row.Id] && animalIdCasesMap[row.Id].length > 0) {
+        //
+                        //TODO:
+        //              triggerHelper.addClinicalObsForCases(row, oldRow, animalIdCasesMap[row.Id]); //Add clinical obs for all open cases associated with an animal
+        //         }
+        //     }
+        // }
     }
 }

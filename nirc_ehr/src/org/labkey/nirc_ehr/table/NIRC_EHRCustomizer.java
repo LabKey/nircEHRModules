@@ -193,6 +193,18 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         newCol.setLabel("Is Active?");
         ti.addColumn(newCol);
 
+        String isOpen = "isOpen";
+        if (ti.getColumn(isOpen) == null)
+        {
+            SQLFragment sql2 = new SQLFragment("(CASE " +
+                    " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".lsid) IS NULL THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                    " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".enddate IS NOT NULL AND " + ExprColumn.STR_TABLE_ALIAS + ".enddate <= {fn curdate()}) THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                    " ELSE " + ti.getSqlDialect().getBooleanTRUE() + " END)");
+            ExprColumn newCol2 = new ExprColumn(ti, isOpen, sql2, JdbcType.BOOLEAN, ti.getColumn("lsid"), ti.getColumn("enddate"));
+            newCol2.setLabel("Is Open?");
+            newCol2.setDescription("Displays whether this case is still open, which will includes cases that have been closed for review");
+            ti.addColumn(newCol2);
+        }
     }
 
     private void appendCaseHistoryCol(AbstractTableInfo ti)

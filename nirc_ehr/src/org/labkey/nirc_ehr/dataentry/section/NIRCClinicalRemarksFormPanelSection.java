@@ -54,7 +54,7 @@ public class NIRCClinicalRemarksFormPanelSection extends ParentFormPanelSection
     {
         List<FieldKey> keys = super.getFieldKeys(ti);
 
-        // only Vets and Folder Admins S.O.A.P fields.
+        // only Vets and Folder Admins can enter S.O.A.P.
         if (!isVet && (!isFolderAdmin || isVetTech))
         {
             keys.remove(FieldKey.fromString("s"));

@@ -12,6 +12,16 @@ Ext4.define('NIRC_EHR.panel.SelectCasePanel', {
         getButtonConfig: function(){
             return [{
                 xtype: 'button',
+                text: 'Use Selected Case',
+                handler: function(btn){
+                    var window = btn.up('window');
+                    var grid = window.down('grid');
+                    var rec = grid.getSelectionModel().getSelection()[0];
+                    EHR.DemographicsCache.reportCaseSelected(rec);
+                    window.close();
+                }
+            }, {
+                xtype: 'button',
                 text: 'Show Closed Cases',
                 handler: function(btn){
                     var owner = btn.up('window');
@@ -132,12 +142,6 @@ Ext4.define('NIRC_EHR.panel.SelectCasePanel', {
             },{
                 header: 'Open Date',
                 dataIndex: 'date',
-                xtype: 'datecolumn',
-                format: LABKEY.extDefaultDateFormat,
-                width: 110
-            },{
-                header: 'Recheck Date',
-                dataIndex: 'reviewdate',
                 xtype: 'datecolumn',
                 format: LABKEY.extDefaultDateFormat,
                 width: 110

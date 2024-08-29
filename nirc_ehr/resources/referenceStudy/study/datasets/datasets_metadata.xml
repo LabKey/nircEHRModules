@@ -344,9 +344,6 @@
             <column columnName="observation">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="isVerified">
-                <datatype>varchar</datatype>
-            </column>
             <column columnName="caseid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
