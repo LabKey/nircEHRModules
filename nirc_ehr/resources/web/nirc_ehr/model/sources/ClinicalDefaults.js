@@ -5,40 +5,6 @@
  */
 EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
     byQuery: {
-        'study.treatment_order': {
-            category: {
-                defaultValue: 'Clinical',
-                hidden: true
-            },
-            performedby: {
-                hidden: false,
-                allowBlank: false,
-                defaultValue: null,
-                lookup: {
-                    schemaName: 'ehr_lookups',
-                    queryName: 'veterinarians',
-                    keyColumn: 'UserId',
-                    displayColumn: 'DisplayName'
-                }
-            },
-        },
-        'study.drug': {
-            category: {
-                defaultValue: 'Clinical',
-                hidden: true
-            },
-            performedby: {
-                hidden: false,
-                allowBlank: false,
-                defaultValue: null,
-                lookup: {
-                    schemaName: 'ehr_lookups',
-                    queryName: 'veterinarians',
-                    keyColumn: 'UserId',
-                    displayColumn: 'DisplayName'
-                }
-            }
-        },
         'study.prc': {
             category: {
                 defaultValue: 'Clinical',
