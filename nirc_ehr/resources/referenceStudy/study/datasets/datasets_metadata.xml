@@ -1011,6 +1011,12 @@
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
             </column>
+            <column columnName="scheduledDate">
+                <datatype>timestamp</datatype>
+            </column>
+            <column columnName="treatmentid">
+                <datatype>varchar</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="cases" tableDbType="TABLE">
