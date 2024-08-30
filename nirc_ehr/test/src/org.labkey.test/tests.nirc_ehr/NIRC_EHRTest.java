@@ -792,6 +792,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         try
         {
             log("Locking the entry");
+            waitForElement(lockBtn);
             lockBtn.findElement(getDriver()).click();
             waitForElementToDisappear(lockBtn);
             Assert.assertTrue("Entry did not lock", isElementPresent(unlockBtn));
