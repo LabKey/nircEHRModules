@@ -24,10 +24,9 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCVitalsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
-import org.labkey.nirc_ehr.security.NIRCEHRVetTechRole;
 
 import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 
 public class NIRCCasesFormType extends NIRCBaseTaskFormType
 {
@@ -84,6 +83,9 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/NIRCExamCasesDataEntryPanel.js"));
         setJavascriptClass("NIRC_EHR.panel.ExamCasesDataEntryPanel");
+
+        // Needed for case and scheduled date/time when navigating from treatment or observation schedule
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/treatmentSubmit.js"));
     }
 
     @Override
@@ -93,5 +95,16 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
             return false;
 
         return super.canInsert();
+    }
+
+    @Override
+    protected List<String> getButtonConfigs()
+    {
+        List<String> ret = super.getButtonConfigs();
+
+        ret.remove("SUBMIT");
+        ret.add("NIRC_TREATMENT_SUBMIT");
+
+        return ret;
     }
 }

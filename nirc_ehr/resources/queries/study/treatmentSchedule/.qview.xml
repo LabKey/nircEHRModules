@@ -1,30 +1,32 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
     <columns>
+        <column name="treatmentRecord"/>
         <column name="Id"/>
         <column name="Id/Demographics/species"/>
         <column name="Id/curLocation/room"/>
         <column name="Id/curLocation/cage"/>
 
         <column name="date"/>
-        <column name="enddate"/>
+        <column name="timeOfDay"/>
+        <column name="daysElapsed"/>
 
-        <column name="code"/>
         <column name="frequency"/>
+        <column name="code"/>
+        <column name="amountAndVolume"/>
         <column name="route"/>
-        <column name="concentration"/>
-        <column name="conc_units"/>
-        <column name="dosage"/>
-        <column name="dosage_units"/>
-        <column name="volume"/>
-        <column name="vol_units"/>
-        <column name="amount"/>
-        <column name="amount_units"/>
+        <column name="remark"/>
         <column name="performedby"/>
+        <column name="startDate"/>
         <column name="category"/>
         <column name="reason" />
-        <column name="remark" />
+        <column name="treatmentStatus" />
     </columns>
     <sorts>
         <sort column="date"/>
+        <sort column="Id/curLocation/room"/>
+        <sort column="Id/curLocation/cage"/>
     </sorts>
+    <filters>
+        <filter column="calculated_status" operator="eq" value="Alive"/>
+    </filters>
 </customView>
