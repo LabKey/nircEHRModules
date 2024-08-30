@@ -214,8 +214,8 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         var values = [];
         if (results){
             Ext4.each(results, function(row){
-                if (row['project']) {
-                    values.push(LABKEY.Utils.encodeHtml(row['project']));
+                if (row['project/name']) {
+                    values.push(LABKEY.Utils.encodeHtml(row['project/name']));
                 }
             }, this);
         }

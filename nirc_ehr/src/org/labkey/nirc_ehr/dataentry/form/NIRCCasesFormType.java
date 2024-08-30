@@ -45,9 +45,12 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
-                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks"),
+                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks",
+                        ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(true, "cases"),
-                new NIRCClinicalObservationsFormSection(),
+                new NIRCClinicalObservationsFormSection(false),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
                 new NIRCTreatmentOrderFormSection(true, "cases"),
                 new NIRCWeightFormSection(true, false, true, "cases"),
@@ -73,6 +76,8 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 ((AbstractFormSection)s).setAllowBulkAdd(false);
             }
         }
+        setStoreCollectionClass("NIRC_EHR.data.CaseStoreCollection");
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/CaseStoreCollection.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
