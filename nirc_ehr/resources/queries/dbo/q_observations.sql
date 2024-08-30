@@ -6,7 +6,6 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
             ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
                 || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS category,
-       anmCmt.TEXT                                                               AS remark,
        (CASE
             WHEN anmEvt.DIAGNOSIS IS NOT NULL THEN (anmCmt.TEXT || ';' || anmEvt.DIAGNOSIS)
             ELSE anmCmt.TEXT END) AS remark,
