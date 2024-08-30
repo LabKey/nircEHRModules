@@ -323,11 +323,17 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Ext4GridRef arrivals = _helper.getExt4GridForFormSection("Arrivals");
         _helper.addRecordToGrid(arrivals);
         arrivals.setGridCellJS(1, "date", now.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
+        arrivals.setGridCell(1, "arrivalType", "Non-quarantine Arrival");
+        arrivals.setGridCell(1, "acquisitionType", "Lab Transfer (Wild Born)");
         arrivals.setGridCell(1, "Id", arrivedAnimal);
         arrivals.setGridCell(1, "cage", "C1");
         arrivals.setGridCell(1, "project", "640991");
         arrivals.setGridCell(1, "arrivalProtocol", "dummyprotocol");
+        arrivals.setGridCell(1, "Id/demographics/gender", "female");
+        arrivals.setGridCell(1, "Id/demographics/geographic_origin", "BRAZIL");
+        arrivals.setGridCell(1, "Id/demographics/species", "Macaca nemestrina PIG");
         arrivals.setGridCellJS(1, "Id/demographics/birth", now.minusDays(7).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
+        arrivals.setGridCell(1, "sourceFacility", "BIOQUAL, Inc.");
         submitForm("Submit Final", "Finalize");
 
         goToSchemaBrowser();
@@ -510,6 +516,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         _ext4Helper.selectComboBoxItem("Condition of Specimen:", "Fresh");
         scrollIntoView(Locator.name("diagnosis"));
         _helper.setDataEntryField("diagnosis", "Dead");
+        _helper.setDataEntryField("identification", "Extra information");
+        _helper.setDataEntryField("grossAbnormalities", "Extra leg");
         _ext4Helper.selectComboBoxItem("Performed By:", NIRC_BASIC_SUBMITTER_NAME);
 
         log("Entering Tissue Disposition");
