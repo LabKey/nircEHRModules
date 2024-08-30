@@ -90,6 +90,12 @@
                             <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
+                    <column columnName="performedby">
+                        <columnTitle>Ordered By</columnTitle>
+                    </column>
+                    <column columnName="scheduledDate">
+                        <columnTitle>Scheduled Date</columnTitle>
+                    </column>
                 </columns>
             </table>
         </tables>

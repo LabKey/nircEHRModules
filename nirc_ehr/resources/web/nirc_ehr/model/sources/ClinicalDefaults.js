@@ -37,6 +37,15 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                     keyColumn: 'UserId',
                     displayColumn: 'DisplayName'
                 }
+            },
+            scheduledDate: {
+                columnConfig: {
+                    width: 130,
+                    fixed: true
+                },
+            },
+            treatmentId: {
+                hidden: true
             }
         },
         'study.prc': {
