@@ -28,7 +28,9 @@ import org.labkey.api.ehr.history.DefaultAnimalRecordFlagDataSource;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ehr.history.DefaultNotesDataSource;
 import org.labkey.api.ehr.history.DefaultVitalsDataSource;
+import org.labkey.api.ehr.security.EHRDataAdminPermission;
 import org.labkey.api.ldk.ExtendedSimpleModule;
+import org.labkey.api.ldk.buttons.ShowEditUIButton;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
@@ -67,7 +69,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.011;
+        return 24.012;
     }
 
     @Override
@@ -90,10 +92,14 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         EHRService ehrService = EHRService.get();
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/nircReports.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/NIRCRecentCasesWindow.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/NIRCRecentRemarksWindow.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("ehr/sharedReports.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SnapshotPanel.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/BloodSummaryPanel.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/AnimalDetailsPanel.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/NIRCClinicalHistoryWindow.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/NIRCCaseHistoryWindow.js"), this);
     }
 
     @Override
@@ -152,6 +158,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerTriggerScriptOption("datasetsToCloseOnNewEntry", List.of("assignment", "protocolAssignment"));
         RoleManager.registerRole(new NIRCEHRVetTechRole());
 
+        EHRService.get().registerMoreActionsButton(new ShowEditUIButton(this, "ehr", "observation_types", EHRDataAdminPermission.class), "ehr", "observation_types");
+
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());
 
@@ -186,6 +194,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCRoomFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCFloorFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCCageFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCClinicalObservationsFormType.class, this));
     }
 
     @Override

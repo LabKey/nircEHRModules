@@ -2,5 +2,8 @@
     <library compileInProductionMode="false">
         <script path="nirc_ehr/model/sources/NIRCDefault.js"/>
         <script path="nirc_ehr/utils.js"/>
+        <script path="nirc_ehr/nirc.css"/>
+        <script path="nirc_ehr/window/NIRCClinicalHistoryWindow.js"/>
+        <script path="nirc_ehr/window/NIRCCaseHistoryWindow.js"/>
     </library>
 </libraries>

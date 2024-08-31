@@ -5,6 +5,7 @@ import org.labkey.api.data.TableInfo;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.ParentFormPanelSection;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.view.template.ClientDependency;
 
 import java.util.List;
 
@@ -21,6 +22,12 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
         this.isVet = isVet;
         this.isFolderAdmin = isFolderAdmin;
         setSupportFormSort(false);
+
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/AnimalIdCases.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/EditCase.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/SelectCaseButton.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SelectCasePanel.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/SelectCaseWindow.js"));
     }
 
     @Override

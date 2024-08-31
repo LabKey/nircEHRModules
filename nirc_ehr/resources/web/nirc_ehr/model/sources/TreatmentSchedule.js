@@ -1,8 +1,5 @@
 EHR.model.DataModelManager.registerMetadata('TreatmentSchedule', {
     allQueries: {
-        category: {
-            defaultValue: 'Clinical',
-        },
         project: {
             hidden: true,
             allowBlank: true
@@ -56,11 +53,17 @@ EHR.model.DataModelManager.registerMetadata('TreatmentSchedule', {
     },
     byQuery: {
         'study.drug': {
+            category: {
+                defaultValue: 'Clinical',
+            },
             date: {
                 header: 'Date/Time',
             }
         },
         'study.treatment_order': {
+            category: {
+                defaultValue: 'Clinical',
+            },
             enddate: {
                 allowBlank: true,
             }

@@ -52,8 +52,6 @@ public class HousingDemographicsProvider extends AbstractListDemographicsProvide
         return ("study".equalsIgnoreCase(schema) && "Housing".equalsIgnoreCase(query)) ||
                 ("study".equalsIgnoreCase(schema) && "Death".equalsIgnoreCase(query)) ||
                 ("study".equalsIgnoreCase(schema) && "Departure".equalsIgnoreCase(query)) ||
-                ("study".equalsIgnoreCase(schema) && "Birth".equalsIgnoreCase(query)) ||
-                ("jhu_ehr".equalsIgnoreCase(schema) && "enclosure".equalsIgnoreCase(query)) ||
-                ("jhu_ehr".equalsIgnoreCase(schema) && "cageConfig".equalsIgnoreCase(query));
+                ("study".equalsIgnoreCase(schema) && "Birth".equalsIgnoreCase(query));
     }
 }

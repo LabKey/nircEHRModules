@@ -1,12 +1,14 @@
 setname	label	keyfield	titleColumn
 acquisition_type	Acquisition Type	value
+activity	Activity	value
 alias_category	Alias Category	value	title
 alopecia_type	Alopecia Type	value
 alopecia_score	Alopecia Type	value
 alopecia_regrowth	Alopecia Regrowth	value
 app_score	Appetite Score	value
 arrival_type	Arrival Type	value
-att_score	Attitude Score	valu
+arthritis_types	Arthritis Types	value
+att_score	Attitude Score	value
 bcs_score	BCS Store	value	title
 behavior_types	Behavior Types	value
 blood_draw_reason	Blood Draw Reason	value
@@ -15,6 +17,7 @@ card_format	Card Format	value	title
 cage_type	Cage Type	value	title
 census_activity_status	Census Activity Status	value	title
 clinremarks_category	Clinremarks Category	value	title
+congenital_abnormalities	Congenital Abnormalities	value	title
 cost_center	Cost Center	value	title
 cost_type	Cost Type	value	title
 country	Country	value	title
@@ -22,19 +25,31 @@ country_category	Country Category	value	title
 data_category	Data Category Field Values	value
 death_reason	Death Reason	value
 delivery_state	Delivery State	value	title
+dental_disease	Dental Disease	value	title
+dental_trauma	Dental Trauma	value	title
+digit_amputation	Digit Amputation	value	title
+ear_types	Ear Types	value	title
 editable_lookups	List of UI editable lookup values	value
 esig_events	ESig Events	value	title
 euthanasia_type	Euthanasia Type	value	title
 exemption_category	Exemption Category	value	title
 expense_class	Expense Class	value	description
+fecal_score	Fecal Score	value	description
 fecal_smear_score	Fecal Smear Scores	value
+feed_assess_types	Feed Assessment Types	value
+gastro_types	Gastrointestinal Types	value
+genital_types	Genital Types	value
+hernia_types	Hernia Types	value
 housing_reason	Housing Reason	value
 hyd_score	Hyd Score	value
 id_history_type	Id History Type	value	title
 incision_score	Incision Score	value
 indoor_outdoor	Indoor/Outdoor	value
 keyword	Keyword	value	title
+lameness	Lameness	value	title
+mass_type	Mass Type	value	title
 mens_score	Mens Score	value
+musculoskeletal_types	Musculoskeletal Types	value
 necropsy_disposition_codes	Tissue Disposition Codes	value	title
 necropsy_exam_reason	Necropsy Reason	value	title
 necropsy_organ_appearance	Appearance	value	title
@@ -42,8 +57,11 @@ necropsy_organ_systems	Organ Systems	value	title
 necropsy_physical_condition	Physical Condition	value	title
 necropsy_specimen_condition	Specimen Condition	value	title
 necropsy_tissue	Tissues	value	title
+neurologic_types	Neurologic Types	value	title
 numeric_unit	Numeric Units	value	title
 observation_areas	Observation Areas	value
+ocular_problem	Ocular Problem	value
+preferences	Preferences	value
 pregnancy_result	Pregnancy Results	value
 procedure_category	Category of procedures	value
 problem_list_category	Problem List Category	value
@@ -56,10 +74,18 @@ questionnaire	Questionnaire	value	title
 regulatory_stress_levels	Regulatory Stress Levels	value	title
 req_order_state	Req Order State	value	title
 req_order_type	Req Order Type	value	title
+respiratory_types	Respiratory Types	value	title
 sib_score	SIB Score	value
+skin_problem	Skin Problem	value
 stool_score	Stool Score	value
+stool_types	Stool Types	value
+tb_obs_score	TB Obs Score	value
+temperament	Temperament	value	title
+trauma_size	Trauma Size	value
 turgor_score	Turgor Score	value
 termination_reason_codes	Termination Reason Codes Codes	value	title
 vendor_approval_code	Vendor Approval Code	value	title
 vendor_production_location	Vendor Production Location	value	title
 weight_ranges	Weight Ranges	value
+wound_score	Wound Score	value
+yesno	Yes/No Values	value
