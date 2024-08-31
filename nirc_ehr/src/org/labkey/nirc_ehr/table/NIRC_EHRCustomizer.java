@@ -883,4 +883,107 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         }
         return realTable;
     }
+
+    private void customizeTreatmentOrder(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("isOpen") == null && ti.getColumn("enddate") != null)
+        {
+            SQLFragment sql = new SQLFragment("(CASE " +
+                    " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".enddate IS NOT NULL AND " + ExprColumn.STR_TABLE_ALIAS + ".enddate <= {fn curdate()}) THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                    " ELSE " + ti.getSqlDialect().getBooleanTRUE() + " END)");
+
+            ExprColumn col = new ExprColumn(ti, "isOpen", sql, JdbcType.BOOLEAN, ti.getColumn("enddate"));
+            col.setLabel("Is Open");
+            ti.addColumn(col);
+        }
+
+        if (ti.getColumn("treatmentRecord") == null && ti.getColumn("objectid") != null)
+        {
+            WrappedColumn col = new WrappedColumn(ti.getColumn("objectid"), "treatmentRecord");
+            col.setLabel("Record Treatment");
+            col.setDisplayColumnFactory(new DisplayColumnFactory() {
+
+                @Override
+                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                {
+                    return new DataColumn(colInfo){
+
+                        @Override
+                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        {
+                            String objectid = (String)getBoundColumn().getValue(ctx);
+                            Date date = (Date)ctx.get("date");
+                            String caseid = (String)ctx.get("caseid");
+                            String category = (String)ctx.get("category");
+                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
+                                return;
+
+                            if (category.equals("Behavior"))
+                            {
+                                if (caseid != null)
+                                {
+                                    linkAction.addParameter("formType", "Behavior Rounds");
+                                    linkAction.addParameter("caseid", caseid);
+                                }
+                                else
+                                {
+                                    linkAction.addParameter("formType", "Bulk Behavior Entry");
+                                }
+                            }
+                            else
+                            {
+                                if (caseid != null)
+                                {
+                                    linkAction.addParameter("formType", "Clinical Cases");
+                                    linkAction.addParameter("caseid", caseid);
+                                }
+                                else
+                                {
+                                    linkAction.addParameter("formType", "medicationTreatment");
+                                }
+                            }
+
+                            linkAction.addParameter("treatmentid", objectid);
+                            linkAction.addParameter("scheduledDate", date.toString());
+
+                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:clinMedicationSchedule";
+                            linkAction.addParameter("returnUrl", returnUrl);
+
+                            String href = linkAction.toString();
+                            out.write(PageFlowUtil.link("Record Treatment").href(href).target("_blank").toString());
+                        }
+
+                        @Override
+                        public void addQueryFieldKeys(Set<FieldKey> keys)
+                        {
+                            super.addQueryFieldKeys(keys);
+                            keys.add(getBoundColumn().getFieldKey());
+                            keys.add(FieldKey.fromString("date"));
+                            keys.add(FieldKey.fromString("caseid"));
+                        }
+
+                        @Override
+                        public boolean isSortable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isFilterable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isEditable()
+                        {
+                            return false;
+                        }
+                    };
+                }
+            });
+            ti.addColumn(col);
+        }
+    }
 }
