@@ -54,6 +54,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                         dosage_units: row.dosage_units.value,
                         volume: row.volume.value,
                         vol_units: row.vol_units.value,
+                        performedby: row.performedby.value,
                         treatmentid: row.objectid.value
                     };
 
@@ -71,7 +72,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                     requiredVersion: 9.1,
                     schemaName: 'study',
                     queryName: 'treatment_order',
-                    columns: 'Id,meaning,code,qualifier,route,concentration,conc_units,amount,amount_units,dosage,dosage_units,volume,vol_units,remark,category,objectid',
+                    columns: 'Id,meaning,code,qualifier,route,concentration,conc_units,amount,amount_units,dosage,dosage_units,volume,vol_units,remark,category,performedby,objectid',
                     filterArray: [LABKEY.Filter.create('objectid', treatmentid, LABKEY.Filter.Types.EQUAL)],
                     scope: this,
                     success: onSuccess,
