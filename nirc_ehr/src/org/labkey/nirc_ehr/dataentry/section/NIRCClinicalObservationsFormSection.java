@@ -7,26 +7,36 @@ import java.util.List;
 public class NIRCClinicalObservationsFormSection extends BaseFormSection
 {
     public static final String LABEL = "Clinical Observations";
-    public static boolean useDefaultButtons = true;
+    private boolean _useDefaultButtons = true;
+    private boolean _autoPopulateDailyObs = true;
 
-    public NIRCClinicalObservationsFormSection(boolean useDefaultBtns)
+    public NIRCClinicalObservationsFormSection(boolean useDefaultBtns, boolean autoPopulateDailyObs, boolean initCollapsed)
     {
-        super("study", "clinical_observations", LABEL, "ehr-clinicalobservationgridpanel", true, false, true);
+        super("study", "clinical_observations", LABEL, "ehr-clinicalobservationgridpanel", true, initCollapsed, true);
 
-        useDefaultButtons = useDefaultBtns;
+        _useDefaultButtons = useDefaultBtns;
+        _autoPopulateDailyObs = autoPopulateDailyObs;
         addClientDependency(ClientDependency.supplierFromPath("ehr/plugin/ClinicalObservationsCellEditing.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/data/ClinicalObservationsClientStore.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/grid/ClinicalObservationGridPanel.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/clinicalObsGridButton.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/addClinicalObsButton.js"));
         setClientStoreClass("EHR.data.ClinicalObservationsClientStore");
     }
     @Override
     public List<String> getTbarButtons()
     {
         List<String> defaults = super.getTbarButtons();
-        defaults.add("ADDREQUIREDCLINICALOBS");
 
-        if (!useDefaultButtons)
+        if (_autoPopulateDailyObs)
+        {
+            defaults.add("NIRC_AUTO_POPULATE_DAILY_OBS");
+        }
+        else {
+            defaults.add("NIRC_DAILY_CLINICAL_OBS");
+        }
+
+        if (!_useDefaultButtons)
         {
             defaults.clear();
             defaults.add("ADDRECORD");
@@ -41,7 +51,7 @@ public class NIRCClinicalObservationsFormSection extends BaseFormSection
     public List<String> getTbarMoreActionButtons()
     {
         List<String> moreActionButtons = super.getTbarMoreActionButtons();
-        if (!useDefaultButtons)
+        if (!_useDefaultButtons)
         {
             moreActionButtons.clear();
         }

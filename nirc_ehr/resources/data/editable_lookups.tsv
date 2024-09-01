@@ -99,6 +99,7 @@ temperament	Behavior	Temperament	Behavior observation fixed values.
 termination_reason_codes	Clinical	Termination Reason Codes	Clinical observation fixed values.
 trauma_size	Clinical	Trauma Size	Clinical observation fixed values.
 treatment_frequency	Clinical	Treatment Frequency	Used in treatment and drug datasets.
+treatment_frequency_times	Clinical	Treatment Frequency Times	Used in treatment, drug and observation datasets.
 turgor_score	Clinical	Turgor Score	Clinical observation fixed values.
 vendor_approval_code	Colony Management	Vendor Approval Code
 vendor_production_location	Colony Management	Vendor Production Location
