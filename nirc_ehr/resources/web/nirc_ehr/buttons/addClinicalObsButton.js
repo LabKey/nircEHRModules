@@ -2,7 +2,6 @@
 EHR.DataEntryUtils.registerGridButton('NIRC_DAILY_CLINICAL_OBS', function(config){
     return Ext4.Object.merge({
         text: 'Daily Observations',
-        // xtype: 'button',
         tooltip: 'Click to delete selected rows',
         handler: function(btn) {
             LABKEY.Query.selectRows({
