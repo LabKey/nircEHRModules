@@ -1,0 +1,6 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <filters>
+        <filter column="isOpen" operator="eq" value="true"/>
+        <filter column="category" operator="neq" value="Surgery"/>
+    </filters>
+</customView>
