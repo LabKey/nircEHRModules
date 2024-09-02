@@ -1,6 +1,6 @@
 EHR.DataEntryUtils.registerGridButton('NIRC_AUTO_POPULATE_DAILY_OBS', function(config){
     return Ext4.Object.merge({
-        text: 'Add Required Clinical Obs',
+        text: 'Auto Populate Clinical Obs',
         xtype: 'button',
         hidden: true,
         listeners: {
