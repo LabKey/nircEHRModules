@@ -24,10 +24,9 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCVitalsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
-import org.labkey.nirc_ehr.security.NIRCEHRVetTechRole;
 
 import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 
 public class NIRCCasesFormType extends NIRCBaseTaskFormType
 {
@@ -45,9 +44,12 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
-                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks"),
+                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks",
+                        ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
+                        ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(true, "cases"),
-                new NIRCClinicalObservationsFormSection(),
+                new NIRCClinicalObservationsFormSection(true, false, true),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
                 new NIRCTreatmentOrderFormSection(true, "cases"),
                 new NIRCWeightFormSection(true, false, true, "cases"),
@@ -73,6 +75,8 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 ((AbstractFormSection)s).setAllowBulkAdd(false);
             }
         }
+        setStoreCollectionClass("NIRC_EHR.data.CaseStoreCollection");
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/CaseStoreCollection.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
@@ -84,6 +88,9 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/NIRCExamCasesDataEntryPanel.js"));
         setJavascriptClass("NIRC_EHR.panel.ExamCasesDataEntryPanel");
+
+        // Needed for case and scheduled date/time when navigating from treatment or observation schedule
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/treatmentSubmit.js"));
     }
 
     @Override
@@ -93,5 +100,16 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
             return false;
 
         return super.canInsert();
+    }
+
+    @Override
+    protected List<String> getButtonConfigs()
+    {
+        List<String> ret = super.getButtonConfigs();
+
+        ret.remove("SUBMIT");
+        ret.add("NIRC_TREATMENT_SUBMIT");
+
+        return ret;
     }
 }

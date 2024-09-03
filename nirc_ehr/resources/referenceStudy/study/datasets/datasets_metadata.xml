@@ -371,8 +371,16 @@
             <column columnName="hx">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="s">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="o">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="a">
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="p">
-                <columnTitle>Plan</columnTitle>
                 <datatype>varchar</datatype>
             </column>
             <column columnName="vetreview">
@@ -1011,6 +1019,12 @@
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
             </column>
+            <column columnName="scheduledDate">
+                <datatype>timestamp</datatype>
+            </column>
+            <column columnName="treatmentid">
+                <datatype>varchar</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="cases" tableDbType="TABLE">
@@ -1080,6 +1094,9 @@
             <column columnName="caseid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="formCasesLink">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>

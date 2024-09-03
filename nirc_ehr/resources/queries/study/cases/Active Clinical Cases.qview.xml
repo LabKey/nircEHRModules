@@ -2,13 +2,23 @@
     <columns>
         <column name="caseCheck"/>
         <column name="Id"/>
+        <column name="Id/curLocation/cage">
+            <properties>
+                <property name="columnTitle" value="Location"/>
+            </properties>
+        </column>
+        <column name="Id/activeProjectAssignments/project"/>
+        <column name="Id/activeProtocolAssignments/protocolDisplayName">
+            <properties>
+                <property name="columnTitle" value="Protocol"/>
+            </properties>
+        </column>
         <column name="date"/>
         <column name="reviewdate"/>
         <column name="enddate"/>
         <column name="Id/demographics/mostRecentHx"/>
         <column name="problemCategory"/>
         <column name="problemSubcategory"/>
-        <column name="Id/curLocation/daysInRoom"/>
         <column name="openRemark"/>
         <column name="plan"/>
         <column name="closeRemark"/>

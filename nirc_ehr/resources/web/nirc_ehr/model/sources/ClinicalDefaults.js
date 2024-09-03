@@ -37,6 +37,15 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                     keyColumn: 'UserId',
                     displayColumn: 'DisplayName'
                 }
+            },
+            scheduledDate: {
+                columnConfig: {
+                    width: 130,
+                    fixed: true
+                },
+            },
+            treatmentId: {
+                hidden: true
             }
         },
         'study.prc': {
@@ -45,9 +54,11 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                 hidden: true
             },
             // procedure data is not categorized, so not using procedure_category based selection
-            // procedure: {
-            //
-            // }
+            procedure: {
+                columnConfig: {
+                    width: 250
+                }
+            }
         },
         'study.clinremarks': {
             category: {
@@ -135,6 +146,9 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                         autoLoad: true
                     }
                 }
+            },
+            formCasesLink: {
+                xtype: 'nirc_ehr-editCases'
             }
         },
         'study.clinremarks': {
@@ -197,10 +211,6 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                         autoLoad: true
                     }
                 }
-            },
-            category: {
-                defaultValue: 'Clinical',
-                hidden: true
             }
         },
         'study.vitals': {
