@@ -10,6 +10,26 @@
                     <column columnName="hx">
                         <columnTitle>History</columnTitle>
                     </column>
+                    <column columnName="s">
+                        <columnTitle>Subjective</columnTitle>
+                        <inputType>textarea</inputType>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
+                    </column>
+                    <column columnName="o">
+                        <columnTitle>Objective</columnTitle>
+                        <inputType>textarea</inputType>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
+                    </column>
+                    <column columnName="a">
+                        <columnTitle>Assessment</columnTitle>
+                        <inputType>textarea</inputType>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
+                    </column>
+                    <column columnName="p">
+                        <columnTitle>Plan</columnTitle>
+                        <inputType>textarea</inputType>
+                        <facetingBehavior>ALWAYS_OFF</facetingBehavior>
+                    </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
@@ -19,11 +39,6 @@
                             <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
-                    <column columnName="p">
-                        <columnTitle>Plan</columnTitle>
-                        <inputType>textarea</inputType>
-                        <inputRows>5</inputRows>
-                    </column>
                     <column columnName="remark">
                         <inputType>textarea</inputType>
                         <inputRows>5</inputRows>
@@ -32,10 +47,16 @@
                         <columnTitle>Vet Review</columnTitle>
                         <inputType>textarea</inputType>
                         <inputRows>5</inputRows>
+                        <isHidden>true</isHidden>
                     </column>
                     <column columnName="vetreviewdate">
                         <columnTitle>Vet Review Date</columnTitle>
                         <formatString>Date</formatString>
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="dateFinalized">
+                        <formatString>Date</formatString>
+                        <isHidden>true</isHidden>
                     </column>
                 </columns>
             </table>

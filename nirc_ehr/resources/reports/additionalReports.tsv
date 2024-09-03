@@ -3,20 +3,20 @@ MHC	Genetics	query	MHC	TRUE		study	MHC				FALSE	FALSE		qcstate/publicdata	This r
 assignment	Colony Management	query	Protocol Assignment	TRUE		study	protocolAssignment				FALSE	FALSE		qcstate/publicdata	This report shows protocol assignments
 grossPathology	Pathology	query	Gross Pathology	TRUE		study	grossPathology				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
 tissueDisposition	Pathology	query	Tissue Disposition	TRUE		study	tissueDisposition				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
-obs	Clinical	query	Observations	TRUE		study	obs			date	FALSE	FALSE		qcstate/publicdata	This report displays observations for the selected animal
+clinical_observations	Clinical	query	Clinical Observations	TRUE		study	clinical_observations			date	FALSE	FALSE		qcstate/publicdata	This report displays clinical observations for the selected animal
 foster	Reproductive Management	query	Fostering	TRUE		study	foster				FALSE	FALSE		qcstate/publicdata	This is for animal fostering data
 projects	Colony Management	query	Project Assignment	TRUE		study	assignment				FALSE	FALSE		qcstate/publicdata	This is for project assignments
 chemistry	Clinical	query	Chemistry	TRUE		study	chemistryResults				FALSE	FALSE		qcstate/publicdata	This is for chemistry results
 alias	Colony Management	query	Aliases	true		study	demographicsAliases				false	false		qcstate/publicdata	This report shows the animal aliases
-activeTreatments	Clinical	query	Active Treatment Orders	true		study	activeTreatmentOrders				false	false		qcstate/publicdata	This report shows active treatment orders
+activeClinTreatmentOrders	Clinical	query	Active Medication Orders	true		study	treatment_order	Clinical Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
 allTreatments	Clinical	query	All Treatment Orders	true		study	treatment_order				false	false		qcstate/publicdata	This report shows all treatment orders
 FileRepository	General	js	File Repository	true		study	FileRepository				false	false		qcstate/publicdata	File Repository for uploading and viewing animal related files
 behaviorCases
 behaviorRemarks															
 bloodSchedule															
 cases	Clinical	query	Active Clinical Cases	true		study	cases	Active Clinical Cases		date	false	false		qcstate/publicdata	This displays active clinical cases
-clinMedicationSchedule															
-clinObsBehavior															
+clinMedicationSchedule	Daily Reports	js	Medication Schedule	true		study	clinMedicationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+clinObsBehavior
 dietSchedule															
 drug															
 incompleteTreatments															
