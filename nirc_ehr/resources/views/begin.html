@@ -155,7 +155,28 @@
                         items: [
                             {name: 'Active Clinical Cases', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:cases'},
                           ]
-                    }, {
+                    },
+                    {
+                        header: 'Medications/Observations',
+                        itemDefaults: {
+                            linkCls: 'none',
+                            style: 'font-weight: bold;'
+                        },
+                        items: [
+                            {name: 'Today\'s Medication Schedule', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:clinMedicationSchedule'},
+                            // {name: 'Today\'s Observation Schedule', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:observationSchedule'},
+                            {name: 'Active Clinical Medication Orders', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:activeClinTreatmentOrders'},
+                            // {name: 'Active Observation Orders', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:activeObservationOrders'},
+                        ]
+                    }
+                ]
+            });
+
+            let menuCfg3 = {
+                width: 330,
+                renderTo: 'ehrMenu3_' + webpart.wrapperDivId,
+                sections: [
+                    {
                         header: 'Pathology',
                         itemDefaults: {
                             linkCls: 'none',
@@ -167,23 +188,8 @@
                                 url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/query-executeQuery.view?schemaName=nirc_ehr&query.queryName=necropsyTasks'
                             },
                         ]
-                    }
-                ]
-            });
-
-            let menuCfg3 = {
-                width: 330,
-                renderTo: 'ehrMenu3_' + webpart.wrapperDivId,
-                sections: [{
-                    header: 'Misc',
-                    itemDefaults: {
-                        linkCls: 'none',
-                        style: 'font-weight: bold;'
                     },
-                    items: [
-                        { name: 'Compare Lists of Animals', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-utilities.view?' },
-                    ]
-                }, {
+                    {
                     header: 'Data Entry',
                     renderer: this.myTasksRenderer,
                     itemDefaults: {

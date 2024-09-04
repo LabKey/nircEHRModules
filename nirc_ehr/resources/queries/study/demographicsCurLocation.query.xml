@@ -16,6 +16,7 @@
                     </column>
                     <column columnName="room"/>
                     <column columnName="cage">
+                        <displayWidth>100</displayWidth>
                     </column>
                     <column columnName="cond">
                         <url>/query/executeQuery.view?schemaName=study&amp;

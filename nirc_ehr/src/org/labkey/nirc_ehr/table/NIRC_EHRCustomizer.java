@@ -1,7 +1,7 @@
 package org.labkey.nirc_ehr.table;
 
+import org.jetbrains.annotations.NotNull;
 import org.labkey.api.data.AbstractTableInfo;
-import org.labkey.api.data.BaseColumnInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.DataColumn;
@@ -15,7 +15,6 @@ import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ehr.EHRService;
-import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.ehr.security.EHRDataEntryPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
@@ -37,10 +36,12 @@ import org.labkey.api.study.StudyService;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
+import org.labkey.api.view.template.ClientDependency;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 public class NIRC_EHRCustomizer extends AbstractTableCustomizer
@@ -92,13 +93,41 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 addNecropsyReportLink(ti);
             }
-            else if (matches(ti, "study", "cases"))
+
+            if (matches(ti, "study", "cases"))
             {
                 customizeCases(ti);
             }
-            else if (matches(ti, "study", "demographics"))
+
+            if (matches(ti, "study", "demographics"))
             {
                 customizeDemographics(ti);
+            }
+
+            if (matches(ti, "study", "treatment_order"))
+            {
+                customizeTreatmentOrder(ti);
+            }
+            else if (matches(table, "study", "clinical_observations"))
+            {
+                customizeClinicalObservations((AbstractTableInfo) table);
+            }
+        }
+    }
+
+    private void customizeClinicalObservations(AbstractTableInfo ti)
+    {
+        var categoryCol = ti.getMutableColumn("category");
+        if (categoryCol != null)
+        {
+            UserSchema us = getUserSchema(ti, "ehr");
+            if (us != null)
+            {
+                categoryCol.setFk(QueryForeignKey
+                        .from(ti.getUserSchema(), ti.getContainerFilter())
+                        .schema(us)
+                        .to("observation_types", "value", "value")
+                        .raw(true));
             }
         }
     }
@@ -147,10 +176,108 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
     private void customizeCases(AbstractTableInfo ti)
     {
+        appendCaseHistoryCol(ti);
+
         if (ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
         {
             appendCaseCheckCol(ti, "caseCheck", "Case Update", "Case Update");
         }
+
+        if (null == ti.getColumn("objectid") || null == ti.getColumn("lsid") || null == ti.getColumn("enddate"))
+            return;
+
+        String isActive = "isActive";
+        ColumnInfo isActiveCol = ti.getColumn(isActive);
+        if (isActiveCol != null)
+        {
+            ti.removeColumn(isActiveCol);
+        }
+
+        SQLFragment sql = new SQLFragment("(CASE " +
+                " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".lsid) IS NULL THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".enddate IS NOT NULL AND " + ExprColumn.STR_TABLE_ALIAS + ".enddate <= {fn curdate()}) THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                " ELSE " + ti.getSqlDialect().getBooleanTRUE() + " END)");
+        ExprColumn newCol = new ExprColumn(ti, isActive, sql, JdbcType.BOOLEAN, ti.getColumn("lsid"), ti.getColumn("enddate"));
+        newCol.setLabel("Is Active?");
+        ti.addColumn(newCol);
+
+        String isOpen = "isOpen";
+        if (ti.getColumn(isOpen) == null)
+        {
+            SQLFragment sql2 = new SQLFragment("(CASE " +
+                    " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".lsid) IS NULL THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                    " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".enddate IS NOT NULL AND " + ExprColumn.STR_TABLE_ALIAS + ".enddate <= {fn curdate()}) THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                    " ELSE " + ti.getSqlDialect().getBooleanTRUE() + " END)");
+            ExprColumn newCol2 = new ExprColumn(ti, isOpen, sql2, JdbcType.BOOLEAN, ti.getColumn("lsid"), ti.getColumn("enddate"));
+            newCol2.setLabel("Is Open?");
+            newCol2.setDescription("Displays whether this case is still open, which will includes cases that have been closed for review");
+            ti.addColumn(newCol2);
+        }
+    }
+
+    private void appendCaseHistoryCol(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("caseHistory") != null)
+            return;
+
+        var ci = new WrappedColumn(ti.getColumn("Id"), "caseHistory");
+        ci.setDisplayColumnFactory(new DisplayColumnFactory()
+        {
+            @Override
+            public DisplayColumn createRenderer(final ColumnInfo colInfo)
+            {
+                return new DataColumn(colInfo){
+
+                    @Override
+                    public @NotNull Set<ClientDependency> getClientDependencies()
+                    {
+                        Set<ClientDependency> dependencies = super.getClientDependencies();
+                        dependencies.add(ClientDependency.fromPath("nirc_ehr/window/NIRCClinicalHistoryWindow.js"));
+                        dependencies.add(ClientDependency.fromPath("nirc_ehr/window/NIRCCaseHistoryWindow.js"));
+                        return dependencies;
+                    }
+
+                    @Override
+                    public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                    {
+                        String objectid = (String)ctx.get("objectid");
+                        String id = (String)getBoundColumn().getValue(ctx);
+
+                        out.write(PageFlowUtil.link("Show Case Hx").onClick("NIRC_EHR.window.CaseHistoryWindow.showCaseHistory(" + PageFlowUtil.jsString(objectid) + ", " + PageFlowUtil.jsString(id) + ", this)").toString());
+                    }
+
+                    @Override
+                    public void addQueryFieldKeys(Set<FieldKey> keys)
+                    {
+                        super.addQueryFieldKeys(keys);
+                        keys.add(FieldKey.fromString("objectid"));
+                        keys.add(getBoundColumn().getFieldKey());
+                    }
+
+                    @Override
+                    public boolean isSortable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isFilterable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isEditable()
+                    {
+                        return false;
+                    }
+                };
+            }
+        });
+        ci.setIsUnselectable(false);
+        ci.setLabel("Case History");
+
+        ti.addColumn(ci);
     }
 
     private void appendCaseCheckCol(AbstractTableInfo ti, String name, String linkLabel, String colLabel)
@@ -169,7 +296,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     @Override
                     public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
                     {
-                        String taskid = (String)ctx.get("taskid");
                         String category = (String)ctx.get("category");
                         ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                         if (category == null || category.equals("Clinical"))
@@ -180,7 +306,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("formType", "Clinical Cases");
                         }
 
-                        linkAction.addParameter("taskid", taskid);
+                        String caseId = (String)ctx.get("objectid");
+                        linkAction.addParameter("caseid", caseId);
                         String href = linkAction.toString();
                         out.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
                     }
@@ -189,7 +316,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     public void addQueryFieldKeys(Set<FieldKey> keys)
                     {
                         super.addQueryFieldKeys(keys);
-                        keys.add(FieldKey.fromString("taskid"));
+                        keys.add(FieldKey.fromString("objectid"));
                         keys.add(FieldKey.fromString("category"));
                     }
 
@@ -575,10 +702,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 col.setHidden(true);
             }
-            if ("date".equalsIgnoreCase(col.getName()) && !ti.getName().equals("drug"))
-            {
-                col.setFormat("Date");
-            }
             if ("enddate".equalsIgnoreCase(col.getName()) && !ti.getName().equals("encounters"))
             {
                 col.setFormat("Date");
@@ -696,12 +819,19 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             col.setURL(DetailsURL.fromString("/query/executeQuery.view?schemaName=ehr_lookups&queryName=flag_values&query.Id~eq=${Id}", ds.getContainerContext()));
             ds.addColumn(col);
         }
-        if (ds.getColumn("demographicsActiveAssignment") == null)
+        if (ds.getColumn("demographicsActiveProtocolAssignment") == null)
         {
-            var col21 = getWrappedCol(us, ds, "activeAssignments", "demographicsActiveAssignment", "Id", "Id");
-            col21.setLabel("Active Protocol Assignments");
-            col21.setDescription("Shows all protocols to which the animal is actively assigned on the current date");
-            ds.addColumn(col21);
+            var protAssignment = getWrappedCol(us, ds, "activeProtocolAssignments", "demographicsActiveProtocolAssignment", "Id", "Id");
+            protAssignment.setLabel("Active Protocol Assignments");
+            protAssignment.setDescription("Shows all protocols to which the animal is actively assigned on the current date");
+            ds.addColumn(protAssignment);
+        }
+        if (ds.getColumn("demographicsActiveProjectAssignment") == null)
+        {
+            var prjAssignment = getWrappedCol(us, ds, "activeProjectAssignments", "demographicsActiveProjectAssignment", "Id", "Id");
+            prjAssignment.setLabel("Active Project Assignments");
+            prjAssignment.setDescription("Shows all project to which the animal is actively assigned on the current date");
+            ds.addColumn(prjAssignment);
         }
         if (ds.getColumn("alias") == null)
         {
@@ -752,5 +882,108 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             }
         }
         return realTable;
+    }
+
+    private void customizeTreatmentOrder(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("isOpen") == null && ti.getColumn("enddate") != null)
+        {
+            SQLFragment sql = new SQLFragment("(CASE " +
+                    " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".enddate IS NOT NULL AND " + ExprColumn.STR_TABLE_ALIAS + ".enddate <= {fn curdate()}) THEN " + ti.getSqlDialect().getBooleanFALSE() +
+                    " ELSE " + ti.getSqlDialect().getBooleanTRUE() + " END)");
+
+            ExprColumn col = new ExprColumn(ti, "isOpen", sql, JdbcType.BOOLEAN, ti.getColumn("enddate"));
+            col.setLabel("Is Open");
+            ti.addColumn(col);
+        }
+
+        if (ti.getColumn("treatmentRecord") == null && ti.getColumn("objectid") != null)
+        {
+            WrappedColumn col = new WrappedColumn(ti.getColumn("objectid"), "treatmentRecord");
+            col.setLabel("Record Treatment");
+            col.setDisplayColumnFactory(new DisplayColumnFactory() {
+
+                @Override
+                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                {
+                    return new DataColumn(colInfo){
+
+                        @Override
+                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        {
+                            String objectid = (String)getBoundColumn().getValue(ctx);
+                            Date date = (Date)ctx.get("date");
+                            String caseid = (String)ctx.get("caseid");
+                            String category = (String)ctx.get("category");
+                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
+                                return;
+
+                            if (category.equals("Behavior"))
+                            {
+                                if (caseid != null)
+                                {
+                                    linkAction.addParameter("formType", "Behavior Rounds");
+                                    linkAction.addParameter("caseid", caseid);
+                                }
+                                else
+                                {
+                                    linkAction.addParameter("formType", "Bulk Behavior Entry");
+                                }
+                            }
+                            else
+                            {
+                                if (caseid != null)
+                                {
+                                    linkAction.addParameter("formType", "Clinical Cases");
+                                    linkAction.addParameter("caseid", caseid);
+                                }
+                                else
+                                {
+                                    linkAction.addParameter("formType", "medicationTreatment");
+                                }
+                            }
+
+                            linkAction.addParameter("treatmentid", objectid);
+                            linkAction.addParameter("scheduledDate", date.toString());
+
+                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:clinMedicationSchedule";
+                            linkAction.addParameter("returnUrl", returnUrl);
+
+                            String href = linkAction.toString();
+                            out.write(PageFlowUtil.link("Record Treatment").href(href).target("_blank").toString());
+                        }
+
+                        @Override
+                        public void addQueryFieldKeys(Set<FieldKey> keys)
+                        {
+                            super.addQueryFieldKeys(keys);
+                            keys.add(getBoundColumn().getFieldKey());
+                            keys.add(FieldKey.fromString("date"));
+                            keys.add(FieldKey.fromString("caseid"));
+                        }
+
+                        @Override
+                        public boolean isSortable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isFilterable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isEditable()
+                        {
+                            return false;
+                        }
+                    };
+                }
+            });
+            ti.addColumn(col);
+        }
     }
 }

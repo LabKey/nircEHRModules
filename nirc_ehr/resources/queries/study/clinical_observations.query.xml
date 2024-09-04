@@ -1,0 +1,43 @@
+    <query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="clinical_observations" tableDbType="TABLE" useColumnOrder="true">
+                <tableUrl />
+                <insertUrl />
+                <importUrl />
+                <updateUrl />
+                <deleteUrl />
+                <columns>
+                    <column columnName="Id">
+                    </column>
+                    <column columnName="date">
+                    </column>
+                    <column columnName="category">
+                        <columnTitle>Category</columnTitle>
+                    </column>
+                    <column columnName="area">
+                        <columnTitle>Area</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>observation_areas</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="observation">
+                        <columnTitle>Observation/Score</columnTitle>
+                    </column>
+                    <column columnName="remark">
+                        <columnTitle>Remark</columnTitle>
+                    </column>
+                    <column columnName="caseId">
+                        <columnTitle>Case</columnTitle>
+                    </column>
+                    <column columnName="performedBy">
+                        <columnTitle>Performed By</columnTitle>
+                        <nullable>false</nullable>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>
