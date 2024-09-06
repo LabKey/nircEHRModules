@@ -17,6 +17,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCCasesFormPanelSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalRemarksFormPanelSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCHousingFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
@@ -50,6 +51,7 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(true, "cases"),
                 new NIRCClinicalObservationsFormSection(true, false, true),
+                new NIRCObservationOrdersFormSection(true, false, true),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
                 new NIRCTreatmentOrderFormSection(true, "cases"),
                 new NIRCWeightFormSection(true, false, true, "cases"),

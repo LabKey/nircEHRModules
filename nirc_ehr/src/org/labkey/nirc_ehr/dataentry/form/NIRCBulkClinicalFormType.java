@@ -10,6 +10,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCBloodDrawFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalRemarksFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
@@ -35,6 +36,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(),
                 new NIRCClinicalObservationsFormSection(true, false, true),
+                new NIRCObservationOrdersFormSection(true, false, true),
                 new NIRCTreatmentGivenFormSection(),
                 new NIRCTreatmentOrderFormSection(),
                 new NIRCWeightFormSection(true, true),
