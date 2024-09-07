@@ -21,7 +21,7 @@ public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
         super(ctx, owner, NAME, NAME, "Clinical", Arrays.asList(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCClinicalObservationsFormSection(true, true, false)
+                new NIRCClinicalObservationsFormSection(true, false)
         ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));

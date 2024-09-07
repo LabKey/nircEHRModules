@@ -1,0 +1,17 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="observationRecord"/>
+        <column name="Id"/>
+        <column name="Id/Demographics/species"/>
+        <column name="Id/curLocation/room"/>
+        <column name="Id/curLocation/cage"/>
+        <column name="scheduledDate"/>
+        <column name="observations"/>
+        <column name="status"/>
+    </columns>
+    <sorts>
+        <sort column="scheduledDate"/>
+        <sort column="Id/curLocation/room"/>
+        <sort column="Id/curLocation/cage"/>
+    </sorts>
+</customView>

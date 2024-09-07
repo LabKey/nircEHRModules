@@ -35,8 +35,8 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(),
-                new NIRCClinicalObservationsFormSection(true, false, true),
-                new NIRCObservationOrdersFormSection(true, false, true),
+                new NIRCClinicalObservationsFormSection(false, null),
+                new NIRCObservationOrdersFormSection(false, null),
                 new NIRCTreatmentGivenFormSection(),
                 new NIRCTreatmentOrderFormSection(),
                 new NIRCWeightFormSection(true, true),
@@ -44,6 +44,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
                 new NIRCBloodDrawFormSection(true, true, true)
         ));
 
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BulkClinical.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
@@ -51,6 +52,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
 
         for (FormSection s : getFormSections())
         {
+            s.addConfigSource("ClinicalDefaults");
             s.addConfigSource("BulkClinical");
             s.addConfigSource("TreatmentSchedule");
         };

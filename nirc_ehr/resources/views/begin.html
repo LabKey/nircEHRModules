@@ -147,7 +147,7 @@
                 renderTo: 'ehrMenu2_' + webpart.wrapperDivId,
                 sections: [
                     {
-                        header: 'Daily Reports',
+                        header: 'Cases',
                         itemDefaults: {
                             linkCls: 'none',
                             style: 'font-weight: bold;'
@@ -157,16 +157,25 @@
                           ]
                     },
                     {
-                        header: 'Medications/Observations',
+                        header: 'Medications and Treatments',
                         itemDefaults: {
                             linkCls: 'none',
                             style: 'font-weight: bold;'
                         },
                         items: [
-                            {name: 'Today\'s Medication Schedule', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:clinMedicationSchedule'},
-                            // {name: 'Today\'s Observation Schedule', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:observationSchedule'},
+                            {name: 'Today\'s Medication/Treatment Schedule', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:clinMedicationSchedule'},
                             {name: 'Active Clinical Medication Orders', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:activeClinTreatmentOrders'},
-                            // {name: 'Active Observation Orders', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:activeObservationOrders'},
+                        ]
+                    },
+                    {
+                        header: 'Observations',
+                        itemDefaults: {
+                            linkCls: 'none',
+                            style: 'font-weight: bold;'
+                        },
+                        items: [
+                            {name: 'Today\'s Observation Schedule', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:observationSchedule'},
+                            {name: 'Active Observation Orders', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:activeObservationOrders'},
                         ]
                     }
                 ]

@@ -108,7 +108,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 customizeTreatmentOrder(ti);
             }
-            else if (matches(table, "study", "clinical_observations"))
+
+            if (matches(table, "study", "clinical_observations") || matches(ti, "study", "observation_order"))
             {
                 customizeClinicalObservations((AbstractTableInfo) table);
             }

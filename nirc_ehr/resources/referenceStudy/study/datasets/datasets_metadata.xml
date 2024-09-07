@@ -334,6 +334,9 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
+            <column columnName="scheduledDate">
+                <datatype>timestamp</datatype>
+            </column>
             <column columnName="category">
                 <columnTitle>Type</columnTitle>
                 <datatype>varchar</datatype>
@@ -347,6 +350,9 @@
             <column columnName="caseid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="type">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>

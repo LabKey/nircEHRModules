@@ -175,5 +175,42 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 }
             }
         },
+        'study.observation_order': {
+            category: {
+                allowBlank: false,
+                editorConfig: {
+                    plugins: [Ext4.create('LDK.plugin.UserEditableCombo', {
+                        allowChooseOther: false
+                    })]
+                },
+                lookup: {
+                    columns: 'value,description'
+                },
+                columnConfig: {
+                    width: 200
+                }
+            },
+            area: {
+                defaultValue: 'N/A',
+                columnConfig: {
+                    width: 200
+                }
+            },
+            observation: {
+                columnConfig: {
+                    width: 200
+                }
+            },
+            remark: {
+                columnConfig: {
+                    width: 300
+                }
+            },
+            frequency: {
+                columnConfig: {
+                    width: 180
+                }
+            }
+        }
     }
 });
