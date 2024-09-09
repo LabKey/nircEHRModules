@@ -209,7 +209,9 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             frequency: {
                 columnConfig: {
                     width: 180
-                }
+                },
+                nullable: false,
+                allowBlank: true
             }
         }
     }

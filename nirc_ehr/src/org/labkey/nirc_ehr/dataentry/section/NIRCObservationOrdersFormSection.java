@@ -48,7 +48,7 @@ public class NIRCObservationOrdersFormSection extends BaseFormSection
             defaults.add("NIRC_AUTO_POPULATE_DAILY_OBS");
         }
         else {
-            defaults.add("NIRC_DAILY_CLINICAL_OBS");
+            defaults.add("NIRC_DAILY_CLINICAL_OBS_ORDERS");
         }
 
         return defaults;

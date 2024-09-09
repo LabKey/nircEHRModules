@@ -87,7 +87,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 addNecropsyReportLink(ti);
                 addNecropsyEnterDataLink(ti);
             }
-            else if (matches(ti, "study", "necropsy") ||
+
+            if (matches(ti, "study", "necropsy") ||
                     matches(ti, "study", "grossPathology") ||
                     matches(ti, "study", "tissueDisposition"))
             {
@@ -112,6 +113,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             if (matches(table, "study", "clinical_observations") || matches(ti, "study", "observation_order"))
             {
                 customizeClinicalObservations((AbstractTableInfo) table);
+            }
+
+            if (matches(ti, "study", "observationSchedule"))
+            {
+                customizeObservationSchedule(ti);
             }
         }
     }
@@ -936,7 +942,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             {
                                 if (caseid != null)
                                 {
-                                    linkAction.addParameter("formType", "Clinical Cases");
+                                    linkAction.addParameter("formType", "Clinical Rounds");
                                     linkAction.addParameter("caseid", caseid);
                                 }
                                 else
@@ -962,6 +968,111 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             keys.add(getBoundColumn().getFieldKey());
                             keys.add(FieldKey.fromString("date"));
                             keys.add(FieldKey.fromString("caseid"));
+                        }
+
+                        @Override
+                        public boolean isSortable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isFilterable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isEditable()
+                        {
+                            return false;
+                        }
+                    };
+                }
+            });
+            ti.addColumn(col);
+        }
+    }
+
+    private void customizeObservationSchedule(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("observationRecord") == null && ti.getColumn("taskid") != null)
+        {
+            WrappedColumn col = new WrappedColumn(ti.getColumn("taskid"), "observationRecord");
+            col.setLabel("Record Observations");
+            col.setDisplayColumnFactory(new DisplayColumnFactory() {
+
+                @Override
+                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                {
+                    return new DataColumn(colInfo){
+
+                        @Override
+                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        {
+                            String taskid = (String)getBoundColumn().getValue(ctx);
+                            Date date = (Date)ctx.get("scheduledDate");
+                            String caseid = (String)ctx.get("caseid");
+                            String category = (String)ctx.get("type");
+                            String observations = (String)ctx.get("observations");
+                            String id = (String)ctx.get("id");
+                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
+                                return;
+
+                            if ("Behavior".equals(category))
+                            {
+                                if (caseid != null)
+                                {
+                                    linkAction.addParameter("formType", "Behavior Rounds");
+                                    linkAction.addParameter("caseid", caseid);
+                                }
+                                else
+                                {
+                                    linkAction.addParameter("formType", "Bulk Behavior Entry");
+                                }
+                            }
+                            else if ("Surgery".equals(category))
+                            {
+                                linkAction.addParameter("formType", "Surgery Rounds");
+                                linkAction.addParameter("caseid", caseid);
+                            }
+                            else
+                            {
+                                if (caseid != null)
+                                {
+                                    linkAction.addParameter("formType", "Clinical Rounds");
+                                    linkAction.addParameter("caseid", caseid);
+                                }
+                                else
+                                {
+                                    linkAction.addParameter("formType", "Bulk Clinical Entry");
+                                }
+                            }
+
+                            linkAction.addParameter("id", id);
+                            linkAction.addParameter("obsTask", taskid);
+                            linkAction.addParameter("observations", observations);
+                            linkAction.addParameter("scheduledDate", date.toString());
+
+                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:observationSchedule";
+                            linkAction.addParameter("returnUrl", returnUrl);
+
+                            String href = linkAction.toString();
+                            out.write(PageFlowUtil.link("Record Observations").href(href).target("_blank").toString());
+                        }
+
+                        @Override
+                        public void addQueryFieldKeys(Set<FieldKey> keys)
+                        {
+                            super.addQueryFieldKeys(keys);
+                            keys.add(getBoundColumn().getFieldKey());
+                            keys.add(FieldKey.fromString("taskid"));
+                            keys.add(FieldKey.fromString("caseid"));
+                            keys.add(FieldKey.fromString("id"));
+                            keys.add(FieldKey.fromString("observations"));
+                            keys.add(FieldKey.fromString("scheduledDate"));
+                            keys.add(FieldKey.fromString("type"));
                         }
 
                         @Override
