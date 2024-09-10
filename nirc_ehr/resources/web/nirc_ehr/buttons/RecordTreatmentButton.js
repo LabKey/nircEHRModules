@@ -15,10 +15,10 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                 fieldLabel: 'Performed By',
                 width: 350,
                 labelWidth: 100,
-                value: LABKEY.Security.currentUser.displayName,
+                value: LABKEY.Security.currentUser.id,
                 itemId: 'performedBy',
                 displayField: 'DisplayName',
-                valueField: 'DisplayName',
+                valueField: 'UserId',
                 queryMode: 'local',
                 forceSelection: true,
                 matchFieldWidth: false,
@@ -65,13 +65,14 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
         let windDate = win.down('#dateField').getValue();
         let performedBy = win.down('#performedBy').getValue();
         const selectedRows = dataRegion.getChecked();
+        dataRegion.clearSelected();
         const objectIds = selectedRows.map(row => row.split('-pkSeparator-')[0]);
         LABKEY.Query.selectRows({
             schemaName: 'study',
             queryName: 'treatment_order',
             filterArray: [LABKEY.Filter.create('objectid', objectIds.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
             scope: this,
-            columns: 'Id,objectid,code,reason,route,amount,amount_units,concentration,volume,vol_units',
+            columns: 'Id,objectid,code,reason,route,amount,amount_units,concentration,volume,vol_units,conc_units,dosage,dosage_units',
             success: function (data) {
                 let rowsToInsert = [];
                 Ext4.each(data.rows, function(row) {
@@ -95,6 +96,9 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                                 amount: row.amount,
                                 amount_units: row.amount_units,
                                 concentration: row.concentration,
+                                conc_units: row.conc_units,
+                                dosage: row.dosage,
+                                dosage_units: row.dosage_units,
                                 volume: row.volume,
                                 vol_units: row.vol_units,
                                 outcome: 'Normal'
