@@ -5,6 +5,7 @@ import org.labkey.api.data.Results;
 import org.labkey.api.ehr.history.AbstractDataSource;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
 
@@ -40,9 +41,9 @@ public class DrugAdminDataSource extends AbstractDataSource
 
     private void addRow(StringBuilder sb, String displayLabel, String value)
     {
-        sb.append(displayLabel);
+        sb.append(PageFlowUtil.filter(displayLabel));
         sb.append(": ");
-        sb.append(value);
+        sb.append(PageFlowUtil.filter(value));
         sb.append(" ");
     }
 }
