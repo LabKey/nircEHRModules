@@ -14,15 +14,31 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                 },
             },
             performedby: {
-                allowBlank: false,
-                defaultValue: LABKEY.Security.currentUser.id.toString()
-            }
+                editorConfig: {
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'core',
+                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                        autoLoad: true
+                    }
+                },
+                defaultValue: LABKEY.Security.currentUser.id.toString(),
+                allowBlank: false
+            },
         },
         'study.necropsy': {
             performedby: {
                 hidden: false,
                 allowBlank: true,
-                defaultValue: LABKEY.Security.currentUser.id.toString()
+                defaultValue: LABKEY.Security.currentUser.id.toString(),
+                editorConfig: {
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'core',
+                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                        autoLoad: true
+                    }
+                }
             },
             necropsyWeight: {
                 label: 'Weight (kg)'
