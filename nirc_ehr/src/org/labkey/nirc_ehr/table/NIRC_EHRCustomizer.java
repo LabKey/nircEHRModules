@@ -677,7 +677,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 if (us != null)
                 {
                     col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
-                            .table("PrincipalsWithoutAdmin")
+                            .table("users")
                             .key("UserId")
                             .display("DisplayName")));
                 }
