@@ -36,6 +36,9 @@
                         <columnTitle>Performed By</columnTitle>
                         <nullable>false</nullable>
                     </column>
+                    <column columnName="scheduledDate">
+                        <columnTitle>Scheduled Date</columnTitle>
+                    </column>
                 </columns>
             </table>
         </tables>

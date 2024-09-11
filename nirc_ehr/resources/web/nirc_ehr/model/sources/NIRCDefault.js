@@ -23,7 +23,17 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             columnConfig: {
                 width: 160
             }
-        }
+        },
+        scheduleddate: {
+            header: 'Scheduled Date/Time',
+            label: 'Scheduled Date/Time',
+            hidden: false,
+            userEditable: false,
+            nullable: true,
+            columnConfig: {
+                width: 180
+            }
+        },
     },
     byQuery: {
         'study.housing': {
@@ -89,7 +99,11 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             category: {
                 defaultValue: 'Clinical',
                 hidden: true
-            }
+            },
+            treatmentid: {
+                hidden: true,
+                nullable: true
+            },
         },
     }
 });
