@@ -606,7 +606,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         //Fill out Clinical Case section with Id, Date, Open Remark
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
-        setFormElement(Locator.textarea("p"), "Case plan");
+        setFormElement(Locator.textarea("plan"), "Case plan");
         setFormElement(Locator.name("Id"), animalId);
         setFormElement(Locator.name("date"), LocalDateTime.now().minusDays(6).format(_dateFormat));
         Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
