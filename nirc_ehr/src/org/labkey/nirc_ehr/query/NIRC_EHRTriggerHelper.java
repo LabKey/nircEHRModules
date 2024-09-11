@@ -4,7 +4,6 @@ import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
@@ -19,7 +18,6 @@ import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
-import org.labkey.api.exp.api.ExperimentService;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.DuplicateKeyException;
@@ -574,6 +572,56 @@ public class NIRC_EHRTriggerHelper
         if (_container.hasPermission(_user, EHRVeterinarianPermission.class))
             return true;
         return false;
+    }
+
+    public void ensureDailyClinicalObservationOrders(String id, String caseid, String qcstate) throws SQLException
+    {
+        TableInfo ti = getTableInfo("study", "observation_order");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
+//        SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), String.join(";", NIRC_EHRManager.DAILY_CLINICAL_OBS), CompareType.IN);
+        filter.addCondition(FieldKey.fromString("caseid"), caseid);
+        filter.addCondition(FieldKey.fromParts("frequency", "meaning"), "SID");
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("category","frequency"), filter, null);
+
+        List<String> missing = new ArrayList<>(NIRC_EHRManager.DAILY_CLINICAL_OBS);
+        ts.forEach(row -> {
+            if (row.getString("category") != null)
+                missing.remove(row.getString("category"));
+        });
+
+        if (!missing.isEmpty())
+        {
+            TableInfo freqTi = getTableInfo("ehr_lookups", "treatment_frequency");
+            filter = new SimpleFilter(FieldKey.fromString("meaning"), "SID");
+            ts = new TableSelector(freqTi, PageFlowUtil.set("rowid"), filter, null);
+            try
+            {
+                int sidRowid = ts.getObject(Integer.class);
+
+                List<Map<String, Object>> rows = new ArrayList<>();
+                for (String category : missing)
+                {
+                    Map<String, Object> row = new CaseInsensitiveHashMap<>();
+                    row.put("category", category);
+                    row.put("frequency", sidRowid);
+                    row.put("caseid", caseid);
+                    row.put("date", new Date());
+                    row.put("Id", id);
+                    row.put("qcstate", qcstate);
+                    rows.add(row);
+                }
+
+                BatchValidationException errors = new BatchValidationException();
+                ti.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+                if (errors.hasErrors())
+                    throw errors;
+            }
+            catch (Exception e)
+            {
+                _log.error("Error adding daily clinical observation orders", e);
+            }
+        }
+
     }
 
     //Add clinical observations to all open cases for an animal so users don't need to add the same observation to each case individually

@@ -37,6 +37,7 @@ import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
 import org.labkey.api.view.template.ClientDependency;
+import org.labkey.nirc_ehr.NIRC_EHRManager;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -996,7 +997,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
     private void customizeObservationSchedule(AbstractTableInfo ti)
     {
-        if (ti.getColumn("observationRecord") == null && ti.getColumn("taskid") != null)
+        if (ti.getColumn("observationRecord") == null )
         {
             WrappedColumn col = new WrappedColumn(ti.getColumn("taskid"), "observationRecord");
             col.setLabel("Record Observations");
@@ -1016,45 +1017,53 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             String category = (String)ctx.get("type");
                             String observations = (String)ctx.get("observations");
                             String id = (String)ctx.get("id");
+
                             ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
                                 return;
 
-                            if ("Behavior".equals(category))
+                            if (NIRC_EHRManager.DAILY_CLINICAL_OBS_TITLE.equals(observations))
                             {
-                                if (caseid != null)
-                                {
-                                    linkAction.addParameter("formType", "Behavior Rounds");
-                                    linkAction.addParameter("caseid", caseid);
-                                }
-                                else
-                                {
-                                    linkAction.addParameter("formType", "Bulk Behavior Entry");
-                                }
-                            }
-                            else if ("Surgery".equals(category))
-                            {
-                                linkAction.addParameter("formType", "Surgery Rounds");
-                                linkAction.addParameter("caseid", caseid);
+                                linkAction.addParameter("formType", "Clinical Observations");
+                                linkAction.addParameter("id", id);
                             }
                             else
                             {
-                                if (caseid != null)
+                                if ("Behavior".equals(category))
                                 {
-                                    linkAction.addParameter("formType", "Clinical Rounds");
+                                    if (caseid != null)
+                                    {
+                                        linkAction.addParameter("formType", "Behavior Rounds");
+                                        linkAction.addParameter("caseid", caseid);
+                                    }
+                                    else
+                                    {
+                                        linkAction.addParameter("formType", "Bulk Behavior Entry");
+                                    }
+                                }
+                                else if ("Surgery".equals(category))
+                                {
+                                    linkAction.addParameter("formType", "Surgery Rounds");
                                     linkAction.addParameter("caseid", caseid);
                                 }
                                 else
                                 {
-                                    linkAction.addParameter("formType", "Bulk Clinical Entry");
+                                    if (caseid != null)
+                                    {
+                                        linkAction.addParameter("formType", "Clinical Rounds");
+                                        linkAction.addParameter("caseid", caseid);
+                                    }
+                                    else
+                                    {
+                                        linkAction.addParameter("formType", "Bulk Clinical Entry");
+                                    }
                                 }
+
+                                linkAction.addParameter("id", id);
+                                linkAction.addParameter("obsTask", taskid);
+                                linkAction.addParameter("observations", observations);
+                                linkAction.addParameter("scheduledDate", date.toString());
                             }
-
-                            linkAction.addParameter("id", id);
-                            linkAction.addParameter("obsTask", taskid);
-                            linkAction.addParameter("observations", observations);
-                            linkAction.addParameter("scheduledDate", date.toString());
-
                             String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:observationSchedule";
                             linkAction.addParameter("returnUrl", returnUrl);
 
