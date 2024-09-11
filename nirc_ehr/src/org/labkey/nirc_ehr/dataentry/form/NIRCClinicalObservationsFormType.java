@@ -8,9 +8,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
 {
@@ -30,14 +28,5 @@ public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
         {
             s.addConfigSource("ClinicalDefaults");
         }
-    }
-
-    @Override
-    protected List<String> getButtonConfigs()
-    {
-        List<String> defaultButtons = new ArrayList<String>();
-        defaultButtons.add("SAVEDRAFT");
-        defaultButtons.add("SUBMIT"); //submit final
-        return defaultButtons;
     }
 }

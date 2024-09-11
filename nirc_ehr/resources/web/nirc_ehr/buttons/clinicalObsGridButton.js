@@ -5,6 +5,8 @@ EHR.DataEntryUtils.registerGridButton('NIRC_AUTO_POPULATE_DAILY_OBS', function(c
         hidden: true,
         listeners: {
             render: function(btn){
+                const id = LABKEY.ActionURL.getParameter('id');
+
                 LABKEY.Query.selectRows({
                     schemaName: 'ehr',
                     queryName: 'observation_types',
@@ -21,8 +23,19 @@ EHR.DataEntryUtils.registerGridButton('NIRC_AUTO_POPULATE_DAILY_OBS', function(c
                                         newRecord.set({
                                             category: row.value,
                                         });
+
+                                        if (id) {
+                                            newRecord.set('Id', id);
+                                        }
                                         grid.store.add(newRecord);
                                     }
+                                }
+
+                                if (id) {
+                                    this.addEvents('animalchange');
+                                    this.enableBubble('animalchange');
+                                    this.fireEvent('animalchange', id);
+                                    grid.fireEvent('panelDataChange');
                                 }
                             }
                         }
