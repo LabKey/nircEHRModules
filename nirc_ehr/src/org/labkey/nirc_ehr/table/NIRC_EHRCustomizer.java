@@ -1026,6 +1026,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             {
                                 linkAction.addParameter("formType", "Clinical Observations");
                                 linkAction.addParameter("id", id);
+                                linkAction.addParameter("caseid", caseid);
+                                linkAction.addParameter("scheduledDate", date.toString());
                             }
                             else
                             {

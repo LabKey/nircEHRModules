@@ -608,6 +608,7 @@ public class NIRC_EHRTriggerHelper
                     row.put("date", new Date());
                     row.put("Id", id);
                     row.put("qcstate", qcstate);
+                    row.put("area", "N/A");
                     rows.add(row);
                 }
 
@@ -624,62 +625,74 @@ public class NIRC_EHRTriggerHelper
 
     }
 
-    //Add clinical observations to all open cases for an animal so users don't need to add the same observation to each case individually
-    //TODO
-//    public void addClinicalObsForCases(Map<String, Object> clinicalObsRow, Map<String, Object> clinicalObsOldRow, List<Map<String, Object>> openCasesPerAnimal, @Nullable String currentCaseId) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
-//    {
-//        if (null != currentCaseId)
-//        {
-//            boolean updateRecord = false;
-//            BatchValidationException errors = new BatchValidationException();
-//            TableInfo ti = getTableInfo("study", "clinical_observations");
-//            SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), clinicalObsRow.get("Id"));
-//            List<Map<String, Object>> rows = new ArrayList<>();
-//
-//            // For each open case, add the clinical observation
-//            for (Map<String, Object> animalCase : openCasesPerAnimal)
-//            {
-//                String caseTaskId = (String) animalCase.get("taskid");
-//                String caseId = (String) animalCase.get("caseid");
-//
-//                Map<String, Object> clinObsRowToInsert = new CaseInsensitiveHashMap<>();
-//                clinObsRowToInsert.put("Id", clinicalObsRow.get("Id"));
-//                clinObsRowToInsert.put("date", clinicalObsRow.get("date"));
-//                clinObsRowToInsert.put("caseid", caseId);
-//                clinObsRowToInsert.put("qcstate", clinicalObsRow.get("qcstate"));
-//                clinObsRowToInsert.put("category", clinicalObsRow.get("category"));
-//                clinObsRowToInsert.put("observation", clinicalObsRow.get("observation"));
-//                clinObsRowToInsert.put("remark", clinicalObsRow.get("remark"));
-//                clinObsRowToInsert.put("taskId", caseTaskId);
-//                clinObsRowToInsert.put("performedby", clinicalObsRow.get("performedby"));
-//
-//                filter.addCondition(FieldKey.fromString("taskid"), caseTaskId);
-//                filter.addCondition(FieldKey.fromString("objectid"), clinicalObsOldRow.get("objectid"));
-//                TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid", "objectid"), filter, null);
-//
-//                if (ts.exists())
-//                {
-//                    updateRecord = true;
-//                    clinObsRowToInsert.put("objectid", ts.getMap().get("objectid"));
-//                }
-//                else
-//                {
-//                    clinObsRowToInsert.put("objectid", new GUID().toString());
-//                }
-//
-//                rows.add(clinObsRowToInsert);
-//
-//                if (updateRecord)
-//                {
-//                    ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
-//                }
-//                else
-//                {
-//                    ti.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
-//                }
-//                if (errors.hasErrors())
-//                    throw errors;
-//            }
-//        }
-//    }
+    public void propagateClinicalObs(Map<String, Object> row) throws SQLException
+    {
+        Date scheduledDate = ConvertHelper.convert(row.get("scheduledDate"), Date.class);
+        Date date = ConvertHelper.convert(row.get("date"), Date.class);
+        String caseid = ConvertHelper.convert(row.get("caseid"), String.class);
+        String category = ConvertHelper.convert(row.get("category"), String.class);
+        String id = ConvertHelper.convert(row.get("id"), String.class);
+        String area = ConvertHelper.convert(row.get("area"), String.class);
+        String observation = ConvertHelper.convert(row.get("observation"), String.class);
+
+        // First we need to get the observation order frequency for this case and category
+        TableInfo ti = getTableInfo("study", "observation_order");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("caseid"), caseid);
+        filter.addCondition(FieldKey.fromString("category"), category);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("frequency"), filter, null);
+
+        Map<String, Object> order = ts.getMap();
+        if (order != null)
+        {
+            filter = new SimpleFilter(FieldKey.fromString("category"), category);
+            filter.addCondition(FieldKey.fromString("caseid"), caseid, CompareType.NEQ);
+            filter.addCondition(FieldKey.fromString("Id"), id);
+            filter.addCondition(FieldKey.fromString("frequency"), order.get("frequency"));
+            filter.addCondition(FieldKey.fromString("area"), area);
+
+            ts = new TableSelector(ti, PageFlowUtil.set("caseid", "category"), filter, null);
+
+            ts.getMapCollection().forEach(map -> {
+                String otherCaseId = (String) map.get("caseid");
+                if (otherCaseId != null)
+                {
+                    try
+                    {
+                        TableInfo obsTi = getTableInfo("study", "clinical_observations");
+                        SimpleFilter obsFilter = new SimpleFilter(FieldKey.fromString("caseid"), otherCaseId);
+                        obsFilter.addCondition(FieldKey.fromString("category"), category);
+                        obsFilter.addCondition(FieldKey.fromString("area"), area);
+                        obsFilter.addCondition(FieldKey.fromString("scheduledDate"), scheduledDate);
+                        obsFilter.addCondition(FieldKey.fromString("Id"), id);
+                        TableSelector obsTs = new TableSelector(obsTi, PageFlowUtil.set("Id"), obsFilter, null);
+                        if (!obsTs.exists())
+                        {
+                            Map<String, Object> obsRow = new CaseInsensitiveHashMap<>();
+                            obsRow.put("caseid", otherCaseId);
+                            obsRow.put("category", category);
+                            obsRow.put("date", date);
+                            obsRow.put("qcstate", "Completed");
+                            obsRow.put("Id", id);
+                            obsRow.put("scheduledDate", scheduledDate);
+                            obsRow.put("area", area);
+                            obsRow.put("observation", observation);
+                            // taskid?
+
+                            List<Map<String, Object>> rows = new ArrayList<>();
+                            rows.add(obsRow);
+
+                            BatchValidationException errors = new BatchValidationException();
+                            obsTi.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+                            if (errors.hasErrors())
+                                throw errors;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _log.error("Error propagating clinical observations", e);
+                    }
+                }
+            });
+        }
+    }
 }

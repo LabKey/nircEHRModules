@@ -6,6 +6,9 @@ EHR.DataEntryUtils.registerGridButton('NIRC_AUTO_POPULATE_DAILY_OBS', function(c
         listeners: {
             render: function(btn){
                 const id = LABKEY.ActionURL.getParameter('id');
+                const caseid = LABKEY.ActionURL.getParameter('caseid');
+                const scheduledDate = LABKEY.ActionURL.getParameter('scheduledDate');
+                const scheduled = id && caseid && scheduledDate;
 
                 LABKEY.Query.selectRows({
                     schemaName: 'ehr',
@@ -24,14 +27,16 @@ EHR.DataEntryUtils.registerGridButton('NIRC_AUTO_POPULATE_DAILY_OBS', function(c
                                             category: row.value,
                                         });
 
-                                        if (id) {
+                                        if (scheduled) {
                                             newRecord.set('Id', id);
+                                            newRecord.set('caseid', caseid);
+                                            newRecord.set('scheduledDate', scheduledDate);
                                         }
                                         grid.store.add(newRecord);
                                     }
                                 }
 
-                                if (id) {
+                                if (scheduled) {
                                     this.addEvents('animalchange');
                                     this.enableBubble('animalchange');
                                     this.fireEvent('animalchange', id);
