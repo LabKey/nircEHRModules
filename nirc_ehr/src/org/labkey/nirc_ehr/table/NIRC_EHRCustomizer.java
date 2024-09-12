@@ -671,8 +671,19 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             }
             if ("performedby".equalsIgnoreCase(col.getName()))
             {
-                if (ti.getName().equalsIgnoreCase("treatment_order") || ti.getName().equalsIgnoreCase("drug"))
+                col.setLabel("Performed By");
+
+                UserSchema us = getEHRUserSchema(ti, "core");
+                if (us != null)
                 {
+                    col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                            .table("users")
+                            .key("UserId")
+                            .display("DisplayName")));
+                }
+            }
+            if ("orderedby".equalsIgnoreCase(col.getName()))
+            {
                     col.setLabel("Ordered By");
                     UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                     if (us != null)
@@ -682,20 +693,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                 .key("UserId")
                                 .display("DisplayName")));
                     }
-                }
-                else
-                {
-                    col.setLabel("Performed By");
-
-                    UserSchema us = getEHRUserSchema(ti, "core");
-                    if (us != null)
-                    {
-                        col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
-                                .table("users")
-                                .key("UserId")
-                                .display("DisplayName")));
-                    }
-                }
             }
             if ("taskid".equalsIgnoreCase(col.getName()))
             {

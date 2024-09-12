@@ -19,9 +19,7 @@
                         </fk>
                     </column>
                     <column columnName="remark"/>
-                    <column columnName="performedBy">
-                        <columnTitle>Performed By</columnTitle>
-                    </column>
+                    <column columnName="performedBy" />
                     <column columnName="taskid">
                         <isHidden>true</isHidden>
                     </column>
