@@ -35,8 +35,10 @@ import org.labkey.test.components.CustomizeView;
 import org.labkey.test.components.dumbster.EmailRecordTable;
 import org.labkey.test.components.ext4.Window;
 import org.labkey.test.components.ui.grids.QueryGrid;
+import org.labkey.test.pages.ehr.AnimalHistoryPage;
 import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
+import org.labkey.test.pages.ehr.EnterDataPage;
 import org.labkey.test.pages.ehr.NotificationAdminPage;
 import org.labkey.test.params.ModuleProperty;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
@@ -46,7 +48,9 @@ import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 import org.labkey.test.util.ext4cmp.Ext4GridRef;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.BufferedReader;
@@ -72,16 +76,24 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 {
     private static final String PROJECT_NAME = "NIRC";
     private static final String PROJECT_TYPE = "NIRC EHR";
-    DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static String  NIRC_BASIC_SUBMITTER = "ac_bs@nirctest.com";
+    private static final File orchardFileLocation = TestFileUtils.getTestTempDir();
+    private static String NIRC_BASIC_SUBMITTER = "ac_bs@nirctest.com";
+    private static String NIRC_BASIC_SUBMITTER_NAME = "ac bs";
     private static String NIRC_BASIC_SUBMITTER_VET_TECH = "vet_tech_bs@nirctest.com";
     private static String NIRC_FULL_SUBMITTER_VET_TECH = "vet_tech_fs@nirctest.com";
-    private  static String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
+    private static String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
 
     private static String deadAnimalId = "D5454";
     private static String departedAnimalId = "H6767";
     private static String aliveAnimalId = "A4545";
-    private static final File orchardFileLocation = TestFileUtils.getTestTempDir();
+    DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    @BeforeClass
+    public static void setupProject() throws Exception
+    {
+        NIRC_EHRTest init = (NIRC_EHRTest) getCurrentTest();
+        init.doSetup();
+    }
 
     @Override
     public void importStudy()
@@ -103,14 +115,14 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     {
         final String emailDomain = "@ehrstudy.test";
         CreateUserResponse inves1 = _userHelper.createUser(INVES_ID + emailDomain, true);
-        CreateUserResponse inves2 =_userHelper.createUser(DUMMY_INVES + emailDomain, true);
+        CreateUserResponse inves2 = _userHelper.createUser(DUMMY_INVES + emailDomain, true);
         goToEHRFolder();
         _permissionsHelper.addUserToProjGroup(inves1.getEmail(), getProjectName(), INVESTIGATOR.getGroup());
         _permissionsHelper.addUserToProjGroup(inves2.getEmail(), getProjectName(), INVESTIGATOR.getGroup());
 
         InsertRowsCommand insertCmd = new InsertRowsCommand("ehr", "protocol");
 
-        Map<String,Object> rowMap = new HashMap<>();
+        Map<String, Object> rowMap = new HashMap<>();
         rowMap.put("protocol", PROTOCOL_ID);
         rowMap.put("InvestigatorId", inves1.getUserId());
         rowMap.put("title", PROTOCOL_ID);
@@ -159,6 +171,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     {
         return "/server/modules/" + getModuleDirectory();
     }
+
     @Override
     protected File getStudyPolicyXML()
     {
@@ -199,7 +212,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     protected void populateRoomRecords() throws Exception
     {
         InsertRowsCommand insertCmd = new InsertRowsCommand("ehr_lookups", "rooms");
-        Map<String,Object> rowMap = new HashMap<>();
+        Map<String, Object> rowMap = new HashMap<>();
         rowMap.put("name", ROOM_ID);
         rowMap.put("floor", "floor1");
         rowMap.put("housingType", 1);
@@ -214,13 +227,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         insertCmd.addRow(rowMap);
 
         insertCmd.execute(createDefaultConnection(), getContainerPath());
-    }
-
-    @BeforeClass
-    public static void setupProject() throws Exception
-    {
-        NIRC_EHRTest init = (NIRC_EHRTest) getCurrentTest();
-        init.doSetup();
     }
 
     private void doSetup() throws Exception
@@ -239,9 +245,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     {
         log("Enabling the notification at the site level");
         goToAdminConsole().clickNotificationServiceAdmin();
-        _ext4Helper.selectComboBoxItem("Status of Notification Service:","Enabled");
-        clickButton("Save",0);
-        _helper.clickExt4WindowBtn("Success","OK");
+        _ext4Helper.selectComboBoxItem("Status of Notification Service:", "Enabled");
+        clickButton("Save", 0);
+        _helper.clickExt4WindowBtn("Success", "OK");
     }
 
     private void enableNotification(String notification)
@@ -249,7 +255,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToEHRFolder();
         _containerHelper.enableModule("Dumbster");
         log("Setup the notification service for this container");
-        EHRAdminPage.beginAt(this,getContainerPath());
+        EHRAdminPage.beginAt(this, getContainerPath());
         NotificationAdminPage notificationAdminPage = EHRAdminPage.clickNotificationService(this);
         notificationAdminPage.setNotificationUserAndReplyEmail(DATA_ADMIN_USER);
         notificationAdminPage.addManageUsers("org.labkey.nirc_ehr.NIRCDeathNotification", "EHR Administrators");
@@ -279,7 +285,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private void addExtensibleCols()
     {
         log("Setup the EHR table definitions");
-        EHRAdminPage.beginAt(this,getContainerPath());
+        EHRAdminPage.beginAt(this, getContainerPath());
         click(Locator.linkWithText("EHR EXTENSIBLE COLUMNS"));
         click(Locator.linkWithText("Load EHR table definitions"));
         waitForElement(Locator.tagWithClass("span", "x4-window-header-text").withText("Success"));
@@ -317,11 +323,17 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Ext4GridRef arrivals = _helper.getExt4GridForFormSection("Arrivals");
         _helper.addRecordToGrid(arrivals);
         arrivals.setGridCellJS(1, "date", now.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
+        arrivals.setGridCell(1, "arrivalType", "Non-quarantine Arrival");
+        arrivals.setGridCell(1, "acquisitionType", "Lab Transfer (Wild Born)");
         arrivals.setGridCell(1, "Id", arrivedAnimal);
         arrivals.setGridCell(1, "cage", "C1");
         arrivals.setGridCell(1, "project", "640991");
         arrivals.setGridCell(1, "arrivalProtocol", "dummyprotocol");
+        arrivals.setGridCell(1, "Id/demographics/gender", "female");
+        arrivals.setGridCell(1, "Id/demographics/geographic_origin", "BRAZIL");
+        arrivals.setGridCell(1, "Id/demographics/species", "Macaca nemestrina PIG");
         arrivals.setGridCellJS(1, "Id/demographics/birth", now.minusDays(7).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
+        arrivals.setGridCell(1, "sourceFacility", "BIOQUAL, Inc.");
         submitForm("Submit Final", "Finalize");
 
         goToSchemaBrowser();
@@ -471,7 +483,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitForText("Id: ERROR: Animal is not at the center.");
 
         setFormElement(Locator.name("Id"), aliveAnimalId);
-        setFormElement(Locator.name("reason"), "Euthaniasia (project)");
+        _ext4Helper.selectComboBoxItem("Disposition:", "Euthaniasia (project)");
 
         Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit Necropsy for Review")));
         Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit Final")));
@@ -491,110 +503,159 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         notifications.clickMessage(notifications.getMessageWithSubjectContaining("Death Notification: " + aliveAnimalId));
         String url = Locator.linkWithText("Click here to record Necropsy").findElement(notifications).getAttribute("href");
 
-        //TODO: Update helpers to set required values in necropsy form
-//        log("Entering Necropsy");
-//        impersonate(NIRC_BASIC_SUBMITTER_VET);
-//        beginAt(url);
-//        Ext4GridRef necropsy = _helper.getExt4GridForFormSection("Necropsy");
-//        necropsy.expand();
-//        waitForElement(Locator.name("necropsyWeight"));
-//        setFormElement(Locator.name("necropsyWeight"), "23");
-//        scrollIntoView(Locator.linkContainingText("More Actions"));
-//        _ext4Helper.selectComboBoxItem(Locator.name("examReason"), "Natural Death");
-//        _ext4Helper.selectComboBoxItem(Locator.name("specimenCondition"), "Fresh");
-//        _ext4Helper.selectComboBoxItem(Locator.name("physicalCondition"), "Excellent");
-//        setFormElement(Locator.textarea("diagnosis"), "Dead");
+        log("Entering Necropsy");
+        impersonate(NIRC_BASIC_SUBMITTER_VET_TECH);
+        beginAt(url);
+        Ext4GridRef necropsy = _helper.getExt4GridForFormSection("Necropsy");
+        necropsy.expand();
+        waitForElement(Locator.name("necropsyWeight"));
+        setFormElement(Locator.name("necropsyWeight"), "23");
+        scrollIntoView(Locator.linkContainingText("More Actions"));
+        _ext4Helper.selectComboBoxItem("Physical Condition:", "Excellent");
+        _ext4Helper.selectComboBoxItem("Reason for Examination:", "Natural Death");
+        _ext4Helper.selectComboBoxItem("Condition of Specimen:", "Fresh");
+        scrollIntoView(Locator.name("diagnosis"));
+        _helper.setDataEntryField("identification", "Extra information");
+        _helper.setDataEntryField("grossAbnormalities", "Extra leg");
+        _helper.setDataEntryField("diagnosis", "Dead");
+        _ext4Helper.selectComboBoxItem("Performed By:", NIRC_BASIC_SUBMITTER_NAME);
 
-//        log("Entering Tissue Disposition");
-//        Ext4GridRef tissueDisposition = _helper.getExt4GridForFormSection("Tissue Disposition");
-//        _helper.addRecordToGrid(tissueDisposition);
-//        tissueDisposition.setGridCell(1, "necropsyDispositionCode", "Frozen");
-//        tissueDisposition.setGridCell(1, "necropsyTissue", "Pancreas");
-//        waitAndClick(_helper.getDataEntryButton("Submit Necropsy for Review"));
-//
-//        log("Assigning the reviewer");
-//        Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
-//
-//        // Make sure to find the element in submitForReview window.
-//        WebElement assignedToElement = Locator.tagWithNameContaining("input", "assignedTo").findWhenNeeded(submitForReview);
-//        setFormElement(assignedToElement, _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
-//
-//        // Entering the text leaves the selection list visible, send 'Enter' to remove it.
-//        assignedToElement.sendKeys(Keys.ENTER);
-//
-//        // The 'button' is actually a link tag.
-//        WebElement submitButton = Locator.tagWithText("a", "Submit").findWhenNeeded(submitForReview);
-//        scrollIntoView(submitButton);
-//        doAndWaitForPageToLoad(()->submitButton.click());
-//
-//        stopImpersonating();
-//
-//        log("Verify rows were inserted in appropriate datasets");
-//        goToEHRFolder();
-//        verifyRowCreated("study", "necropsy", aliveAnimalId, 1);
-//        verifyRowCreated("study", "grossPathology", aliveAnimalId, 9);
-//        verifyRowCreated("study", "tissueDisposition", aliveAnimalId, 1);
-//
-//        goToEHRFolder();
-//        impersonate(NIRC_FULL_SUBMITTER_VET);
-//        EnterDataPage enterDataPage = EnterDataPage.beginAt(this, getContainerPath());
-//        enterDataPage.clickAllTasksTab();
-//        waitAndClick(Locator.linkWithText("Death/Necropsy"));
-//        switchToWindow(1);
-//        submitForm("Submit Final", "Finalize");
-//        switchToMainWindow();
-//        stopImpersonating();
-//
-//        log("Verify rows were inserted in appropriate datasets");
-//        goToEHRFolder();
-//        verifyRowCreated("study", "weight", aliveAnimalId, 1);
-//
-//        log("Verify animal is marked as dead");
-//        AnimalHistoryPage historyPage = AnimalHistoryPage.beginAt(this);
-//        historyPage.searchSingleAnimal(aliveAnimalId);
-//        waitForText(WAIT_FOR_PAGE, "Dead");
-//        waitForText("23 kg"); //checking latest weight is updated.
-//
-//        goToSchemaBrowser();
-//        DataRegionTable table = viewQueryData("study", "housing");
-//        table.setFilter("Id", "Equals", aliveAnimalId);
-//        Assert.assertTrue("End date is not updated for study.housing", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
-//
-//        log("Verify end date in study.assignment");
-//        goToSchemaBrowser();
-//        table = viewQueryData("study", "assignment");
-//        table.setFilter("Id", "Equals", aliveAnimalId);
-//        Assert.assertTrue("End date is not updated for study.assignment", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
-//
-//        log("Verify end date in study.protocolAssignment");
-//        goToSchemaBrowser();
-//        table = viewQueryData("study", "protocolAssignment");
-//        table.setFilter("Id", "Equals", aliveAnimalId);
-//        Assert.assertTrue("End date is not updated for study.protocolAssignment", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
+        log("Entering Tissue Disposition");
+        Ext4GridRef tissueDisposition = _helper.getExt4GridForFormSection("Tissue Disposition");
+        _helper.addRecordToGrid(tissueDisposition);
+        tissueDisposition.setGridCell(1, "necropsyDispositionCode", "Frozen");
+        tissueDisposition.setGridCell(1, "necropsyTissue", "Pancreas");
+        waitAndClick(_helper.getDataEntryButton("Submit Necropsy for Review"));
+
+        log("Assigning the reviewer");
+        Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
+
+        // Make sure to find the element in submitForReview window.
+        WebElement assignedToElement = Locator.tagWithNameContaining("input", "assignedTo").findWhenNeeded(submitForReview);
+        setFormElement(assignedToElement, _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
+
+        // Entering the text leaves the selection list visible, send 'Enter' to remove it.
+        assignedToElement.sendKeys(Keys.ENTER);
+
+        // The 'button' is actually a link tag.
+        WebElement submitButton = Locator.tagWithText("a", "Submit").findWhenNeeded(submitForReview);
+        scrollIntoView(submitButton);
+        doAndWaitForPageToLoad(() -> submitButton.click());
+
+        stopImpersonating();
+
+        log("Verify rows were inserted in appropriate datasets");
+        goToEHRFolder();
+        verifyRowCreated("study", "necropsy", aliveAnimalId, 1);
+        verifyRowCreated("study", "grossPathology", aliveAnimalId, 9);
+        verifyRowCreated("study", "tissueDisposition", aliveAnimalId, 1);
+
+        goToEHRFolder();
+        impersonate(NIRC_FULL_SUBMITTER_VET);
+        EnterDataPage enterDataPage = EnterDataPage.beginAt(this, getContainerPath());
+        enterDataPage.clickAllTasksTab();
+        waitAndClick(Locator.linkWithText("Death/Necropsy"));
+        switchToWindow(1);
+        submitForm("Submit Final", "Finalize");
+        switchToMainWindow();
+        stopImpersonating();
+
+        log("Verify rows were inserted in appropriate datasets");
+        goToEHRFolder();
+        verifyRowCreated("study", "weight", aliveAnimalId, 1);
+
+        log("Verify animal is marked as dead");
+        AnimalHistoryPage historyPage = AnimalHistoryPage.beginAt(this);
+        historyPage.searchSingleAnimal(aliveAnimalId);
+        waitForText(WAIT_FOR_PAGE, "Dead");
+        waitForText("23 kg"); //checking latest weight is updated.
+
+        goToSchemaBrowser();
+        DataRegionTable table = viewQueryData("study", "housing");
+        table.setFilter("Id", "Equals", aliveAnimalId);
+        Assert.assertTrue("End date is not updated for study.housing", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
+
+        log("Verify end date in study.assignment");
+        goToSchemaBrowser();
+        table = viewQueryData("study", "assignment");
+        table.setFilter("Id", "Equals", aliveAnimalId);
+        Assert.assertTrue("End date is not updated for study.assignment", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
+
+        log("Verify end date in study.protocolAssignment");
+        goToSchemaBrowser();
+        table = viewQueryData("study", "protocolAssignment");
+        table.setFilter("Id", "Equals", aliveAnimalId);
+        Assert.assertTrue("End date is not updated for study.protocolAssignment", table.getDataAsText(0, "endDate").contains(LocalDateTime.now().format(_dateFormat)));
 
     }
 
     @Test
     public void testClinicalCasesWorkflow()
     {
-        //TODO: Test Basic Clinical Workflow
+        String animalId = "8377984";
+
         //Go to NIRC/EHR main page
+        goToEHRFolder();
+
         //Impersonate as NIRC_FULL_SUBMITTER_VET_TECH
+        impersonate(NIRC_FULL_SUBMITTER_VET_TECH);
+
         //Navigate to Enter Data > Clinical Cases
+        gotoEnterData();
+        clickAndWait(Locator.linkWithText("Clinical Cases"));
+
         //Fill out Clinical Case section with Id, Date, Open Remark
+        setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
+        setFormElement(Locator.textarea("plan"), "Case plan");
+        setFormElement(Locator.name("Id"), animalId);
+        setFormElement(Locator.name("date"), LocalDateTime.now().minusDays(6).format(_dateFormat));
+        Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
+
         //Fill out Clinical Remarks section with Date, Remark
+        setFormElement(Locator.name("date").index(1), LocalDateTime.now().minusDays(5).format(_dateFormat));
+        setFormElement(Locator.textarea("remark"), "Clinical Remarks - Test ");
+
+        Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
+        _helper.addRecordToGrid(weight);
+        weight.setGridCellJS(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
+        weight.setGridCell(1, "weight", "6.000");
+
         //'Submit Final'
-        //Stop impersonation
+        submitForm("Submit Final", "Finalize Form");
+        stopImpersonating();
+
         //Go to NIRC/EHR main page
-        //Impersonate as NIRC_FULL_SUBMITTER_VET
+        goToEHRFolder();
+        impersonate(NIRC_FULL_SUBMITTER_VET);
+
         //Go to 'Active Clinical Cases'
+        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+
         //Click on 'Case Update' link
+        AnimalHistoryPage historyPage = new AnimalHistoryPage<>(getDriver());
+        DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
+        activeClinicalCases.link(0, "caseCheck").click();
+        switchToWindow(1);
+
         //Fill out Close Date
+        setFormElement(Locator.name("enddate"), LocalDateTime.now().format(_dateFormat));
+
+        //Verifying if the form was loaded with all the entered data
+        weight = _helper.getExt4GridForFormSection("Weights");
+        Assert.assertEquals("Weight value entered was not retrived", 1, weight.getRowCount());
+
         //'Submit Final'
+        submitForm("Submit Final", "Finalize Form");
+
         //Go to NIRC/EHR main page
-        //Go to 'Active Clinical Cases'
+        goToEHRFolder();
+        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+
         //Verify that the case is no longer present/is closed
-        //Stop impersonation
+        historyPage = new AnimalHistoryPage<>(getDriver());
+        activeClinicalCases = historyPage.getActiveReportDataRegion();
+        Assert.assertEquals("No active cases", 0, activeClinicalCases.getDataRowCount());
+        stopImpersonating();
     }
 
     @Override
@@ -658,16 +719,21 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         String prefix = "orchardFile";
         final String[] largestTimestamp = {"0"};
 
-        try {
+        try
+        {
             // Use Files.walkFileTree to traverse the directory
-            Files.walkFileTree(orchardFileLocation.toPath(), new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(orchardFileLocation.toPath(), new SimpleFileVisitor<Path>()
+            {
                 @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+                {
                     // Check if the file name starts with "orchardFile"
-                    if (file.getFileName().toString().startsWith(prefix)) {
+                    if (file.getFileName().toString().startsWith(prefix))
+                    {
                         String fileName = file.getFileName().toString();
                         String timestamp = fileName.substring(prefix.length(), fileName.indexOf(".txt"));
-                        if (timestamp.compareTo(largestTimestamp[0]) > 0) {
+                        if (timestamp.compareTo(largestTimestamp[0]) > 0)
+                        {
                             largestTimestamp[0] = timestamp;
                         }
 
@@ -675,15 +741,18 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                     return FileVisitResult.CONTINUE;
                 }
             });
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 
-        if (largestTimestamp[0].equals("0")) {
+        if (largestTimestamp[0].equals("0"))
+        {
             Assert.fail("Orchard file is not created");
         }
 
-        File orchardFile =  new File(orchardFileLocation + "/orchardFile" + largestTimestamp[0] + ".txt");
+        File orchardFile = new File(orchardFileLocation + "/orchardFile" + largestTimestamp[0] + ".txt");
         waitFor(() -> orchardFile.exists(), WAIT_FOR_PAGE);
         Assert.assertTrue("Edited animal is not present in the orchard file",
                 TestFileUtils.getFileContents(orchardFile).contains(animalId));
@@ -691,6 +760,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void submitForm(String buttonText, String windowTitle)
     {
+        //Give time for errors to disappear after validation
+        longWait().until(ExpectedConditions.invisibilityOfElementWithText(Locator.tag("div"), "The form has the following errors and warnings:"));
         Locator submitFinalBtn = Locator.linkWithText(buttonText);
         shortWait().until(ExpectedConditions.elementToBeClickable(submitFinalBtn));
         Window<?> msgWindow;
@@ -716,10 +787,19 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void lockForm()
     {
-        if (Ext4Helper.Locators.ext4Button("Lock Entry").isDisplayed(getDriver()))
+        Locator.XPathLocator lockBtn = Ext4Helper.Locators.ext4Button("Lock Entry");
+        Locator.XPathLocator unlockBtn = Ext4Helper.Locators.ext4Button("Unlock Entry");
+        try
         {
-            Ext4Helper.Locators.ext4Button("Lock Entry").findElement(getDriver()).click();
-            waitForElement(Ext4Helper.Locators.ext4Button("Unlock Entry"));
+            log("Locking the entry");
+            waitForElement(lockBtn);
+            lockBtn.findElement(getDriver()).click();
+            waitForElementToDisappear(lockBtn);
+            Assert.assertTrue("Entry did not lock", isElementPresent(unlockBtn));
         }
+         catch (NoSuchElementException e)
+         {
+             log("Form is already unlocked");
+         }
     }
 }

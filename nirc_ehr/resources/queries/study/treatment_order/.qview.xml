@@ -19,7 +19,7 @@
         <column name="vol_units"/>
         <column name="amount"/>
         <column name="amount_units"/>
-        <column name="performedby"/>
+        <column name="orderedby"/>
         <column name="category"/>
         <column name="reason" />
         <column name="remark" />

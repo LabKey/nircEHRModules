@@ -11,32 +11,13 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                 hidden: true
             },
             performedby: {
-                hidden: false,
-                allowBlank: false,
-                defaultValue: null,
-                lookup: {
-                    schemaName: 'ehr_lookups',
-                    queryName: 'veterinarians',
-                    keyColumn: 'UserId',
-                    displayColumn: 'DisplayName'
-                }
-            },
+                hidden: true
+            }
         },
         'study.drug': {
             category: {
                 defaultValue: 'Clinical',
                 hidden: true
-            },
-            performedby: {
-                hidden: false,
-                allowBlank: false,
-                defaultValue: null,
-                lookup: {
-                    schemaName: 'ehr_lookups',
-                    queryName: 'veterinarians',
-                    keyColumn: 'UserId',
-                    displayColumn: 'DisplayName'
-                }
             },
             scheduledDate: {
                 columnConfig: {
@@ -58,6 +39,13 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                 columnConfig: {
                     width: 250
                 }
+            }
+        },
+        'study.clinremarks': {
+            category: {
+                defaultValue: 'Clinical',
+                hidden: true,
+                allowBlank: false
             }
         },
         'study.blood': {
@@ -119,36 +107,48 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             caseCategory: {
                 hidden: true
             },
-            performedby: {
-                hidden: false,
-                defaultValue: LABKEY.Security.currentUser.id.toString(),
-                editorConfig: {
-                    store: {
-                        type: 'labkey-store',
-                        schemaName: 'core',
-                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
-                        autoLoad: true
-                    }
-                }
-            },
             formCasesLink: {
                 xtype: 'nirc_ehr-editCases'
             }
         },
-
-        'study.clinical_observations': {
-            performedby: {
-                hidden: false,
-                defaultValue: LABKEY.Security.currentUser.id.toString(),
-                editorConfig: {
-                    store: {
-                        type: 'labkey-store',
-                        schemaName: 'core',
-                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
-                        autoLoad: true
-                    }
+        'study.clinremarks': {
+            hx: {
+                formEditorConfig: {
+                    xtype: 'ehr-hxtextarea'
+                },
+            },
+            p: {
+                height: 120
+            },
+            remark: {
+                label: 'Remark',
+                height: 120
+            },
+            vetreview: {
+                height: 120
+            },
+            category: {
+                getInitialValue: function (v, rec) {
+                    return 'Clinical'
+                },
+                editable: false,
+                hidden: true,
+                columnConfig: {
+                    editable: false
                 }
             },
+            enddate: {
+                hidden: true
+            },
+            dateFinalized: {
+                hidden: true
+            },
+            qcstate: {
+                hidden: true
+            },
+        },
+
+        'study.clinical_observations': {
             type: {
                 hidden: true,
                 defaultValue: 'Clinical'

@@ -12,18 +12,9 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                     dateFormat: 'Y-m-d',
                     timeFormat: 'H:i'
                 },
-            },
-            performedby: {
-                allowBlank: false,
-                defaultValue: LABKEY.Security.currentUser.id.toString()
             }
         },
         'study.necropsy': {
-            performedby: {
-                hidden: false,
-                allowBlank: true,
-                defaultValue: LABKEY.Security.currentUser.id.toString()
-            },
             necropsyWeight: {
                 label: 'Weight (kg)'
             },

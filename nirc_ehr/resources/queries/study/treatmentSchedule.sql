@@ -9,7 +9,8 @@ d.id,
 d.calculated_status,
 s.*,
 s.objectid as treatmentid,
-drug.qcstate.label as treatmentStatus
+drug.qcstate.label as treatmentStatus,
+s.objectid || '-pkSeparator-' || s.date as primaryKey -- -pkSeparator- is used to separate the two parts of the primary key in RecordTreatmentButton.js
 FROM study.demographics d JOIN
 
 

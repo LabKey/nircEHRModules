@@ -150,25 +150,28 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
             int datasetId = StudyService.get().getDatasetIdByName(ti.getUserSchema().getContainer(), "clinRemarks");
             Dataset dataset = StudyService.get().getDataset(ti.getUserSchema().getContainer(), datasetId);
-            String realTableName = dataset.getDomain().getStorageTableName();
 
-            SQLFragment sql = new SQLFragment("(SELECT " + ti.getSqlDialect().getGroupConcat(new SQLFragment("r.hx"), true, false, new SQLFragment(getChr(ti) + "(10)")).getSqlCharSequence() + " FROM studydataset." + realTableName +
-                    " r WHERE r.participantId = " + ExprColumn.STR_TABLE_ALIAS + ".participantId AND r.hx IS NOT NULL AND r.date = (SELECT max(date) as expr FROM studydataset." + realTableName + " r2 "
-                    + " WHERE r2.participantId = r.participantId AND r2.hx is not null))"
-            );
-            ExprColumn latestHx = new ExprColumn(ti, hxName, sql, JdbcType.VARCHAR, idCol);
-            latestHx.setLabel("Most Recent Hx");
-            latestHx.setDisplayColumnFactory(new DisplayColumnFactory()
+            if (dataset != null && dataset.getDomain() != null)
             {
-                @Override
-                public DisplayColumn createRenderer(ColumnInfo colInfo)
+                String realTableName = dataset.getDomain().getStorageTableName();
+                SQLFragment sql = new SQLFragment("(SELECT " + ti.getSqlDialect().getGroupConcat(new SQLFragment("r.hx"), true, false, new SQLFragment(getChr(ti) + "(10)")).getSqlCharSequence() + " FROM studydataset." + realTableName +
+                        " r WHERE r.participantId = " + ExprColumn.STR_TABLE_ALIAS + ".participantId AND r.hx IS NOT NULL AND r.date = (SELECT max(date) as expr FROM studydataset." + realTableName + " r2 "
+                        + " WHERE r2.participantId = r.participantId AND r2.hx is not null))"
+                );
+                ExprColumn latestHx = new ExprColumn(ti, hxName, sql, JdbcType.VARCHAR, idCol);
+                latestHx.setLabel("Most Recent Hx");
+                latestHx.setDisplayColumnFactory(new DisplayColumnFactory()
                 {
-                    return new FixedWidthDisplayColumn(colInfo, 100);
-                }
-            });
+                    @Override
+                    public DisplayColumn createRenderer(ColumnInfo colInfo)
+                    {
+                        return new FixedWidthDisplayColumn(colInfo, 100);
+                    }
+                });
 
-            latestHx.setWidth("200");
-            ti.addColumn(latestHx);
+                latestHx.setWidth("200");
+                ti.addColumn(latestHx);
+            }
         }
 
         if (ti.getColumn("mostRecentClinicalObservations") == null)
@@ -676,8 +679,19 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             }
             if ("performedby".equalsIgnoreCase(col.getName()))
             {
-                if (ti.getName().equalsIgnoreCase("treatment_order") || ti.getName().equalsIgnoreCase("drug"))
+                col.setLabel("Performed By");
+
+                UserSchema us = getEHRUserSchema(ti, "core");
+                if (us != null)
                 {
+                    col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                            .table("users")
+                            .key("UserId")
+                            .display("DisplayName")));
+                }
+            }
+            if ("orderedby".equalsIgnoreCase(col.getName()))
+            {
                     col.setLabel("Ordered By");
                     UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
                     if (us != null)
@@ -687,20 +701,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                 .key("UserId")
                                 .display("DisplayName")));
                     }
-                }
-                else
-                {
-                    col.setLabel("Performed By");
-
-                    UserSchema us = getEHRUserSchema(ti, "core");
-                    if (us != null)
-                    {
-                        col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
-                                .table("users")
-                                .key("UserId")
-                                .display("DisplayName")));
-                    }
-                }
             }
             if ("taskid".equalsIgnoreCase(col.getName()))
             {
