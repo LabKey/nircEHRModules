@@ -38,6 +38,9 @@ import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
+import org.labkey.nirc_ehr.dataentry.form.NIRCBulkClinicalFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCClinicalObservationsFormType;
+import org.labkey.nirc_ehr.dataentry.form.NIRCClinicalRoundsFormType;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -1024,7 +1027,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
                             if (NIRC_EHRManager.DAILY_CLINICAL_OBS_TITLE.equals(observations))
                             {
-                                linkAction.addParameter("formType", "Clinical Observations");
+                                linkAction.addParameter("formType", NIRCClinicalObservationsFormType.NAME);
                                 linkAction.addParameter("id", id);
                                 linkAction.addParameter("caseid", caseid);
                                 linkAction.addParameter("scheduledDate", date.toString());
@@ -1052,12 +1055,12 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                 {
                                     if (caseid != null)
                                     {
-                                        linkAction.addParameter("formType", "Clinical Rounds");
+                                        linkAction.addParameter("formType", NIRCClinicalRoundsFormType.NAME);
                                         linkAction.addParameter("caseid", caseid);
                                     }
                                     else
                                     {
-                                        linkAction.addParameter("formType", "Bulk Clinical Entry");
+                                        linkAction.addParameter("formType", NIRCBulkClinicalFormType.NAME);
                                     }
                                 }
 
@@ -1102,6 +1105,50 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         public boolean isEditable()
                         {
                             return false;
+                        }
+                    };
+                }
+            });
+            ti.addColumn(col);
+        }
+
+        if (ti.getColumn("observationStatus") == null )
+        {
+            WrappedColumn col = new WrappedColumn(ti.getColumn("status"), "observationStatus");
+            col.setLabel("Status2");
+            col.setDisplayColumnFactory(new DisplayColumnFactory()
+            {
+
+                @Override
+                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                {
+                    return new DataColumn(colInfo)
+                    {
+
+                        @Override
+                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        {
+                            String status = (String) getBoundColumn().getValue(ctx);
+                            String stat = "";
+                            if (status != null)
+                            {
+                                String[] sts = status.split(";");
+
+                                for (String st : sts)
+                                {
+                                    if (stat.isEmpty() && st.equals("Completed"))
+                                    {
+                                        stat = "Completed";
+                                    }
+
+                                    if ("Completed".equals(stat) && !st.equals("Completed"))
+                                    {
+                                        stat = st;
+                                    }
+                                }
+                            }
+
+                            out.write(stat);
                         }
                     };
                 }

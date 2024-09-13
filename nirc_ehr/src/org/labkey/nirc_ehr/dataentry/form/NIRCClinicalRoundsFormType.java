@@ -44,7 +44,7 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(true, "cases"),
                 new NIRCClinicalObservationsFormSection(true, "cases"),
-                new NIRCObservationOrdersFormSection(true, "cases"),
+                new NIRCObservationOrdersFormSection(null, true, "cases"),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
                 new NIRCTreatmentOrderFormSection(true,
                         "cases"),

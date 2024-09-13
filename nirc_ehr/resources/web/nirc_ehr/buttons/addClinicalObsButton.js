@@ -9,25 +9,26 @@ EHR.DataEntryUtils.registerGridButton('NIRC_DAILY_CLINICAL_OBS', function(config
                 queryName: 'observation_types',
                 success: function (results) {
                     var grid = btn.up('gridpanel');
-                    if (grid?.store?.data?.getCount() === 0) {
-                        if (results?.rows?.length > 0) {
-                            for (var i = 0; i < results.rows.length; i++) {
-                                var row = results.rows[i];
-                                if (row.value === 'Verified Id?' || row.value === 'Stool' || row.value === 'Activity' ||
-                                        row.value === 'Appetite' || row.value === 'Hydration' || row.value === 'BCS') {
+                    if (results?.rows?.length > 0) {
+                        for (var i = 0; i < results.rows.length; i++) {
+                            var row = results.rows[i];
+                            if (row.value === 'Verified Id?' || row.value === 'Stool' || row.value === 'Activity' ||
+                                    row.value === 'Appetite' || row.value === 'Hydration' || row.value === 'BCS') {
 
-                                    var newRecord = grid.store.createModel({});
-                                    newRecord.set({
-                                        category: row.value,
-                                    });
-                                    grid.store.add(newRecord);
-                                }
+                                var newRecord = grid.store.createModel({});
+                                newRecord.set({
+                                    category: row.value,
+                                });
+                                grid.store.add(newRecord);
                             }
                         }
                     }
+                    else {
+                        Ext4.Msg.alert('Unable to load observation types. Please contact the system administrator.');
+                    }
                 },
                 failure: function (error) {
-                    alert('Unable to load observation types. Please contact the system administrator.');
+                    Ext4.Msg.alert('Unable to load observation types. Please contact the system administrator.');
                     console.log('Error loading observation types: ' + error);
                 },
                 scope: this
@@ -55,34 +56,38 @@ EHR.DataEntryUtils.registerGridButton('NIRC_DAILY_CLINICAL_OBS_ORDERS', function
                             queryName: 'observation_types',
                             success: function (results) {
                                 var grid = btn.up('gridpanel');
-                                if (grid?.store?.data?.getCount() === 0) {
-                                    if (results?.rows?.length > 0) {
-                                        for (var i = 0; i < results.rows.length; i++) {
-                                            var row = results.rows[i];
-                                            if (row.value === 'Verified Id?' || row.value === 'Stool' || row.value === 'Activity' ||
-                                                    row.value === 'Appetite' || row.value === 'Hydration' || row.value === 'BCS') {
+                                if (results?.rows?.length > 0) {
+                                    for (var i = 0; i < results.rows.length; i++) {
+                                        var row = results.rows[i];
+                                        if (row.value === 'Verified Id?' || row.value === 'Stool' || row.value === 'Activity' ||
+                                                row.value === 'Appetite' || row.value === 'Hydration' || row.value === 'BCS') {
 
-                                                var newRecord = grid.store.createModel({});
-                                                newRecord.set({
-                                                    category: row.value,
-                                                    frequency: sidRowId
-                                                });
-                                                grid.store.add(newRecord);
-                                            }
+                                            var newRecord = grid.store.createModel({});
+                                            newRecord.set({
+                                                category: row.value,
+                                                frequency: sidRowId
+                                            });
+                                            grid.store.add(newRecord);
                                         }
                                     }
                                 }
+                                else {
+                                    Ext4.Msg.alert('Unable to load observation types. Please contact the system administrator.');
+                                }
                             },
                             failure: function (error) {
-                                alert('Unable to load observation types. Please contact the system administrator.');
+                                Ext4.Msg.alert('Unable to load observation types. Please contact the system administrator.');
                                 console.log('Error loading observation types: ' + error);
                             },
                             scope: this
                         });
                     }
+                    else {
+                        Ext4.Msg.alert('Unable to load treatment frequencies. Please contact the system administrator.');
+                    }
                 },
                 failure: function (error) {
-                    alert('Unable to load treatment frequencies. Please contact the system administrator.');
+                    Ext4.Msg.alert('Unable to load treatment frequencies. Please contact the system administrator.');
                     console.log('Error loading treatment frequencies: ' + error);
                 }
             });

@@ -8,13 +8,13 @@ public class NIRCObservationOrdersFormSection extends BaseFormSection
 {
 
     public static final String LABEL = "Observation Orders";
-    private boolean _autoPopulateDailyObs = true;
+    private String _dailyObsOption;
 
-    public NIRCObservationOrdersFormSection(boolean autoPopulateDailyObs, boolean initCollapsed)
+    public NIRCObservationOrdersFormSection(String dailyObsOption, boolean initCollapsed)
     {
         super("study", "observation_order", LABEL, "ehr-clinicalobservationgridpanel", true, initCollapsed, true);
 
-        _autoPopulateDailyObs = autoPopulateDailyObs;
+        _dailyObsOption = dailyObsOption;
         addClientDependency(ClientDependency.supplierFromPath("ehr/plugin/ClinicalObservationsCellEditing.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/data/ClinicalObservationsClientStore.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/grid/ClinicalObservationGridPanel.js"));
@@ -23,9 +23,9 @@ public class NIRCObservationOrdersFormSection extends BaseFormSection
         setClientStoreClass("EHR.data.ClinicalObservationsClientStore");
     }
 
-    public NIRCObservationOrdersFormSection(boolean isChild, String parentQueryName)
+    public NIRCObservationOrdersFormSection(String dailyObsOption, boolean isChild, String parentQueryName)
     {
-        this(false, true);
+        this(dailyObsOption, true);
 
         if (isChild && null != parentQueryName)
         {
@@ -43,12 +43,9 @@ public class NIRCObservationOrdersFormSection extends BaseFormSection
     {
         List<String> defaults = super.getTbarButtons();
 
-        if (_autoPopulateDailyObs)
+        if (_dailyObsOption != null)
         {
-            defaults.add("NIRC_AUTO_POPULATE_DAILY_OBS");
-        }
-        else {
-            defaults.add("NIRC_DAILY_CLINICAL_OBS_ORDERS");
+            defaults.add(_dailyObsOption);
         }
 
         return defaults;

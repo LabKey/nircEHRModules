@@ -8,9 +8,6 @@ SELECT
     MAX(g.taskid) as taskid,
     MAX(g.type) as type,
     MAX(g.caseid) as caseid
---     g.obsCount,
---     g.statusCount,
---     g.status
 FROM
 (
     SELECT
@@ -25,10 +22,7 @@ FROM
             END as observations,
         sr.obsCount,
         sr.statusCount,
-        CASE WHEN (sr.statusCount > 0 AND sr.statusCount < sr.obsCount) THEN 'Partial'
-            WHEN (sr.statusCount > 0 AND sr.statusCount = sr.obsCount) THEN 'Completed'
-            ELSE NULL
-            END as status
+        sr.status
     FROM
     (
     SELECT
@@ -38,7 +32,7 @@ FROM
         sch.caseid,
         sch.type,
         GROUP_CONCAT(sch.category, '; ') as observations,
-        GROUP_CONCAT(obsStatus, ', ') as status,
+        GROUP_CONCAT(obsStatus, ';') as status,
         COUNT(sch.category) as obsCount,
         COUNT(sch.obsStatus) as statusCount
     FROM
