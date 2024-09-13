@@ -58,6 +58,9 @@ necropsy_physical_condition	Physical Condition	value	title
 necropsy_specimen_condition	Specimen Condition	value	title
 necropsy_tissue	Tissues	value	title
 neurologic_types	Neurologic Types	value	title
+nhp_training_reason	NHP Training Reason	value
+nhp_training_result	NHP Training Result	value
+nhp_training_type	NHP Training Type	value
 numeric_unit	Numeric Units	value	title
 observation_areas	Observation Areas	value
 ocular_problem	Ocular Problem	value

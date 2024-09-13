@@ -1363,4 +1363,37 @@
         </columns>
         <tableTitle>Fostering</tableTitle>
     </table>
+    <table tableName="nhpTraining" tableDbType="TABLE">
+        <tableTitle>Animal Training</tableTitle>
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+                <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
+            </column>
+            <column columnName="trainingType">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="reason">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="result">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="trainingStaff">
+                <datatype>varchar</datatype>
+            </column>
+        </columns>
+    </table>
 </tables>
