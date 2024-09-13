@@ -651,7 +651,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         waitForText("Remark: WARN: Must enter at least one comment");
         _helper.setDataEntryField("remark", "Clinical Remarks - Treatment complete");
-        orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Orders");
+        orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Given");
         orderGrid.setGridCell(1, "orderedby", NIRC_VET_NAME);
         waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
         submitForm("Submit Final", "Finalize");
@@ -668,13 +668,17 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         AnimalHistoryPage historyPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
         activeClinicalCases.link(0, "caseCheck").click();
-        switchToWindow(1);
+        switchToWindow(2);
 
         //Fill out Close Date
-        doAndWaitForElementToRefresh(() -> Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(),
-                Locator.name("enddate"), getDriver(), new WebDriverWait(getDriver(), Duration.ofSeconds(2)));
+        waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
+        sleep(200);
+        Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
+        sleep(200);
+        if( !isElementVisible(Locator.name("enddate")))
+            Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
         setFormElement(Locator.name("enddate"), LocalDateTime.now().format(_dateFormat));
-        setFormElement(Locator.name("s"), "Closing the case");
+        _helper.setDataEntryField("s", "Closing the case");
         waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
 
         //Verifying if the form was loaded with all the entered data
