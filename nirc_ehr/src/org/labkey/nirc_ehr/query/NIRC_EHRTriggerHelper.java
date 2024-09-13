@@ -578,7 +578,6 @@ public class NIRC_EHRTriggerHelper
     {
         TableInfo ti = getTableInfo("study", "observation_order");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
-//        SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), String.join(";", NIRC_EHRManager.DAILY_CLINICAL_OBS), CompareType.IN);
         filter.addCondition(FieldKey.fromString("caseid"), caseid);
         filter.addCondition(FieldKey.fromParts("frequency", "meaning"), "SID");
         TableSelector ts = new TableSelector(ti, PageFlowUtil.set("category","frequency"), filter, null);
