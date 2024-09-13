@@ -52,6 +52,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -61,6 +62,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -82,6 +84,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static String NIRC_BASIC_SUBMITTER_VET_TECH = "vet_tech_bs@nirctest.com";
     private static String NIRC_FULL_SUBMITTER_VET_TECH = "vet_tech_fs@nirctest.com";
     private static String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
+    private static String NIRC_VET_NAME = "vet fs";
 
     private static String deadAnimalId = "D5454";
     private static String departedAnimalId = "H6767";
@@ -608,20 +611,50 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
         setFormElement(Locator.textarea("plan"), "Case plan");
         setFormElement(Locator.name("Id"), animalId);
-        setFormElement(Locator.name("date"), LocalDateTime.now().minusDays(6).format(_dateFormat));
+        setFormElement(Locator.name("date"), LocalDateTime.now().minusDays(1).format(_dateFormat));
         Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
 
         //Fill out Clinical Remarks section with Date, Remark
-        setFormElement(Locator.name("date").index(1), LocalDateTime.now().minusDays(5).format(_dateFormat));
-        setFormElement(Locator.textarea("remark"), "Clinical Remarks - Test ");
+         scrollIntoView(Locator.textarea("remark"));
+        setFormElement(Locator.name("date").index(1), LocalDateTime.now().minusDays(1).format(_dateFormat));
+        _helper.setDataEntryField("remark", "Clinical Remarks - Test");
+        waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
         _helper.addRecordToGrid(weight);
         weight.setGridCellJS(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
         weight.setGridCell(1, "weight", "6.000");
 
-        //'Submit Final'
+        log("Adding Medications/Treatments Orders");
+        Ext4GridRef orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Orders");
+        _helper.addRecordToGrid(orderGrid);
+        orderGrid.setGridCell(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
+        orderGrid.clickDownArrowOnGrid(1, "code");
+        orderGrid.setGridCell(1, "code", "Diazepam");
+        orderGrid.clickDownArrowOnGrid(1, "frequency");
+        orderGrid.setGridCell(1, "frequency", "QID");
+        orderGrid.clickDownArrowOnGrid(1, "route");
+        orderGrid.setGridCell(1, "route", "IVAG");
+        orderGrid.clickDownArrowOnGrid(1, "orderedby");
+        orderGrid.setGridCell(1, "orderedby", NIRC_VET_NAME);
+        orderGrid.completeEdit();
         submitForm("Submit Final", "Finalize Form");
+
+        log("Completing today's Medication Schedule");
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Today's Medication Schedule"));
+        AnimalHistoryPage animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        DataRegionTable scheduleTable = animalHistoryPage.getActiveReportDataRegion();
+        Assert.assertEquals("Incorrect number of rows", 4, scheduleTable.getDataRowCount());
+        scheduleTable.link(0, "treatmentRecord").click();
+        switchToWindow(1);
+
+        waitForText("Remark: WARN: Must enter at least one comment");
+        _helper.setDataEntryField("remark", "Clinical Remarks - Treatment complete");
+        orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Orders");
+        orderGrid.setGridCell(1, "orderedby", NIRC_VET_NAME);
+        waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
+        submitForm("Submit Final", "Finalize");
         stopImpersonating();
 
         //Go to NIRC/EHR main page
@@ -638,7 +671,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(1);
 
         //Fill out Close Date
+        doAndWaitForElementToRefresh(() -> Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(),
+                Locator.name("enddate"), getDriver(), new WebDriverWait(getDriver(), Duration.ofSeconds(2)));
         setFormElement(Locator.name("enddate"), LocalDateTime.now().format(_dateFormat));
+        setFormElement(Locator.name("s"), "Closing the case");
+        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
 
         //Verifying if the form was loaded with all the entered data
         weight = _helper.getExt4GridForFormSection("Weights");
