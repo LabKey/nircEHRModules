@@ -44,8 +44,10 @@ import org.labkey.nirc_ehr.dataentry.form.NIRCClinicalRoundsFormType;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public class NIRC_EHRCustomizer extends AbstractTableCustomizer
@@ -1000,6 +1002,64 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
     private void customizeObservationSchedule(AbstractTableInfo ti)
     {
+        if (ti.getColumn("observationList") == null )
+        {
+            WrappedColumn col = new WrappedColumn(ti.getColumn("observations"), "observationList");
+            col.setLabel("Observations");
+            col.setDisplayColumnFactory(new DisplayColumnFactory()
+            {
+
+                @Override
+                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                {
+                    return new DataColumn(colInfo)
+                    {
+
+                        @Override
+                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        {
+                            String status = (String) getBoundColumn().getValue(ctx);
+                            String stat = status;
+                            if (status != null)
+                            {
+                                List<String> dailies = new ArrayList<>();
+                                List<String> nonDailies = new ArrayList<>();
+                                String[] sts = status.split(";");
+
+                                for (String st : sts)
+                                {
+                                    if (NIRC_EHRManager.DAILY_CLINICAL_OBS.contains(st) && !dailies.contains(st))
+                                    {
+                                        dailies.add(st);
+                                    }
+                                    else
+                                    {
+                                        nonDailies.add(st);
+                                    }
+                                }
+
+                                if (dailies.size() == NIRC_EHRManager.DAILY_CLINICAL_OBS.size())
+                                {
+                                    stat = NIRC_EHRManager.DAILY_CLINICAL_OBS_TITLE;
+                                    if (!nonDailies.isEmpty())
+                                    {
+                                        stat += "; " + String.join("; ", nonDailies);
+                                    }
+                                }
+                                else
+                                {
+                                    stat = status;
+                                }
+                            }
+
+                            out.write(stat);
+                        }
+                    };
+                }
+            });
+            ti.addColumn(col);
+        }
+
         if (ti.getColumn("observationRecord") == null )
         {
             WrappedColumn col = new WrappedColumn(ti.getColumn("taskid"), "observationRecord");
@@ -1018,14 +1078,14 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             Date date = (Date)ctx.get("scheduledDate");
                             String caseid = (String)ctx.get("caseid");
                             String category = (String)ctx.get("type");
-                            String observations = (String)ctx.get("observations");
+                            String observationList = (String)ctx.get("observationList");
                             String id = (String)ctx.get("id");
 
                             ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
                                 return;
 
-                            if (NIRC_EHRManager.DAILY_CLINICAL_OBS_TITLE.equals(observations))
+                            if (NIRC_EHRManager.DAILY_CLINICAL_OBS_LIST.equals(observationList))
                             {
                                 linkAction.addParameter("formType", NIRCClinicalObservationsFormType.NAME);
                                 linkAction.addParameter("id", id);
@@ -1066,7 +1126,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
                                 linkAction.addParameter("id", id);
                                 linkAction.addParameter("obsTask", taskid);
-                                linkAction.addParameter("observations", observations);
+                                linkAction.addParameter("observations", observationList);
                                 linkAction.addParameter("scheduledDate", date.toString());
                             }
                             String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:observationSchedule";
@@ -1115,7 +1175,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (ti.getColumn("observationStatus") == null )
         {
             WrappedColumn col = new WrappedColumn(ti.getColumn("status"), "observationStatus");
-            col.setLabel("Status2");
+            col.setLabel("Status");
             col.setDisplayColumnFactory(new DisplayColumnFactory()
             {
 

@@ -16,10 +16,7 @@ FROM
         sr.scheduledDate,
         sr.caseid,
         sr.type,
-        CASE WHEN sr.observations = 'Activity; Appetite; BCS; Hydration; Stool; Verified Id?'
-            THEN javaConstant('org.labkey.nirc_ehr.NIRC_EHRManager.DAILY_CLINICAL_OBS_TITLE')
-            ELSE sr.observations
-            END as observations,
+        sr.observations,
         sr.obsCount,
         sr.statusCount,
         sr.status
@@ -31,7 +28,7 @@ FROM
         sch.date as scheduledDate,
         sch.caseid,
         sch.type,
-        GROUP_CONCAT(sch.category, '; ') as observations,
+        GROUP_CONCAT(sch.category, ';') as observations,
         GROUP_CONCAT(obsStatus, ';') as status,
         COUNT(sch.category) as obsCount,
         COUNT(sch.obsStatus) as statusCount

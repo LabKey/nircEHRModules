@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
 {
-    public static final String NAME = "Clinical Rounds";
+    public static final String NAME = "Clinical Observations";
 
     public NIRCClinicalObservationsFormType(DataEntryFormContext ctx, Module owner)
     {

@@ -4,6 +4,7 @@
  * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
  */
 
+const console = require("console");
 require("ehr/triggers").initScript(this);
 
 var animalIdCasesMap = {};
@@ -24,7 +25,20 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         }
 
         if (!helper.isValidateOnly()) {
-            triggerHelper.propagateClinicalObs(row); //Add clinical obs for all open cases associated with an animal
+            var qc;
+            if (row.QCStateLabel) {
+                qc = EHR.Server.Security.getQCStateByLabel(row.QCStateLabel);
+            }
+            else if (row.QCState) {
+                qc = EHR.Server.Security.getQCStateByRowId(row.QCState);
+            }
+
+            if (!qc) {
+                console.error('Unable to find QCState: ' + row.QCState + '/' + row.QCStateLabel);
+            }
+            else {
+                triggerHelper.propagateClinicalObs(row, qc.RowId); //Add clinical obs for all open cases associated with an animal
+            }
         }
     }
 }

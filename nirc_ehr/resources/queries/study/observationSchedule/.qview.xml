@@ -6,8 +6,8 @@
         <column name="Id/curLocation/room"/>
         <column name="Id/curLocation/cage"/>
         <column name="scheduledDate"/>
-        <column name="observations"/>
-        <column name="status"/>
+        <column name="observationList"/>
+        <column name="observationStatus"/>
     </columns>
     <sorts>
         <sort column="scheduledDate"/>
