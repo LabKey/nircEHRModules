@@ -574,7 +574,7 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public void ensureDailyClinicalObservationOrders(String id, String caseid, String qcstate) throws SQLException
+    public void ensureDailyClinicalObservationOrders(String id, String caseid, String performedby, String qcstate) throws SQLException
     {
         TableInfo ti = getTableInfo("study", "observation_order");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
@@ -609,6 +609,7 @@ public class NIRC_EHRTriggerHelper
                     row.put("Id", id);
                     row.put("qcstate", qcstate);
                     row.put("area", "N/A");
+                    row.put("performedby", performedby);
                     rows.add(row);
                 }
 
@@ -650,7 +651,7 @@ public class NIRC_EHRTriggerHelper
             if (order != null)
             {
                 filter = new SimpleFilter(FieldKey.fromString("category"), category);
-                filter.addCondition(FieldKey.fromString("caseid"), caseid, CompareType.NEQ);
+                filter.addCondition(FieldKey.fromString("caseid"), caseid, CompareType.NEQ_OR_NULL);
                 filter.addCondition(FieldKey.fromString("Id"), id);
                 filter.addCondition(FieldKey.fromString("frequency"), order.get("frequency"));
                 filter.addCondition(FieldKey.fromString("area"), area);
@@ -659,44 +660,41 @@ public class NIRC_EHRTriggerHelper
 
                 ts.getMapCollection().forEach(map -> {
                     String otherCaseId = (String) map.get("caseid");
-                    if (otherCaseId != null)
+                    try
                     {
-                        try
+                        TableInfo obsTi = getTableInfo("study", "clinical_observations");
+                        SimpleFilter obsFilter = new SimpleFilter(FieldKey.fromString("caseid"), otherCaseId);
+                        obsFilter.addCondition(FieldKey.fromString("category"), category);
+                        obsFilter.addCondition(FieldKey.fromString("area"), area);
+                        obsFilter.addCondition(FieldKey.fromString("scheduledDate"), scheduledDate);
+                        obsFilter.addCondition(FieldKey.fromString("Id"), id);
+                        TableSelector obsTs = new TableSelector(obsTi, PageFlowUtil.set("Id"), obsFilter, null);
+                        if (!obsTs.exists())
                         {
-                            TableInfo obsTi = getTableInfo("study", "clinical_observations");
-                            SimpleFilter obsFilter = new SimpleFilter(FieldKey.fromString("caseid"), otherCaseId);
-                            obsFilter.addCondition(FieldKey.fromString("category"), category);
-                            obsFilter.addCondition(FieldKey.fromString("area"), area);
-                            obsFilter.addCondition(FieldKey.fromString("scheduledDate"), scheduledDate);
-                            obsFilter.addCondition(FieldKey.fromString("Id"), id);
-                            TableSelector obsTs = new TableSelector(obsTi, PageFlowUtil.set("Id"), obsFilter, null);
-                            if (!obsTs.exists())
-                            {
-                                Map<String, Object> obsRow = new CaseInsensitiveHashMap<>();
-                                obsRow.put("caseid", otherCaseId);
-                                obsRow.put("category", category);
-                                obsRow.put("date", date);
-                                obsRow.put("qcstate", qcstate);
-                                obsRow.put("Id", id);
-                                obsRow.put("scheduledDate", scheduledDate);
-                                obsRow.put("area", area);
-                                obsRow.put("observation", observation);
-                                obsRow.put("performedBy", performedBy);
-                                obsRow.put("taskid", taskid);
+                            Map<String, Object> obsRow = new CaseInsensitiveHashMap<>();
+                            obsRow.put("caseid", otherCaseId);
+                            obsRow.put("category", category);
+                            obsRow.put("date", date);
+                            obsRow.put("qcstate", qcstate);
+                            obsRow.put("Id", id);
+                            obsRow.put("scheduledDate", scheduledDate);
+                            obsRow.put("area", area);
+                            obsRow.put("observation", observation);
+                            obsRow.put("performedBy", performedBy);
+                            obsRow.put("taskid", taskid);
 
-                                List<Map<String, Object>> rows = new ArrayList<>();
-                                rows.add(obsRow);
+                            List<Map<String, Object>> rows = new ArrayList<>();
+                            rows.add(obsRow);
 
-                                BatchValidationException errors = new BatchValidationException();
-                                obsTi.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
-                                if (errors.hasErrors())
-                                    throw errors;
-                            }
+                            BatchValidationException errors = new BatchValidationException();
+                            obsTi.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+                            if (errors.hasErrors())
+                                throw errors;
                         }
-                        catch (Exception e)
-                        {
-                            _log.error("Error propagating clinical observations", e);
-                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _log.error("Error propagating clinical observations", e);
                     }
                 });
             }

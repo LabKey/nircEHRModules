@@ -95,7 +95,7 @@ FROM
         ) s1
 
         ) s ON (s.animalid = d.id)
-        LEFT JOIN study.clinical_observations co ON s.category = co.category AND co.scheduledDate IS NOT NULL AND s.date = co.scheduledDate AND co.id = s.animalid
+        LEFT JOIN study.clinical_observations co ON s.category = co.category AND co.scheduledDate IS NOT NULL AND s.date = co.scheduledDate AND co.id = s.animalid AND co.caseid = s.caseid
     ) sch
     GROUP BY
         sch.id,

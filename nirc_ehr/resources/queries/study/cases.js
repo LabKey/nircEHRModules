@@ -35,7 +35,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                     console.error('Unable to find QCState: ' + row.QCState + '/' + row.QCStateLabel);
                 }
                 else if (qc.Label != 'COMPLETED' && row.caseid && row.Id && qc) {
-                    triggerHelper.ensureDailyClinicalObservationOrders(row.Id, row.caseid, qc.RowId);
+                    triggerHelper.ensureDailyClinicalObservationOrders(row.Id, row.caseid, row.performedby, qc.RowId);
                 }
             }
         }
