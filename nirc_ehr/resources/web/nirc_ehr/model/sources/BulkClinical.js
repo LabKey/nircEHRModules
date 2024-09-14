@@ -1,14 +1,4 @@
 EHR.model.DataModelManager.registerMetadata('BulkClinical', {
-    allQueries: {
-        category: {
-            defaultValue: 'Clinical',
-            hidden: true
-        },
-        project: {
-            hidden: true,
-            allowBlank: true
-        },
-    },
     byQuery: {
         'study.clinremarks': {
             p: {
@@ -37,23 +27,27 @@ EHR.model.DataModelManager.registerMetadata('BulkClinical', {
             remark: {
                 allowBlank: true
             },
-        },
-        'study.clinical_observations': {
             category: {
-                hidden: false
+                getInitialValue: function (v, rec) {
+                    return 'Clinical'
+                },
+                editable: false,
+                hidden: true,
+                columnConfig: {
+                    editable: false
+                }
             },
-            remark: {
-                allowBlank: true
-            },
-        },
-        'study.blood': {
-            units: {
-                hidden: true
-            },
-        },
-        'study.vitals': {
-            units: {
-                hidden: true
+            performedby: {
+                hidden: false,
+                defaultValue: LABKEY.Security.currentUser.id.toString(),
+                editorConfig: {
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'core',
+                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                        autoLoad: true
+                    }
+                }
             },
         }
     }

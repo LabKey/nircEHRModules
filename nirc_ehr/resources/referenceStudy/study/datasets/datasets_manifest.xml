@@ -26,6 +26,7 @@
         <dataset name="inbreeding" id="1021" category="Colony Management" type="Standard"/>
         <dataset name="necropsy" id="1019" category="Pathology" type="Standard"/>
         <dataset name="obs" id="1025" category="Clinical" type="Standard"/>
+        <dataset name="observation_order" id="1049" category="Clinical" type="Standard"/>
         <dataset name="notes" id="1027" category="Colony Management" type="Standard"/>
         <dataset name="pairings" id="1028" category="Colony Management" type="Standard"/>
         <dataset name="physicalExam" id="1029" category="Clinical" type="Standard"/>
