@@ -671,15 +671,14 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(2);
 
         //Fill out Close Date
+        _helper.setDataEntryField("s", "Closing the case");
+        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+
         waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
-        sleep(200);
         Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
-        sleep(200);
         if( !isElementVisible(Locator.name("enddate")))
             Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
         setFormElement(Locator.name("enddate"), LocalDateTime.now().format(_dateFormat));
-        _helper.setDataEntryField("s", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
 
         //Verifying if the form was loaded with all the entered data
         weight = _helper.getExt4GridForFormSection("Weights");
