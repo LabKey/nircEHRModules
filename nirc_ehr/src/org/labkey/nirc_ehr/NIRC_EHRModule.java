@@ -195,6 +195,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCFloorFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCCageFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCClinicalObservationsFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCClinicalRoundsFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCAnimalTrainingFormType.class, this));
     }
 

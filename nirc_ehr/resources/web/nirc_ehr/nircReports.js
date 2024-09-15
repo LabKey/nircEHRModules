@@ -197,3 +197,25 @@ EHR.reports.clinicalHistory = function(panel, tab, showActionsBtn, includeAll){
         }
     }
 };
+
+EHR.reports.observationSchedule = function(panel, tab, viewName){
+    var filterArray = panel.getFilterArray(tab);
+    var title = panel.getTitleSuffix();
+
+    var date = Ext4.Date.format(new Date(), LABKEY.extDefaultDateFormat);
+    tab.add({
+        xtype: 'ldk-querypanel',
+        style: 'margin-bottom:20px;',
+        queryConfig: panel.getQWPConfig({
+            schemaName: 'study',
+            queryName: 'observationSchedule',
+            title: 'Observation Schedule ' + title,
+            filters: filterArray.nonRemovable,
+            removeableFilters: filterArray.removable,
+            parameters: {
+                StartDate: date,
+                NumDays: 1
+            }
+        })
+    });
+}

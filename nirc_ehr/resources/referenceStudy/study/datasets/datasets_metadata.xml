@@ -334,6 +334,9 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
+            <column columnName="scheduledDate">
+                <datatype>timestamp</datatype>
+            </column>
             <column columnName="category">
                 <columnTitle>Type</columnTitle>
                 <datatype>varchar</datatype>
@@ -347,6 +350,9 @@
             <column columnName="caseid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="type">
+                <datatype>varchar</datatype>
             </column>
         </columns>
     </table>
@@ -1362,6 +1368,46 @@
             </column>
         </columns>
         <tableTitle>Fostering</tableTitle>
+    </table>
+    <table tableName="observation_order" tableDbType="TABLE">
+        <columns>
+            <column columnName="Id">
+                <datatype>varchar</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+                <importAliases>
+                    <importAlias>ptid</importAlias>
+                </importAliases>
+            </column>
+            <column columnName="date">
+                <datatype>timestamp</datatype>
+                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+            </column>
+            <column columnName="category">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="area">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="caseid">
+                <datatype>varchar</datatype>
+                <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
+            </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+                <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
+            </column>
+            <column columnName="formSort">
+                <datatype>integer</datatype>
+            </column>
+            <column columnName="frequency">
+                <datatype>integer</datatype>
+            </column>
+            <column columnName="type">
+                <datatype>varchar</datatype>
+            </column>
+        </columns>
+        <tableTitle>Observation Orders</tableTitle>
     </table>
     <table tableName="nhpTraining" tableDbType="TABLE">
         <tableTitle>Animal Training</tableTitle>

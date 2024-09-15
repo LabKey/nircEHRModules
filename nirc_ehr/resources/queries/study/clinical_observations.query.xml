@@ -39,6 +39,10 @@
                     <column columnName="scheduledDate">
                         <columnTitle>Scheduled Date</columnTitle>
                     </column>
+                    <column columnName="type">
+                        <columnTitle>Type</columnTitle>
+                        <isHidden>true</isHidden>
+                    </column>
                 </columns>
             </table>
         </tables>
