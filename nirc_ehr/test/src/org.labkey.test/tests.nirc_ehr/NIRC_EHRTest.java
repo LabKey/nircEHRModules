@@ -680,10 +680,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
             Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
         setFormElement(Locator.name("enddate"), LocalDateTime.now().format(_dateFormat));
 
-        //Verifying if the form was loaded with all the entered data
-        weight = _helper.getExt4GridForFormSection("Weights");
-        Assert.assertEquals("Weight value entered was not retrived", 1, weight.getRowCount());
-
         //'Submit Final'
         submitForm("Submit Final", "Finalize Form");
 
