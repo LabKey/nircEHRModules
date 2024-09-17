@@ -28,9 +28,7 @@
                             <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
-                    <column columnName="performedBy">
-                        <columnTitle>Performed By</columnTitle>
-                    </column>
+                    <column columnName="performedBy" />
                 </columns>
             </table>
         </tables>

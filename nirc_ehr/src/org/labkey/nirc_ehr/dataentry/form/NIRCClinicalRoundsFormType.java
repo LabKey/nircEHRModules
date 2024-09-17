@@ -7,7 +7,6 @@ import org.labkey.api.ehr.dataentry.SimpleFormSection;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.module.Module;
-import org.labkey.api.query.Queryable;
 import org.labkey.api.security.permissions.AdminPermission;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
@@ -15,7 +14,6 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCBloodDrawFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCaseTemplateFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCasesFormPanelSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalRemarksFormPanelSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCHousingFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureFormSection;
@@ -29,13 +27,12 @@ import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
 import java.util.Arrays;
 import java.util.List;
 
-public class NIRCCasesFormType extends NIRCBaseTaskFormType
+public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
 {
-    @Queryable
-    public static final String NAME = "Clinical Cases";
-    public static final String LABEL = "Clinical Cases";
+    public static final String NAME = "Clinical Rounds";
+    public static final String LABEL = "Clinical Rounds";
 
-    public NIRCCasesFormType(DataEntryFormContext ctx, Module owner)
+    public NIRCClinicalRoundsFormType(DataEntryFormContext ctx, Module owner)
     {
         super(ctx, owner, NAME, LABEL, "Clinical", Arrays.<FormSection>asList(
                 new NIRCTaskFormSection(),
@@ -45,15 +42,12 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
-                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks",
-                        ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
-                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
-                        ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(true, "cases"),
                 new NIRCClinicalObservationsFormSection(true, "cases"),
                 new NIRCObservationOrdersFormSection(null, true, "cases"),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
-                new NIRCTreatmentOrderFormSection(true, "cases"),
+                new NIRCTreatmentOrderFormSection(true,
+                        "cases"),
                 new NIRCWeightFormSection(true, false, true, "cases"),
                 new NIRCVitalsFormSection(true, "cases"),
                 new NIRCHousingFormSection(true, true, true, "cases"),
@@ -67,6 +61,7 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
         {
             s.addConfigSource("ClinicalDefaults");
             s.addConfigSource("ClinicalCase");
+            s.addConfigSource("ClinicalRounds");
             s.addConfigSource("TreatmentSchedule");
 
             if (s instanceof SimpleFormSection && !s.getName().equals("tasks"))
@@ -85,6 +80,7 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalCase.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalRounds.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/panel/ExamDataEntryPanel.js"));
         setJavascriptClass("EHR.panel.ExamDataEntryPanel");
 

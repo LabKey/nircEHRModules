@@ -64,6 +64,9 @@ necropsy_physical_condition
 necropsy_specimen_condition
 necropsy_tissue
 neurologic_types
+nhp_training_reason
+nhp_training_result
+nhp_training_type
 numeric_unit
 observation_areas
 ocular_problem

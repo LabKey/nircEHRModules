@@ -112,6 +112,12 @@
     <ns:datasetPermission datasetName="clinical_observations" groupName="EHR Full Updaters" role="org.labkey.ehr.security.EHRFullUpdaterRole"/>
     <ns:datasetPermission datasetName="clinical_observations" groupName="EHR Request Admins" role="org.labkey.ehr.security.EHRRequestAdminRole"/>
     <ns:datasetPermission datasetName="clinical_observations" groupName="EHR Requestors" role="org.labkey.ehr.security.EHRRequestorRole"/>
+    <ns:datasetPermission datasetName="observation_order" groupName="EHR Administrators" role="org.labkey.ehr.security.EHRDataAdminRole"/>
+    <ns:datasetPermission datasetName="observation_order" groupName="EHR Basic Submitters" role="org.labkey.ehr.security.EHRBasicSubmitterRole"/>
+    <ns:datasetPermission datasetName="observation_order" groupName="EHR Full Submitters" role="org.labkey.ehr.security.EHRFullSubmitterRole"/>
+    <ns:datasetPermission datasetName="observation_order" groupName="EHR Full Updaters" role="org.labkey.ehr.security.EHRFullUpdaterRole"/>
+    <ns:datasetPermission datasetName="observation_order" groupName="EHR Request Admins" role="org.labkey.ehr.security.EHRRequestAdminRole"/>
+    <ns:datasetPermission datasetName="observation_order" groupName="EHR Requestors" role="org.labkey.ehr.security.EHRRequestorRole"/>
     <ns:datasetPermission datasetName="treatment_order" groupName="EHR Administrators" role="org.labkey.ehr.security.EHRDataAdminRole"/>
     <ns:datasetPermission datasetName="treatment_order" groupName="EHR Basic Submitters" role="org.labkey.ehr.security.EHRBasicSubmitterRole"/>
     <ns:datasetPermission datasetName="treatment_order" groupName="EHR Full Submitters" role="org.labkey.ehr.security.EHRFullSubmitterRole"/>

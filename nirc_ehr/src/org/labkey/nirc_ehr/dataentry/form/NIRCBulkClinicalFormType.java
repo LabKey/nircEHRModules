@@ -10,6 +10,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCBloodDrawFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalRemarksFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
@@ -34,7 +35,8 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
                 new NIRCProcedureFormSection(),
-                new NIRCClinicalObservationsFormSection(true, false, true),
+                new NIRCClinicalObservationsFormSection(false, null),
+                new NIRCObservationOrdersFormSection("NIRC_DAILY_CLINICAL_OBS_ORDERS", false, null),
                 new NIRCTreatmentGivenFormSection(),
                 new NIRCTreatmentOrderFormSection(),
                 new NIRCWeightFormSection(true, true),
@@ -42,6 +44,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
                 new NIRCBloodDrawFormSection(true, true, true)
         ));
 
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BulkClinical.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
@@ -49,6 +52,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
 
         for (FormSection s : getFormSections())
         {
+            s.addConfigSource("ClinicalDefaults");
             s.addConfigSource("BulkClinical");
             s.addConfigSource("TreatmentSchedule");
         };
