@@ -1172,6 +1172,10 @@
                 <columnTitle>Ordered By</columnTitle>
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="endTreatmentOrderedBy">
+                <columnTitle>End Treatment Ordered By</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="vitals" tableDbType="TABLE">

@@ -324,6 +324,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
                         String caseId = (String)ctx.get("objectid");
                         linkAction.addParameter("caseid", caseId);
+                        linkAction.addParameter("edit", true);
                         String href = linkAction.toString();
                         out.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
                     }
@@ -707,6 +708,18 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                 .display("DisplayName")));
                     }
             }
+            if ("endTreatmentOrderedBy".equalsIgnoreCase(col.getName()))
+            {
+                col.setLabel("End Treatment Ordered By");
+                UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                if (us != null)
+                {
+                    col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                            .table("veterinarians")
+                            .key("UserId")
+                            .display("DisplayName")));
+                }
+            }
             if ("taskid".equalsIgnoreCase(col.getName()))
             {
                 col.setURL(DetailsURL.fromString("/ehr/dataEntryFormDetails.view?formType=${taskid/formtype}&taskId=${taskid}"));
@@ -717,11 +730,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             }
             if ("enddate".equalsIgnoreCase(col.getName()) && !ti.getName().equals("encounters"))
             {
-                col.setFormat("Date");
+                col.setFormat("DateTime");
             }
             if ("reviewdate".equalsIgnoreCase(col.getName()))
             {
-                col.setFormat("Date");
+                col.setFormat("DateTime");
             }
             if ("caseid".equalsIgnoreCase(col.getName()))
             {

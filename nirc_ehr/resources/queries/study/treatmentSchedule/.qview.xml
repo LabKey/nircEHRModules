@@ -15,7 +15,7 @@
         <column name="amountAndVolume"/>
         <column name="route"/>
         <column name="remark"/>
-        <column name="performedby"/>
+        <column name="orderedby"/>
         <column name="startDate"/>
         <column name="category"/>
         <column name="reason" />
