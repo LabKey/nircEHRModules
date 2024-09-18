@@ -17,6 +17,7 @@
         <column name="conc_units"/>
         <column name="dosage"/>
         <column name="dosage_units"/>
+        <column name="orderedby"/>
         <column name="performedBy"/>
         <column name="description"/>
         <column name="remark"/>

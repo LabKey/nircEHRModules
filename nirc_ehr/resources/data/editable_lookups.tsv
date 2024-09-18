@@ -67,6 +67,9 @@ necropsy_physical_condition	Colony Management	Necropsy Physical Condition
 necropsy_specimen_condition	Colony Management	Necropsy Specimen Condition
 necropsy_tissue	Colony Management	Necropsy Tissue
 neurologic_types	Clinical	Neurologic Types	Clinical observation fixed values.
+nhp_training_reason	Behavior	NHP Training Reason	Behavior training reason values
+nhp_training_result	Behavior	NHP Training Result	Behavior training result values
+nhp_training_type	Behavior	NHP Training Type	Behavior training type values
 numeric_unit	Colony Management	Numeric Unit
 observation_types	Clinical	Clin remarks observation types
 observation_areas	Clinical	Observation Areas	Clinical observation areas.

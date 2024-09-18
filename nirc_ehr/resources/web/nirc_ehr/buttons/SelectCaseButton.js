@@ -15,6 +15,11 @@ Ext4.define('NIRC_EHR.form.field.SelectCaseButton', {
             const rec = store.getAt(0);
             EHR.DemographicsCache.reportCaseSelected(rec);
             panel.fireEvent('animalchange', rec.data.Id);
+
+            let editCases = this.up('#upperPanel')?.query('nirc_ehr-editCases')?.[0];
+            editCases.fieldEnableChange(true);
+            if (hideEdit)
+                editCases.editBtn.hide();
         });
     },
 
