@@ -49,6 +49,7 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
         if (!isVet && (!isFolderAdmin || isVetTech))
         {
             keys.remove(FieldKey.fromString("enddate"));
+            keys.remove(FieldKey.fromString("closeRemark"));
         }
 
         return keys;
