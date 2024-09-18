@@ -642,7 +642,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         log("Completing today's Medication Schedule");
         goToEHRFolder();
-        waitAndClickAndWait(Locator.linkWithText("Today's Medication Schedule"));
+        waitAndClickAndWait(Locator.linkWithText("Today's Medication/Treatment Schedule"));
         AnimalHistoryPage animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable scheduleTable = animalHistoryPage.getActiveReportDataRegion();
         Assert.assertEquals("Incorrect number of rows", 4, scheduleTable.getDataRowCount());
