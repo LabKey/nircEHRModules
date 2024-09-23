@@ -23,7 +23,10 @@ public class NIRCCaseHistoryDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
         sb.append(safeAppend(rs, "Category", "category"));
-        sb.append(safeAppend(rs, "Case #", "caseno"));
+        sb.append(safeAppend(rs, "Problem Area", "problemCategory"));
+        sb.append(safeAppend(rs, "Problem", "problemSubCategory"));
+        sb.append(safeAppend(rs, "Open Remark", "openRemark"));
+        sb.append(safeAppend(rs, "Case Plan", "plan"));
 
         if (!redacted)
         {
@@ -41,6 +44,16 @@ public class NIRCCaseHistoryDataSource extends AbstractDataSource
     @Override
     protected Set<String> getColumnNames()
     {
-        return PageFlowUtil.set("Id", "date", "enddate", "caseno", "objectid", "performedby/displayName", "category");
+        return PageFlowUtil.set("Id",
+                "date",
+                "enddate",
+                "caseno",
+                "objectid",
+                "performedby/displayName",
+                "category",
+                "problemCategory",
+                "problemSubcategory",
+                "openRemark",
+                "plan");
     }
 }
