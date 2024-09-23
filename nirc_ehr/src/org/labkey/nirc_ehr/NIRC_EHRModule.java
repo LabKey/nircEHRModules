@@ -140,7 +140,8 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerHistoryDataSource(new FosteringDataSource(this));
         EHRService.get().registerHistoryDataSource(new ExemptionsDataSource(this));
         EHRService.get().registerHistoryDataSource(new HistopathologyDataSource(this));
-        EHRService.get().registerHistoryDataSource(new NIRCCaseHistoryDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCCaseCloseDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCCaseOpenDataSource(this));
         EHRService.get().registerHistoryDataSource(new NIRCClinicalRemarksDataSource(this));
         EHRService.get().registerHistoryDataSource(new ObservationsDataSource(this));
         EHRService.get().registerHistoryDataSource(new PairingsDataSource(this));

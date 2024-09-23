@@ -11,9 +11,9 @@ import org.labkey.api.util.PageFlowUtil;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class NIRCCaseHistoryDataSource extends AbstractDataSource
+public class NIRCCaseOpenDataSource extends AbstractDataSource
 {
-    public NIRCCaseHistoryDataSource(Module module)
+    public NIRCCaseOpenDataSource(Module module)
     {
         super("study", "Cases", "Case Opened", "Clinical", module);
     }
