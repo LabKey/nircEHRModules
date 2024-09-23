@@ -76,7 +76,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             row.project = projectId;
         }
         else {
-            console.log("project can not be found - ", projectName);
+            row.description = projectName;
+            console.log("project can not be found: " + projectName + " for Id: " + row.Id);
         }
         prevAnimalId = row.Id;
         if (!(!row.endDate || row.endDate === 'undefined')) {
