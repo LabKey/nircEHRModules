@@ -1093,6 +1093,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             String category = (String)ctx.get("type");
                             String observationList = (String)ctx.get("observationList");
                             String id = (String)ctx.get("id");
+                            String orderIds = (String)ctx.get("orderIds");
 
                             ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
@@ -1134,6 +1135,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                     else
                                     {
                                         linkAction.addParameter("formType", NIRCBulkClinicalFormType.NAME);
+                                        linkAction.addParameter("orderIds", orderIds);
                                     }
                                 }
 
@@ -1157,9 +1159,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             keys.add(FieldKey.fromString("taskid"));
                             keys.add(FieldKey.fromString("caseid"));
                             keys.add(FieldKey.fromString("id"));
-                            keys.add(FieldKey.fromString("observations"));
+                            keys.add(FieldKey.fromString("observationList"));
                             keys.add(FieldKey.fromString("scheduledDate"));
                             keys.add(FieldKey.fromString("type"));
+                            keys.add(FieldKey.fromString("orderIds"));
                         }
 
                         @Override
@@ -1202,26 +1205,36 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
                         {
                             String status = (String) getBoundColumn().getValue(ctx);
+                            Long obsCount = (Long)ctx.get("obsCount");
+                            Long orders = (Long)ctx.get("orders");
                             String stat = "";
                             if (status != null)
                             {
                                 String[] sts = status.split(";");
 
-                                for (String st : sts)
+                                // Right now we're only putting any status if all the observations for this row have a status
+                                if ((obsCount * orders) == sts.length)
                                 {
-                                    if (stat.isEmpty() && st.equals("Completed"))
+                                    for (String st : sts)
                                     {
-                                        stat = "Completed";
-                                    }
-
-                                    if ("Completed".equals(stat) && !st.equals("Completed"))
-                                    {
-                                        stat = st;
+                                        if ("Completed".equals(stat) || stat.isEmpty())
+                                        {
+                                            stat = st;
+                                        }
                                     }
                                 }
                             }
 
                             out.write(stat);
+                        }
+
+                        @Override
+                        public void addQueryFieldKeys(Set<FieldKey> keys)
+                        {
+                            super.addQueryFieldKeys(keys);
+                            keys.add(getBoundColumn().getFieldKey());
+                            keys.add(FieldKey.fromString("obsCount"));
+                            keys.add(FieldKey.fromString("orders"));
                         }
                     };
                 }

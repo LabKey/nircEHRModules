@@ -7,6 +7,7 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 
 import java.util.Arrays;
 
@@ -19,7 +20,8 @@ public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
         super(ctx, owner, NAME, NAME, "Clinical", Arrays.asList(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCClinicalObservationsFormSection(true, false)
+                new NIRCClinicalObservationsFormSection(true, false),
+                new NIRCWeightFormSection(true, true)
         ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));

@@ -24,7 +24,8 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'No' for 'Verified Id?', please enter Remark", "WARN");
         }
 
-        if (!helper.isValidateOnly()) {
+        // Cases propagate observations to other cases
+        if (!helper.isValidateOnly() && row.caseid) {
             var qc;
             if (row.QCStateLabel) {
                 qc = EHR.Server.Security.getQCStateByLabel(row.QCStateLabel);
@@ -37,7 +38,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 console.error('Unable to find QCState: ' + row.QCState + '/' + row.QCStateLabel);
             }
             else {
-                triggerHelper.propagateClinicalObs(row, qc.RowId); //Add clinical obs for all open cases associated with an animal
+                row.orderId = triggerHelper.propagateClinicalObs(row, qc.RowId); //Add clinical obs for all open cases associated with an animal
             }
         }
     }

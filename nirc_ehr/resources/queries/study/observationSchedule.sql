@@ -4,6 +4,8 @@ SELECT
     COUNT(g.caseid) cases,
     COUNT(g.taskid) orders,
     g.observations,
+    g.obsCount,
+    GROUP_CONCAT(g.obsOrderIds, ';') as orderIds,
     GROUP_CONCAT(g.status, ';') as status,
     MAX(g.taskid) as taskid,
     MAX(g.type) as type,
@@ -16,6 +18,7 @@ FROM
         sr.scheduledDate,
         sr.caseid,
         sr.type,
+        sr.obsOrderIds,
         sr.observations,
         sr.obsCount,
         sr.statusCount,
@@ -28,6 +31,7 @@ FROM
         sch.date as scheduledDate,
         sch.caseid,
         sch.type,
+        GROUP_CONCAT(sch.objectid, ';') as obsOrderIds,
         GROUP_CONCAT(sch.category, ';') as observations,
         GROUP_CONCAT(obsStatus, ';') as status,
         COUNT(sch.category) as obsCount,
@@ -37,7 +41,6 @@ FROM
         SELECT
             d.id,
             s.*,
-            s.category,
             co.qcstate.label as obsStatus
         FROM study.demographics d JOIN
         (SELECT
@@ -73,6 +76,7 @@ FROM
             t1.caseid,
             t1.taskid,
             t1.type,
+            t1.objectid,
 
             t1.qcstate
 
@@ -95,7 +99,7 @@ FROM
         ) s1
 
         ) s ON (s.animalid = d.id)
-        LEFT JOIN study.clinical_observations co ON s.category = co.category AND co.scheduledDate IS NOT NULL AND s.date = co.scheduledDate AND co.id = s.animalid AND co.caseid = s.caseid
+        LEFT JOIN study.clinical_observations co ON co.scheduledDate IS NOT NULL AND s.date = co.scheduledDate AND co.orderId = s.objectid
     ) sch
     GROUP BY
         sch.id,
@@ -108,4 +112,5 @@ FROM
 GROUP BY
     g.id,
     g.scheduledDate,
-    g.observations
+    g.observations,
+    g.obsCount

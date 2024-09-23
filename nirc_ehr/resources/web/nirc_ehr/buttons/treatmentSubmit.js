@@ -22,6 +22,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
             const obsTask = LABKEY.ActionURL.getParameter('obsTask');
             const id = LABKEY.ActionURL.getParameter('id');
             const observations = LABKEY.ActionURL.getParameter('observations');
+            const orderIds = LABKEY.ActionURL.getParameter('orderIds');
 
             if (treatmentid) {
 
@@ -103,7 +104,8 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                         let record = {
                             Id: row.Id.value,
                             category: row.category.value,
-                            area: row.area.value
+                            area: row.area.value,
+                            orderId: row.objectid.value
                         };
 
                         if (scheduledDate) {
@@ -121,7 +123,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                     requiredVersion: 9.1,
                     schemaName: 'study',
                     queryName: 'observation_order',
-                    columns: 'Id,category,area',
+                    columns: 'Id,category,area,objectid',
                     filterArray: [LABKEY.Filter.create('taskid', obsTask, LABKEY.Filter.Types.EQUAL),
                         LABKEY.Filter.create('id', id, LABKEY.Filter.Types.EQUAL),
                         LABKEY.Filter.create('category', observations, LABKEY.Filter.Types.EQUALS_ONE_OF)],

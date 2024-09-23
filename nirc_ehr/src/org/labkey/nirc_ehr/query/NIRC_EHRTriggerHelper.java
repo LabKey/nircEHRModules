@@ -50,6 +50,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class NIRC_EHRTriggerHelper
 {
@@ -574,7 +575,7 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public void ensureDailyClinicalObservationOrders(String id, String caseid, String performedby, String qcstate) throws SQLException
+    public void ensureDailyClinicalObservationOrders(String id, String caseid, String performedby, String qcstate, String taskid) throws SQLException
     {
         TableInfo ti = getTableInfo("study", "observation_order");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
@@ -609,6 +610,7 @@ public class NIRC_EHRTriggerHelper
                     row.put("qcstate", qcstate);
                     row.put("area", "N/A");
                     row.put("performedby", performedby);
+                    row.put("taskid", taskid);
                     rows.add(row);
                 }
 
@@ -622,10 +624,10 @@ public class NIRC_EHRTriggerHelper
                 _log.error("Error adding daily clinical observation orders", e);
             }
         }
-
     }
 
-    public void propagateClinicalObs(Map<String, Object> row, String qcstate) throws SQLException
+    // This helper function propagates clinical observations through clinical cases
+    public String propagateClinicalObs(Map<String, Object> row, String qcstate) throws SQLException
     {
         Date scheduledDate = ConvertHelper.convert(row.get("scheduledDate"), Date.class);
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
@@ -636,6 +638,8 @@ public class NIRC_EHRTriggerHelper
         String observation = ConvertHelper.convert(row.get("observation"), String.class);
         String performedBy = ConvertHelper.convert(row.get("performedBy"), String.class);
         String taskid = ConvertHelper.convert(row.get("taskid"), String.class);
+
+        AtomicReference<String> orderId = new AtomicReference<>();
 
         // First we need to get the observation order frequency for this case and category
         TableInfo ti = getTableInfo("study", "observation_order");
@@ -649,25 +653,38 @@ public class NIRC_EHRTriggerHelper
             Map<String, Object> order = orders[0];
             if (order != null)
             {
+                // Get the same observation orders for all cases
                 filter = new SimpleFilter(FieldKey.fromString("category"), category);
-                filter.addCondition(FieldKey.fromString("caseid"), caseid, CompareType.NEQ_OR_NULL);
                 filter.addCondition(FieldKey.fromString("Id"), id);
                 filter.addCondition(FieldKey.fromString("frequency"), order.get("frequency"));
                 filter.addCondition(FieldKey.fromString("area"), area);
 
-                ts = new TableSelector(ti, PageFlowUtil.set("caseid", "category"), filter, null);
+                ts = new TableSelector(ti, PageFlowUtil.set("caseid", "category", "objectid"), filter, null);
 
+                // iterate through obs orders in other cases
                 ts.getMapCollection().forEach(map -> {
                     String otherCaseId = (String) map.get("caseid");
+                    String obsOrderId = (String) map.get("objectid");
+
+                    if (otherCaseId == null)
+                        return;
+
+                    // For the case being used in the trigger, just pass back the order id
+                    if (otherCaseId.equals(caseid))
+                    {
+                        orderId.set(obsOrderId);
+                        return;
+                    }
+
                     try
                     {
+                        // Check if clinical obs for that date/time and order id already exists
                         TableInfo obsTi = getTableInfo("study", "clinical_observations");
-                        SimpleFilter obsFilter = new SimpleFilter(FieldKey.fromString("caseid"), otherCaseId);
-                        obsFilter.addCondition(FieldKey.fromString("category"), category);
-                        obsFilter.addCondition(FieldKey.fromString("area"), area);
+                        SimpleFilter obsFilter = new SimpleFilter(FieldKey.fromString("orderId"), obsOrderId);
                         obsFilter.addCondition(FieldKey.fromString("scheduledDate"), scheduledDate);
-                        obsFilter.addCondition(FieldKey.fromString("Id"), id);
                         TableSelector obsTs = new TableSelector(obsTi, PageFlowUtil.set("Id"), obsFilter, null);
+
+                        // If id does not exist, insert the clinical observation
                         if (!obsTs.exists())
                         {
                             Map<String, Object> obsRow = new CaseInsensitiveHashMap<>();
@@ -681,6 +698,7 @@ public class NIRC_EHRTriggerHelper
                             obsRow.put("observation", observation);
                             obsRow.put("performedBy", performedBy);
                             obsRow.put("taskid", taskid);
+                            obsRow.put("orderId", obsOrderId);
 
                             List<Map<String, Object>> rows = new ArrayList<>();
                             rows.add(obsRow);
@@ -698,5 +716,6 @@ public class NIRC_EHRTriggerHelper
                 });
             }
         }
+        return orderId.get();
     }
 }
