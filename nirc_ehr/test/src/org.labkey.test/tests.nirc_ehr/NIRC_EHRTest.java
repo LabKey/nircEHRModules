@@ -52,7 +52,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,7 +61,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -649,11 +647,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         scheduleTable.link(0, "treatmentRecord").click();
         switchToWindow(1);
 
-        waitForText("Remark: WARN: Must enter at least one comment");
-        _helper.setDataEntryField("remark", "Clinical Remarks - Treatment complete");
+        waitForText("WARN: The field: Ordered By is required");
         orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Given");
         orderGrid.setGridCell(1, "orderedby", NIRC_VET_NAME);
-        waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
+        waitForTextToDisappear("WARN: The field: Ordered By is required");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
 
