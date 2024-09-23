@@ -60,14 +60,14 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         }
 
 
-        var projectName = row.projectName.split(' ')[0];
+        var projectName = row.projectName.split(' ' + row.Id)[0];
         var projectId = projectData[projectName];
         if (!projectId) {
             var projectNames = Object.keys(projectData);
             for (var i = 0; i < projectNames.length; i++) {
 
                 var pName = projectNames[i];
-                if (pName.toString().indexOf(projectName) === 0) {
+                if (pName == projectName) {
                     projectId = projectData[projectNames[i]];
                 }
             }
