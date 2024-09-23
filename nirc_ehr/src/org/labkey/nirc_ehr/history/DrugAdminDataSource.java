@@ -22,20 +22,28 @@ public class DrugAdminDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        if (rs.hasColumn(FieldKey.fromString("type")) && rs.getObject("type") != null)
+        sb.append(safeAppend(rs, "Category", "category"));
+        sb.append(safeAppend(rs, "Drug/Treatment", "code/meaning"));
+        sb.append(safeAppend(rs, "Route", "route"));
+        boolean amountExists = rs.hasColumn(FieldKey.fromString("amount")) && rs.getObject("amount") != null;
+        boolean volumeExists = rs.hasColumn(FieldKey.fromString("volume")) && rs.getObject("volume") != null;
+        if (amountExists && volumeExists)
         {
-            addRow(sb, "Type", rs.getString("type"));
+            String amountAndVolume = rs.getString("amount") + " " + rs.getString("amount_units")
+                    + " / " + rs.getString("volume") + " " + rs.getString("vol_units");
+            sb.append(safeAppend(rs, "Amount/Volume", amountAndVolume));
         }
+        else if (amountExists)
+        {
+            sb.append(safeAppend(rs, "Amount", rs.getString("amount") + " " + rs.getString("amount_units")));
+        }
+        else if (volumeExists)
+        {
+            sb.append(safeAppend(rs, "Volume", rs.getString("volume") + " " + rs.getString("volume_units")));
+        }
+        sb.append(safeAppend(rs, "Performed By", "performedby/displayName"));
+        sb.append(safeAppend(rs, "Remark", "remark"));
 
-        if (rs.hasColumn(FieldKey.fromString("amount")) && rs.getObject("amount") != null)
-        {
-            addRow(sb, "Amount", rs.getString("amount"));
-        }
-
-        if (rs.hasColumn(FieldKey.fromString("remark")) && rs.getObject("remark") != null)
-        {
-            addRow(sb, "Remark", rs.getString("remark"));
-        }
         return sb.toString();
     }
 
