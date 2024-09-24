@@ -9,6 +9,10 @@ require("ehr/triggers").initScript(this);
 
 var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 
+function onInit(event, helper) {
+    helper.decodeExtraContextProperty('ordersInTransaction');
+}
+
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'cases', function(helper, errors, row, oldRow){
     if (!helper.isETL()) {
         if (row.enddate && !triggerHelper.canCloseCase(row.category)) {
@@ -35,7 +39,12 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                     console.error('Unable to find QCState: ' + row.QCState + '/' + row.QCStateLabel);
                 }
                 else if (qc.Label != 'COMPLETED' && row.caseid && row.Id && qc) {
-                    triggerHelper.ensureDailyClinicalObservationOrders(row.Id, row.caseid, row.performedby, qc.RowId, row.taskid);
+                    var ordersInTransaction = helper.getProperty('ordersInTransaction');
+                    var oit = [];
+                    if (ordersInTransaction && ordersInTransaction.length) {
+                        oit = ordersInTransaction;
+                    }
+                    triggerHelper.ensureDailyClinicalObservationOrders(row.Id, row.caseid, row.performedby, qc.RowId, row.taskid, oit);
                 }
             }
         }

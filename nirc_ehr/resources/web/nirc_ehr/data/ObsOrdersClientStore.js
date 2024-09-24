@@ -1,14 +1,19 @@
-
-Ext4.define('NIRC_EHR.data.CaseClientStore', {
+Ext4.define('NIRC_EHR.data.ObsOrdersClientStore', {
     extend: 'EHR.data.DataEntryClientStore',
+
+    constructor: function(){
+        this.callParent(arguments);
+
+        this.observationTypesStore = EHR.DataEntryUtils.getObservationTypesStore();
+    },
 
     getExtraContext: function(){
         // Pass through cases for validation in clinremarks
-        var caseMap = {};
+        var orders = [];
         var allRecords = this.getRange();
         for (var idx = 0; idx < allRecords.length; ++idx){
             var record = allRecords[idx];
-            if (record.get('caseid')){
+            if (record.get('category')){
                 var id = record.get('Id');
                 var date = record.get('date');
                 if (!id || !date)
@@ -16,27 +21,20 @@ Ext4.define('NIRC_EHR.data.CaseClientStore', {
 
                 date = Ext4.Date.format(date, LABKEY.extDefaultDateFormat);
 
-                if (!caseMap[id])
-                    caseMap[id] = [];
-
-                caseMap[id].push({
+                orders.push({
+                    id: id,
                     objectid: record.get('objectid'),
                     date: date,
                     qcstate: record.get('QCState'),
-                    caseid: record.get('caseid'),
-                    enddate: record.get('enddate')
+                    taskid: record.get('taskid'),
+                    category: record.get('category'),
+                    frequency: record.get('frequency')
                 });
             }
         }
 
-        if (!LABKEY.Utils.isEmptyObj(caseMap)){
-            caseMap = Ext4.encode(caseMap);
-
-            return {
-                casesInTransaction: caseMap
-            }
+        return {
+                ordersInTransaction: orders
         }
-
-        return null;
     }
 });

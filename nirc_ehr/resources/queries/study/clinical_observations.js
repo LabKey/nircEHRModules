@@ -10,6 +10,9 @@ require("ehr/triggers").initScript(this);
 var animalIdCasesMap = {};
 var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 
+function onInit(event, helper) {
+    helper.decodeExtraContextProperty('orderTasksInTransaction');
+}
 
 function onUpsert(helper, scriptErrors, row, oldRow) {
 
@@ -24,8 +27,8 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'No' for 'Verified Id?', please enter Remark", "WARN");
         }
 
-        // Cases propagate observations to other cases
-        if (!helper.isValidateOnly() && row.caseid) {
+        // Handle scheduled observations
+        if (!helper.isValidateOnly() && row.scheduledDate) {
             var qc;
             if (row.QCStateLabel) {
                 qc = EHR.Server.Security.getQCStateByLabel(row.QCStateLabel);
@@ -38,7 +41,16 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 console.error('Unable to find QCState: ' + row.QCState + '/' + row.QCStateLabel);
             }
             else {
-                row.orderId = triggerHelper.propagateClinicalObs(row, qc.RowId); //Add clinical obs for all open cases associated with an animal
+                var orderTasks = helper.getProperty('orderTasksInTransaction');
+                if (orderTasks && orderTasks.length > 0) {
+                    var orderData = triggerHelper.handleScheduledObservations(row, qc.RowId, orderTasks[0]);
+
+                    if (orderData) {
+                        row.caseid = orderData.caseId;
+                        row.orderid = orderData.orderId;
+                        row.area = orderData.area;
+                    }
+                }
             }
         }
     }

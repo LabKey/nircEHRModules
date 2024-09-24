@@ -2,38 +2,24 @@ SELECT
     g.id,
     g.scheduledDate,
     COUNT(g.caseid) cases,
-    COUNT(g.taskid) orders,
-    g.observations,
-    g.obsCount,
+    GROUP_CONCAT(g.observations, ';') as observations,
+    SUM(obsCount) as obsCount,
     GROUP_CONCAT(g.obsOrderIds, ';') as orderIds,
     GROUP_CONCAT(g.status, ';') as status,
-    MAX(g.taskid) as taskid,
+    GROUP_CONCAT(g.taskids, ';') as taskids,
     MAX(g.type) as type,
     MAX(g.caseid) as caseid
 FROM
 (
     SELECT
-        sr.id,
-        sr.taskid,
-        sr.scheduledDate,
-        sr.caseid,
-        sr.type,
-        sr.obsOrderIds,
-        sr.observations,
-        sr.obsCount,
-        sr.statusCount,
-        sr.status
-    FROM
-    (
-    SELECT
         sch.id,
-        sch.taskid,
         sch.date as scheduledDate,
         sch.caseid,
         sch.type,
         GROUP_CONCAT(sch.objectid, ';') as obsOrderIds,
         GROUP_CONCAT(sch.category, ';') as observations,
         GROUP_CONCAT(obsStatus, ';') as status,
+        GROUP_CONCAT(DISTINCT(sch.taskid), ';') as taskids,
         COUNT(sch.category) as obsCount,
         COUNT(sch.obsStatus) as statusCount
     FROM
@@ -103,14 +89,10 @@ FROM
     ) sch
     GROUP BY
         sch.id,
-        sch.taskid,
         sch.date,
         sch.caseid,
         sch.type
-    ) sr
 ) g
 GROUP BY
     g.id,
-    g.scheduledDate,
-    g.observations,
-    g.obsCount
+    g.scheduledDate

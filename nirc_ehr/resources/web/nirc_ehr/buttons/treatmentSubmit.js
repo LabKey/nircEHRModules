@@ -22,7 +22,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
             const obsTask = LABKEY.ActionURL.getParameter('obsTask');
             const id = LABKEY.ActionURL.getParameter('id');
             const observations = LABKEY.ActionURL.getParameter('observations');
-            const orderIds = LABKEY.ActionURL.getParameter('orderIds');
+            // const orderIds = LABKEY.ActionURL.getParameter('orderIds');
 
             if (treatmentid) {
 
@@ -83,7 +83,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
 
             }
 
-            if (obsTask && id && observations) {
+            if (id && observations) {
                 this.addEvents('animalchange');
                 this.enableBubble('animalchange');
 
@@ -99,20 +99,26 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                         return;
                     }
 
+                    const categories = [];
                     for (let i = 0; i < results.rows.length; i++) {
                         let row = results.rows[i];
-                        let record = {
-                            Id: row.Id.value,
-                            category: row.category.value,
-                            area: row.area.value,
-                            orderId: row.objectid.value
-                        };
 
-                        if (scheduledDate) {
-                            record.scheduledDate = scheduledDate;
+                        if (!categories.includes(row.category.value)) {
+                            let record = {
+                                Id: row.Id.value,
+                                category: row.category.value,
+                                area: row.area.value,
+                                orderId: row.objectid.value,
+                                caseid: row.caseid.value
+                            };
+
+                            if (scheduledDate) {
+                                record.scheduledDate = scheduledDate;
+                            }
+
+                            obsGrid.store.add(record);
+                            categories.push(row.category.value);
                         }
-
-                        obsGrid.store.add(record);
                     }
 
                     this.fireEvent('animalchange', results.rows[0].Id.value);
@@ -123,8 +129,8 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                     requiredVersion: 9.1,
                     schemaName: 'study',
                     queryName: 'observation_order',
-                    columns: 'Id,category,area,objectid',
-                    filterArray: [LABKEY.Filter.create('taskid', obsTask, LABKEY.Filter.Types.EQUAL),
+                    columns: 'Id,category,area,objectid,caseid',
+                    filterArray: [LABKEY.Filter.create('taskid', obsTask, LABKEY.Filter.Types.EQUALS_ONE_OF),
                         LABKEY.Filter.create('id', id, LABKEY.Filter.Types.EQUAL),
                         LABKEY.Filter.create('category', observations, LABKEY.Filter.Types.EQUALS_ONE_OF)],
                     scope: this,

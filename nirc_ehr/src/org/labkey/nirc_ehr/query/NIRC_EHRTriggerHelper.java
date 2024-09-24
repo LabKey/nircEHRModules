@@ -50,7 +50,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class NIRC_EHRTriggerHelper
 {
@@ -575,13 +574,18 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public void ensureDailyClinicalObservationOrders(String id, String caseid, String performedby, String qcstate, String taskid) throws SQLException
+    public void ensureDailyClinicalObservationOrders(String id, String caseid, String performedby, String qcstate, String taskid, List<Map<String, Object>> ordersInTransaction) throws SQLException
     {
+        TableInfo freqTi = getTableInfo("ehr_lookups", "treatment_frequency");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("meaning"), "SID");
+        TableSelector ts = new TableSelector(freqTi, PageFlowUtil.set("rowid"), filter, null);
+        Integer sidRowid = ts.getObject(Integer.class);
+
         TableInfo ti = getTableInfo("study", "observation_order");
-        SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
+        filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
         filter.addCondition(FieldKey.fromString("caseid"), caseid);
-        filter.addCondition(FieldKey.fromParts("frequency", "meaning"), "SID");
-        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("category","frequency"), filter, null);
+        filter.addCondition(FieldKey.fromParts("frequency"), sidRowid);
+        ts = new TableSelector(ti, PageFlowUtil.set("category","frequency"), filter, null);
 
         List<String> missing = new ArrayList<>(NIRC_EHRManager.DAILY_CLINICAL_OBS);
         ts.forEach(row -> {
@@ -589,15 +593,15 @@ public class NIRC_EHRTriggerHelper
                 missing.remove(row.getString("category"));
         });
 
+        ordersInTransaction.forEach(row -> {
+            if (row.get("category") != null && row.get("frequency") != null && row.get("frequency").equals(sidRowid))
+                missing.remove((String)row.get("category"));
+        });
+
         if (!missing.isEmpty())
         {
-            TableInfo freqTi = getTableInfo("ehr_lookups", "treatment_frequency");
-            filter = new SimpleFilter(FieldKey.fromString("meaning"), "SID");
-            ts = new TableSelector(freqTi, PageFlowUtil.set("rowid"), filter, null);
             try
             {
-                int sidRowid = ts.getObject(Integer.class);
-
                 List<Map<String, Object>> rows = new ArrayList<>();
                 for (String category : missing)
                 {
@@ -611,6 +615,7 @@ public class NIRC_EHRTriggerHelper
                     row.put("area", "N/A");
                     row.put("performedby", performedby);
                     row.put("taskid", taskid);
+                    row.put("type", "Clinical"); // TODO: Will need to update for behavior
                     rows.add(row);
                 }
 
@@ -627,95 +632,65 @@ public class NIRC_EHRTriggerHelper
     }
 
     // This helper function propagates clinical observations through clinical cases
-    public String propagateClinicalObs(Map<String, Object> row, String qcstate) throws SQLException
+    public Map<String, Object> handleScheduledObservations(Map<String, Object> row, String qcstate, String orderTasks) throws SQLException, BatchValidationException, QueryUpdateServiceException, DuplicateKeyException
     {
         Date scheduledDate = ConvertHelper.convert(row.get("scheduledDate"), Date.class);
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
-        String caseid = ConvertHelper.convert(row.get("caseid"), String.class);
         String category = ConvertHelper.convert(row.get("category"), String.class);
-        String id = ConvertHelper.convert(row.get("id"), String.class);
-        String area = ConvertHelper.convert(row.get("area"), String.class);
         String observation = ConvertHelper.convert(row.get("observation"), String.class);
         String performedBy = ConvertHelper.convert(row.get("performedBy"), String.class);
         String taskid = ConvertHelper.convert(row.get("taskid"), String.class);
 
-        AtomicReference<String> orderId = new AtomicReference<>();
-
-        // First we need to get the observation order frequency for this case and category
+        // Get observation orders for these tasks
         TableInfo ti = getTableInfo("study", "observation_order");
-        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("caseid"), caseid);
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("taskid"), orderTasks, CompareType.IN);
         filter.addCondition(FieldKey.fromString("category"), category);
-        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("frequency"), filter, null);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("category,caseid,Id,area,objectid"), filter, null);
 
         Map<String, Object>[] orders = ts.getMapArray();
+        Map<String, Object> triggerOrder = null;
+
         if (orders.length > 0)
         {
-            Map<String, Object> order = orders[0];
-            if (order != null)
+            for (int i = 0; i < orders.length; i++)
             {
-                // Get the same observation orders for all cases
-                filter = new SimpleFilter(FieldKey.fromString("category"), category);
-                filter.addCondition(FieldKey.fromString("Id"), id);
-                filter.addCondition(FieldKey.fromString("frequency"), order.get("frequency"));
-                filter.addCondition(FieldKey.fromString("area"), area);
+                Map<String, Object> order = orders[i];
 
-                ts = new TableSelector(ti, PageFlowUtil.set("caseid", "category", "objectid"), filter, null);
+                // First order we find will fill out the information in the row passing through the trigger
+                if (i == 0)
+                {
+                    triggerOrder = new HashMap<>();
+                    triggerOrder.put("caseid", order.get("caseid"));
+                    triggerOrder.put("area", order.get("area"));
+                    triggerOrder.put("orderId", order.get("objectid"));
+                    continue;
+                }
 
-                // iterate through obs orders in other cases
-                ts.getMapCollection().forEach(map -> {
-                    String otherCaseId = (String) map.get("caseid");
-                    String obsOrderId = (String) map.get("objectid");
+                // If there are multiple treatment orders that match insert the others here
+                Map<String, Object> obsRow = new CaseInsensitiveHashMap<>();
+                obsRow.put("caseid", order.get("caseid"));
+                obsRow.put("category", order.get("category"));
+                obsRow.put("date", date);
+                obsRow.put("qcstate", qcstate);
+                obsRow.put("Id", order.get("Id"));
+                obsRow.put("scheduledDate", scheduledDate);
+                obsRow.put("area", order.get("area"));
+                obsRow.put("observation", observation);
+                obsRow.put("performedBy", performedBy);
+                obsRow.put("orderId", order.get("objectid"));
+                obsRow.put("taskid", order.get("taskid"));
 
-                    if (otherCaseId == null)
-                        return;
+                List<Map<String, Object>> rows = new ArrayList<>();
+                rows.add(obsRow);
 
-                    // For the case being used in the trigger, just pass back the order id
-                    if (otherCaseId.equals(caseid))
-                    {
-                        orderId.set(obsOrderId);
-                        return;
-                    }
-
-                    try
-                    {
-                        // Check if clinical obs for that date/time and order id already exists
-                        TableInfo obsTi = getTableInfo("study", "clinical_observations");
-                        SimpleFilter obsFilter = new SimpleFilter(FieldKey.fromString("orderId"), obsOrderId);
-                        obsFilter.addCondition(FieldKey.fromString("scheduledDate"), scheduledDate);
-                        TableSelector obsTs = new TableSelector(obsTi, PageFlowUtil.set("Id"), obsFilter, null);
-
-                        // If id does not exist, insert the clinical observation
-                        if (!obsTs.exists())
-                        {
-                            Map<String, Object> obsRow = new CaseInsensitiveHashMap<>();
-                            obsRow.put("caseid", otherCaseId);
-                            obsRow.put("category", category);
-                            obsRow.put("date", date);
-                            obsRow.put("qcstate", qcstate);
-                            obsRow.put("Id", id);
-                            obsRow.put("scheduledDate", scheduledDate);
-                            obsRow.put("area", area);
-                            obsRow.put("observation", observation);
-                            obsRow.put("performedBy", performedBy);
-                            obsRow.put("taskid", taskid);
-                            obsRow.put("orderId", obsOrderId);
-
-                            List<Map<String, Object>> rows = new ArrayList<>();
-                            rows.add(obsRow);
-
-                            BatchValidationException errors = new BatchValidationException();
-                            obsTi.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
-                            if (errors.hasErrors())
-                                throw errors;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        _log.error("Error propagating clinical observations", e);
-                    }
-                });
+                BatchValidationException errors = new BatchValidationException();
+                TableInfo obsTi = getTableInfo("study", "clinical_observations");
+                obsTi.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+                if (errors.hasErrors())
+                    throw errors;
             }
+
         }
-        return orderId.get();
+        return triggerOrder;
     }
 }
