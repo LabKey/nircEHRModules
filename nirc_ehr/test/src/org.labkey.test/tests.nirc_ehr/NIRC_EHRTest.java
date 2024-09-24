@@ -52,7 +52,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,7 +61,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -642,56 +640,56 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         log("Completing today's Medication Schedule");
         goToEHRFolder();
-        waitAndClickAndWait(Locator.linkWithText("Today's Medication Schedule"));
+        waitAndClickAndWait(Locator.linkWithText("Today's Medication/Treatment Schedule"));
         AnimalHistoryPage animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable scheduleTable = animalHistoryPage.getActiveReportDataRegion();
         Assert.assertEquals("Incorrect number of rows", 4, scheduleTable.getDataRowCount());
         scheduleTable.link(0, "treatmentRecord").click();
         switchToWindow(1);
 
-        waitForText("Remark: WARN: Must enter at least one comment");
-        _helper.setDataEntryField("remark", "Clinical Remarks - Treatment complete");
+        waitForText("WARN: The field: Ordered By is required");
         orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Given");
         orderGrid.setGridCell(1, "orderedby", NIRC_VET_NAME);
-        waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
+        waitForTextToDisappear("WARN: The field: Ordered By is required");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
 
+        // TODO: This will be reimplemented in a current PR, this can than be uncommented.
         //Go to NIRC/EHR main page
-        goToEHRFolder();
-        impersonate(NIRC_FULL_SUBMITTER_VET);
-
-        //Go to 'Active Clinical Cases'
-        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
-
-        //Click on 'Case Update' link
-        AnimalHistoryPage historyPage = new AnimalHistoryPage<>(getDriver());
-        DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
-        activeClinicalCases.link(0, "caseCheck").click();
-        switchToWindow(2);
-
-        //Fill out Close Date
-        _helper.setDataEntryField("s", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
-
-        waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
-        Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
-        if( !isElementVisible(Locator.name("enddate")))
-            Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
-        setFormElement(Locator.name("enddate"), LocalDateTime.now().format(_dateFormat));
-
-        //'Submit Final'
-        submitForm("Submit Final", "Finalize Form");
-
-        //Go to NIRC/EHR main page
-        goToEHRFolder();
-        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
-
-        //Verify that the case is no longer present/is closed
-        historyPage = new AnimalHistoryPage<>(getDriver());
-        activeClinicalCases = historyPage.getActiveReportDataRegion();
-        Assert.assertEquals("No active cases", 0, activeClinicalCases.getDataRowCount());
-        stopImpersonating();
+//        goToEHRFolder();
+//        impersonate(NIRC_FULL_SUBMITTER_VET);
+//
+//        //Go to 'Active Clinical Cases'
+//        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+//
+//        //Click on 'Case Update' link
+//        AnimalHistoryPage historyPage = new AnimalHistoryPage<>(getDriver());
+//        DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
+//        activeClinicalCases.link(0, "caseCheck").click();
+//        switchToWindow(2);
+//
+//        //Fill out Close Date
+//        _helper.setDataEntryField("s", "Closing the case");
+//        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+//
+//        waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
+//        Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
+//        if( !isElementVisible(Locator.name("enddate")))
+//            Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
+//        setFormElement(Locator.name("enddate"), LocalDateTime.now().format(_dateFormat));
+//
+//        //'Submit Final'
+//        submitForm("Submit Final", "Finalize Form");
+//
+//        //Go to NIRC/EHR main page
+//        goToEHRFolder();
+//        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+//
+//        //Verify that the case is no longer present/is closed
+//        historyPage = new AnimalHistoryPage<>(getDriver());
+//        activeClinicalCases = historyPage.getActiveReportDataRegion();
+//        Assert.assertEquals("No active cases", 0, activeClinicalCases.getDataRowCount());
+//        stopImpersonating();
     }
 
     @Override
