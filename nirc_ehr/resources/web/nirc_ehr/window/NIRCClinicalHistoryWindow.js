@@ -31,13 +31,39 @@ Ext4.define('NIRC_EHR.window.ClinicalHistoryWindow', {
             }
         }];
 
-        // if (EHR.Security.hasLoaded()){
-        //     ret.push({
-        //         text: 'Actions',
-        //         menu: NIRC_EHR.panel.ClinicalManagementPanel.getActionMenu(this.subjectId, this.caseId)
-        //     });
-        // }
-
         return ret;
+    },
+
+    getItems: function(){
+        return [{
+            xtype: EHR.reports.clinicalHistoryPanelXtype || 'ehr-smallformsnapshotpanel',
+            showActionsButton: false,
+            subjectId: this.subjectId,
+            hideHeader: true,
+            style: 'padding: 5px;',
+            showExtendedInformation: true
+        },{
+            xtype: 'tabpanel',
+            items: [{
+                xtype: 'ehr-clinicalhistorypanel',
+                title: 'History',
+                border: true,
+                width: 1230,
+                gridHeight: 400,
+                height: 400,
+                autoLoadRecords: true,
+                autoScroll: true,
+                subjectId: this.subjectId,
+                containerPath: this.containerPath,
+                minDate: this.minDate || Ext4.Date.add(new Date(), Ext4.Date.YEAR, -2)
+            },{
+                xtype: 'ehr-weightgraphpanel',
+                title: 'Weights',
+                subjectId: this.subjectId,
+                containerPath: this.containerPath,
+                width: 1230,
+                border: true
+            }]
+        }];
     }
 });
