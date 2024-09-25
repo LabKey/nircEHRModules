@@ -1,6 +1,6 @@
 
 Ext4.define('NIRC_EHR.data.CaseClientStore', {
-    extend: 'EHR.data.DataEntryClientStore',
+    extend: 'EHR.data.ParentClientStore',
 
     getExtraContext: function(){
         // Pass through cases for validation in clinremarks
@@ -8,7 +8,7 @@ Ext4.define('NIRC_EHR.data.CaseClientStore', {
         var allRecords = this.getRange();
         for (var idx = 0; idx < allRecords.length; ++idx){
             var record = allRecords[idx];
-            if (record.get('caseid')){
+            if (record.get('objectid')){
                 var id = record.get('Id');
                 var date = record.get('date');
                 if (!id || !date)
