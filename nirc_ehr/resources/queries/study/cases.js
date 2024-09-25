@@ -18,6 +18,10 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         if (row.enddate && !triggerHelper.canCloseCase(row.category)) {
                 EHR.Server.Utils.addError(errors, 'enddate', 'Veterinarian permission required to close a case.', 'ERROR');
         }
+
+        if (!helper.isValidateOnly() && row.caseid && row.enddate && (row.enddate != oldRow.enddate)) {
+            triggerHelper.closeDailyClinicalObs(row.caseid, row.enddate);
+        }
     }
 });
 

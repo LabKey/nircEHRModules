@@ -574,6 +574,32 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
+    public void closeDailyClinicalObs(String caseid, String enddate) throws SQLException
+    {
+        TableInfo ti = getTableInfo("study", "observation_order");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("caseid"), caseid);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("objectid"), filter, null);
+
+        Map<String, Object>[] orders = ts.getMapArray();
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (Map<String, Object> order : orders)
+        {
+
+            Map<String, Object> row = new CaseInsensitiveHashMap<>();
+            row.put("objectid", order.get("objectid"));
+            row.put("enddate", enddate);
+            rows.add(row);
+        }
+        try
+        {
+            ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+        }
+        catch (Exception e)
+        {
+            _log.error("Error closing daily clinical observation order", e);
+        }
+    }
+
     public void ensureDailyClinicalObservationOrders(String id, String caseid, String performedby, String qcstate, String taskid, List<Map<String, Object>> ordersInTransaction) throws SQLException
     {
         TableInfo freqTi = getTableInfo("ehr_lookups", "treatment_frequency");
