@@ -651,6 +651,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(1);
 
         waitForText("Diazepam");
+        waitForText(animalId);
         orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Given");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
@@ -670,6 +671,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(2);
 
         //Fill out Close Date
+        waitForText(animalId);
         _helper.setDataEntryField("s", "Closing the case");
         waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
 
