@@ -22,34 +22,27 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         if (!helper.isValidateOnly() && row.caseid && row.enddate && (row.enddate != oldRow.enddate)) {
             triggerHelper.closeDailyClinicalObs(row.caseid, row.enddate);
         }
-    }
-});
 
-EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.COMPLETE, 'study', 'cases', function(event, errors, helper){
-    if (!helper.isETL()) {
-        var rows = helper.getRows();
-        if (helper.getEvent() == 'insert' && rows.length && !helper.isValidateOnly()) {
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i].row;
-                var qc;
-                if (row.QCStateLabel) {
-                    qc = EHR.Server.Security.getQCStateByLabel(row.QCStateLabel);
-                }
-                else if (row.QCState) {
-                    qc = EHR.Server.Security.getQCStateByRowId(row.QCState);
-                }
+        var reopen = oldRow.enddate && !row.enddate;
+        if (!helper.isValidateOnly() && (reopen || helper.getEvent() == 'insert') && row.caseid && row.Id && row.performedby && row.taskid) {
+            var qc;
+            if (row.QCStateLabel) {
+                qc = EHR.Server.Security.getQCStateByLabel(row.QCStateLabel);
+            }
+            else if (row.QCState) {
+                qc = EHR.Server.Security.getQCStateByRowId(row.QCState);
+            }
 
-                if (!qc) {
-                    console.error('Unable to find QCState: ' + row.QCState + '/' + row.QCStateLabel);
+            if (!qc) {
+                console.error('Unable to find QCState: ' + row.QCState + '/' + row.QCStateLabel);
+            }
+            else if (qc.Label == 'Completed' && row.caseid && row.Id && row.performedby && row.taskid && qc) {
+                var ordersInTransaction = helper.getProperty('ordersInTransaction');
+                var oit = [];
+                if (ordersInTransaction && ordersInTransaction.length) {
+                    oit = ordersInTransaction;
                 }
-                else if (qc.Label != 'COMPLETED' && row.caseid && row.Id && qc) {
-                    var ordersInTransaction = helper.getProperty('ordersInTransaction');
-                    var oit = [];
-                    if (ordersInTransaction && ordersInTransaction.length) {
-                        oit = ordersInTransaction;
-                    }
-                    triggerHelper.ensureDailyClinicalObservationOrders(row.Id, row.caseid, row.performedby, qc.RowId, row.taskid, oit);
-                }
+                triggerHelper.ensureDailyClinicalObservationOrders(row.Id, row.caseid, row.performedby, qc.RowId, row.taskid, oit);
             }
         }
     }
