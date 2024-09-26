@@ -23,7 +23,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             triggerHelper.closeDailyClinicalObs(row.caseid, row.enddate);
         }
 
-        var reopen = oldRow.enddate && !row.enddate;
+        var reopen = oldRow && oldRow.enddate && !row.enddate;
         if (!helper.isValidateOnly() && (reopen || helper.getEvent() == 'insert') && row.caseid && row.Id && row.performedby && row.taskid) {
             var qc;
             if (row.QCStateLabel) {
