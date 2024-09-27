@@ -3,7 +3,7 @@
     <tables xmlns="http://labkey.org/data/xml">
         <table tableName="pairingSummary" tableDbType="TABLE">
             <tableTitle>Pairing Summary</tableTitle>
-            <javaCustomizer class="org.labkey.ehr.table.DefaultEHRCustomizer" />
+            <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer" />
             <tableUrl />
             <columns>
                 <column columnName="otherIds">
@@ -15,13 +15,10 @@
                 <column columnName="separationRemark">
                     <columnTitle>Remark on Separation</columnTitle>
                 </column>
+                <column columnName="type">
+                    <columnTitle>Formation/Separation Type</columnTitle>
+                </column>
                 <column columnName="taskid">
-                    <isHidden>true</isHidden>
-                </column>
-                <column columnName="lsid">
-                    <isHidden>true</isHidden>
-                </column>
-                <column columnName="qcstate">
                     <isHidden>true</isHidden>
                 </column>
             </columns>

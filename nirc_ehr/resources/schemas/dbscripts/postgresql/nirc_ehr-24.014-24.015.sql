@@ -6,4 +6,4 @@ SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;editable_lookups;/
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;pairing_goal;/data/pairing_goal.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;pairing_reason;/data/pairing_reason.tsv');
 SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;pairing_observation;/data/pairing_observation.tsv');
-SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;separation_reason;/data/separation_reason.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;pairing_separation_reason;/data/pairing_separation_reason.tsv');
