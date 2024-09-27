@@ -36,6 +36,9 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
             project: {
                 xtype: 'combo',
                 allowBlank: false,
+                columnConfig: {
+                    width: 150
+                },
                 lookup: {
                     schemaName: 'ehr',
                     queryName: 'project',
