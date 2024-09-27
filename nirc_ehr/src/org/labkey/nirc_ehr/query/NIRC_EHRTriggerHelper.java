@@ -2,6 +2,7 @@ package org.labkey.nirc_ehr.query;
 
 import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableObject;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
@@ -623,6 +624,25 @@ public class NIRC_EHRTriggerHelper
             }
         }
 
+    }
+
+    public boolean validateHousing(String id, String cage, Date date)
+    {
+        if (id == null || cage == null || date == null)
+            return true;
+
+        TableInfo ti = getTableInfo("study", "Housing");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+        filter.addCondition(FieldKey.fromString("cage"), cage, CompareType.EQUAL);
+
+        Date updatedDate = ConvertHelper.convert(date, Date.class);
+        updatedDate = DateUtils.addMinutes(updatedDate, 1);  // temp fix
+        filter.addCondition(FieldKey.fromString("date"), updatedDate, CompareType.LTE);
+        filter.addClause(new SimpleFilter.OrClause(new CompareType.EqualsCompareClause(FieldKey.fromString("enddate"), CompareType.GT, date), new CompareType.CompareClause(FieldKey.fromString("enddate"), CompareType.ISBLANK, null)));
+        filter.addCondition(FieldKey.fromString("qcstate/publicdata"), true, CompareType.EQUAL);
+
+        TableSelector ts = new TableSelector(ti, Collections.singleton("Id"), filter, null);
+        return ts.exists();
     }
 
     public void propagateClinicalObs(Map<String, Object> row, String qcstate) throws SQLException

@@ -64,6 +64,9 @@ nhp_training_type	NHP Training Type	value
 numeric_unit	Numeric Units	value	title
 observation_areas	Observation Areas	value
 ocular_problem	Ocular Problem	value
+pairing_goal	Pairing Goal	value
+pairing_reason	Introduction Reason	value
+pairing_observation	Interaction Summary	value
 preferences	Preferences	value
 pregnancy_result	Pregnancy Results	value
 procedure_category	Category of procedures	value
@@ -78,6 +81,7 @@ regulatory_stress_levels	Regulatory Stress Levels	value	title
 req_order_state	Req Order State	value	title
 req_order_type	Req Order Type	value	title
 respiratory_types	Respiratory Types	value	title
+separation_reason	Pairing Status Change Reason	value	value
 sib_score	SIB Score	value
 skin_problem	Skin Problem	value
 stool_score	Stool Score	value

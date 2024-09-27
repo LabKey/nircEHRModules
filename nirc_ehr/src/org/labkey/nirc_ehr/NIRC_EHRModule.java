@@ -69,7 +69,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.014;
+        return 24.015;
     }
 
     @Override

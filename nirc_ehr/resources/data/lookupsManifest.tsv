@@ -70,6 +70,9 @@ nhp_training_type
 numeric_unit
 observation_areas
 ocular_problem
+pairing_goal
+pairing_reason
+pairing_observation
 preferences
 pregnancy_result
 procedure_category
@@ -85,6 +88,7 @@ req_order_state
 req_order_type
 respiratory_types
 routes
+separation_reason
 sib_score
 source
 snomed

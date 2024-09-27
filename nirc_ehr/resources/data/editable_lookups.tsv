@@ -74,6 +74,9 @@ numeric_unit	Colony Management	Numeric Unit
 observation_types	Clinical	Clin remarks observation types
 observation_areas	Clinical	Observation Areas	Clinical observation areas.
 ocular_problem	Clinical	Ocular Problem	Clinical observation fixed values.
+pairing_goal	Behavior	Pairing Goal	Used in pairing dataset.
+pairing_reason	Behavior	Introduction Reason	Used in pairing dataset.
+pairing_observation	Behavior	Interaction Summary	Used in pairing dataset.
 preferences	Behavior	Preferences	Behavior observation fixed values.
 pregnancy_result	Colony Management	Pregancy Result
 procedure_category	Clinical	Procedure Category	Used in procedures to group procedures.
@@ -90,6 +93,7 @@ req_order_state	Colony Management	Request Order State
 req_order_type	Colony Management	Request Order Type
 respiratory_types	Clinical	Respiratory Types	Clinical observation fixed values.
 routes	Clinical	Treatment Routes	Used in drug and treatment datasets.
+separation_reason	Colony Management	Pairing Status Change Reason	Pairing Status Change Reason Fixed Values.
 sib_score	Behavior	SIB Score	Behavior observation fixed values.
 skin_problem	Clinical	Skin Problems	Clinical observation fixed values.
 species	Colony Management	Species
