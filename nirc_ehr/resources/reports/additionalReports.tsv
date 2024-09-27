@@ -24,9 +24,10 @@ dietSchedule
 drug															
 incompleteTreatments															
 pairingsBehavior															
-pairingHistory															
+pairingHistory
 pairingHousingSummary															
-roommateHistoryBehavior															
+pairings	Behavior	query	Pairings	TRUE		study	pairingSummary			date	FALSE	FALSE		qcstate/publicdata	This report displays pairings for the selected animal
+roommateHistoryBehavior
 surgicalCases															
 surgMedicationSchedule															
 surgMedicationScheduleDaily															

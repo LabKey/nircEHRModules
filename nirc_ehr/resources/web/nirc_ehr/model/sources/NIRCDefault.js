@@ -47,6 +47,18 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 width: 180
             }
         },
+        date: {
+            columnConfig: {
+                fixed: true,
+                width: 150
+            }
+        },
+        enddate: {
+            columnConfig: {
+                fixed: true,
+                width: 150
+            }
+        },
     },
     byQuery: {
         'study.housing': {
@@ -164,6 +176,44 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 },
                 nullable: false,
                 allowBlank: true
+            }
+        },
+        'study.pairings': {
+            type: {
+                hidden: true
+            },
+            // date: {
+            //     width: 100
+            // },
+            // enddate: {
+            //     hidden: false,
+            //     width: 100
+            // },
+            pairid: {
+                hidden: false,
+                columnConfig: {
+                    width: 100
+                },
+            },
+            reason: {
+                columnConfig: {
+                    width: 150
+                },
+            },
+            goal: {
+                columnConfig: {
+                    width: 150
+                },
+            },
+            endState: {
+                columnConfig: {
+                    width: 150
+                },
+            },
+            separationRemark: {
+                columnConfig: {
+                    width: 200
+                }
             }
         }
     }
