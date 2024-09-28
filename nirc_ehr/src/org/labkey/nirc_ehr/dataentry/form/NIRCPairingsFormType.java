@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class NIRCPairingsFormType extends NIRCBaseTaskFormType
 {
-    public static final String NAME = "Pairings Observations";
+    public static final String NAME = "Pairing Observations";
 
     public NIRCPairingsFormType(DataEntryFormContext ctx, Module owner)
     {

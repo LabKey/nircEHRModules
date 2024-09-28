@@ -4,6 +4,7 @@ SELECT
   p.pairid,
   p.date,
   p.enddate,
+  TIMESTAMPDIFF('SQL_TSI_DAY', p.date, coalesce(p.enddate,curdate())) as duration,
   p.reason,
   p.goal,
   p.endState,
@@ -13,8 +14,8 @@ SELECT
   p.separationRemark,
   p.performedby,
   p.taskid,
-  TIMESTAMPDIFF('SQL_TSI_DAY', p.date, coalesce(p.enddate,curdate())) as duration,
   p.type
 
 FROM study.pairings p
+-- WHERE p.taskid IS NOT NULL
 

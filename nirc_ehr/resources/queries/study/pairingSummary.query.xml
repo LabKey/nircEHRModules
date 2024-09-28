@@ -18,9 +18,6 @@
                 <column columnName="type">
                     <columnTitle>Formation/Separation Type</columnTitle>
                 </column>
-                <column columnName="taskid">
-                    <isHidden>true</isHidden>
-                </column>
             </columns>
         </table>
     </tables>

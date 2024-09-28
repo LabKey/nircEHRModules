@@ -15,8 +15,8 @@
         <column name="separationreason"/>
         <column name="remark"/>
         <column name="separationRemark"/>
-        <column name="type"/>
         <column name="performedby"/>
+        <column name="taskId"/>
     </columns>
 </customView>
 
