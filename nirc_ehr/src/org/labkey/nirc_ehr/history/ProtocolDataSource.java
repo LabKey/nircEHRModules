@@ -16,6 +16,7 @@ public class ProtocolDataSource extends AbstractDataSource
     public ProtocolDataSource(Module module)
     {
         super("study", "protocolAssignment", "Protocol Transfer", "Protocol Transfer", module);
+        setShowTime(true);
     }
 
     @Override

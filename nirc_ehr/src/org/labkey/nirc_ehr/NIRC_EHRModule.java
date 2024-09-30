@@ -28,6 +28,7 @@ import org.labkey.api.ehr.history.DefaultAnimalRecordFlagDataSource;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ehr.history.DefaultNotesDataSource;
 import org.labkey.api.ehr.history.DefaultVitalsDataSource;
+import org.labkey.nirc_ehr.history.NIRCVitalsDataSource;
 import org.labkey.api.ehr.security.EHRDataAdminPermission;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.ldk.buttons.ShowEditUIButton;
@@ -145,7 +146,9 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerHistoryDataSource(new NIRCClinicalObservationsDataSource(this));
         EHRService.get().registerHistoryDataSource(new NIRCClinicalRemarksDataSource(this));
         EHRService.get().registerHistoryDataSource(new NIRCEndTreatmentOrderDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCHousingDataSource(this));
         EHRService.get().registerHistoryDataSource(new NIRCObservationOrdersDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCVitalsDataSource(this));
         EHRService.get().registerHistoryDataSource(new ObservationsDataSource(this));
         EHRService.get().registerHistoryDataSource(new PairingsDataSource(this));
         EHRService.get().registerHistoryDataSource(new PhysicalExamDataSource(this));

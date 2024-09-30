@@ -5,14 +5,17 @@ import org.labkey.api.data.Results;
 import org.labkey.api.ehr.history.AbstractDataSource;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
+import java.util.Set;
 
 public class ProceduresDataSource extends AbstractDataSource
 {
     public ProceduresDataSource(Module module)
     {
         super("study", "prc", "Procedures", "Procedures", module);
+        setShowTime(true);
     }
 
     @Override
@@ -20,9 +23,9 @@ public class ProceduresDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        if (rs.hasColumn(FieldKey.fromString("type")) && rs.getObject("type") != null)
+        if (rs.hasColumn(FieldKey.fromString("procedure/name")) && rs.getObject(FieldKey.fromString("procedure/name")) != null)
         {
-            addRow(sb, "Type", rs.getString("type"));
+            addRow(sb, "Procedure", rs.getString(FieldKey.fromString("procedure/name")));
         }
 
         if (rs.hasColumn(FieldKey.fromString("remark")) && rs.getObject("remark") != null)
@@ -39,6 +42,12 @@ public class ProceduresDataSource extends AbstractDataSource
         sb.append(": ");
         sb.append(value);
         sb.append("\n");
+    }
+
+    @Override
+    protected Set<String> getColumnNames()
+    {
+        return PageFlowUtil.set("Id", "date", "procedure/name", "remark");
     }
 }
 

@@ -27,6 +27,7 @@ public class BloodDrawDataSource extends AbstractDataSource
     public BloodDrawDataSource(Module module)
     {
         super("study", "Blood Draws", "Blood Draw", "Blood Draws", module);
+        setShowTime(true);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class BloodDrawDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(safeAppend(rs, "Total Quantity", "quantity"));
+        sb.append(safeAppend(rs, "Total Quantity", "quantity", "ml"));
         sb.append(safeAppend(rs, "Sample Type", "type"));
         sb.append(safeAppend(rs, "Remark", "remark"));
 

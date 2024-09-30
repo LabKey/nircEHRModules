@@ -34,6 +34,7 @@ public class NIRCCaseCloseDataSource extends AbstractDataSource
         StringBuilder sb = new StringBuilder();
 
         sb.append("Opened Date: ").append(DateUtil.formatDate(c, start));
+        sb.append("\n");
         sb.append(safeAppend(rs, "Problem Area", "problemCategory"));
         sb.append(safeAppend(rs, "Close Remark", "closeRemark"));
 
