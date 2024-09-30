@@ -144,7 +144,17 @@ public class NIRCClinicalObservationsDataSource extends AbstractDataSource
         sb.append(": ");
 
         if (rs.getString(FieldKey.fromString("observation")) != null)
-            sb.append(PageFlowUtil.filter(rs.getString(FieldKey.fromString("observation"))));
+        {
+            // check if observation is hydration includes string &gt;10%
+            if (rs.getString(FieldKey.fromString("observation")).contains("&gt;10%"))
+            {
+                sb.append("Hydration: >10%");
+            }
+            else
+            {
+                sb.append(PageFlowUtil.filter(rs.getString(FieldKey.fromString("observation"))));
+            }
+        }
 
         if (rs.getString(FieldKey.fromString("remark")) != null)
         {

@@ -30,6 +30,8 @@ public class DepartureDataSource extends AbstractDataSource
 
         if (rs.hasColumn(FieldKey.fromString("destination/title")) && rs.getObject(FieldKey.fromString("destination/title")) != null)
             sb.append("Destination: " + rs.getString(FieldKey.fromString("destination/title")));
+        else
+            sb.append("Destination: Unknown");
 
         return sb.toString();
     }
