@@ -20,7 +20,7 @@ public class DepartureDataSource extends AbstractDataSource
     @Override
     protected Set<String> getColumnNames()
     {
-        return PageFlowUtil.set("Id", "date", "destination/title");
+        return PageFlowUtil.set("Id", "date", "destination/meaning");
     }
 
     @Override
@@ -28,8 +28,8 @@ public class DepartureDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        if (rs.hasColumn(FieldKey.fromString("destination/title")) && rs.getObject(FieldKey.fromString("destination/title")) != null)
-            sb.append("Destination: " + rs.getString(FieldKey.fromString("destination/title")));
+        if (rs.hasColumn(FieldKey.fromString("destination/meaning")) && rs.getObject(FieldKey.fromString("destination/meaning")) != null)
+            sb.append("Destination: " + rs.getString(FieldKey.fromString("destination/meaning")));
         else
             sb.append("Destination: Unknown");
 

@@ -27,7 +27,7 @@ public class PregnancyDataSource extends AbstractDataSource
 
         if (rs.hasColumn(FieldKey.fromString("result/title")) && rs.getObject(FieldKey.fromString("result/title")) != null)
         {
-            addRow(sb, "Outcome", rs.getString(FieldKey.fromString("result/title")));
+            safeAppend(rs, "Outcome", "result/title");
         }
         else
         {
