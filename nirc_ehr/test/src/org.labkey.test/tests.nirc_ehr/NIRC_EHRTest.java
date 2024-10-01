@@ -47,6 +47,7 @@ import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
+import org.labkey.test.util.ext4cmp.Ext4FieldRef;
 import org.labkey.test.util.ext4cmp.Ext4GridRef;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -609,13 +610,15 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
         setFormElement(Locator.textarea("plan"), "Case plan");
         setFormElement(Locator.name("Id"), animalId);
-        setFormElement(Locator.name("date"), LocalDateTime.now().minusDays(1).format(_dateFormat));
+        _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
 
         //Fill out Clinical Remarks section with Date, Remark
          scrollIntoView(Locator.textarea("remark"));
-        setFormElement(Locator.name("date").index(1), LocalDateTime.now().minusDays(1).format(_dateFormat));
+        _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         _helper.setDataEntryField("remark", "Clinical Remarks - Test");
+        if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
+            _helper.setDataEntryField("remark", "Clinical Remarks - Test");
         waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
@@ -647,49 +650,52 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         scheduleTable.link(0, "treatmentRecord").click();
         switchToWindow(1);
 
-        waitForText("WARN: The field: Ordered By is required");
+        waitForText("Diazepam");
+        waitForText(animalId);
+        waitForTextToDisappear("Id is required");
         orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Given");
-        orderGrid.setGridCell(1, "orderedby", NIRC_VET_NAME);
-        waitForTextToDisappear("WARN: The field: Ordered By is required");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
 
         // TODO: This will be reimplemented in a current PR, this can than be uncommented.
         //Go to NIRC/EHR main page
-//        goToEHRFolder();
-//        impersonate(NIRC_FULL_SUBMITTER_VET);
-//
-//        //Go to 'Active Clinical Cases'
-//        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
-//
-//        //Click on 'Case Update' link
-//        AnimalHistoryPage historyPage = new AnimalHistoryPage<>(getDriver());
-//        DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
-//        activeClinicalCases.link(0, "caseCheck").click();
-//        switchToWindow(2);
-//
-//        //Fill out Close Date
-//        _helper.setDataEntryField("s", "Closing the case");
-//        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
-//
-//        waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
-//        Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
-//        if( !isElementVisible(Locator.name("enddate")))
-//            Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
-//        setFormElement(Locator.name("enddate"), LocalDateTime.now().format(_dateFormat));
-//
-//        //'Submit Final'
-//        submitForm("Submit Final", "Finalize Form");
-//
-//        //Go to NIRC/EHR main page
-//        goToEHRFolder();
-//        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
-//
-//        //Verify that the case is no longer present/is closed
-//        historyPage = new AnimalHistoryPage<>(getDriver());
-//        activeClinicalCases = historyPage.getActiveReportDataRegion();
-//        Assert.assertEquals("No active cases", 0, activeClinicalCases.getDataRowCount());
-//        stopImpersonating();
+        goToEHRFolder();
+        impersonate(NIRC_FULL_SUBMITTER_VET);
+
+        //Go to 'Active Clinical Cases'
+        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+
+        //Click on 'Case Update' link
+        AnimalHistoryPage historyPage = new AnimalHistoryPage<>(getDriver());
+        DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
+        activeClinicalCases.link(0, "caseCheck").click();
+        switchToWindow(2);
+
+        //Fill out Close Date
+        waitForText(animalId);
+        waitForTextToDisappear("Id is required");
+        _helper.setDataEntryField("s", "Closing the case");
+        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+
+        waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
+        Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
+        Ext4FieldRef enddateField = _helper.getExt4FieldForFormSection("Clinical Case", "Close Date");
+        if( !enddateField.isVisible())
+            Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
+        enddateField.setValue(LocalDateTime.now().format(_dateFormat));
+
+        //'Submit Final'
+        submitForm("Submit Final", "Finalize Form");
+
+        //Go to NIRC/EHR main page
+        goToEHRFolder();
+        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+
+        //Verify that the case is no longer present/is closed
+        historyPage = new AnimalHistoryPage<>(getDriver());
+        activeClinicalCases = historyPage.getActiveReportDataRegion();
+        Assert.assertEquals("No active cases", 0, activeClinicalCases.getDataRowCount());
+        stopImpersonating();
     }
 
     @Override

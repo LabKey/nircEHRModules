@@ -15,11 +15,11 @@ public class NIRCClinicalObservationsFormSection extends BaseFormSection
 
         _autoPopulateDailyObs = autoPopulateDailyObs;
         addClientDependency(ClientDependency.supplierFromPath("ehr/plugin/ClinicalObservationsCellEditing.js"));
-        addClientDependency(ClientDependency.supplierFromPath("ehr/data/ClinicalObservationsClientStore.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/ClinicalObservationClientStore.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/grid/ClinicalObservationGridPanel.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/clinicalObsGridButton.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/addClinicalObsButton.js"));
-        setClientStoreClass("EHR.data.ClinicalObservationsClientStore");
+        setClientStoreClass("NIRC_EHR.data.ClinicalObservationsClientStore");
     }
 
     public NIRCClinicalObservationsFormSection(boolean isChild, String parentQueryName)

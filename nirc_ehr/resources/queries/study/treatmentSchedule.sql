@@ -64,6 +64,7 @@ SELECT
   t1.performedby,
   t1.remark,
   t1.caseid,
+  t1.orderedby,
 
   t1.qcstate
 
