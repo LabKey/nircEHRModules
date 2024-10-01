@@ -72,7 +72,7 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
             queryName: 'treatment_order',
             filterArray: [LABKEY.Filter.create('objectid', objectIds.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
             scope: this,
-            columns: 'Id,objectid,code,reason,route,amount,amount_units,concentration,volume,vol_units,conc_units,dosage,dosage_units',
+            columns: 'Id,objectid,code,reason,route,amount,amount_units,concentration,volume,vol_units,conc_units,dosage,dosage_units,orderedby',
             success: function (data) {
                 let rowsToInsert = [];
                 Ext4.each(data.rows, function(row) {
@@ -101,6 +101,7 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                                 dosage_units: row.dosage_units,
                                 volume: row.volume,
                                 vol_units: row.vol_units,
+                                orderedby: row.orderedby,
                                 outcome: 'Normal'
                             });
                         }

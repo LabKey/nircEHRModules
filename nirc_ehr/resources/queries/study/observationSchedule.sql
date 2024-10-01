@@ -2,34 +2,24 @@ SELECT
     g.id,
     g.scheduledDate,
     COUNT(g.caseid) cases,
-    COUNT(g.taskid) orders,
-    g.observations,
+    GROUP_CONCAT(g.observations, ';') as observations,
+    SUM(obsCount) as obsCount,
+    GROUP_CONCAT(g.obsOrderIds, ';') as orderIds,
     GROUP_CONCAT(g.status, ';') as status,
-    MAX(g.taskid) as taskid,
+    GROUP_CONCAT(g.taskids, ';') as taskids,
     MAX(g.type) as type,
     MAX(g.caseid) as caseid
 FROM
 (
     SELECT
-        sr.id,
-        sr.taskid,
-        sr.scheduledDate,
-        sr.caseid,
-        sr.type,
-        sr.observations,
-        sr.obsCount,
-        sr.statusCount,
-        sr.status
-    FROM
-    (
-    SELECT
         sch.id,
-        sch.taskid,
         sch.date as scheduledDate,
         sch.caseid,
         sch.type,
+        GROUP_CONCAT(sch.objectid, ';') as obsOrderIds,
         GROUP_CONCAT(sch.category, ';') as observations,
         GROUP_CONCAT(obsStatus, ';') as status,
+        GROUP_CONCAT(DISTINCT(sch.taskid), ';') as taskids,
         COUNT(sch.category) as obsCount,
         COUNT(sch.obsStatus) as statusCount
     FROM
@@ -37,7 +27,6 @@ FROM
         SELECT
             d.id,
             s.*,
-            s.category,
             co.qcstate.label as obsStatus
         FROM study.demographics d JOIN
         (SELECT
@@ -73,6 +62,7 @@ FROM
             t1.caseid,
             t1.taskid,
             t1.type,
+            t1.objectid,
 
             t1.qcstate
 
@@ -95,17 +85,14 @@ FROM
         ) s1
 
         ) s ON (s.animalid = d.id)
-        LEFT JOIN study.clinical_observations co ON s.category = co.category AND co.scheduledDate IS NOT NULL AND s.date = co.scheduledDate AND co.id = s.animalid AND co.caseid = s.caseid
+        LEFT JOIN study.clinical_observations co ON co.scheduledDate IS NOT NULL AND s.date = co.scheduledDate AND co.orderId = s.objectid
     ) sch
     GROUP BY
         sch.id,
-        sch.taskid,
         sch.date,
         sch.caseid,
         sch.type
-    ) sr
 ) g
 GROUP BY
     g.id,
-    g.scheduledDate,
-    g.observations
+    g.scheduledDate

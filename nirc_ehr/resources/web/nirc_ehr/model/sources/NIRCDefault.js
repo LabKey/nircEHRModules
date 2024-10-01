@@ -127,6 +127,11 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             category: {
                 defaultValue: 'Clinical',
                 hidden: true
+            },
+            endTreatmentOrderedBy: {
+                columnConfig: {
+                    width: 200
+                }
             }
         },
         'study.drug': {
@@ -137,7 +142,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             treatmentid: {
                 hidden: true,
                 nullable: true
-            },
+            }
         },
         'study.observation_order': {
             category: {

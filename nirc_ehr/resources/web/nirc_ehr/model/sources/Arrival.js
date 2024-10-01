@@ -48,6 +48,9 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
             },
             project: {
                 xtype: 'combo',
+                columnConfig: {
+                    width: 150
+                },
                 lookup: {
                     schemaName: 'ehr',
                     queryName: 'project',

@@ -23,6 +23,7 @@
         <column name="category"/>
         <column name="reason" />
         <column name="remark" />
+        <column name="endTreatmentOrderedBy" />
     </columns>
     <sorts>
         <sort column="date"/>

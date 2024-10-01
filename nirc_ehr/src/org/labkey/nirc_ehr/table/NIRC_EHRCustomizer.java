@@ -41,12 +41,11 @@ import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
-import org.labkey.nirc_ehr.dataentry.form.NIRCBulkClinicalFormType;
 import org.labkey.nirc_ehr.dataentry.form.NIRCClinicalObservationsFormType;
-import org.labkey.nirc_ehr.dataentry.form.NIRCClinicalRoundsFormType;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -407,6 +406,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
                         String caseId = (String)ctx.get("objectid");
                         linkAction.addParameter("caseid", caseId);
+                        linkAction.addParameter("edit", true);
                         String href = linkAction.toString();
                         out.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
                     }
@@ -790,6 +790,18 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                 .display("DisplayName")));
                     }
             }
+            if ("endTreatmentOrderedBy".equalsIgnoreCase(col.getName()))
+            {
+                col.setLabel("End Treatment Ordered By");
+                UserSchema us = getEHRUserSchema(ti, "ehr_lookups");
+                if (us != null)
+                {
+                    col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                            .table("veterinarians")
+                            .key("UserId")
+                            .display("DisplayName")));
+                }
+            }
             if ("taskid".equalsIgnoreCase(col.getName()))
             {
                 col.setURL(DetailsURL.fromString("/ehr/dataEntryFormDetails.view?formType=${taskid/formtype}&taskId=${taskid}"));
@@ -800,11 +812,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             }
             if ("enddate".equalsIgnoreCase(col.getName()) && !ti.getName().equals("encounters"))
             {
-                col.setFormat("Date");
+                col.setFormat("DateTime");
             }
             if ("reviewdate".equalsIgnoreCase(col.getName()))
             {
-                col.setFormat("Date");
+                col.setFormat("DateTime");
             }
             if ("caseid".equalsIgnoreCase(col.getName()))
             {
@@ -1111,9 +1123,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
                                 for (String st : sts)
                                 {
-                                    if (NIRC_EHRManager.DAILY_CLINICAL_OBS.contains(st) && !dailies.contains(st))
+                                    if (NIRC_EHRManager.DAILY_CLINICAL_OBS.contains(st))
                                     {
-                                        dailies.add(st);
+                                        if (!dailies.contains(st))
+                                            dailies.add(st);
                                     }
                                     else
                                     {
@@ -1145,7 +1158,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
         if (ti.getColumn("observationRecord") == null )
         {
-            WrappedColumn col = new WrappedColumn(ti.getColumn("taskid"), "observationRecord");
+            WrappedColumn col = new WrappedColumn(ti.getColumn("taskids"), "observationRecord");
             col.setLabel("Record Observations");
             col.setDisplayColumnFactory(new DisplayColumnFactory() {
 
@@ -1157,10 +1170,8 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         @Override
                         public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
                         {
-                            String taskid = (String)getBoundColumn().getValue(ctx);
+                            String taskids = (String)getBoundColumn().getValue(ctx);
                             Date date = (Date)ctx.get("scheduledDate");
-                            String caseid = (String)ctx.get("caseid");
-                            String category = (String)ctx.get("type");
                             String observationList = (String)ctx.get("observationList");
                             String id = (String)ctx.get("id");
 
@@ -1168,50 +1179,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
                                 return;
 
-                            if (NIRC_EHRManager.DAILY_CLINICAL_OBS_LIST.equals(observationList))
-                            {
-                                linkAction.addParameter("formType", NIRCClinicalObservationsFormType.NAME);
-                                linkAction.addParameter("id", id);
-                                linkAction.addParameter("caseid", caseid);
-                                linkAction.addParameter("scheduledDate", date.toString());
-                            }
-                            else
-                            {
-                                if ("Behavior".equals(category))
-                                {
-                                    if (caseid != null)
-                                    {
-                                        linkAction.addParameter("formType", "Behavior Rounds");
-                                        linkAction.addParameter("caseid", caseid);
-                                    }
-                                    else
-                                    {
-                                        linkAction.addParameter("formType", "Bulk Behavior Entry");
-                                    }
-                                }
-                                else if ("Surgery".equals(category))
-                                {
-                                    linkAction.addParameter("formType", "Surgery Rounds");
-                                    linkAction.addParameter("caseid", caseid);
-                                }
-                                else
-                                {
-                                    if (caseid != null)
-                                    {
-                                        linkAction.addParameter("formType", NIRCClinicalRoundsFormType.NAME);
-                                        linkAction.addParameter("caseid", caseid);
-                                    }
-                                    else
-                                    {
-                                        linkAction.addParameter("formType", NIRCBulkClinicalFormType.NAME);
-                                    }
-                                }
-
-                                linkAction.addParameter("id", id);
-                                linkAction.addParameter("obsTask", taskid);
-                                linkAction.addParameter("observations", observationList);
-                                linkAction.addParameter("scheduledDate", date.toString());
-                            }
+                            linkAction.addParameter("formType", NIRCClinicalObservationsFormType.NAME);
+                            linkAction.addParameter("id", id);
+                            linkAction.addParameter("scheduledDate", date.toString());
+                            linkAction.addParameter("obsTask", taskids);
+                            linkAction.addParameter("observations", observationList);
                             String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:observationSchedule";
                             linkAction.addParameter("returnUrl", returnUrl);
 
@@ -1225,11 +1197,9 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             super.addQueryFieldKeys(keys);
                             keys.add(getBoundColumn().getFieldKey());
                             keys.add(FieldKey.fromString("taskid"));
-                            keys.add(FieldKey.fromString("caseid"));
                             keys.add(FieldKey.fromString("id"));
-                            keys.add(FieldKey.fromString("observations"));
+                            keys.add(FieldKey.fromString("observationList"));
                             keys.add(FieldKey.fromString("scheduledDate"));
-                            keys.add(FieldKey.fromString("type"));
                         }
 
                         @Override
@@ -1250,6 +1220,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             return false;
                         }
                     };
+
                 }
             });
             ti.addColumn(col);
@@ -1272,26 +1243,34 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
                         {
                             String status = (String) getBoundColumn().getValue(ctx);
+                            BigDecimal obsCount = (BigDecimal)ctx.get("obsCount");
                             String stat = "";
                             if (status != null)
                             {
                                 String[] sts = status.split(";");
 
-                                for (String st : sts)
+                                // Right now we're only putting any status if all the observations for this row have a status
+                                if (obsCount.intValue() == sts.length)
                                 {
-                                    if (stat.isEmpty() && st.equals("Completed"))
+                                    for (String st : sts)
                                     {
-                                        stat = "Completed";
-                                    }
-
-                                    if ("Completed".equals(stat) && !st.equals("Completed"))
-                                    {
-                                        stat = st;
+                                        if ("Completed".equals(stat) || stat.isEmpty())
+                                        {
+                                            stat = st;
+                                        }
                                     }
                                 }
                             }
 
                             out.write(stat);
+                        }
+
+                        @Override
+                        public void addQueryFieldKeys(Set<FieldKey> keys)
+                        {
+                            super.addQueryFieldKeys(keys);
+                            keys.add(getBoundColumn().getFieldKey());
+                            keys.add(FieldKey.fromString("obsCount"));
                         }
                     };
                 }
