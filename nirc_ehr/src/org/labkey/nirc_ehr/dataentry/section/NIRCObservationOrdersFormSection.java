@@ -16,11 +16,12 @@ public class NIRCObservationOrdersFormSection extends BaseFormSection
 
         _dailyObsOption = dailyObsOption;
         addClientDependency(ClientDependency.supplierFromPath("ehr/plugin/ClinicalObservationsCellEditing.js"));
-        addClientDependency(ClientDependency.supplierFromPath("ehr/data/ClinicalObservationsClientStore.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/grid/ClinicalObservationGridPanel.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/clinicalObsGridButton.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/addClinicalObsButton.js"));
-        setClientStoreClass("EHR.data.ClinicalObservationsClientStore");
+
+        setClientStoreClass("NIRC_EHR.data.ObsOrdersClientStore");
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/ObsOrdersClientStore.js"));
     }
 
     public NIRCObservationOrdersFormSection(String dailyObsOption, boolean isChild, String parentQueryName)
@@ -32,8 +33,8 @@ public class NIRCObservationOrdersFormSection extends BaseFormSection
             addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ParentChild.js"));
             addConfigSource("ParentChild");
 
-            addClientDependency(ClientDependency.supplierFromPath("ehr/data/ChildClientStore.js"));
-            setClientStoreClass("EHR.data.ChildClientStore");
+            addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/ObsOrderChildClientStore.js"));
+            setClientStoreClass("NIRC_EHR.data.ObsOrderChildClientStore");
             addExtraProperty("parentQueryName", parentQueryName);
         }
     }

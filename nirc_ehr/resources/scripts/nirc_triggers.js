@@ -84,7 +84,13 @@ exports.init = function (EHR) {
 
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'treatment_order', function(event, helper) {
         helper.setScriptOptions({
-            allowDeadIds: true,
+            allowFutureDates: true,
+        });
+    });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'observation_order', function(event, helper, EHR) {
+        helper.setScriptOptions({
+            allowFutureDates: true,
         });
     });
 

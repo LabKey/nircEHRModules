@@ -169,6 +169,7 @@ Ext4.define('NIRC_EHR.data.CaseStoreCollection', {
         }
 
         this._cachedKey = cacheKey;
+        this.validateAll();
     },
 
     getTaskId: function(){

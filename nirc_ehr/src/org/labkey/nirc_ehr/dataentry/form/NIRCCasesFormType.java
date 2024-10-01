@@ -57,7 +57,7 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 new NIRCWeightFormSection(true, false, true, "cases"),
                 new NIRCVitalsFormSection(true, "cases"),
                 new NIRCHousingFormSection(true, true, true, "cases"),
-                new NIRCBloodDrawFormSection(true, true, true)
+                new NIRCBloodDrawFormSection(true, "cases")
         ));
 
         setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);

@@ -16,7 +16,7 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
 {
     private void transformAnimalIdToUpperCase(Map<String, Object> row)
     {
-        if (row != null && row.containsKey("Id"))
+        if (row != null && row.containsValue("Id"))
         {
             row.put("Id", ((String) row.get("Id")).toUpperCase());
         }

@@ -90,6 +90,15 @@
                             <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
+                    <column columnName="treatmentid">
+                        <columnTitle>Treatment Id</columnTitle>
+                        <isHidden>true</isHidden>
+                        <fk>
+                            <fkDbSchema>study</fkDbSchema>
+                            <fkTable>treatment_order</fkTable>
+                            <fkColumnName>objectid</fkColumnName>
+                        </fk>
+                    </column>
                     <column columnName="orderedby" />
                     <column columnName="performedby" />
                     <column columnName="scheduledDate">
