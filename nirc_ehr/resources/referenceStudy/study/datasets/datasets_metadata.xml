@@ -869,6 +869,9 @@
             <column columnName="observation">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="formationType">
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="separationReason">
                 <datatype>varchar</datatype>
             </column>

@@ -5,11 +5,7 @@
                 <columns>
                     <column columnName="Id" />
                     <column columnName="date">
-<!--                        <displayWidth>100</displayWidth>-->
-                    </column>
-                    <column columnName="enddate">
-                        <isHidden>false</isHidden>
-<!--                        <displayWidth>100</displayWidth>-->
+                        <displayWidth>120</displayWidth>
                     </column>
                     <column columnName="pairId">
                         <columnTitle>Pair Id</columnTitle>
@@ -24,9 +20,17 @@
                             <fkDisplayColumnName>cage</fkDisplayColumnName>
                         </fk>
                     </column>
+                    <column columnName="formationType">
+                        <columnTitle>Formation Type</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>pairing_formation_types</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
                     <column columnName="reason">
                         <columnTitle>Introduction Reason</columnTitle>
-                        <displayWidth>200</displayWidth>
+                        <displayWidth>150</displayWidth>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>pairing_reason</fkTable>
@@ -42,14 +46,9 @@
                             <fkColumnName>value</fkColumnName>
                         </fk>
                     </column>
-                    <column columnName="endState">
-                        <columnTitle>End State</columnTitle>
-                        <displayWidth>100</displayWidth>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>pairing_goal</fkTable>
-                            <fkColumnName>value</fkColumnName>
-                        </fk>
+                    <column columnName="remark">
+                        <columnTitle>Remark on Formation</columnTitle>
+                        <displayWidth>200</displayWidth>
                     </column>
                     <column columnName="observation">
                         <columnTitle>Interaction Summary</columnTitle>
@@ -59,8 +58,21 @@
                             <fkColumnName>value</fkColumnName>
                         </fk>
                     </column>
+                    <column columnName="enddate">
+                        <isHidden>false</isHidden>
+                        <displayWidth>120</displayWidth>
+                    </column>
+                    <column columnName="endState">
+                        <columnTitle>End State</columnTitle>
+                        <displayWidth>100</displayWidth>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>pairing_goal</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
                     <column columnName="separationReason">
-                        <columnTitle>Status Change Reason</columnTitle>
+                        <columnTitle>Separation Reason</columnTitle>
                         <displayWidth>100</displayWidth>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
@@ -68,10 +80,7 @@
                             <fkColumnName>value</fkColumnName>
                         </fk>
                     </column>
-                    <column columnName="remark">
-                        <columnTitle>Remark on Formation</columnTitle>
-                        <displayWidth>200</displayWidth>
-                    </column>
+
                     <column columnName="separationRemark">
                         <columnTitle>Remark on Separation</columnTitle>
                         <displayWidth>200</displayWidth>

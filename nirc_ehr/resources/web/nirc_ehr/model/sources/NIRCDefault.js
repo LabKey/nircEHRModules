@@ -182,18 +182,16 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             type: {
                 hidden: true
             },
-            // date: {
-            //     width: 100
-            // },
-            // enddate: {
-            //     hidden: false,
-            //     width: 100
-            // },
             pairid: {
                 hidden: false,
                 columnConfig: {
                     width: 100
                 },
+            },
+            formationType: {
+                columnConfig: {
+                    width: 150
+                }
             },
             reason: {
                 columnConfig: {

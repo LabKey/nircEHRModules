@@ -65,6 +65,7 @@ numeric_unit	Numeric Units	value	title
 observation_areas	Observation Areas	value
 ocular_problem	Ocular Problem	value
 pairing_goal	Pairing Goal	value
+pairing_formation_types	Pairing Formation Type	value
 pairing_reason	Introduction Reason	value
 pairing_observation	Interaction Summary	value
 pairing_separation_reason	Pairing Status Change Reason	value	value

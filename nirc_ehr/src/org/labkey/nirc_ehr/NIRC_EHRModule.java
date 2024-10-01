@@ -44,6 +44,7 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.form.*;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
+import org.labkey.nirc_ehr.demographics.CagematesDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
@@ -121,6 +122,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new ProtocolAssignmentDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new HousingDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new CagematesDemographicsProvider(this));
 
         EHRService.get().registerHistoryDataSource(new ArrivalDataSource(this));
         EHRService.get().registerHistoryDataSource(new BiopsyDataSource(this));

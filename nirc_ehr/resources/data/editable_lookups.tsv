@@ -74,6 +74,7 @@ numeric_unit	Colony Management	Numeric Unit
 observation_types	Clinical	Clin remarks observation types
 observation_areas	Clinical	Observation Areas	Clinical observation areas.
 ocular_problem	Clinical	Ocular Problem	Clinical observation fixed values.
+pairing_formation_types	Pairing Formation Type	value
 pairing_goal	Behavior	Pairing Goal	Used in pairing dataset.
 pairing_reason	Behavior	Introduction Reason	Used in pairing dataset.
 pairing_observation	Behavior	Interaction Summary	Used in pairing dataset.

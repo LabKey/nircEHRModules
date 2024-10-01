@@ -24,8 +24,7 @@ dietSchedule
 drug															
 incompleteTreatments															
 pairingsBehavior															
-pairingHistory	Behavior	query	Pairing History	TRUE		study	pairingHistory			date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
-pairingHousingSummary															
+pairingHousingSummary
 pairingSummary	Behavior	query	Pairing Summary	TRUE		study	pairingSummary			date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
 nhpTraining	Behavior	query	Animal Training	TRUE		study	nhpTraining			date	FALSE	FALSE		qcstate/publicdata	This report displays animal training data
 roommateHistoryBehavior
