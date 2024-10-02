@@ -43,7 +43,7 @@ public class BloodDrawDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(safeAppend(rs, "Total Quantity", "quantity", "ml"));
+        sb.append(safeAppend(rs, "Total Quantity", "quantity", " mL"));
         sb.append(safeAppend(rs, "Sample Type", "type"));
         sb.append(safeAppend(rs, "Remark", "remark"));
 

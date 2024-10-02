@@ -8,6 +8,7 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
+import java.util.Set;
 
 public class PregnancyDataSource extends AbstractDataSource
 {
@@ -17,18 +18,20 @@ public class PregnancyDataSource extends AbstractDataSource
     }
 
     @Override
+    protected Set<String> getColumnNames()
+    {
+        return PageFlowUtil.set("Id", "date", "result/title");
+    }
+
+    @Override
     protected String getHtml(Container c, Results rs, boolean redacted) throws SQLException
     {
         StringBuilder sb = new StringBuilder();
 
-        if (rs.hasColumn(FieldKey.fromString("type")) && rs.getObject("type") != null)
+        FieldKey outcome = FieldKey.fromString("result/title");
+        if (rs.hasColumn(outcome) && rs.getObject(outcome) != null)
         {
-            addRow(sb, "Type", rs.getString("type"));
-        }
-
-        if (rs.hasColumn(FieldKey.fromString("result/title")) && rs.getObject(FieldKey.fromString("result/title")) != null)
-        {
-            safeAppend(rs, "Outcome", "result/title");
+            addRow(sb, "Outcome", rs.getString(outcome));
         }
         else
         {
@@ -43,7 +46,6 @@ public class PregnancyDataSource extends AbstractDataSource
         sb.append(displayLabel);
         sb.append(": ");
         sb.append(PageFlowUtil.filter(value));
-        sb.append(", ");
     }
 }
 
