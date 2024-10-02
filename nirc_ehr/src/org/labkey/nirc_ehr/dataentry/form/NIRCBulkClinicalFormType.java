@@ -50,11 +50,25 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
 
+        // Needed for case and scheduled date/time when navigating from treatment or observation schedule
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/treatmentSubmit.js"));
+
         for (FormSection s : getFormSections())
         {
             s.addConfigSource("ClinicalDefaults");
             s.addConfigSource("BulkClinical");
             s.addConfigSource("TreatmentSchedule");
         };
+    }
+
+    @Override
+    protected List<String> getButtonConfigs()
+    {
+        List<String> ret = super.getButtonConfigs();
+
+        ret.remove("SUBMIT");
+        ret.add("NIRC_TREATMENT_SUBMIT");
+
+        return ret;
     }
 }

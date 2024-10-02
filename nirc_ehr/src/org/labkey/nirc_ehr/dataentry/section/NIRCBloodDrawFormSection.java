@@ -26,10 +26,11 @@ public class NIRCBloodDrawFormSection extends BloodDrawFormSection
         _addCopyFromSection = addCopyFromSection;
     }
 
-    public NIRCBloodDrawFormSection(boolean collapsible, boolean initCollapsed, boolean addCopyFromSection, boolean isChild, String parentQueryName)
+    public NIRCBloodDrawFormSection(boolean isChild, String parentQueryName)
     {
-        this(collapsible, initCollapsed, addCopyFromSection);
-        if (isChild)
+        this(true, true, true);
+
+        if (isChild && null != parentQueryName)
         {
             addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ParentChild.js"));
             addConfigSource("ParentChild");
