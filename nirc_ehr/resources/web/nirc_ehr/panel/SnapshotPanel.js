@@ -5,9 +5,10 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
     initComponent: function() {
         Ext4.apply(this, {
             defaults: {
-                border: false
+                border: false,
             },
-            items: this.getItems()
+            showExtendedInformation: true,
+            items: this.getItems(),
         });
 
         this.callParent();

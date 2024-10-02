@@ -5,8 +5,10 @@ import org.labkey.api.data.Results;
 import org.labkey.api.ehr.history.AbstractDataSource;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
+import java.util.Set;
 
 public class ExemptionsDataSource extends AbstractDataSource
 {
@@ -14,6 +16,12 @@ public class ExemptionsDataSource extends AbstractDataSource
     public ExemptionsDataSource(Module module)
     {
         super("study", "exemptions", "Exemptions", "Exemptions", module);
+    }
+
+    @Override
+    protected Set<String> getColumnNames()
+    {
+        return PageFlowUtil.set("Id", "date", "category", "remark");
     }
 
     @Override

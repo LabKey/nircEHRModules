@@ -292,12 +292,21 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         click(Locator.linkWithText("Load EHR table definitions"));
         waitForElement(Locator.tagWithClass("span", "x4-window-header-text").withText("Success"));
         assertExt4MsgBox("EHR tables updated successfully.", "OK");
+        click(Locator.linkWithText("Load EHR_Lookup table definitions"));
+        waitForElement(Locator.tagWithClass("span", "x4-window-header-text").withText("Success"));
+        assertExt4MsgBox("EHR_Lookups tables updated successfully.", "OK");
     }
 
     private void addNIRCEhrLinks()
     {
         navigateToFolder(getProjectName(), getFolderName());
         (new PortalHelper(this)).addWebPart("NIRC EHR Links");
+    }
+
+    @Test
+    public void testSetup()
+    {
+
     }
 
     @Override
