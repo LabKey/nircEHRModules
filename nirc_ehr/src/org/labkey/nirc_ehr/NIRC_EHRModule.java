@@ -128,7 +128,6 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerHistoryDataSource(new BirthDataSource(this));
         EHRService.get().registerHistoryDataSource(new BloodDrawDataSource(this));
         EHRService.get().registerHistoryDataSource(new BreederDataSource(this));
-        EHRService.get().registerHistoryDataSource(new CasesDataSource(this));
         EHRService.get().registerHistoryDataSource(new DeathDataSource(this));
         EHRService.get().registerHistoryDataSource(new DefaultAlopeciaDataSource(this));
         EHRService.get().registerHistoryDataSource(new DefaultAnimalRecordFlagDataSource(this));
