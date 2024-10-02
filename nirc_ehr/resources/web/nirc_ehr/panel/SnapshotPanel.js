@@ -69,6 +69,10 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
                         fieldLabel: 'Project'
                     },{
                         xtype: 'displayfield',
+                        fieldLabel: 'Source',
+                        name: 'source'
+                    },{
+                        xtype: 'displayfield',
                         fieldLabel: 'Prev Id',
                         name: 'prev_id'
                     }]
