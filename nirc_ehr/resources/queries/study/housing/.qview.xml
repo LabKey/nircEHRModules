@@ -6,7 +6,7 @@
         <column name="Id"/>
         <column name="date"/>
         <column name="enddate"/>
-        <column name="room" />
+        <column name="room/fullRoom" />
         <column name="cage" />
         <column name="reason" />
         <column name="remark"/>
