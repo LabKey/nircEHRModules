@@ -29,7 +29,7 @@ public class DepartureDataSource extends AbstractDataSource
         StringBuilder sb = new StringBuilder();
 
         if (rs.hasColumn(FieldKey.fromString("destination/meaning")) && rs.getObject(FieldKey.fromString("destination/meaning")) != null)
-            sb.append("Destination: " + rs.getString(FieldKey.fromString("destination/meaning")));
+            sb.append(safeAppend(rs, "Destination", "destination/meaning"));
         else
             sb.append("Destination: Unknown");
 

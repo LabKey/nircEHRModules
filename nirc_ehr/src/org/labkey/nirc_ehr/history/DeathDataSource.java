@@ -29,7 +29,7 @@ public class DeathDataSource extends AbstractDataSource
         StringBuilder sb = new StringBuilder();
 
         if(rs.hasColumn(FieldKey.fromString("reason/title")) && rs.getObject(FieldKey.fromString("reason/title")) != null)
-            sb.append("Disposition: " + rs.getString(FieldKey.fromString("reason/title")));
+            sb.append(safeAppend(rs, "Disposition", "reason/title"));
         else
             sb.append("Disposition: Unknown");
 

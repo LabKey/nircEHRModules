@@ -47,7 +47,7 @@ public class ProtocolDataSource extends AbstractDataSource
     {
         sb.append(displayLabel);
         sb.append(": ");
-        sb.append(value);
+        sb.append(PageFlowUtil.filter(value));
         sb.append("\n");;
     }
 }

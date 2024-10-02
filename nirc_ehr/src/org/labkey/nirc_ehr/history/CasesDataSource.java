@@ -30,7 +30,7 @@ public class CasesDataSource extends AbstractDataSource
         StringBuilder sb = new StringBuilder();
 
         if(rs.hasColumn(FieldKey.fromString("openDiagnosis")) && rs.getObject(FieldKey.fromString("openDiagnosis")) != null)
-            sb.append("Reason: " + rs.getString(FieldKey.fromString("openDiagnosis")));
+            sb.append(safeAppend(rs, "Reason", "openDiagnosis"));
 
         return sb.toString();
     }

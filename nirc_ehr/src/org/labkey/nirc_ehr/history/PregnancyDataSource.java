@@ -5,6 +5,7 @@ import org.labkey.api.data.Results;
 import org.labkey.api.ehr.history.AbstractDataSource;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
 
@@ -41,7 +42,7 @@ public class PregnancyDataSource extends AbstractDataSource
     {
         sb.append(displayLabel);
         sb.append(": ");
-        sb.append(value);
+        sb.append(PageFlowUtil.filter(value));
         sb.append(", ");
     }
 }
