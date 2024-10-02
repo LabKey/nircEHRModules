@@ -4,9 +4,7 @@
             <table tableName="clinremarks" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
                     <column columnName="Id" />
-                    <column columnName="date">
-                        <formatString>Date</formatString>
-                    </column>
+                    <column columnName="date" />
                     <column columnName="hx">
                         <columnTitle>History</columnTitle>
                     </column>

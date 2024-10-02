@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.dataentry.BloodDrawFormSection;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
+import org.labkey.api.view.template.ClientDependency;
 
 import java.util.List;
 
@@ -23,6 +24,21 @@ public class NIRCBloodDrawFormSection extends BloodDrawFormSection
         _collapsible = collapsible;
         _initCollapsed = initCollapsed;
         _addCopyFromSection = addCopyFromSection;
+    }
+
+    public NIRCBloodDrawFormSection(boolean isChild, String parentQueryName)
+    {
+        this(true, true, true);
+
+        if (isChild && null != parentQueryName)
+        {
+            addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ParentChild.js"));
+            addConfigSource("ParentChild");
+
+            addClientDependency(ClientDependency.supplierFromPath("ehr/data/ChildClientStore.js"));
+            setClientStoreClass("EHR.data.ChildClientStore");
+            addExtraProperty("parentQueryName", parentQueryName);
+        }
     }
 
     public List<String> getTbarButtons()

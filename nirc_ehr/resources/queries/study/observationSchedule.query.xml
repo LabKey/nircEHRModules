@@ -12,9 +12,7 @@
                     <column columnName="observations">
                         <columnTitle>Observations</columnTitle>
                     </column>
-                    <column columnName="observationRecord">
-                        <columnTitle></columnTitle>
-                    </column>
+                    <column columnName="observationRecord" />
                 </columns>
             </table>
         </tables>

@@ -53,6 +53,17 @@ Ext4.define('NIRC_EHR.form.EditCases', {
                 item.inputEl.removeCls('form-panel-input-disabled');
             }
         }
+
+        if (item.labelEl && item.containerEl) {
+            if (disable) {
+                item.labelEl.addCls('form-panel-input-disabled');
+                item.containerEl.addCls('form-panel-input-disabled');
+            }
+            else {
+                item.labelEl.removeCls('form-panel-input-disabled');
+                item.containerEl.removeCls('form-panel-input-disabled');
+            }
+        }
     },
 
     fieldEnableChange: function(disable){
