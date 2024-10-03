@@ -2,14 +2,15 @@
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="pairings" tableDbType="TABLE" useColumnOrder="true">
+                <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer" />
                 <columns>
                     <column columnName="Id" />
-                    <column columnName="date">
-                        <displayWidth>120</displayWidth>
+                    <column columnName="date"/>
+                    <column columnName="enddate">
+                        <isHidden>false</isHidden>
                     </column>
                     <column columnName="pairId">
                         <columnTitle>Pair Id</columnTitle>
-                        <displayWidth>100</displayWidth>
                     </column>
                     <column columnName="cage">
                         <columnTitle>Location</columnTitle>
@@ -18,14 +19,6 @@
                             <fkTable>cage</fkTable>
                             <fkColumnName>location</fkColumnName>
                             <fkDisplayColumnName>cage</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="formationType">
-                        <columnTitle>Formation Type</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>pairing_formation_types</fkTable>
-                            <fkColumnName>value</fkColumnName>
                         </fk>
                     </column>
                     <column columnName="reason">
@@ -46,6 +39,14 @@
                             <fkColumnName>value</fkColumnName>
                         </fk>
                     </column>
+                    <column columnName="formationType">
+                        <columnTitle>Formation Type</columnTitle>
+                        <fk>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>pairing_formation_types</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
                     <column columnName="remark">
                         <columnTitle>Remark on Formation</columnTitle>
                         <displayWidth>200</displayWidth>
@@ -57,10 +58,6 @@
                             <fkTable>pairing_observation</fkTable>
                             <fkColumnName>value</fkColumnName>
                         </fk>
-                    </column>
-                    <column columnName="enddate">
-                        <isHidden>false</isHidden>
-                        <displayWidth>120</displayWidth>
                     </column>
                     <column columnName="endState">
                         <columnTitle>End State</columnTitle>

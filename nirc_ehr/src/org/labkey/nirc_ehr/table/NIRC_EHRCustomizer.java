@@ -128,8 +128,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 customizeObservationSchedule(ti);
             }
 
-            if (matches(ti, "study", "pairings") ||
-                    matches(ti, "study", "pairingSummary"))
+            if (matches(ti, "study", "pairings"))
             {
                 customizePairing(ti);
             }
@@ -349,6 +348,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     public void addQueryFieldKeys(Set<FieldKey> keys)
                     {
                         super.addQueryFieldKeys(keys);
+                        keys.add(FieldKey.fromString("taskid"));
                     }
 
                     @Override
@@ -751,7 +751,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 col.setLabel("Area");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "areas", "area", "description"));
             }
-            if ("remark".equalsIgnoreCase(col.getName()) && null == col.getFk())
+            if ("remark".equalsIgnoreCase(col.getName()) && null == col.getFk() && !ti.getName().equalsIgnoreCase("pairings"))
             {
                 col.setLabel("Remark");
             }

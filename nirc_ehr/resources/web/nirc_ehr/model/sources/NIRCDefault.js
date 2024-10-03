@@ -59,6 +59,12 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 width: 150
             }
         },
+        'cage': {
+            columnConfig: {
+                fixed: true,
+                width: 150
+            },
+        },
     },
     byQuery: {
         'study.housing': {
@@ -67,11 +73,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 hidden: true
             },
             'cage': {
-                allowBlank: false,
-                columnConfig: {
-                    fixed: true,
-                    width: 150
-                },
+                allowBlank: false
             },
             'enddate': {
                 hidden: true
@@ -184,13 +186,23 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             }
         },
         'study.pairings': {
+            date : {
+                getInitialValue: function(v, rec){
+                    if (v)
+                        return v;
+
+                    let curDate = new Date();
+                    curDate.setHours(0, 0, 0, 0);
+                    return curDate;
+                }
+            },
             type: {
                 hidden: true
             },
             pairid: {
                 hidden: false,
                 columnConfig: {
-                    width: 100
+                    width: 150
                 },
             },
             formationType: {
@@ -212,6 +224,12 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 columnConfig: {
                     width: 150
                 },
+            },
+            remark: {
+                title: 'Remark on Formation',
+                columnConfig: {
+                    width: 200
+                }
             },
             separationRemark: {
                 columnConfig: {

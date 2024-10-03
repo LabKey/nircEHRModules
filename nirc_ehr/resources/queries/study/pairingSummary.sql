@@ -1,4 +1,5 @@
 SELECT
+  p.updatePairing,
   p.Id,
  (SELECT group_concat(distinct p2.Id, chr(10)) AS Ids FROM study.pairings p2 WHERE p.Id != p2.id AND p.pairId = p2.pairId) as otherIds,
   p.pairid,
@@ -17,5 +18,3 @@ SELECT
   p.type
 
 FROM study.pairings p
--- WHERE p.taskid IS NOT NULL
-

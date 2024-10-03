@@ -1,9 +1,8 @@
 <query xmlns="http://labkey.org/data/xml/query">
 <metadata>
     <tables xmlns="http://labkey.org/data/xml">
-        <table tableName="pairingSummary" tableDbType="TABLE">
+        <table tableName="pairingSummary" tableDbType="NOT_IN_DB">
             <tableTitle>Pairing Summary</tableTitle>
-            <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer" />
             <tableUrl />
             <columns>
                 <column columnName="otherIds">
