@@ -2,9 +2,6 @@
     <sorts>
         <sort column="date" descending="true"/>
     </sorts>
-    <filters>
-        <filter column="enddate" operator="isnonblank"/>
-    </filters>
     <columns>
         <column name="Id"/>
         <column name="otherIds"/>
