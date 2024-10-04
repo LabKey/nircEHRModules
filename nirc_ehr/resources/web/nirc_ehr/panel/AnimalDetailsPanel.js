@@ -131,8 +131,8 @@ Ext4.define('NIRC_EHR.panel.AnimalDetailsPanel', {
                     fieldLabel: 'Flags',
                     name: 'flags'
                 },{
-                    fieldLabel: 'Groups',
-                    name: 'groups'
+                    fieldLabel: 'Cagemates',
+                    name: 'cagemates'
                 },{
                     fieldLabel: 'Weight',
                     name: 'weights'
@@ -233,22 +233,5 @@ Ext4.define('NIRC_EHR.panel.AnimalDetailsPanel', {
         }
 
         toSet['weights'] = text;
-    },
-
-    //note: this should not get called if redacted
-    appendGroups: function(toSet, results){
-        toSet['groups'] = null;
-
-        if (this.redacted)
-            return;
-
-        var values = [];
-        if (results){
-            Ext4.each(results, function(row){
-                values.push(LABKEY.Utils.encodeHtml(row['groupId/name']));
-            }, this);
-        }
-
-        toSet['groups'] = values.length ? values.join('<br>') : 'None';
     },
 });

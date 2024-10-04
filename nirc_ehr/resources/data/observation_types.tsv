@@ -54,7 +54,7 @@ Neurologic		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"n
 Musculoskeletal		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"musculoskeletal_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	musculoskeletal_types	value
 Respiratory Tract		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"respiratory_types","displayField":"value","valueField":"value"}	ehr_lookups	respiratory_types	value
 Feed Assessment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"feed_assess_types","displayField":"value","valueField":"value"}	ehr_lookups	feed_assess_types	value
-Stool		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"stool_score","displayField":"value","sortFields":"sort_order","valueField":"value"}
+Stool		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"stool_types","displayField":"value","sortFields":"sort_order","valueField":"value"}
 Activity	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"activity","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	activity	value
 Verified Id?		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yesno","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yesno	value
 Turgor		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"turgor_score","displayField":"value","sortFields":"sort_order","valueField":"value"}

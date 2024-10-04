@@ -846,10 +846,39 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+                <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
+            </column>
             <column columnName="type">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="remark">
+            <column columnName="pairId">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="cage">
+                <columnTitle>Location</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="reason">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="goal">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="endState">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="observation">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="formationType">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="separationReason">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="separationRemark">
                 <datatype>varchar</datatype>
             </column>
         </columns>

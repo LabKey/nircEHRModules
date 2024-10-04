@@ -46,6 +46,7 @@ import org.labkey.nirc_ehr.buttons.MarkTreatmentCompletedButton;
 import org.labkey.nirc_ehr.dataentry.form.*;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
+import org.labkey.nirc_ehr.demographics.CagematesDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
@@ -71,7 +72,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.014;
+        return 24.015;
     }
 
     @Override
@@ -123,6 +124,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new ProtocolAssignmentDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new HousingDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new CagematesDemographicsProvider(this));
 
         EHRService.get().registerHistoryDataSource(new ArrivalDataSource(this));
         EHRService.get().registerHistoryDataSource(new BiopsyDataSource(this));
@@ -209,6 +211,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCClinicalObservationsFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCClinicalRoundsFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCAnimalTrainingFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCPairingsFormType.class, this));
     }
 
     @Override

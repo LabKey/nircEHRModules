@@ -1,5 +1,6 @@
 package org.labkey.nirc_ehr.table;
 
+import io.micrometer.common.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.labkey.api.data.AbstractTableInfo;
 import org.labkey.api.data.ColumnInfo;
@@ -14,7 +15,9 @@ import org.labkey.api.data.RenderContext;
 import org.labkey.api.data.SQLFragment;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
+import org.labkey.api.data.WrappedColumnInfo;
 import org.labkey.api.ehr.EHRService;
+import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.ehr.security.EHRDataEntryPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
@@ -124,6 +127,19 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             {
                 customizeObservationSchedule(ti);
             }
+
+            if (matches(ti, "study", "pairings"))
+            {
+                customizePairing(ti);
+            }
+        }
+    }
+
+    private void customizePairing(AbstractTableInfo ti)
+    {
+        if (ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRBehaviorEntryPermission.class))
+        {
+            appendPairingUpdateCol(ti);
         }
     }
 
@@ -291,6 +307,73 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         });
         ci.setIsUnselectable(false);
         ci.setLabel("Case History");
+
+        ti.addColumn(ci);
+    }
+
+    private void appendPairingUpdateCol(AbstractTableInfo ti)
+    {
+        String name = "updatePairing";
+        String label = "Update Pairing";
+        if (ti.getColumn(name) != null)
+            return;
+
+        var ci = new WrappedColumn(ti.getColumn("Id"), name);
+        ci.setDisplayColumnFactory(new DisplayColumnFactory()
+        {
+            @Override
+            public DisplayColumn createRenderer(final ColumnInfo colInfo)
+            {
+                return new DataColumn(colInfo){
+
+                    @Override
+                    public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                    {
+                        ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                        if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRBehaviorEntryPermission.class))
+                            return;
+
+                        linkAction.addParameter("formType", "Pairing Observations");
+
+                        String taskId = (String)ctx.get("taskid");
+                        if (StringUtils.isNotEmpty(taskId))
+                        {
+                            linkAction.addParameter("taskid", taskId);
+                            String href = linkAction.toString();
+                            out.write(PageFlowUtil.link(label).href(href).target("_blank").toString());
+                        }
+                    }
+
+                    @Override
+                    public void addQueryFieldKeys(Set<FieldKey> keys)
+                    {
+                        super.addQueryFieldKeys(keys);
+                        keys.add(FieldKey.fromString("taskid"));
+                    }
+
+                    @Override
+                    public boolean isSortable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isFilterable()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isEditable()
+                    {
+                        return false;
+                    }
+                };
+            }
+        });
+        ci.setIsUnselectable(false);
+        ci.setLabel(label);
+        ci.setWidth("50px");
 
         ti.addColumn(ci);
     }
@@ -668,7 +751,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 col.setLabel("Area");
                 col.setFk(new QueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us, null, "areas", "area", "description"));
             }
-            if ("remark".equalsIgnoreCase(col.getName()) && null == col.getFk())
+            if ("remark".equalsIgnoreCase(col.getName()) && null == col.getFk() && !ti.getName().equalsIgnoreCase("pairings"))
             {
                 col.setLabel("Remark");
             }

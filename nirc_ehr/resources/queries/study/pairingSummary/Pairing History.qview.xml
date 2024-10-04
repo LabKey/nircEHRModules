@@ -3,8 +3,8 @@
         <sort column="date" descending="true"/>
     </sorts>
     <columns>
-        <column name="updatePairing"/>
         <column name="Id"/>
+        <column name="otherIds"/>
         <column name="date"/>
         <column name="enddate"/>
         <column name="pairid"/>
@@ -12,10 +12,10 @@
         <column name="goal"/>
         <column name="endState"/>
         <column name="observation"/>
-        <column name="separationreason"/>
+        <column name="formationType"/>
         <column name="remark"/>
+        <column name="separationReason"/>
         <column name="separationRemark"/>
-        <column name="type"/>
         <column name="performedby"/>
     </columns>
 </customView>

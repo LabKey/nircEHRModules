@@ -1,8 +1,8 @@
 SELECT
     STAFF_ID as staffId,
     EMAIL_ADDRESS as email,
-    STAFF_FIRST_NAME as firstName,
-    STAFF_LAST_NAME as lastName,
+    trim(STAFF_FIRST_NAME) as firstName,
+    trim(STAFF_LAST_NAME) as lastName,
     STAFF_MIDDLE_NAME as middleName,
     STAFF_NUMBER as displayName,
     HIRE_DATE as hireDate,
