@@ -4,9 +4,9 @@ SELECT anmEvt.ANIMAL_EVENT_ID as objectid,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP) AS weightDate,
        CAST(COALESCE (adt.modified,anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified,
        (CASE
-            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
-            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
-                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
+            WHEN (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME) IS NULL OR trim(anmEvt.STAFF_ID.STAFF_LAST_NAME) IS NULL) THEN 'unknown'
+            ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
+                || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        anmEvt.result AS weight,
        ev.NUMERIC_UNIT_ID   AS Units
 FROM ANIMAL_EVENT anmEvt
