@@ -1,14 +1,15 @@
 SELECT anmEvt.ANIMAL_EVENT_ID                                                    AS objectid,
        anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER                                         AS Id,
-       CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS administrationDate,
+       CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS date,
        (CASE
-            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
-            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
-                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
-       anmEvt.RESULT                                                             AS score,
-       anmEvt.DIAGNOSIS                                                          AS diagnosis,
-       ev.NUMERIC_UNIT_ID                                                        AS Units,
-       anmCmt.TEXT                                                               AS remark,
+            WHEN (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME) IS NULL OR trim(anmEvt.STAFF_ID.STAFF_LAST_NAME) IS NULL) THEN 'unknown'
+            ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
+                || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
+       anmEvt.RESULT || ev.NUMERIC_UNIT_ID.NAME                                       AS observation,
+       anmEvt.RESULT                                       AS resobservation,
+       ev.NUMERIC_UNIT_ID                                       AS unitobservation,
+       anmEvt.DIAGNOSIS                                                          AS remark,
+       'Alopecia Score'                                                          AS category,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID

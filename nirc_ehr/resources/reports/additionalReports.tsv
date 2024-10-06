@@ -14,6 +14,7 @@ FileRepository	General	js	File Repository	true		study	FileRepository				false	fa
 observationSchedule	Daily Reports	js	Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeObservationOrders	Clinical	query	Active Observation Orders	true		study	observation_order	Active Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 observationOrders	Clinical	query	Observation Orders	true		study	observation_order			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+alopecia	Clinical	query	Alopecia Scores	TRUE		study	clinical_observations	Alopecia Scores		date	FALSE	FALSE		qcstate/publicdata	This report contains the alopecia scores for the animal
 behaviorCases
 behaviorRemarks															
 bloodSchedule															
