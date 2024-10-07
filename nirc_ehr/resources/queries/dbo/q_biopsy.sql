@@ -2,9 +2,9 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER                                         AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS biopsyDate,
        (CASE
-            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
-            ELSE (anmEvt.STAFF_ID.STAFF_FIRST_NAME
-                || '|' || anmEvt.STAFF_ID.STAFF_LAST_NAME) END)                  AS performedby,
+            WHEN (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME) IS NULL OR trim(anmEvt.STAFF_ID.STAFF_LAST_NAME) IS NULL) THEN 'unknown'
+            ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
+                || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS type,
        CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
                 ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'

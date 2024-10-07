@@ -5,24 +5,26 @@ var deathIdMap = {};
 
 function onInit(event, helper){
 
-    LABKEY.Query.selectRows({
-        requiredVersion: 9.1,
-        schemaName: 'study',
-        queryName: 'deaths',
-        columns: ['Id', 'QCState/Label'],
-        scope: this,
-        success: function (results) {
-            if (!results || !results.rows || results.rows.length < 1)
-                return;
+    if (!helper.isETL() && event != 'truncate') {
+        LABKEY.Query.selectRows({
+            requiredVersion: 9.1,
+            schemaName: 'study',
+            queryName: 'deaths',
+            columns: ['Id', 'QCState/Label'],
+            scope: this,
+            success: function (results) {
+                if (!results || !results.rows || results.rows.length < 1)
+                    return;
 
-            for(var i=0; i < results.rows.length; i++) {
-                deathIdMap[results.rows[i]["Id"]["value"]] = {QCStateLabel: results.rows[i]["QCState/Label"]["value"]};
+                for (var i = 0; i < results.rows.length; i++) {
+                    deathIdMap[results.rows[i]["Id"]["value"]] = {QCStateLabel: results.rows[i]["QCState/Label"]["value"]};
+                }
+            },
+            failure: function (error) {
+                console.log("error getting death data in death trigger onInit()\n" + error);
             }
-        },
-        failure: function (error) {
-            console.log("error getting death data in death trigger onInit()\n" + error);
-        }
-    });
+        });
+    }
 }
 
 function onUpsert(helper, scriptErrors, row, oldRow) {

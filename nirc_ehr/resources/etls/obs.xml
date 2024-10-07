@@ -17,6 +17,20 @@
                 </columnTransforms>
             </destination>
         </transform>
+        <transform id="step2" type="org.labkey.di.pipeline.TransformTask">
+            <description>Copy to alopecia target</description>
+            <source schemaName="dbo" queryName="q_alopecia"/>
+            <destination schemaName="study" queryName="clinical_observations"
+                         bulkLoad="true" batchSize="5000" targetOption="merge">
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
+                <columnTransforms>
+                    <column source="administrationDate" target="date"/>
+                    <column source="performedby" target="performedby" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
+                </columnTransforms>
+            </destination>
+        </transform>
     </transforms>
 
     <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified" >

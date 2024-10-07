@@ -72,7 +72,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.015;
+        return 24.016;
     }
 
     @Override
@@ -173,6 +173,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         EHRService.get().unregisterMoreActionsButtons("study", "treatment_order");
         EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "treatment_order", "Set End Date"), "study", "treatment_order");
+        EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());

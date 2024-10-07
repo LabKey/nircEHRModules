@@ -8,7 +8,7 @@ SELECT objectid,
        openDiagnosis,
        closeDiagnosis,
        enddate,
-       category,
+       'Clinical' as category,
        attachmentFile
 FROM CasesTemp
 WHERE category = 'Presenting Diagnosis' AND (openRemark IS NULL OR openRemark NOT LIKE 'Error:%')
