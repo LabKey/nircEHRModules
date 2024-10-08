@@ -25,6 +25,7 @@ import org.junit.experimental.categories.Category;
 import org.labkey.api.reader.Readers;
 import org.labkey.remoteapi.CommandException;
 import org.labkey.remoteapi.core.SaveModulePropertiesCommand;
+import org.labkey.remoteapi.query.ImportDataCommand;
 import org.labkey.remoteapi.query.InsertRowsCommand;
 import org.labkey.remoteapi.security.CreateUserResponse;
 import org.labkey.test.Locator;
@@ -241,6 +242,25 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         enableSiteNotification();
         populateLocations();
         addUsersAndPermissions();//create users and assign roles, created for Death/Necropsy form, but users can be repurposed for other forms.
+        populateEHRTables();
+    }
+
+    @LogMethod
+    private void populateEHRTables()
+    {
+        goToEHRFolder();
+        File fileName = new File(TestFileUtils.getLabKeyRoot(), getModulePath() + "/resources/data/observation_types.tsv");
+        ImportDataCommand command = new ImportDataCommand("ehr", "observation_types");
+        command.setFile(fileName);
+        try
+        {
+            command.execute(getApiHelper().getConnection(), getContainerPath());
+        }
+        catch (IOException | CommandException e)
+        {
+            log("Error while inserting into observation_types " + e.getMessage());
+        }
+
     }
 
     private void enableSiteNotification()
@@ -288,12 +308,16 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     {
         log("Setup the EHR table definitions");
         EHRAdminPage.beginAt(this, getContainerPath());
-        click(Locator.linkWithText("EHR EXTENSIBLE COLUMNS"));
+        clickAndWait(Locator.linkWithText("EHR Extensible Columns"));
+
+        log("Load EHR table definitions");
         click(Locator.linkWithText("Load EHR table definitions"));
         waitForElement(Locator.tagWithClass("span", "x4-window-header-text").withText("Success"));
         assertExt4MsgBox("EHR tables updated successfully.", "OK");
-        click(Locator.linkWithText("Load EHR_Lookup table definitions"));
-        waitForElement(Locator.tagWithClass("span", "x4-window-header-text").withText("Success"));
+
+        log("Load EHR_Lookup table definitions");
+        Locator.linkWithText("Load EHR_Lookup table definitions").findElement(getDriver()).click();
+        waitForElement(Ext4Helper.Locators.window().withDescendant(Window.Locators.title().withText("Success")));
         assertExt4MsgBox("EHR_Lookups tables updated successfully.", "OK");
     }
 
@@ -404,6 +428,125 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         log("Verifying Orchard file is created");
         verifyOrchardFileGenerated(bornAnimal);
+    }
+
+    @Test
+    public void testClinicalObservation()
+    {
+        String animalId = "TEST4551032";
+
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Clinical Cases"));
+
+        //Fill out Clinical Case section with Id, Date, Open Remark
+        _helper.setDataEntryField("openRemark", "Clinical Case WorkFlow - Test");
+        _helper.setDataEntryField("plan", "Case plan - Test");
+        _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
+        setFormElement(Locator.name("Id"), animalId);
+
+        _helper.setDataEntryField("s", "Subjective for " + animalId);
+        _helper.setDataEntryField("remark", "Remarks for " + animalId);
+
+        Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
+        _helper.addRecordToGrid(observationOrders);
+        observationOrders.setGridCell(1, "category", "Ears");
+        observationOrders.setGridCell(1, "frequency", "QID");
+        submitForm("Submit Final", "Finalize");
+
+        log("Verifying Active Observation Orders");
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Active Observation Orders"));
+        DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", animalId);
+        Assert.assertEquals("Incorrect active observation orders", Arrays.asList("Ears", "Activity", "Appetite", "BCS", "Hydration",
+                "Stool", "Verified Id?"), table.getColumnDataAsText("category"));
+
+        log("Verifying Today's Observation Schedule");
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
+        table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        Assert.assertEquals("Incorrect rows in Today's Observation Schedule", 4, table.getDataRowCount());
+        Assert.assertEquals("Incorrect observation title", "Daily Clinical Observations; Ears", table.getDataAsText(0, "observationList"));
+        Assert.assertEquals("Status is not updated", "", table.getDataAsText(0, "observationStatus"));
+        table.link(0, "observationRecord").click();
+
+        switchToWindow(1);
+        waitForText(animalId);
+        Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
+        observation.setGridCell(1, "observation", "Discharge");
+        observation.setGridCellJS(1, "remark", "remark for Ears");
+
+        observation.setGridCell(2, "observation", "0-1 Extremely Lethargic");
+        observation.setGridCellJS(2, "remark", "remark for activity");
+
+        observation.setGridCell(3, "observation", "Normal to low");
+        observation.setGridCellJS(3, "remark", "remark for Appetite");
+
+        observation.setGridCell(4, "observation", "2.5");
+        observation.setGridCellJS(4, "remark", "remark for BCS");
+
+        observation.setGridCell(5, "observation", "10%");
+        observation.setGridCellJS(5, "remark", "remark for Hydration");
+
+        observation.setGridCell(6, "observation", "M/F");
+        observation.setGridCellJS(6, "remark", "remark for Stool");
+
+        observation.setGridCell(7, "observation", "No");
+        observation.setGridCellJS(7, "remark", "remark for Verified Id?");
+        submitForm("Submit Final", "Finalize");
+
+        table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        Assert.assertEquals("Status is not updated", "Completed", table.getDataAsText(0, "observationStatus"));
+
+        log("Closing the case");
+        goToEHRFolder();
+        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+        DataRegionTable activeClinicalCases = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        activeClinicalCases.link(0, "caseCheck").click();
+        switchToWindow(2);
+
+        waitForText(animalId);
+        waitForTextToDisappear("Id is required");
+        _helper.setDataEntryField("s", "Closing the case");
+        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
+        _helper.getExt4FieldForFormSection("Clinical Case", "Close Date").setValue(LocalDateTime.now().format(_dateFormat));
+        submitForm("Submit Final", "Finalize");
+
+        goToEHRFolder();
+    }
+
+    @Test
+    public void testBulkClinicalEntry()
+    {
+        String animalId = "44443";
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Bulk Clinical Entry"));
+
+        Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
+        _helper.addRecordToGrid(observationOrders);
+        observationOrders.setGridCell(1,"Id", animalId);
+        observationOrders.setGridCell(1, "category", "Mass/Soft Tissue Swelling");
+        observationOrders.setGridCell(1, "frequency", "TID");
+        submitForm("Submit Final", "Finalize");
+
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
+        DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", animalId);
+        Assert.assertEquals("Incorrect number of rows(TID) for " + animalId, 3, table.getDataRowCount());
+
+        table.link(0, "observationRecord").click();
+        switchToWindow(1);
+        waitForText(animalId);
+        Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
+        observation.setGridCell(1, "observation", "Seroma");
+        observation.setGridCellJS(1, "remark", "remark for " + animalId);
+        submitForm("Submit Final", "Finalize");
+
+        table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", animalId);
+        Assert.assertEquals("Status is not updated ", "Completed", table.getDataAsText(0, "observationStatus"));
     }
 
     @Override
@@ -613,7 +756,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         //Navigate to Enter Data > Clinical Cases
         gotoEnterData();
-        clickAndWait(Locator.linkWithText("Clinical Cases"));
+        waitAndClickAndWait(Locator.linkWithText("Clinical Cases"));
 
         //Fill out Clinical Case section with Id, Date, Open Remark
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
@@ -623,7 +766,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
 
         //Fill out Clinical Remarks section with Date, Remark
-         scrollIntoView(Locator.textarea("remark"));
+        scrollIntoView(Locator.textarea("remark"));
         _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         _helper.setDataEntryField("remark", "Clinical Remarks - Test");
         if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
@@ -689,7 +832,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
         Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
         Ext4FieldRef enddateField = _helper.getExt4FieldForFormSection("Clinical Case", "Close Date");
-        if( !enddateField.isVisible())
+        if (!enddateField.isVisible())
             Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
         enddateField.setValue(LocalDateTime.now().format(_dateFormat));
 
@@ -846,9 +989,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
             waitForElementToDisappear(lockBtn);
             Assert.assertTrue("Entry did not lock", isElementPresent(unlockBtn));
         }
-         catch (NoSuchElementException e)
-         {
-             log("Form is already unlocked");
-         }
+        catch (NoSuchElementException e)
+        {
+            log("Form is already unlocked");
+        }
     }
 }
