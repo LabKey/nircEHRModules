@@ -41,6 +41,7 @@ import org.labkey.test.pages.ehr.EHRAdminPage;
 import org.labkey.test.pages.ehr.EHRLookupPage;
 import org.labkey.test.pages.ehr.EnterDataPage;
 import org.labkey.test.pages.ehr.NotificationAdminPage;
+import org.labkey.test.pages.ehr.ParticipantViewPage;
 import org.labkey.test.params.ModuleProperty;
 import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
@@ -514,6 +515,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         submitForm("Submit Final", "Finalize");
 
         goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Active Clinical Cases"));
+        ParticipantViewPage reportPage = new AnimalHistoryPage(getDriver()).clickCategoryTab("Clinical")
+                .clickReportTab("All Clinical Cases");
+        table = reportPage.getActiveReportDataRegion();
+        Assert.assertEquals("Case not closed correctly ", LocalDateTime.now().format(_dateFormat) + " 00:00", table.getDataAsText(0, "enddate"));
     }
 
     @Test
@@ -525,10 +531,22 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
         _helper.addRecordToGrid(observationOrders);
-        observationOrders.setGridCell(1,"Id", animalId);
+        observationOrders.setGridCell(1, "Id", animalId);
         observationOrders.setGridCell(1, "category", "Mass/Soft Tissue Swelling");
         observationOrders.setGridCell(1, "frequency", "TID");
+        waitAndClick(_helper.getDataEntryButton("Submit for Review"));
+        Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
+        _ext4Helper.selectComboBoxItem("Assign To:", Ext4Helper.TextMatchTechnique.CONTAINS, NIRC_VET_NAME);
+        submitForReview.clickButton("Submit");
+
+        goToEHRFolder();
+        impersonate(NIRC_FULL_SUBMITTER_VET);
+        waitAndClickAndWait(Locator.linkContainingText("My Review Tasks"));
+        DataRegionTable taskTable = new DataRegionTable.DataRegionFinder(getDriver()).withName("query").waitFor();
+        taskTable.link(0, "rowid").click();
+        waitAndClickAndWait(Locator.linkWithText("Edit"));
         submitForm("Submit Final", "Finalize");
+        stopImpersonating();
 
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
