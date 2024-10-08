@@ -181,6 +181,12 @@ Ext4.define('NIRC_EHR.panel.AnimalDetailsPanel', {
                 }]
             }]
         },{
+            name: 'treatments',
+            xtype: 'ehr-snapshotchildpanel',
+            headerLabel: 'Current Medications / Prescribed Diets',
+            emptyText: 'There are no active medications',
+            style: 'margin-top: 20px;'
+        },{
             name: 'caseSummary',
             xtype: 'ehr-snapshotchildpanel',
             headerLabel: 'Active Cases',
