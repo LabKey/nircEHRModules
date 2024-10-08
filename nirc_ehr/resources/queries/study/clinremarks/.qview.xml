@@ -6,8 +6,11 @@
         <column name="Id"/>
         <column name="date"/>
         <column name="performedby"/>
-        <column name="description"/>
         <column name="remark"/>
+        <column name="s"/>
+        <column name="o"/>
+        <column name="a"/>
+        <column name="p"/>
         <column name="hx"/>
         <column name="QCState"/>
     </columns>

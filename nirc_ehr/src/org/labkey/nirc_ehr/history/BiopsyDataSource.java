@@ -5,14 +5,22 @@ import org.labkey.api.data.Results;
 import org.labkey.api.ehr.history.AbstractDataSource;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
+import java.util.Set;
 
 public class BiopsyDataSource extends AbstractDataSource
 {
     public BiopsyDataSource(Module module)
     {
         super("study", "Biopsy", "Biopsy", "Biopsy", module);
+    }
+
+    @Override
+    protected Set<String> getColumnNames()
+    {
+        return PageFlowUtil.set("Id", "date", "type", "remark");
     }
 
     @Override
@@ -42,7 +50,7 @@ public class BiopsyDataSource extends AbstractDataSource
     {
         sb.append(displayLabel);
         sb.append(": ");
-        sb.append(value);
+        sb.append(PageFlowUtil.filter(value));
         sb.append("\n");
     }
 }

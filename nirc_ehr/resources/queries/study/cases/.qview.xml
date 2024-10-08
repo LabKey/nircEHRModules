@@ -17,6 +17,7 @@
                 <property name="columnTitle" value="Status"/>
             </properties>
         </column>
+        <column name="caseHistory"/>
     </columns>
     <filters>
         <filter column="category" operator="eq" value="Clinical"/>

@@ -20,7 +20,7 @@ public class DeathDataSource extends AbstractDataSource
     @Override
     protected Set<String> getColumnNames()
     {
-        return PageFlowUtil.set("Id", "date", "reason");
+        return PageFlowUtil.set("Id", "date", "reason/title", "remark");
     }
 
     @Override
@@ -28,8 +28,13 @@ public class DeathDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        if(rs.hasColumn(FieldKey.fromString("reason")) && rs.getObject(FieldKey.fromString("reason")) != null)
-            sb.append("Reason: " + rs.getString(FieldKey.fromString("reason")));
+        if(rs.hasColumn(FieldKey.fromString("reason/title")) && rs.getObject(FieldKey.fromString("reason/title")) != null)
+            sb.append(safeAppend(rs, "Disposition", "reason/title"));
+        else
+            sb.append("Disposition: Unknown");
+
+        if(rs.hasColumn(FieldKey.fromString("remark")) && rs.getObject(FieldKey.fromString("remark")) != null)
+            sb.append(safeAppend(rs, "Remark", "remark"));
 
         return sb.toString();
     }

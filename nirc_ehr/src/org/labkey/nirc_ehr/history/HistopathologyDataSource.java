@@ -19,14 +19,22 @@ import org.labkey.api.data.Container;
 import org.labkey.api.data.Results;
 import org.labkey.api.ehr.history.AbstractDataSource;
 import org.labkey.api.module.Module;
+import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
+import java.util.Set;
 
 public class HistopathologyDataSource extends AbstractDataSource
 {
     public HistopathologyDataSource(Module module)
     {
         super("study", "histopathology", "Histopathology", "Histopathology", module);
+    }
+
+    @Override
+    protected Set<String> getColumnNames()
+    {
+        return PageFlowUtil.set("Id", "date", "diagnosis", "remark");
     }
 
     @Override

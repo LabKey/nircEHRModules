@@ -5,9 +5,10 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
     initComponent: function() {
         Ext4.apply(this, {
             defaults: {
-                border: false
+                border: false,
             },
-            items: this.getItems()
+            showExtendedInformation: true,
+            items: this.getItems(),
         });
 
         this.callParent();
@@ -242,5 +243,40 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         }
 
         toSet['protocolAssignment'] = values.length > 0 ? values.join('<br/>') : 'None';
+    },
+
+    appendRoommateResults: function(toSet, results, id){
+        var cagemates = 0;
+        var animals = [];
+        if (results && results.length){
+            var row = results[0];
+            if (row.animals){
+                animals = row.animals.replace(/( )*,( )*/g, ',');
+                animals = animals.split(',');
+                animals.sort();
+                var index = animals.indexOf(id);
+                if (index !== -1) {
+                    animals.splice(index, 1);
+                }
+            }
+        }
+
+        toSet['cagemates'] = LABKEY.Utils.encodeHtml(cagemates);  // encoding not currently useful, but future-proofing here
+
+        if (animals.length > 3){
+            toSet['cagemates'] = animals.length + ' animals';
+        }
+        else if (animals.length == 0){
+            toSet['cagemates'] = 'None';
+        }
+        else {
+            var html = '';
+            var sep = '';
+            Ext4.each(animals, function(id) {
+                html += sep + '<a href="' + LABKEY.ActionURL.buildURL('ehr', 'participantView', null, {participantId: id}) + '">' + LABKEY.Utils.encodeHtml(id) + '</a>';
+                sep = ', ';
+            });
+            toSet['cagemates'] = html;
+        }
     },
 });
