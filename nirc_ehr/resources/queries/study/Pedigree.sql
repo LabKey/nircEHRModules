@@ -8,6 +8,7 @@ SELECT
     d.id as Id,
     d.dam as Dam,
     d.sire as Sire,
+    d.modified,
 
     CASE (d.id.demographics.gender.meaning)
         WHEN 'male' THEN 1
