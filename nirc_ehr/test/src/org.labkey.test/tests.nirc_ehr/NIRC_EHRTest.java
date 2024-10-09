@@ -466,6 +466,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
         table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Incorrect rows in Today's Observation Schedule", 4, table.getDataRowCount());
         Assert.assertEquals("Incorrect observation title", "Daily Clinical Observations; Ears", table.getDataAsText(0, "observationList"));
         Assert.assertEquals("Status is not updated", "", table.getDataAsText(0, "observationStatus"));
@@ -785,7 +786,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         //Fill out Clinical Remarks section with Date, Remark
         scrollIntoView(Locator.textarea("remark"));
-        _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
+        _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(2).format(_dateFormat));
         _helper.setDataEntryField("remark", "Clinical Remarks - Test");
         if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
             _helper.setDataEntryField("remark", "Clinical Remarks - Test");
@@ -799,7 +800,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Adding Medications/Treatments Orders");
         Ext4GridRef orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Orders");
         _helper.addRecordToGrid(orderGrid);
-        orderGrid.setGridCell(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
+        orderGrid.setGridCell(1, "date", LocalDateTime.now().minusDays(2).format(_dateFormat));
         orderGrid.clickDownArrowOnGrid(1, "code");
         orderGrid.setGridCell(1, "code", "Diazepam");
         orderGrid.clickDownArrowOnGrid(1, "frequency");
@@ -852,14 +853,14 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Ext4FieldRef enddateField = _helper.getExt4FieldForFormSection("Clinical Case", "Close Date");
         if (!enddateField.isVisible())
             Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
-        enddateField.setValue(LocalDateTime.now().format(_dateFormat));
+        enddateField.setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
 
         //'Submit Final'
         submitForm("Submit Final", "Finalize Form");
 
         //Go to NIRC/EHR main page
         goToEHRFolder();
-        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+        waitAndClickAndWait(Locator.linkWithText("Active Clinical Cases"));
 
         //Verify that the case is no longer present/is closed
         historyPage = new AnimalHistoryPage<>(getDriver());
