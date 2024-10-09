@@ -1,0 +1,46 @@
+SELECT core.executeJavaUpgradeCode('reloadFolder');
+
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lookup_sets;/data/lookup_sets.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;editable_lookups;/data/editable_lookups.tsv');
+
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;treatment_frequency_times;/data/treatment_frequency_times.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;alopecia_score;/data/alopecia_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;app_score;/data/app_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;arthritis_types;/data/arthritis_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;behavior_types;/data/behavior_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;congenital_abnormalities;/data/congenital_abnormalities.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;dental_disease;/data/dental_disease.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;dental_trauma;/data/dental_trauma.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;digit_amputation;/data/digit_amputation.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;ear_types;/data/ear_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;fecal_score;/data/fecal_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;feed_assess_types;/data/feed_assess_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;gastro_types;/data/gastro_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;genital_types;/data/genital_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;hernia_types;/data/hernia_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;hyd_score;/data/hyd_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;lameness;/data/lameness.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;mass_type;/data/mass_type.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;musculoskeletal_types;/data/musculoskeletal_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;neurologic_types;/data/neurologic_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;ocular_problem;/data/ocular_problem.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;preferences;/data/preferences.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;respiratory_types;/data/respiratory_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;skin_problem;/data/skin_problem.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;stool_types;/data/stool_types.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;tb_obs_score;/data/tb_obs_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;temperament;/data/temperament.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;trauma_size;/data/trauma_size.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;turgor_score;/data/turgor_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;wound_score;/data/wound_score.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;yesno;/data/yesno.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;cage_type;/data/cage_type.tsv');
+SELECT core.executeJavaUpgradeCode('importFromTsv;ehr_lookups;divider_types;/data/divider_types.tsv');
+
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/cases;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/clinremarks;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/obs;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/necropsy;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/blood;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/pairings;truncate');
+SELECT core.executeJavaUpgradeCode('etl;{NIRC_EHR}/vitals;truncate');

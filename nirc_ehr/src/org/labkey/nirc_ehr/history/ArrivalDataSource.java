@@ -20,7 +20,7 @@ public class ArrivalDataSource extends AbstractDataSource
     @Override
     protected Set<String> getColumnNames()
     {
-        return PageFlowUtil.set("Id", "date", "sourceFacility");
+        return PageFlowUtil.set("Id", "date", "sourceFacility", "arrivalType", "acquisitionType");
     }
 
     @Override
@@ -28,6 +28,8 @@ public class ArrivalDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
+        sb.append(safeAppend(rs, "Arrival Type", "arrivalType"));
+        sb.append(safeAppend(rs, "Acquisition Type", "acquisitionType"));
         if (rs.hasColumn(FieldKey.fromString("sourceFacility")) && rs.getObject(FieldKey.fromString("sourceFacility")) != null)
             sb.append("Lab Transfer From: " + rs.getString(FieldKey.fromString("sourceFacility")));
 

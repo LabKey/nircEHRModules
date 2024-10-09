@@ -2,8 +2,8 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        anmEvt.ANIMAL_ID.ANIMAL_ID_NUMBER                                         AS Id,
        CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                  AS administrationDate,
        (CASE
-            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME IS NULL OR anmEvt.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
-            WHEN (anmEvt.STAFF_ID.STAFF_FIRST_NAME = ' ' OR anmEvt.STAFF_ID.STAFF_LAST_NAME = ' ') THEN 'unknown'
+            WHEN (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME) IS NULL OR trim(anmEvt.STAFF_ID.STAFF_LAST_NAME) IS NULL) THEN 'unknown'
+            WHEN (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME) = ' ' OR trim(anmEvt.STAFF_ID.STAFF_LAST_NAME) = ' ') THEN 'unknown'
             ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
                 || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS type,

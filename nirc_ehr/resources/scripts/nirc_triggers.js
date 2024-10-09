@@ -97,7 +97,7 @@ exports.init = function (EHR) {
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'deaths', function(event, helper) {
 
         helper.setScriptOptions({
-            datasetsToClose: ['Assignment', 'Protocol Assignments' , 'Housing'],
+            datasetsToClose: ['assignment', 'protocolAssignment' , 'housing', 'treatment_order', 'observation_order', 'cases', 'pairings', 'exemptions', 'flags'],
             allowShippedIds: false,
             allowDeadIds: false,
             requiresStatusRecalc: false,

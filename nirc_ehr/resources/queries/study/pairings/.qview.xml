@@ -3,9 +3,20 @@
         <sort column="date" descending="true"/>
     </sorts>
     <columns>
+        <column name="updatePairing"/>
         <column name="Id"/>
         <column name="date"/>
-        <column name="type"/>
+        <column name="enddate"/>
+        <column name="pairid"/>
+        <column name="reason"/>
+        <column name="goal"/>
+        <column name="endState"/>
+        <column name="observation"/>
+        <column name="separationreason"/>
         <column name="remark"/>
+        <column name="separationRemark"/>
+        <column name="type"/>
+        <column name="performedby"/>
     </columns>
 </customView>
+
