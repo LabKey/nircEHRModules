@@ -17,11 +17,14 @@ Ext4.define('NIRC_EHR.form.field.SelectCaseButton', {
             if (hideEdit)
                 editCases.editBtn.hide();
 
-            setTimeout(() => {
-                const rec = store.getAt(0);
-                EHR.DemographicsCache.reportCaseSelected(rec);
+            const scheduledDate = LABKEY.ActionURL.getParameter('scheduledDate');
+            const rec = store.getAt(0);
+            EHR.DemographicsCache.reportCaseSelected(rec);
+
+            // If there is a scheduled date, the submit button load will fire animalchange event. So don't do it twice.
+            // Causes strange behavior in tests.
+            if (!scheduledDate)
                 panel.fireEvent('animalchange', rec.data.Id);
-            }, 1000);
         });
     },
 
