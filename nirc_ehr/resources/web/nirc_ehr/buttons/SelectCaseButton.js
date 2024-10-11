@@ -21,7 +21,7 @@ Ext4.define('NIRC_EHR.form.field.SelectCaseButton', {
                 const rec = store.getAt(0);
                 EHR.DemographicsCache.reportCaseSelected(rec);
                 panel.fireEvent('animalchange', rec.data.Id);
-            }, 5000);
+            }, 500);
         });
     },
 
