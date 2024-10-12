@@ -3,7 +3,7 @@ EHR.model.DataModelManager.registerMetadata('ClinicalRounds', {
         Id: {
             inheritFromParent: true,
             editable: false,
-            hidden: true,
+            hidden: false,
             columnConfig: {
                 editable: false
             }
