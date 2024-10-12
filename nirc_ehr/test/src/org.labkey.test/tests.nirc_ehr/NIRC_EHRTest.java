@@ -662,7 +662,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitForText("Diazepam");
         waitForText(animalId);
         waitForTextToDisappear("Id is required");
-        orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Given");
+        waitForTextToDisappear("Id is required");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
 
