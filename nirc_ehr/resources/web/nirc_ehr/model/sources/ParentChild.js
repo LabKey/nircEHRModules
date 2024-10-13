@@ -3,7 +3,7 @@ EHR.model.DataModelManager.registerMetadata('ParentChild', {
         Id: {
             inheritFromParent: true,
             editable: false,
-            hidden: false,
+            hidden: true,
             columnConfig: {
                 editable: false
             }

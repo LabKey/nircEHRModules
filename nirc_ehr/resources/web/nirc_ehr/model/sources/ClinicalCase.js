@@ -4,7 +4,7 @@ EHR.model.DataModelManager.registerMetadata('ClinicalCase', {
         Id: {
             inheritFromParent: true,
             editable: false,
-            hidden: false,
+            hidden: true,
             columnConfig: {
                 editable: false
             }
