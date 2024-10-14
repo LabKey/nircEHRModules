@@ -618,6 +618,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //Fill out Clinical Case section with Id, Date, Open Remark
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
         setFormElement(Locator.textarea("plan"), "Case plan");
+        scrollIntoView(Locator.name("Id"));
         setFormElement(Locator.name("Id"), animalId);
         _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
@@ -631,6 +632,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
+        scrollIntoView(weight.getTbarButton("Add"));
         _helper.addRecordToGrid(weight);
         weight.setGridCellJS(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
         weight.setGridCell(1, "weight", "6.000");
