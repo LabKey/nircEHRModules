@@ -9,7 +9,7 @@
         <column name="species"/>
         <column name="Id/Demographics/dam"/>
         <column name="Id/Demographics/sire"/>
-        <column name="birth"/>
+        <column name="sourceFacility"/>
         <column name="acquisitionType"/>
         <column name="performedBy"/>
         <column name="history"/>
