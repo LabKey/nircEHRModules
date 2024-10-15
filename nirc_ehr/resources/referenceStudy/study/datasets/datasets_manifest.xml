@@ -4,13 +4,12 @@
         <dataset name="alias" id="1038" category="Colony Management" type="Standard"/>
         <dataset name="arrival" id="1001" category="Colony Management" type="Standard"/>
         <dataset name="assignment" id="1002" category="Colony Management" type="Standard"/>
-        <dataset name="alopecia" id="1003" category="Colony Management" type="Standard"/>
         <dataset name="blood" id="1005" category="Clinical" type="Standard"/>
-        <dataset name="biopsy" id="1004" category="Colony Management" type="Standard"/>
+        <dataset name="biopsy" id="1004" category="Clinical" type="Standard"/>
         <dataset name="birth" id="1007" category="Colony Management" demographicData="true" type="Standard"/>
         <dataset name="breeder" id="1008" category="Colony Management" type="Standard"/>
-        <dataset name="clinical_observations" id="1039" category="Colony Management" type="Standard"/>
-        <dataset name="clinremarks" id="1009" category="Colony Management" type="Standard"/>
+        <dataset name="clinical_observations" id="1039" category="Clinical" type="Standard"/>
+        <dataset name="clinremarks" id="1009" category="Clinical" type="Standard"/>
         <dataset name="cases" id="1023" category="Clinical" type="Standard"/>
         <dataset name="chemistryResults" id="1024" category="ClinPath" type="Standard"/>
         <dataset name="deaths" id="1011" category="Pathology" demographicData="true" type="Standard"/>
@@ -29,7 +28,7 @@
         <dataset name="nhpTraining" id="1040" category="Behavior" type="Standard"/>
         <dataset name="observation_order" id="1049" category="Clinical" type="Standard"/>
         <dataset name="notes" id="1027" category="Colony Management" type="Standard"/>
-        <dataset name="pairings" id="1028" category="Colony Management" type="Standard"/>
+        <dataset name="pairings" id="1028" category="Behavior" type="Standard"/>
         <dataset name="physicalExam" id="1029" category="Clinical" type="Standard"/>
         <dataset name="problem" id="1030" category="Clinical" type="Standard"/>
         <dataset name="prc" id="1034" category="Clinical" type="Standard"/>

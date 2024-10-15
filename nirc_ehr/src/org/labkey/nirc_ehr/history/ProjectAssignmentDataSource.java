@@ -8,6 +8,7 @@ public class ProjectAssignmentDataSource extends DefaultAssignmentDataSource
     public ProjectAssignmentDataSource(Module module)
     {
         super(module);
+        setShowTime(true);
         setCategoryText("Project Assignment");
         setPrimaryGroup("Project Assignments");
     }

@@ -16,6 +16,7 @@ public class ProtocolDataSource extends AbstractDataSource
     public ProtocolDataSource(Module module)
     {
         super("study", "protocolAssignment", "Protocol Transfer", "Protocol Transfer", module);
+        setShowTime(true);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class ProtocolDataSource extends AbstractDataSource
     {
         sb.append(displayLabel);
         sb.append(": ");
-        sb.append(value);
+        sb.append(PageFlowUtil.filter(value));
         sb.append("\n");;
     }
 }

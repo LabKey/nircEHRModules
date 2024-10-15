@@ -22,6 +22,7 @@
         <column name="openRemark"/>
         <column name="plan"/>
         <column name="closeRemark"/>
+        <column name="caseHistory"/>
     </columns>
     <filters>
         <filter column="enddate" operator="isblank"/>

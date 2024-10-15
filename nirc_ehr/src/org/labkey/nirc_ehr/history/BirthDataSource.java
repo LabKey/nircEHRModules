@@ -15,6 +15,7 @@ public class BirthDataSource extends AbstractDataSource
     public BirthDataSource(Module module)
     {
         super("study", "Birth", "Birth", "Births", module);
+        setShowTime(true);
     }
 
     @Override

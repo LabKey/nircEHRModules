@@ -19,14 +19,23 @@ import org.labkey.api.data.Container;
 import org.labkey.api.data.Results;
 import org.labkey.api.ehr.history.AbstractDataSource;
 import org.labkey.api.module.Module;
+import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
+import java.util.Set;
 
 public class BloodDrawDataSource extends AbstractDataSource
 {
     public BloodDrawDataSource(Module module)
     {
         super("study", "Blood Draws", "Blood Draw", "Blood Draws", module);
+        setShowTime(true);
+    }
+
+    @Override
+    protected Set<String> getColumnNames()
+    {
+        return PageFlowUtil.set("Id", "date", "quantity", "type", "remark");
     }
 
     @Override
@@ -34,7 +43,7 @@ public class BloodDrawDataSource extends AbstractDataSource
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(safeAppend(rs, "Total Quantity", "quantity"));
+        sb.append(safeAppend(rs, "Total Quantity", "quantity", " mL"));
         sb.append(safeAppend(rs, "Sample Type", "type"));
         sb.append(safeAppend(rs, "Remark", "remark"));
 

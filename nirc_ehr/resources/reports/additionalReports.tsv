@@ -3,7 +3,7 @@ MHC	Genetics	query	MHC	TRUE		study	MHC				FALSE	FALSE		qcstate/publicdata	This r
 assignment	Colony Management	query	Protocol Assignment	TRUE		study	protocolAssignment				FALSE	FALSE		qcstate/publicdata	This report shows protocol assignments
 grossPathology	Pathology	query	Gross Pathology	TRUE		study	grossPathology				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
 tissueDisposition	Pathology	query	Tissue Disposition	TRUE		study	tissueDisposition				FALSE	FALSE		qcstate/publicdata	This is for histopathology reports
-clinical_observations	Clinical	query	Clinical Observations	TRUE		study	clinical_observations			date	FALSE	FALSE		qcstate/publicdata	This report displays clinical observations for the selected animal
+clinical_observations	Clinical	query	Clinical Observations	TRUE		study	clinical_observationsSummary			date	FALSE	FALSE		qcstate/publicdata	This report displays clinical observations for the selected animal
 foster	Reproductive Management	query	Fostering	TRUE		study	foster				FALSE	FALSE		qcstate/publicdata	This is for animal fostering data
 projects	Colony Management	query	Project Assignment	TRUE		study	assignment				FALSE	FALSE		qcstate/publicdata	This is for project assignments
 chemistry	Clinical	query	Chemistry	TRUE		study	chemistryResults				FALSE	FALSE		qcstate/publicdata	This is for chemistry results
@@ -14,19 +14,25 @@ FileRepository	General	js	File Repository	true		study	FileRepository				false	fa
 observationSchedule	Daily Reports	js	Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeObservationOrders	Clinical	query	Active Observation Orders	true		study	observation_order	Active Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 observationOrders	Clinical	query	Observation Orders	true		study	observation_order			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+alopecia	Clinical	query	Alopecia Scores	TRUE		study	clinical_observations	Alopecia Scores		date	FALSE	FALSE		qcstate/publicdata	This report contains the alopecia scores for the animal
 behaviorCases
 behaviorRemarks															
 bloodSchedule															
 cases	Clinical	query	Active Clinical Cases	true		study	cases	Active Clinical Cases		date	false	false		qcstate/publicdata	This displays active clinical cases
+clinCases	Clinical	query	All Clinical Cases	true		study	Cases	All Clinical Cases		date	false	false		qcstate/publicdata	This report contains one record for each clinical case
 clinMedicationSchedule	Daily Reports	js	Medication Schedule	true		study	clinMedicationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 clinObsBehavior
 dietSchedule															
 drug															
 incompleteTreatments															
 pairingsBehavior															
-pairingHistory															
-pairingHousingSummary															
-roommateHistoryBehavior															
+pairingHousingSummary
+pairingSummary	Behavior	query	Pairing Summary	TRUE		study	pairingSummary			date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
+activePairing	Behavior	query	Active Pairing	TRUE		study	pairingSummary	Active Pairing		date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
+pairingHistory	Behavior	query	Pairing History	TRUE		study	pairingSummary	Pairing History		date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
+nhpTraining	Behavior	query	Animal Training	TRUE		study	nhpTraining			date	FALSE	FALSE		qcstate/publicdata	This report displays animal training data
+roommateHistoryBehavior
 surgicalCases															
 surgMedicationSchedule															
-surgMedicationScheduleDaily															
+surgMedicationScheduleDaily
+pairings

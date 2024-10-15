@@ -19,6 +19,12 @@ public class SerologyDataSource extends AbstractDataSource
     }
 
     @Override
+    protected Set<String> getColumnNames()
+    {
+        return PageFlowUtil.set("Id", "date", "type", "lab");
+    }
+
+    @Override
     protected String getHtml(Container c, Results rs, boolean redacted) throws SQLException
     {
         StringBuilder sb = new StringBuilder();
@@ -40,7 +46,7 @@ public class SerologyDataSource extends AbstractDataSource
     {
         sb.append(displayLabel);
         sb.append(": ");
-        sb.append(value);
+        sb.append(PageFlowUtil.filter(value));
         sb.append("\n");
     }
 }

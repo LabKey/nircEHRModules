@@ -5,9 +5,10 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
     initComponent: function() {
         Ext4.apply(this, {
             defaults: {
-                border: false
+                border: false,
             },
-            items: this.getItems()
+            showExtendedInformation: true,
+            items: this.getItems(),
         });
 
         this.callParent();
@@ -148,6 +149,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         toSet['geographic_origin'] = LABKEY.Utils.encodeHtml(row.getGeographicOrigin());
         toSet['gender'] = LABKEY.Utils.encodeHtml(row.getGender());
         toSet['age'] = LABKEY.Utils.encodeHtml(row.getAgeInYearsAndDays());
+        toSet['source'] = LABKEY.Utils.encodeHtml(row.getSourceRecord());
 
         var location;
         if (row.getActiveHousing() && row.getActiveHousing().length){
@@ -242,5 +244,89 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         }
 
         toSet['protocolAssignment'] = values.length > 0 ? values.join('<br/>') : 'None';
+    },
+
+    appendRoommateResults: function(toSet, results, id){
+        var cagemates = 0;
+        var animals = [];
+        if (results && results.length){
+            var row = results[0];
+            if (row.animals){
+                animals = row.animals.replace(/( )*,( )*/g, ',');
+                animals = animals.split(',');
+                animals.sort();
+                var index = animals.indexOf(id);
+                if (index !== -1) {
+                    animals.splice(index, 1);
+                }
+            }
+        }
+
+        toSet['cagemates'] = LABKEY.Utils.encodeHtml(cagemates);  // encoding not currently useful, but future-proofing here
+
+        if (animals.length > 3){
+            toSet['cagemates'] = animals.length + ' animals';
+        }
+        else if (animals.length == 0){
+            toSet['cagemates'] = 'None';
+        }
+        else {
+            var html = '';
+            var sep = '';
+            Ext4.each(animals, function(id) {
+                html += sep + '<a href="' + LABKEY.ActionURL.buildURL('ehr', 'participantView', null, {participantId: id}) + '">' + LABKEY.Utils.encodeHtml(id) + '</a>';
+                sep = ', ';
+            });
+            toSet['cagemates'] = html;
+        }
+    },
+
+    appendCaseSummary: function(toSet, results){
+        var el = this.down('panel[name=caseSummary]');
+        if (!el){
+            return;
+        }
+
+        results = results || [];
+        var filteredResults = [];
+        Ext4.Array.forEach(results, function(row){
+            var enddate = row.enddate ? LDK.ConvertUtils.parseDate(row.enddate) : null;
+            if (!enddate || enddate.getTime() > (new Date()).getTime()){
+                filteredResults.push(row);
+            }
+        }, this);
+
+        el.appendTable({
+            rows: filteredResults
+        }, [{
+            name: 'category',
+            label: 'Category'
+        },{
+            name: 'problemCategory',
+            label: 'Problem Area',
+            attrs: {
+                style: 'width: 150px !important;"'
+            }
+        },{
+            name: 'problemSubcategory',
+            label: 'Problem Subcategory',
+            attrs: {
+                style: 'width: 150px !important;"'
+            }
+        },{
+            name: 'date',
+            label: 'Open Date',
+            attrs: {
+                style: 'width: 120px !important;"'
+            },
+            dateFormat: LABKEY.extDefaultDateFormat
+        },{
+            name: 'openRemark',
+            label: 'Open Remark',
+            maxWidth: 500,
+            attrs: {
+                style: 'white-space: normal !important;"'
+            }
+        }]);
     },
 });

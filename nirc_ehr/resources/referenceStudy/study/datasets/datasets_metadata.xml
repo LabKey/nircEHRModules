@@ -132,35 +132,6 @@
             </column>
         </columns>
     </table>
-    <table tableName="alopecia" tableDbType="TABLE">
-        <tableTitle>Alopecia</tableTitle>
-        <columns>
-            <column columnName="Id">
-                <datatype>varchar</datatype>
-                <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
-                <importAliases>
-                    <importAlias>ptid</importAlias>
-                </importAliases>
-            </column>
-            <column columnName="date">
-                <datatype>timestamp</datatype>
-                <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
-                <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
-            </column>
-            <column columnName="score">
-                <columnTitle>Score</columnTitle>
-                <datatype>integer</datatype>
-            </column>
-            <column columnName="diagnosis">
-                <columnTitle>Diagnosis</columnTitle>
-                <datatype>varchar</datatype>
-            </column>
-            <column columnName="units">
-                <columnTitle>Units</columnTitle>
-                <datatype>integer</datatype>
-            </column>
-        </columns>
-    </table>
     <table tableName="biopsy" tableDbType="TABLE">
         <tableTitle>Biopsy</tableTitle>
         <columns>
@@ -352,6 +323,9 @@
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
             </column>
             <column columnName="type">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="orderId">
                 <datatype>varchar</datatype>
             </column>
         </columns>
@@ -843,10 +817,39 @@
                 <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
                 <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
             </column>
+            <column columnName="enddate">
+                <datatype>timestamp</datatype>
+                <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
+            </column>
             <column columnName="type">
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="remark">
+            <column columnName="pairId">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="cage">
+                <columnTitle>Location</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="reason">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="goal">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="endState">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="observation">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="formationType">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="separationReason">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="separationRemark">
                 <datatype>varchar</datatype>
             </column>
         </columns>
@@ -1170,6 +1173,10 @@
             </column>
             <column columnName="orderedby">
                 <columnTitle>Ordered By</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="endTreatmentOrderedBy">
+                <columnTitle>End Treatment Ordered By</columnTitle>
                 <datatype>varchar</datatype>
             </column>
         </columns>

@@ -22,7 +22,9 @@ import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
 import org.labkey.api.ehr.dataentry.DefaultDataEntryFormFactory;
+import org.labkey.api.ehr.demographics.ActiveTreatmentsDemographicsProvider;
 import org.labkey.api.ehr.demographics.ParentsDemographicsProvider;
+import org.labkey.api.ehr.demographics.SourceDemographicsProvider;
 import org.labkey.api.ehr.history.DefaultAlopeciaDataSource;
 import org.labkey.api.ehr.history.DefaultAnimalRecordFlagDataSource;
 import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
@@ -41,9 +43,12 @@ import org.labkey.api.security.roles.RoleManager;
 import org.labkey.api.util.NetworkDrive;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
+import org.labkey.nirc_ehr.buttons.MarkTreatmentCompletedButton;
 import org.labkey.nirc_ehr.dataentry.form.*;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
+import org.labkey.nirc_ehr.demographics.ActiveCasesDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
+import org.labkey.nirc_ehr.demographics.CagematesDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
@@ -69,7 +74,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.014;
+        return 24.016;
     }
 
     @Override
@@ -121,13 +126,17 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerDemographicsProvider(new ActiveAssignmentsDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new ProtocolAssignmentDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new HousingDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new CagematesDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new CagematesDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ActiveCasesDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new ActiveTreatmentsDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new SourceDemographicsProvider(this));
 
         EHRService.get().registerHistoryDataSource(new ArrivalDataSource(this));
         EHRService.get().registerHistoryDataSource(new BiopsyDataSource(this));
         EHRService.get().registerHistoryDataSource(new BirthDataSource(this));
         EHRService.get().registerHistoryDataSource(new BloodDrawDataSource(this));
         EHRService.get().registerHistoryDataSource(new BreederDataSource(this));
-        EHRService.get().registerHistoryDataSource(new CasesDataSource(this));
         EHRService.get().registerHistoryDataSource(new DeathDataSource(this));
         EHRService.get().registerHistoryDataSource(new DefaultAlopeciaDataSource(this));
         EHRService.get().registerHistoryDataSource(new DefaultAnimalRecordFlagDataSource(this));
@@ -140,6 +149,14 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerHistoryDataSource(new FosteringDataSource(this));
         EHRService.get().registerHistoryDataSource(new ExemptionsDataSource(this));
         EHRService.get().registerHistoryDataSource(new HistopathologyDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCCaseCloseDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCCaseOpenDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCClinicalObservationsDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCClinicalRemarksDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCEndTreatmentOrderDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCHousingDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCObservationOrdersDataSource(this));
+        EHRService.get().registerHistoryDataSource(new NIRCVitalsDataSource(this));
         EHRService.get().registerHistoryDataSource(new ObservationsDataSource(this));
         EHRService.get().registerHistoryDataSource(new PairingsDataSource(this));
         EHRService.get().registerHistoryDataSource(new PhysicalExamDataSource(this));
@@ -159,6 +176,10 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         RoleManager.registerRole(new NIRCEHRVetTechRole());
 
         EHRService.get().registerMoreActionsButton(new ShowEditUIButton(this, "ehr", "observation_types", EHRDataAdminPermission.class), "ehr", "observation_types");
+
+        EHRService.get().unregisterMoreActionsButtons("study", "treatment_order");
+        EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "treatment_order", "Set End Date"), "study", "treatment_order");
+        EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());
@@ -197,6 +218,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCClinicalObservationsFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCClinicalRoundsFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCAnimalTrainingFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCPairingsFormType.class, this));
     }
 
     @Override

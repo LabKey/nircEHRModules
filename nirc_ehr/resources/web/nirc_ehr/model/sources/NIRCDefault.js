@@ -47,6 +47,24 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 width: 180
             }
         },
+        date: {
+            columnConfig: {
+                fixed: true,
+                width: 150
+            }
+        },
+        enddate: {
+            columnConfig: {
+                fixed: true,
+                width: 150
+            }
+        },
+        'cage': {
+            columnConfig: {
+                fixed: true,
+                width: 150
+            },
+        },
     },
     byQuery: {
         'study.housing': {
@@ -55,11 +73,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 hidden: true
             },
             'cage': {
-                allowBlank: false,
-                columnConfig: {
-                    fixed: true,
-                    width: 150
-                },
+                allowBlank: false
             },
             'enddate': {
                 hidden: true
@@ -115,6 +129,11 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             category: {
                 defaultValue: 'Clinical',
                 hidden: true
+            },
+            endTreatmentOrderedBy: {
+                columnConfig: {
+                    width: 200
+                }
             }
         },
         'study.drug': {
@@ -125,7 +144,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             treatmentid: {
                 hidden: true,
                 nullable: true
-            },
+            }
         },
         'study.observation_order': {
             category: {
@@ -164,6 +183,58 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 },
                 nullable: false,
                 allowBlank: true
+            }
+        },
+        'study.pairings': {
+            date : {
+                getInitialValue: function(v, rec){
+                    if (v)
+                        return v;
+
+                    let curDate = new Date();
+                    curDate.setHours(0, 0, 0, 0);
+                    return curDate;
+                }
+            },
+            type: {
+                hidden: true
+            },
+            pairid: {
+                hidden: false,
+                columnConfig: {
+                    width: 150
+                },
+            },
+            formationType: {
+                columnConfig: {
+                    width: 150
+                }
+            },
+            reason: {
+                columnConfig: {
+                    width: 150
+                },
+            },
+            goal: {
+                columnConfig: {
+                    width: 150
+                },
+            },
+            endState: {
+                columnConfig: {
+                    width: 150
+                },
+            },
+            remark: {
+                title: 'Remark on Formation',
+                columnConfig: {
+                    width: 200
+                }
+            },
+            separationRemark: {
+                columnConfig: {
+                    width: 200
+                }
             }
         }
     }

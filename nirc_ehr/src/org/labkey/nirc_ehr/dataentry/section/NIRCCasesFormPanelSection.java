@@ -28,6 +28,9 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/SelectCaseButton.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SelectCasePanel.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/SelectCaseWindow.js"));
+
+        setClientStoreClass("NIRC_EHR.data.CaseClientStore");
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/CaseClientStore.js"));
     }
 
     @Override
@@ -49,6 +52,7 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
         if (!isVet && (!isFolderAdmin || isVetTech))
         {
             keys.remove(FieldKey.fromString("enddate"));
+            keys.remove(FieldKey.fromString("closeRemark"));
         }
 
         return keys;
