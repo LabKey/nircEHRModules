@@ -1,7 +1,10 @@
 SELECT alt.ALTERNATE_ID AS "objectId",
        anm.ANIMAL_ID,
        anm.ANIMAL_ID_NUMBER AS "Id",
-       alt.NAME AS "projectName",
+       CASE WHEN (SUBSTRING(trim(alt.NAME),3,1) = '-' OR SUBSTRING(trim(alt.NAME),5,1) = '-')
+            THEN trim(SUBSTRING(trim(alt.NAME),0,11))
+            ELSE trim(SUBSTRING(trim(alt.NAME), 0, 8))
+            END as "projectName",
        alt.NAME AS "description",
        ae.EVENT_DATETIME AS assignmentDate,  -- Set to arrival/birth then updated by trigger
        CASE WHEN alt.DESCRIPTION IS NULL OR length(trim(alt.DESCRIPTION)) != 11 THEN NULL
