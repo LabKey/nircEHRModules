@@ -49,7 +49,7 @@ public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
         boolean isVetTech = getCtx().getContainer().hasPermission(getCtx().getUser(), NIRCEHRVetTechPermission.class);
         boolean isVet = getCtx().getContainer().hasPermission(getCtx().getUser(), EHRVeterinarianPermission.class);
 
-        defaultButtons.add("SAVEDRAFT");
+        defaultButtons.add("DEATHNECROPSYSAVEDRAFT");
         defaultButtons.add("DEATHSUBMIT");
 
         if (isVetTech)
