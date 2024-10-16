@@ -89,6 +89,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             // If a user tries to submit a new Death record (identified by QCState = 'IN PROGRESS') for an animal that
             // already has a pending request/review status in study.deaths, then below error message will be displayed.
             else if (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
+                    deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel &&
                     (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                             deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record is pending review for this animal', 'ERROR');
