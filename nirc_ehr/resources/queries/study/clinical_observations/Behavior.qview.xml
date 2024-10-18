@@ -5,9 +5,10 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="performedby"/>
+        <column name="area"/>
+        <column name="observation"/>
         <column name="remark"/>
-        <column name="hx"/>
+        <column name="performedBy"/>
         <column name="QCState"/>
     </columns>
     <filters>
