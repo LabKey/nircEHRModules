@@ -6,46 +6,35 @@ import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.ehr.dataentry.SimpleFormSection;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.module.Module;
+import org.labkey.api.query.Queryable;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCBloodDrawFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCaseTemplateFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCasesFormPanelSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCHousingFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalRemarksFormPanelSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCVitalsFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
+public class NIRCBehavioralCasesFormType extends NIRCBaseTaskFormType
 {
-    public static final String NAME = "Clinical Rounds";
-    public static final String LABEL = "Clinical Rounds";
+    @Queryable
+    public static final String NAME = "Behavioral Cases";
+    public static final String LABEL = "Behavioral Cases";
 
-    public NIRCClinicalRoundsFormType(DataEntryFormContext ctx, Module owner)
+    public NIRCBehavioralCasesFormType(DataEntryFormContext ctx, Module owner)
     {
-        super(ctx, owner, NAME, LABEL, "Clinical", Arrays.<FormSection>asList(
+        super(ctx, owner, NAME, LABEL, "Behavior", Arrays.<FormSection>asList(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
-                new NIRCCasesFormPanelSection("Clinical Case", ctx, false),
-                new NIRCProcedureFormSection(true, "cases"),
-                new NIRCClinicalObservationsFormSection(true, "cases"),
-                new NIRCObservationOrdersFormSection(null, true, "cases"),
-                new NIRCTreatmentGivenFormSection(true, "cases"),
-                new NIRCTreatmentOrderFormSection(true,
-                        "cases"),
-                new NIRCWeightFormSection(true, false, true, "cases"),
-                new NIRCVitalsFormSection(true, "cases"),
-                new NIRCHousingFormSection(true, true, true, "cases"),
-                new NIRCBloodDrawFormSection(true, "cases")
+                new NIRCCasesFormPanelSection("Behavior Case", ctx, true),
+                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Behavior Assessment", ctx, true)
+//                new NIRCClinicalObservationsFormSection(true, "cases"),
+//                new NIRCObservationOrdersFormSection(null, true, "cases"),
+//                new NIRCTreatmentGivenFormSection(true, "cases"),
+//                new NIRCTreatmentOrderFormSection(true, "cases"),
         ));
 
         setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);
@@ -54,8 +43,7 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
         for (FormSection s : this.getFormSections())
         {
             s.addConfigSource("ClinicalDefaults");
-            s.addConfigSource("ClinicalCase");
-            s.addConfigSource("ClinicalRounds");
+            s.addConfigSource("BehavioralCase");
             s.addConfigSource("TreatmentSchedule");
 
             if (s instanceof SimpleFormSection && !s.getName().equals("tasks"))
@@ -73,8 +61,7 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalCase.js"));
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalRounds.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BehavioralCase.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/panel/ExamDataEntryPanel.js"));
         setJavascriptClass("EHR.panel.ExamDataEntryPanel");
 

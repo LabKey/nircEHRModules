@@ -15,8 +15,9 @@ observationSchedule	Daily Reports	js	Observation Schedule	true		study	observatio
 activeObservationOrders	Clinical	query	Active Observation Orders	true		study	observation_order	Active Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 observationOrders	Clinical	query	Observation Orders	true		study	observation_order			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 alopecia	Clinical	query	Alopecia Scores	TRUE		study	clinical_observations	Alopecia Scores		date	FALSE	FALSE		qcstate/publicdata	This report contains the alopecia scores for the animal
-behaviorCases
-behaviorRemarks															
+behaviorCases	Behavior	query	Active Behavior Cases	true		study	cases	Active Behavior Cases		date	false	false		qcstate/publicdata	This displays active behavioral cases
+allBehaviorCases	Behavior	query	Behavior Cases	true		study	cases	All Behavior Cases		date	false	false		qcstate/publicdata	This displays all behavioral cases
+behaviorRemarks
 bloodSchedule															
 cases	Clinical	query	Active Clinical Cases	true		study	cases	Active Clinical Cases		date	false	false		qcstate/publicdata	This displays active clinical cases
 clinCases	Clinical	query	All Clinical Cases	true		study	Cases	All Clinical Cases		date	false	false		qcstate/publicdata	This report contains one record for each clinical case
