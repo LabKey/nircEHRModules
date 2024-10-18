@@ -73,6 +73,15 @@ EHR.model.DataModelManager.registerMetadata('BulkBehavior', {
                 hidden: true,
                 defaultValue: 'Behavior'
             }
-        }
+        },
+        'study.treatment_order': {
+            category: {
+                defaultValue: 'Behavior',
+                hidden: true
+            },
+            performedby: {
+                hidden: true
+            }
+        },
     }
 });
