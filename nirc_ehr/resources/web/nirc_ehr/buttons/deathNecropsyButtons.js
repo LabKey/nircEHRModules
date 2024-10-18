@@ -1,22 +1,6 @@
 /**
- * A button specific to the Death-Necropsy form
+ * Buttons specific to the Death-Necropsy form
  */
-
-EHR.DataEntryUtils.registerDataEntryFormButton('DEATHNECROPSYSAVEDRAFT', {
-    text: 'Save Draft',
-    name: 'deathNecropsySaveDraft',
-    errorThreshold: 'ERROR',
-    successURL: LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
-    itemId: 'deathNecropsySaveDraftBtn',
-    disabled: false,
-    requiredQC: 'In Progress',
-    targetQC: 'In Progress',
-    handler: function(btn){
-        var panel = btn.up('ehr-dataentrypanel');
-        panel.onSubmit(btn, false, true);
-    },
-    disableOn: 'ERROR'
-});
 
 EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {
     text: 'Submit Death',

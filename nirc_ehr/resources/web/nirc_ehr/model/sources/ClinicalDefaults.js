@@ -80,6 +80,16 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             }
         },
         'study.cases': {
+            QCState: {
+                allowBlank: false,
+                getInitialValue: function(v){
+                    var qc;
+                    if (!v && EHR.Security.getQCStateByLabel('In Progress'))
+                        qc = EHR.Security.getQCStateByLabel('In Progress').RowId;
+                    return v || qc;
+                },
+                shownInGrid: false
+            },
             openRemark: {
                 height: 120
             },
@@ -112,6 +122,16 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             }
         },
         'study.clinremarks': {
+            QCState: {
+                allowBlank: false,
+                getInitialValue: function(v){
+                    var qc;
+                    if (!v && EHR.Security.getQCStateByLabel('In Progress'))
+                        qc = EHR.Security.getQCStateByLabel('In Progress').RowId;
+                    return v || qc;
+                },
+                shownInGrid: false
+            },
             hx: {
                 formEditorConfig: {
                     xtype: 'ehr-hxtextarea'
