@@ -80,7 +80,6 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         //only allow death record to be created if animal is in demographics table
         if (idMap[row.Id]) {
 
-            console.log("row.QCStateLabel.toUpperCase() = " + row.QCStateLabel.toUpperCase());
             var calc_status = undefined;
             if (row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' || row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')
                 calc_status = 'Necropsy Pending';
