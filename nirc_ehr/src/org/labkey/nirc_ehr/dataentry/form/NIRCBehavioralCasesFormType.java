@@ -11,8 +11,12 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCaseTemplateFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCasesFormPanelSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalRemarksFormPanelSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,11 +34,11 @@ public class NIRCBehavioralCasesFormType extends NIRCBaseTaskFormType
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
                 new NIRCCasesFormPanelSection("Behavior Case", ctx, true),
-                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Behavior Assessment", ctx, true)
-//                new NIRCClinicalObservationsFormSection(true, "cases"),
-//                new NIRCObservationOrdersFormSection(null, true, "cases"),
-//                new NIRCTreatmentGivenFormSection(true, "cases"),
-//                new NIRCTreatmentOrderFormSection(true, "cases"),
+                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Behavior Assessment", ctx, true),
+                new NIRCClinicalObservationsFormSection(true, "cases"),
+                new NIRCObservationOrdersFormSection(null, true, "cases"),
+                new NIRCTreatmentGivenFormSection(true, "cases"),
+                new NIRCTreatmentOrderFormSection(true, "cases")
         ));
 
         setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);
@@ -42,8 +46,8 @@ public class NIRCBehavioralCasesFormType extends NIRCBaseTaskFormType
 
         for (FormSection s : this.getFormSections())
         {
-            s.addConfigSource("ClinicalDefaults");
             s.addConfigSource("BehavioralCase");
+            s.addConfigSource("BehaviorDefaults");
             s.addConfigSource("TreatmentSchedule");
 
             if (s instanceof SimpleFormSection && !s.getName().equals("tasks"))
@@ -60,8 +64,8 @@ public class NIRCBehavioralCasesFormType extends NIRCBaseTaskFormType
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
 
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BehavioralCase.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BehaviorDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/panel/ExamDataEntryPanel.js"));
         setJavascriptClass("EHR.panel.ExamDataEntryPanel");
 
