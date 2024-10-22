@@ -20,6 +20,14 @@ public class NIRCClinicalRemarksFormSection extends BaseFormSection
         this.isFolderAdmin = isFolderAdmin;
     }
 
+    public NIRCClinicalRemarksFormSection(String label, boolean isVetTech, boolean isVet, boolean isFolderAdmin)
+    {
+        super("study", "clinremarks", label, "ehr-gridpanel", true, true, true);
+        this.isVetTech = isVetTech;
+        this.isVet = isVet;
+        this.isFolderAdmin = isFolderAdmin;
+    }
+
     @Override
     protected List<FieldKey> getFieldKeys(TableInfo ti)
     {

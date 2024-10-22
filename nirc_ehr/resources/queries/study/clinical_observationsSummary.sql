@@ -7,7 +7,8 @@ SELECT
     remark,
     performedBy,
     scheduledDate,
-    QCState
+    QCState,
+    type
 FROM clinical_observations
 GROUP BY
     Id,
@@ -18,4 +19,5 @@ GROUP BY
     remark,
     performedBy,
     scheduledDate,
-    QCState
+    QCState,
+    type
