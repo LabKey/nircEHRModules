@@ -1,5 +1,5 @@
 /**
- * A button specific to the Death-Necropsy form
+ * Buttons specific to the Death-Necropsy form
  */
 
 EHR.DataEntryUtils.registerDataEntryFormButton('DEATHSUBMIT', {

@@ -65,6 +65,14 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                 width: 150
             },
         },
+        QCState: {
+            getInitialValue: function (v) {
+                var qc;
+                if (!v && EHR.Security.getQCStateByLabel('In Progress'))
+                    qc = EHR.Security.getQCStateByLabel('In Progress').RowId;
+                return v || qc || 'In Progress';
+            }
+        }
     },
     byQuery: {
         'study.housing': {

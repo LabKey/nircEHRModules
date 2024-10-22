@@ -141,9 +141,16 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
             toSet['animalId'] = LABKEY.Utils.encodeHtml(id);
         }
 
-        var status = row.getCalculatedStatus() || 'Unknown';
-        toSet['calculated_status'] = '<span ' + (status.toLowerCase() !== 'alive' ? 'style="background-color:yellow"' : '') + '>'
-                + LABKEY.Utils.encodeHtml(status) + '</span>';
+        var status = row.getCalculatedStatus();
+        var statusVal = 'Unknown';
+        if (typeof status == 'string'){
+            statusVal  = status;
+        }
+        else {
+            statusVal = status[0] && (Object.keys(status[0]).length > 0) ? status[0].calculated_status : statusVal;
+        }
+        toSet['calculated_status'] = '<span ' + (statusVal !== 'Alive' ? 'style="background-color:yellow"' : '') + '>'
+                + LABKEY.Utils.encodeHtml(statusVal) + '</span>';
 
         toSet['species'] = LABKEY.Utils.encodeHtml(row.getSpeciesCommonName());
         toSet['geographic_origin'] = LABKEY.Utils.encodeHtml(row.getGeographicOrigin());
