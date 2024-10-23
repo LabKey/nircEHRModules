@@ -5,11 +5,12 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="category"/>
-        <column name="diagnosis"/>
+        <column name="performedby"/>
         <column name="remark"/>
+        <column name="hx"/>
+        <column name="QCState"/>
     </columns>
     <filters>
-        <filter column="category" operator="eq" value="Clinical"/>
+        <filter column="category" operator="eq" value="Behavior"/>
     </filters>
 </customView>

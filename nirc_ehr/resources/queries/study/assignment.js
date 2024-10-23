@@ -59,24 +59,20 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             }
         }
 
-
-        var projectName = row.projectName.split(' ')[0];
-        var projectId = projectData[projectName];
-        if (!projectId) {
-            var projectNames = Object.keys(projectData);
-            for (var i = 0; i < projectNames.length; i++) {
-
-                var pName = projectNames[i];
-                if (pName.toString().indexOf(projectName) === 0) {
-                    projectId = projectData[projectNames[i]];
-                }
-            }
-        }
-        if (projectId) {
-            row.project = projectId;
+        if (!row.projectName) {
+            console.log("project name is missing for Id: " + row.Id);
         }
         else {
-            console.log("project can not be found - ", projectName);
+            var projectName = row.projectName.split(' ' + row.Id)[0];
+            var projectId = projectData[projectName];
+
+            if (projectId) {
+                row.project = projectId;
+            }
+            else {
+                row.description = projectName;
+                console.log("project cannot be found: " + projectName + " for Id: " + row.Id);
+            }
         }
         prevAnimalId = row.Id;
         if (!(!row.endDate || row.endDate === 'undefined')) {
