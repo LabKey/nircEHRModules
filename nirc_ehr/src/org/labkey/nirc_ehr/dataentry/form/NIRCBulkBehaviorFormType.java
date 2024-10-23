@@ -24,7 +24,7 @@ public class NIRCBulkBehaviorFormType extends NIRCBaseTaskFormType
 
     public NIRCBulkBehaviorFormType(DataEntryFormContext ctx, Module owner)
     {
-        super(ctx, owner, NAME, LABEL, "Clinical", List.of(
+        super(ctx, owner, NAME, LABEL, "Behavior", List.of(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCClinicalRemarksFormSection("Behavior Assessment", ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
@@ -36,7 +36,7 @@ public class NIRCBulkBehaviorFormType extends NIRCBaseTaskFormType
                 new NIRCTreatmentOrderFormSection()
         ));
 
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BulkBehavior.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BehaviorDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
@@ -46,7 +46,7 @@ public class NIRCBulkBehaviorFormType extends NIRCBaseTaskFormType
 
         for (FormSection s : getFormSections())
         {
-            s.addConfigSource("BulkBehavior");
+            s.addConfigSource("BehaviorDefaults");
             s.addConfigSource("TreatmentSchedule");
         };
     }

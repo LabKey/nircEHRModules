@@ -5,10 +5,8 @@ import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.ehr.dataentry.SimpleFormSection;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
-import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.Queryable;
-import org.labkey.api.security.permissions.AdminPermission;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCBloodDrawFormSection;
@@ -24,7 +22,6 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCVitalsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
-import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,14 +38,8 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
-                new NIRCCasesFormPanelSection("Clinical Case",
-                        ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
-                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
-                        ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
-                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks",
-                        ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
-                        ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
-                        ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
+                new NIRCCasesFormPanelSection("Clinical Case", ctx, false),
+                new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks", ctx, false),
                 new NIRCProcedureFormSection(true, "cases"),
                 new NIRCClinicalObservationsFormSection(true, "cases"),
                 new NIRCObservationOrdersFormSection(null, true, "cases"),
