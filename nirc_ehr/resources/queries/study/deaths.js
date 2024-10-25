@@ -9,12 +9,6 @@ function onInit(event, helper){
 
     helper.decodeExtraContextProperty('deathsInTransaction');
 
-    helper.setScriptOptions({
-        allowAnyId: true,
-        requiresStatusRecalc: true,
-        allowDatesInDistantPast: true
-    });
-
     // Cache valid Ids for check on each row
     LABKEY.Query.selectRows({
         requiredVersion: 9.1,
@@ -80,13 +74,6 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         //only allow death record to be created if animal is in demographics table
         if (idMap[row.Id]) {
 
-            var calc_status = undefined;
-            if (row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' || row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')
-                calc_status = 'Necropsy Pending';
-            else if (row.QCStateLabel.toUpperCase() === 'COMPLETED')
-                calc_status = 'Dead';
-
-
             // check if death record already exists for this animal
             if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
@@ -107,6 +94,14 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                             deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record is pending review for this animal', 'ERROR');
             }
+            // if 'Save Draft' record already exists, it doesn't allow to 'Save Draft' or 'Submit Death'
+            // on the same animal again - throws an error "duplicate key value violates unique constraint"
+            // So, added this check to allow 'Save Draft' record to be saved only once.
+            else if (oldRow === undefined && row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
+                    deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel &&
+                    deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'IN PROGRESS') {
+                EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death/Necropsy data entry is in progress for this animal', 'ERROR');
+            }
             else if (!helper.isValidateOnly() && row.Id && row.date &&
                     (row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                     row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED' ||
@@ -114,12 +109,11 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 
                 if (validIds.indexOf(row.id) !== -1) {
 
-                    console.log("calc_status = " + calc_status);
                     // update demographics
                     demographicsUpdates.push({
                         Id: row.Id,
-                        death: calc_status === 'Dead' ? row.date : null,
-                        calculated_status: calc_status,
+                        death: row.date,
+                        calculated_status: 'Dead',
                         QCState: helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId()
                     });
 

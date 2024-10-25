@@ -32,8 +32,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
     if (!helper.isETL()) {
 
         if (deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel &&
-                (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'IN PROGRESS' ||
-                deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
+                (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                 deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
 
             if (!row.examReason)

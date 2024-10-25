@@ -87,7 +87,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
                     items: [{
                         xtype: 'displayfield',
                         fieldLabel: 'Status',
-                        name: 'calculated_status'
+                        name: 'necropsy_status'
                     },{
                         xtype: 'displayfield',
                         fieldLabel: 'Sex',
@@ -141,13 +141,15 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
             toSet['animalId'] = LABKEY.Utils.encodeHtml(id);
         }
 
-        var status = row.getCalculatedStatus();
+        var data = row.getData();
+        var status = data ? data.necropsy_status : undefined;
         var statusVal = 'Unknown';
-        if (typeof status == 'string'){
-            statusVal  = status;
-        }
-        else {
-            statusVal = status[0] && (Object.keys(status[0]).length > 0) ? status[0].calculated_status : statusVal;
+        if (status) {
+            if (typeof status == 'string') {
+                statusVal = status;
+            } else {
+                statusVal = status[0] && (Object.keys(status[0]).length > 0) ? status[0].necropsy_status : statusVal;
+            }
         }
         toSet['calculated_status'] = '<span ' + (statusVal !== 'Alive' ? 'style="background-color:yellow"' : '') + '>'
                 + LABKEY.Utils.encodeHtml(statusVal) + '</span>';

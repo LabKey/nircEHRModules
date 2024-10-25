@@ -100,9 +100,11 @@ exports.init = function (EHR) {
             datasetsToClose: ['assignment', 'protocolAssignment' , 'housing', 'treatment_order', 'observation_order', 'cases', 'pairings', 'exemptions', 'flags'],
             allowShippedIds: false,
             allowDeadIds: false,
-            requiresStatusRecalc: false,
+            requiresStatusRecalc: true,
             allowRequestsInPast: true,
-            removeTimeFromDate: false
+            removeTimeFromDate: false,
+            allowDatesInDistantPast: true,
+            allowAnyId: true
         });
     });
 

@@ -13,7 +13,7 @@ public class NecropsyStatusDemographicsProvider extends AbstractListDemographics
 
     public NecropsyStatusDemographicsProvider(Module module)
     {
-        super(module, "study", "necropsyStatus", "calculated_status");
+        super(module, "study", "necropsyStatus", "necropsy_status");
         _supportsQCState = false;
     }
 
@@ -28,7 +28,7 @@ public class NecropsyStatusDemographicsProvider extends AbstractListDemographics
     {
         Set<FieldKey> keys = new HashSet<FieldKey>();
         keys.add(FieldKey.fromString("Id"));
-        keys.add(FieldKey.fromString("calculated_status"));
+        keys.add(FieldKey.fromString("necropsy_status"));
 
         return keys;
     }
