@@ -28,7 +28,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
 
     public NIRCBulkClinicalFormType(DataEntryFormContext ctx, Module owner)
     {
-        super(ctx, owner, NAME, LABEL, "Behavior", List.of(
+        super(ctx, owner, NAME, LABEL, "Clinical", List.of(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCClinicalRemarksFormSection(ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
