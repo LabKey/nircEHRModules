@@ -102,10 +102,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                     deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'IN PROGRESS') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death/Necropsy data entry is in progress for this animal', 'ERROR');
             }
-            else if (!helper.isValidateOnly() && row.Id && row.date &&
-                    (row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
-                    row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED' ||
-                    row.QCStateLabel.toUpperCase() === 'COMPLETED')) {
+            else if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
 
                 if (validIds.indexOf(row.id) !== -1) {
 
@@ -131,6 +128,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_INSERT, 'study', 'deaths', function(helper, scriptErrors, row, oldRow) {
     helper.registerDeath(row.Id, row.date);
+    triggerHelper.reportDataChange("study", "deaths", [row.Id]);
 });
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.COMPLETE, 'study', 'Deaths', function(event, errors, helper){

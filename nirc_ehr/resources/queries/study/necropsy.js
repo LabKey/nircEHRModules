@@ -60,3 +60,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         }
     }
 }
+
+EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_INSERT, 'study', 'necropsy', function(helper, scriptErrors, row, oldRow) {
+    triggerHelper.reportDataChange("study", "necropsy", [row.Id]);
+});
