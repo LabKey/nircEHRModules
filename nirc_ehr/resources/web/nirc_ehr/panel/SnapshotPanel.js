@@ -31,6 +31,14 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         });
     },
 
+    onLoad: function(ids, resultMap){
+        if (ids && ids.length && ids[0] != this.subjectId){
+            return;
+        }
+
+        this.callParent(arguments);
+    },
+
     getBaseItems: function(){
         return [{
             xtype: 'container',
@@ -87,7 +95,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
                     items: [{
                         xtype: 'displayfield',
                         fieldLabel: 'Status',
-                        name: 'necropsy_status'
+                        name: 'calculated_status'
                     },{
                         xtype: 'displayfield',
                         fieldLabel: 'Sex',
