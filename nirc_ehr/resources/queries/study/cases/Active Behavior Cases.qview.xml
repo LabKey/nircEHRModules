@@ -1,7 +1,12 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
     <columns>
         <column name="caseCheck"/>
+        <column name="caseHistory"/>
         <column name="Id"/>
+        <column name="Id/Demographics/species"/>
+        <column name="Id/curLocation/room/building"/>
+        <column name="Id/curLocation/room"/>
+        <column name="Id/curLocation/cage"/>
         <column name="date"/>
         <column name="reviewdate"/>
         <column name="enddate"/>
@@ -9,17 +14,17 @@
         <column name="problemCategory"/>
         <column name="problemSubcategory"/>
         <column name="Id/curLocation/daysInRoom"/>
-        <column name="openRemark"/>
+        <column name="remark"/>
         <column name="plan"/>
-        <column name="closeRemark"/>
-        <column name="qcstate/label">
-            <properties>
-                <property name="columnTitle" value="Status"/>
-            </properties>
-        </column>
-        <column name="caseHistory"/>
+        <column name="daysSinceLastVetReview"/>
     </columns>
+    <filters>
+        <filter column="isOpen" operator="eq" value="true"/>
+        <filter column="category" operator="eq" value="Behavior"/>
+    </filters>
     <sorts>
+        <sort column="Id/curLocation/room"/>
+        <sort column="Id/curLocation/cage"/>
         <sort column="date" descending="true"/>
     </sorts>
 </customView>

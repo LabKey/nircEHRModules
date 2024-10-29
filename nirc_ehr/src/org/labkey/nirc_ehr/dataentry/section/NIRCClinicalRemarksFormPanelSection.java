@@ -4,8 +4,11 @@ import org.json.JSONObject;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.ParentFormPanelSection;
+import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.security.permissions.AdminPermission;
 import org.labkey.api.view.template.ClientDependency;
+import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
 
 import java.util.List;
 
@@ -14,6 +17,7 @@ public class NIRCClinicalRemarksFormPanelSection extends ParentFormPanelSection
     private boolean isVetTech;
     private boolean isVet;
     private boolean isFolderAdmin;
+    private boolean isBehavior;
 
     public NIRCClinicalRemarksFormPanelSection(String label)
     {
@@ -21,12 +25,14 @@ public class NIRCClinicalRemarksFormPanelSection extends ParentFormPanelSection
         setSupportFormSort(false);
     }
 
-    public NIRCClinicalRemarksFormPanelSection(boolean isChild, String parentQueryName, String label, boolean isVetTech, boolean isVet, boolean isFolderAdmin)
+    public NIRCClinicalRemarksFormPanelSection(boolean isChild, String parentQueryName, String label, DataEntryFormContext ctx, boolean isBehavior)
     {
         this(label);
-        this.isVetTech = isVetTech;
-        this.isVet = isVet;
-        this.isFolderAdmin = isFolderAdmin;
+        this.isVetTech = ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class);
+        this.isVet = ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class);
+        this.isFolderAdmin = ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class);
+        this.isBehavior = isBehavior;
+
         if (isChild)
         {
             addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ParentChild.js"));
@@ -55,7 +61,7 @@ public class NIRCClinicalRemarksFormPanelSection extends ParentFormPanelSection
         List<FieldKey> keys = super.getFieldKeys(ti);
 
         // only Vets and Folder Admins can enter S.O.A.P.
-        if (!isVet && (!isFolderAdmin || isVetTech))
+        if (isBehavior || (!isVet && (!isFolderAdmin || isVetTech)))
         {
             keys.remove(FieldKey.fromString("s"));
             keys.remove(FieldKey.fromString("o"));

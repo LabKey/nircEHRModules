@@ -394,7 +394,14 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     {
                         String category = (String)ctx.get("category");
                         ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
-                        if (category == null || category.equals("Clinical"))
+                        if ("Behavior".equals(category))
+                        {
+                            if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRBehaviorEntryPermission.class))
+                                return;
+
+                            linkAction.addParameter("formType", "Behavioral Cases");
+                        }
+                        else
                         {
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
                                 return;

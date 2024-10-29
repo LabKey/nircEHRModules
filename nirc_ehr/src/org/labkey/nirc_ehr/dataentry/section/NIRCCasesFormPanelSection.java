@@ -4,8 +4,11 @@ import org.json.JSONObject;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.ParentFormPanelSection;
+import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.security.permissions.AdminPermission;
 import org.labkey.api.view.template.ClientDependency;
+import org.labkey.nirc_ehr.security.NIRCEHRVetTechPermission;
 
 import java.util.List;
 
@@ -14,13 +17,15 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
     private boolean isVetTech;
     private boolean isVet;
     private boolean isFolderAdmin;
+    private boolean isBehavior;
 
-    public NIRCCasesFormPanelSection(String label, boolean isVetTech, boolean isVet, boolean isFolderAdmin)
+    public NIRCCasesFormPanelSection(String label, DataEntryFormContext ctx, boolean isBehavior)
     {
         super("study", "cases", label);
-        this.isVetTech = isVetTech;
-        this.isVet = isVet;
-        this.isFolderAdmin = isFolderAdmin;
+        this.isBehavior = isBehavior;
+        this.isVetTech = ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class);
+        this.isVet = ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class);
+        this.isFolderAdmin = ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class);
         setSupportFormSort(false);
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/AnimalIdCases.js"));
@@ -49,7 +54,8 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
         List<FieldKey> keys = super.getFieldKeys(ti);
 
         // only Vets and Folder Admins can see the enddate ('Close date') field to be able to close the case.
-        if (!isVet && (!isFolderAdmin || isVetTech))
+        // Does not apply to behavior cases.
+        if (!this.isBehavior && !isVet && (!isFolderAdmin || isVetTech))
         {
             keys.remove(FieldKey.fromString("enddate"));
             keys.remove(FieldKey.fromString("closeRemark"));
