@@ -17,13 +17,14 @@ public class NIRCBaseTaskFormType extends TaskForm
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/NIRCDefault.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/saveDraftButton.js"));
     }
 
     @Override
     protected List<String> getButtonConfigs()
     {
         List<String> defaultButtons = new ArrayList<>();
-        defaultButtons.add("SAVEDRAFT");
+        defaultButtons.add("NIRCSAVEDRAFTBUTTON");
         defaultButtons.add("REVIEW");
         defaultButtons.add("SUBMIT");
 
