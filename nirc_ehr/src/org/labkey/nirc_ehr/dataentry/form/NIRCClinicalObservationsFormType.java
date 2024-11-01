@@ -14,7 +14,7 @@ import java.util.List;
 
 public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
 {
-    public static final String NAME = "Clinical Observations";
+    public static final String NAME = "Observations";
 
     public NIRCClinicalObservationsFormType(DataEntryFormContext ctx, Module owner)
     {
