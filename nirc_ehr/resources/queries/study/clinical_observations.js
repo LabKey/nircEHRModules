@@ -27,6 +27,11 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'No' for 'Verified Id?', please enter Remark", "WARN");
         }
 
+        var yesRemarkRequired = (row.category === "Self Biting Observed" || row.category === "New Injury Observed" || row.category === "Other Stereotopy" || row.category === "Environmental Change" || row.category === "Special Enrichment");
+        if (yesRemarkRequired && row.observation === "Yes" && !row.remark) {
+            EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'Yes' for " + row.category + ", please explain in the Remark", "WARN");
+        }
+
         // Handle scheduled observations
         if (!helper.isValidateOnly() && row.scheduledDate) {
             var qc;
