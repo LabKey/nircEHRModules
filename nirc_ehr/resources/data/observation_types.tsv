@@ -1,7 +1,10 @@
 value	category	editorconfig	schemaName	queryName	valueColumn
-Alopecia Score	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_score","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_score	value
+Alopecia Score	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_score","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_score	value
 Alopecia Type	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_type","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_type	value
 Alopecia Regrowth	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_regrowth","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_regrowth	value
+Behavior Managment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"behavior_mgmt_codes","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	behavior_mgmt_codes	value
+Daily Enrichment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"daily_enrich_codes","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	daily_enrich_codes	value
+Daily Enrichment Other	Behavior	{"xtype":"textfield"}
 Preferences	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"preferences","displayField":"value","valueField":"value"}	ehr_lookups	preferences	value
 Temperament	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"temperament","displayField":"value","valueField":"value"}	ehr_lookups	temperament	value
 BCS		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"bcs_score","forceSelection":true,"displayField":"value","valueField":"value"}	ehr_lookups	bcs_score	value

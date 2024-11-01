@@ -10,6 +10,7 @@ arrival_type	Arrival Type	value
 arthritis_types	Arthritis Types	value
 att_score	Attitude Score	value
 bcs_score	BCS Store	value	title
+behavior_mgmt_codes	Behavior Management Codes	value
 behavior_types	Behavior Types	value
 blood_draw_reason	Blood Draw Reason	value
 blood_sample_type	Blood Sample Types	value
@@ -22,6 +23,7 @@ cost_center	Cost Center	value	title
 cost_type	Cost Type	value	title
 country	Country	value	title
 country_category	Country Category	value	title
+daily_enrich_codes	Daily Enrichment Codes	value
 data_category	Data Category Field Values	value
 death_reason	Death Reason	value
 delivery_state	Delivery State	value	title

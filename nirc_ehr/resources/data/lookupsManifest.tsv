@@ -12,6 +12,7 @@ arrival_type
 arthritis_types
 att_score
 bcs_score
+behavior_mgmt_codes
 behavior_types
 blood_draw_reason
 blood_draw_tube_type
@@ -25,6 +26,7 @@ conc_units
 cost_type
 country
 country_category
+daily_enrich_codes
 data_category
 death_reason
 delivery_state
