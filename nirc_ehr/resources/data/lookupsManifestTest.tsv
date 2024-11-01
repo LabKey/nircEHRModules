@@ -111,4 +111,6 @@ vendor_production_location
 volume_units
 weight_ranges
 wound_score
-yesno
+wound_severity
+wound_status
+yes_no_order

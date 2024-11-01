@@ -117,4 +117,6 @@ vendor_production_location	Colony Management	Vendor Production Location
 volume_units	Clinical	Volume Units	Used in drug and treatment datasets.
 weight_ranges	Clinical	Weight Ranges	Min/Max allowable weight per species. Used in various weight reports.
 wound_score	Clinical	Wound Score	Clinical observation fixed values.
-yesno	Clinical	Yes/No Values	Used for yes/no values in various datasets
+wound_severity	Clinical	Wound Severity	Clinical observation fixed values.
+wound_status	Clinical	Wound Status	Clinical observation fixed values.
+yes_no_order	Clinical	Yes/No Values in Order	Used for yes/no values in various datasets. Includes sort order.

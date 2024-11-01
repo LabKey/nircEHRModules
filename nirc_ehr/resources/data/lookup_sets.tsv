@@ -98,4 +98,6 @@ vendor_approval_code	Vendor Approval Code	value	title
 vendor_production_location	Vendor Production Location	value	title
 weight_ranges	Weight Ranges	value
 wound_score	Wound Score	value
-yesno	Yes/No Values	value
+wound_severity	Wound Severity	value
+wound_status	Wound Status	value
+yes_no_order	Yes/No Values in Order	value
