@@ -47,6 +47,7 @@ public class NIRCBehaviorRoundsFormType extends NIRCBaseTaskFormType
             s.addConfigSource("BehavioralCase");
             s.addConfigSource("BehaviorDefaults");
             s.addConfigSource("TreatmentSchedule");
+            s.addConfigSource("BehaviorRounds");
 
             if (s instanceof SimpleFormSection && !s.getName().equals("tasks"))
                 s.setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);
@@ -64,6 +65,7 @@ public class NIRCBehaviorRoundsFormType extends NIRCBaseTaskFormType
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BehavioralCase.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BehaviorDefaults.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BehaviorRounds.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/panel/ExamDataEntryPanel.js"));
         setJavascriptClass("EHR.panel.ExamDataEntryPanel");
 
