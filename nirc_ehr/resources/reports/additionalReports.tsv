@@ -8,12 +8,14 @@ foster	Reproductive Management	query	Fostering	TRUE		study	foster				FALSE	FALSE
 projects	Colony Management	query	Project Assignment	TRUE		study	assignment				FALSE	FALSE		qcstate/publicdata	This is for project assignments
 chemistry	Clinical	query	Chemistry	TRUE		study	chemistryResults				FALSE	FALSE		qcstate/publicdata	This is for chemistry results
 alias	Colony Management	query	Aliases	true		study	demographicsAliases				false	false		qcstate/publicdata	This report shows the animal aliases
-activeClinTreatmentOrders	Clinical	query	Active Medication Orders	true		study	treatment_order	Clinical Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
+activeClinTreatmentOrders	Clinical	query	Active Clinical Medication Orders	true		study	treatment_order	Clinical Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
+activeBehaviorTreatmentOrders	Behavior	query	Active Behavior Medication Orders	true		study	treatment_order	Behavior Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
 allTreatments	Clinical	query	All Treatment Orders	true		study	treatment_order				false	false		qcstate/publicdata	This report shows all treatment orders
 behTreatments	Clinical	query	Behavior Medication Orders	true		study	treatment_order	behavior			false	false		qcstate/publicdata	This report shows all treatment orders
 FileRepository	General	js	File Repository	true		study	FileRepository				false	false		qcstate/publicdata	File Repository for uploading and viewing animal related files
 observationSchedule	Daily Reports	js	Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
-activeObservationOrders	Clinical	query	Active Observation Orders	true		study	observation_order	Active Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+activeClinicalObservationOrders	Clinical	query	Active Clinical Observation Orders	true		study	observation_order	Active Clinical Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+activeBehaviorObservationOrders	Behavior	query	Active Behavior Observation Orders	true		study	observation_order	Active Behavior Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 observationOrders	Clinical	query	Observation Orders	true		study	observation_order			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 alopecia	Clinical	query	Alopecia Scores	TRUE		study	clinical_observations	Alopecia Scores		date	FALSE	FALSE		qcstate/publicdata	This report contains the alopecia scores for the animal
 behaviorCases	Behavior	query	Active Behavior Cases	true		study	cases	Active Behavior Cases		date	false	false		qcstate/publicdata	This displays active behavioral cases

@@ -1040,7 +1040,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             {
                                 if (caseid != null)
                                 {
-                                    linkAction.addParameter("formType", "Behavior Rounds");
+                                    linkAction.addParameter("formType", "Behavioral Rounds");
                                     linkAction.addParameter("caseid", caseid);
                                 }
                                 else
