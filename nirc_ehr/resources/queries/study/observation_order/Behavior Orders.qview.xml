@@ -1,17 +1,20 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
-    <sorts>
-        <sort column="date" descending="true"/>
-    </sorts>
     <columns>
         <column name="Id"/>
         <column name="date"/>
+        <column name="enddate"/>
+        <column name="category"/>
         <column name="area"/>
-        <column name="observation"/>
+        <column name="frequency"/>
+        <column name="performedby"/>
         <column name="remark"/>
-        <column name="performedBy"/>
+        <column name="history"/>
         <column name="QCState"/>
     </columns>
     <filters>
         <filter column="type" operator="eq" value="Behavior"/>
     </filters>
+    <sorts>
+        <sort column="date"/>
+    </sorts>
 </customView>

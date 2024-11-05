@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
+import org.labkey.api.ehr.buttons.MarkCompletedButton;
 import org.labkey.api.ehr.dataentry.DefaultDataEntryFormFactory;
 import org.labkey.api.ehr.demographics.ParentsDemographicsProvider;
 import org.labkey.api.ehr.demographics.SourceDemographicsProvider;
@@ -179,7 +180,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         EHRService.get().unregisterMoreActionsButtons("study", "treatment_order");
         EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "treatment_order", "Set End Date"), "study", "treatment_order");
-        EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
+        EHRService.get().registerMoreActionsButton(new MarkCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());

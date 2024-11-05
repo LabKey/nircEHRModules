@@ -11,7 +11,7 @@ alias	Colony Management	query	Aliases	true		study	demographicsAliases				false	f
 activeClinTreatmentOrders	Clinical	query	Active Clinical Medication Orders	true		study	treatment_order	Clinical Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
 activeBehaviorTreatmentOrders	Behavior	query	Active Behavior Medication Orders	true		study	treatment_order	Behavior Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
 allTreatments	Clinical	query	All Treatment Orders	true		study	treatment_order				false	false		qcstate/publicdata	This report shows all treatment orders
-behTreatments	Clinical	query	Behavior Medication Orders	true		study	treatment_order	behavior			false	false		qcstate/publicdata	This report shows all treatment orders
+behTreatments	Behavior	query	All Behavior Medication Orders	true		study	treatment_order	behavior			false	false		qcstate/publicdata	This report shows all treatment orders
 FileRepository	General	js	File Repository	true		study	FileRepository				false	false		qcstate/publicdata	File Repository for uploading and viewing animal related files
 observationSchedule	Daily Reports	js	Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeClinicalObservationOrders	Clinical	query	Active Clinical Observation Orders	true		study	observation_order	Active Clinical Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
