@@ -31,8 +31,9 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 
     if (!helper.isETL()) {
 
-        if (deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
-                deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED') {
+        if (deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel &&
+                (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
+                deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
 
             if (!row.examReason)
                 EHR.Server.Utils.addError(scriptErrors, 'examReason', "'Reason for Examination' is required", 'ERROR');
@@ -59,3 +60,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         }
     }
 }
+
+EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_INSERT, 'study', 'necropsy', function(helper, scriptErrors, row, oldRow) {
+    triggerHelper.reportDataChange("study", "necropsy", [row.Id]);
+});
