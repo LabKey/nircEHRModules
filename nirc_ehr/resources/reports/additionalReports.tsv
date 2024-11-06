@@ -13,7 +13,7 @@ activeBehaviorTreatmentOrders	Behavior	query	Active Behavior Medication Orders	t
 allTreatments	Clinical	query	All Treatment Orders	true		study	treatment_order				false	false		qcstate/publicdata	This report shows all treatment orders
 behTreatments	Behavior	query	All Behavior Medication Orders	true		study	treatment_order	behavior			false	false		qcstate/publicdata	This report shows all treatment orders
 FileRepository	General	js	File Repository	true		study	FileRepository				false	false		qcstate/publicdata	File Repository for uploading and viewing animal related files
-observationSchedule	Daily Reports	js	Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+observationSchedule	Daily Reports	query	Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeClinicalObservationOrders	Clinical	query	Active Clinical Observation Orders	true		study	observation_order	Active Clinical Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeBehaviorObservationOrders	Behavior	query	Active Behavior Observation Orders	true		study	observation_order	Active Behavior Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 observationOrders	Clinical	query	Observation Orders	true		study	observation_order			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
@@ -27,8 +27,9 @@ clinCases	Clinical	query	All Clinical Cases	true		study	Cases	All Clinical Cases
 clinMedicationSchedule	Daily Reports	js	Medication Schedule	true		study	clinMedicationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 dietSchedule
 drug															
-incompleteTreatments															
-pairingsBehavior															
+incompleteTreatments	Daily Reports	js	Incomplete Treatments	true		study	incompleteTreatments			date	false	false		qcstate/publicdata	This report contains a list of incomplete treatments for the previous 30 days
+incompleteObservations	Daily Reports	js	Incomplete Observations	true		study	incompleteObservations			date	false	false		qcstate/publicdata	This report contains a list of incomplete observations for the previous 30 days
+pairingsBehavior
 pairingHousingSummary
 pairingSummary	Behavior	query	Pairing Summary	TRUE		study	pairingSummary			date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
 activePairing	Behavior	query	Active Pairing	TRUE		study	pairingSummary	Active Pairing		date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
