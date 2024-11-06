@@ -4,7 +4,6 @@ Alopecia Type	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","qu
 Alopecia Regrowth	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_regrowth","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_regrowth	value
 Behavior Managment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"behavior_mgmt_codes","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	behavior_mgmt_codes	value
 Daily Enrichment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"daily_enrich_codes","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	daily_enrich_codes	value
-Daily Enrichment Other	Behavior	{"xtype":"textfield"}
 Self Biting Observed	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
 New Injury Observed	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
 Other Stereotopy	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
