@@ -89,9 +89,18 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             // If a user tries to submit a new Death record (identified by QCState = 'IN PROGRESS') for an animal that
             // already has a pending request/review status in study.deaths, then below error message will be displayed.
             else if (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
+                    deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel &&
                     (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                             deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record is pending review for this animal', 'ERROR');
+            }
+            // if 'Save Draft' record already exists, it doesn't allow to 'Save Draft' or 'Submit Death'
+            // on the same animal again - throws an error "duplicate key value violates unique constraint"
+            // So, added this check to allow 'Save Draft' record to be saved only once.
+            else if (oldRow === undefined && row.QCStateLabel.toUpperCase() === 'IN PROGRESS' &&
+                    deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel &&
+                    deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'IN PROGRESS') {
+                EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death/Necropsy data entry is in progress for this animal', 'ERROR');
             }
             else if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
 
@@ -119,6 +128,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.AFTER_INSERT, 'study', 'deaths', function(helper, scriptErrors, row, oldRow) {
     helper.registerDeath(row.Id, row.date);
+    triggerHelper.reportDataChange("study", "deaths", [row.Id]);
 });
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.COMPLETE, 'study', 'Deaths', function(event, errors, helper){

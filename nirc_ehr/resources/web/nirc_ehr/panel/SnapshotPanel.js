@@ -31,6 +31,14 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
         });
     },
 
+    onLoad: function(ids, resultMap){
+        if (ids && ids.length && ids[0] != this.subjectId){
+            return;
+        }
+
+        this.callParent(arguments);
+    },
+
     getBaseItems: function(){
         return [{
             xtype: 'container',
@@ -141,9 +149,18 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
             toSet['animalId'] = LABKEY.Utils.encodeHtml(id);
         }
 
-        var status = row.getCalculatedStatus() || 'Unknown';
-        toSet['calculated_status'] = '<span ' + (status.toLowerCase() !== 'alive' ? 'style="background-color:yellow"' : '') + '>'
-                + LABKEY.Utils.encodeHtml(status) + '</span>';
+        var data = row.getData();
+        var status = data ? data.necropsy_status : undefined;
+        var statusVal = 'Unknown';
+        if (status) {
+            if (typeof status == 'string') {
+                statusVal = status;
+            } else {
+                statusVal = status[0] && (Object.keys(status[0]).length > 0) ? status[0].necropsy_status : statusVal;
+            }
+        }
+        toSet['calculated_status'] = '<span ' + (statusVal !== 'Alive' ? 'style="background-color:yellow"' : '') + '>'
+                + LABKEY.Utils.encodeHtml(statusVal) + '</span>';
 
         toSet['species'] = LABKEY.Utils.encodeHtml(row.getSpeciesCommonName());
         toSet['geographic_origin'] = LABKEY.Utils.encodeHtml(row.getGeographicOrigin());

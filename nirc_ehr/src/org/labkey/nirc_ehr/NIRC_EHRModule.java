@@ -50,6 +50,7 @@ import org.labkey.nirc_ehr.demographics.ActiveCasesDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.CagematesDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
+import org.labkey.nirc_ehr.demographics.NecropsyStatusDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
@@ -131,6 +132,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerDemographicsProvider(new ActiveCasesDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new ActiveTreatmentsDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new SourceDemographicsProvider(this));
+        ehrService.registerDemographicsProvider(new NecropsyStatusDemographicsProvider(this));
 
         EHRService.get().registerHistoryDataSource(new ArrivalDataSource(this));
         EHRService.get().registerHistoryDataSource(new BiopsyDataSource(this));

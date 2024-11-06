@@ -18,6 +18,7 @@ import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.ehr.EHRDemographicsService;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
@@ -36,6 +37,7 @@ import org.labkey.api.study.StudyService;
 import org.labkey.api.util.GUID;
 import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
+import org.labkey.api.util.Pair;
 import org.labkey.nirc_ehr.NIRCDeathNotification;
 import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
@@ -738,5 +740,10 @@ public class NIRC_EHRTriggerHelper
 
         TableSelector ts = new TableSelector(ti, Collections.singleton("Id"), filter, null);
         return ts.exists();
+    }
+
+    public void reportDataChange(String schema, String query, final List<String> ids)
+    {
+        EHRDemographicsService.get().reportDataChange(_container, schema, query, ids);
     }
 }
