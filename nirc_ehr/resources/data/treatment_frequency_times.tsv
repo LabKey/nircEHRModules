@@ -1,6 +1,7 @@
 Frequency	Hour of Day	Time Description
 SID	800	AM
 Monthly	800	AM
+Weekly	800	AM
 Alternating Days	800	AM
 TID	800	AM
 TID	1200	PM

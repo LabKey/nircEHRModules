@@ -21,8 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.UpgradeCode;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.SharedEHRUpgradeCode;
+import org.labkey.api.ehr.buttons.MarkCompletedButton;
 import org.labkey.api.ehr.dataentry.DefaultDataEntryFormFactory;
-import org.labkey.api.ehr.demographics.ActiveTreatmentsDemographicsProvider;
 import org.labkey.api.ehr.demographics.ParentsDemographicsProvider;
 import org.labkey.api.ehr.demographics.SourceDemographicsProvider;
 import org.labkey.api.ehr.history.DefaultAlopeciaDataSource;
@@ -48,6 +48,7 @@ import org.labkey.nirc_ehr.dataentry.form.*;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveCasesDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveFlagsDemographicsProvider;
+import org.labkey.nirc_ehr.demographics.ActiveTreatmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.CagematesDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.NecropsyStatusDemographicsProvider;
@@ -181,7 +182,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         EHRService.get().unregisterMoreActionsButtons("study", "treatment_order");
         EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "treatment_order", "Set End Date"), "study", "treatment_order");
-        EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
+        EHRService.get().registerMoreActionsButton(new MarkCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());
@@ -223,6 +224,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCAnimalTrainingFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCPairingsFormType.class, this));
         EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCBulkBehaviorFormType.class, this));
+        EHRService.get().registerFormType(new DefaultDataEntryFormFactory(NIRCBehaviorRoundsFormType.class, this));
     }
 
     @Override

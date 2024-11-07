@@ -454,12 +454,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         observationOrders.setGridCell(1, "frequency", "QID");
         submitForm("Submit Final", "Finalize");
 
-        log("Verifying Active Observation Orders");
+        log("Verifying Active Clinical Observation Orders");
         goToEHRFolder();
-        waitAndClickAndWait(Locator.linkWithText("Active Observation Orders"));
+        waitAndClickAndWait(Locator.linkWithText("Active Clinical Observation Orders"));
         DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
-        Assert.assertEquals("Incorrect active observation orders", Arrays.asList("Ears", "Activity", "Appetite", "BCS", "Hydration",
+        Assert.assertEquals("Incorrect active clinical observation orders", Arrays.asList("Ears", "Activity", "Appetite", "BCS", "Hydration",
                 "Stool", "Verified Id?"), table.getColumnDataAsText("category"));
 
         log("Verifying Today's Observation Schedule");
