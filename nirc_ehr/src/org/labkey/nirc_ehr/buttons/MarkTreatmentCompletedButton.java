@@ -26,7 +26,7 @@ public class MarkTreatmentCompletedButton extends MarkCompletedButton
         // NOTE: we have a problem if this is called before all XML metadata is applied.  for example, a dataset could call the tablecustomizer from studyData.query.xml
         // but the dataset-specific query.xml file will apply a different format to the enddate column.  as a result, defer creating the JS handler as long as we can.
         ColumnInfo col = ti.getColumn("enddate");
-        String xtype = "datefield";
+        String xtype = "xdatetime";
         if (!_forceDateOnlyField && col != null && col.getFormat() != null && col.getFormat().contains("HH"))
             xtype = "xdatetime";
 

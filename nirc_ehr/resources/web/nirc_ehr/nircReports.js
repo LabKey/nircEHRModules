@@ -219,3 +219,64 @@ EHR.reports.observationSchedule = function(panel, tab, viewName){
         })
     });
 }
+
+EHR.reports.incompleteTreatments = function(panel, tab, viewName){
+    const currentDate = new Date();
+    const previousDate = new Date();
+    previousDate.setDate(currentDate.getDate() - 30);
+
+    const gridFilterArray = panel.getFilterArray(tab);
+    const filterArray = gridFilterArray.nonRemovable.concat(LABKEY.Filter.create('treatmentStatus', "Completed", LABKEY.Filter.Types.NEQ_OR_NULL));
+
+    const config = panel.getQWPConfig({
+        title: 'Incomplete Treatments For Past 30 Days',
+        schemaName: 'study',
+        queryName: 'treatmentSchedule',
+        dataRegionName: 'incomplete_treatments',
+        parameters: {
+            StartDate: `${String(previousDate.getMonth() + 1).padStart(2, '0')}/${String(previousDate.getDate()).padStart(2, '0')}/${previousDate.getFullYear()}`,
+            NumDays: 30
+        },
+        filters: filterArray,
+        removeableFilters: gridFilterArray.removable,
+        frame: true
+    });
+
+    tab.add({
+        xtype: 'ldk-querycmp',
+        style: 'margin-bottom:20px;',
+        queryConfig: config
+    });
+}
+
+EHR.reports.incompleteObservations = function(panel, tab, viewName){
+    const currentDate = new Date();
+    const previousDate = new Date();
+    previousDate.setDate(currentDate.getDate() - 30);
+
+    const gridFilterArray = panel.getFilterArray(tab);
+    const filterArray = gridFilterArray.nonRemovable.concat(
+            [LABKEY.Filter.create('status', "Completed", LABKEY.Filter.Types.DOES_NOT_CONTAIN),
+            ]
+    );
+
+    const config = panel.getQWPConfig({
+        title: 'Incomplete Observations For Past 30 Days',
+        schemaName: 'study',
+        queryName: 'observationSchedule',
+        dataRegionName: 'incomplete_observations',
+        parameters: {
+            StartDate: `${String(previousDate.getMonth() + 1).padStart(2, '0')}/${String(previousDate.getDate()).padStart(2, '0')}/${previousDate.getFullYear()}`,
+            NumDays: 30
+        },
+        filters: filterArray,
+        removeableFilters: gridFilterArray.removable,
+        frame: true
+    });
+
+    tab.add({
+        xtype: 'ldk-querycmp',
+        style: 'margin-bottom:20px;',
+        queryConfig: config
+    });
+}

@@ -1,5 +1,6 @@
 Meaning	Sort Order	Week of Month	Day of Month	Day of Week	Interval in Days	Short Name	Active?
 Monthly					30		true
+Weekly					7		true
 Alternating Days					2		true
 SID					1		true
 QID					1		true

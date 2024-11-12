@@ -24,7 +24,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         }
 
         var reopen = oldRow && oldRow.enddate && !row.enddate;
-        if (!helper.isValidateOnly() && (reopen || helper.getEvent() == 'insert') && row.caseid && row.Id && row.performedby && row.taskid) {
+        if (!helper.isValidateOnly() && (reopen || helper.getEvent() == 'insert') && row.caseid && row.Id && row.performedby && row.taskid && row.category == 'Clinical') {
             var qc;
             if (row.QCStateLabel) {
                 qc = EHR.Server.Security.getQCStateByLabel(row.QCStateLabel);

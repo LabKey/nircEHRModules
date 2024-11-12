@@ -57,7 +57,8 @@ Ext4.define('NIRC_EHR.panel.SelectCasePanel', {
             return {
                 'Clinical Cases': 'Clinical',
                 'Clinical Rounds': 'Clinical',
-                'Behavior Cases': 'Behavioral',
+                'Behavioral Cases': 'Behavior',
+                'Behavioral Rounds': 'Behavior',
             };
         }
     },
