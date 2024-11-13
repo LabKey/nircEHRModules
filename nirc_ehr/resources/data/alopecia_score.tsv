@@ -1,25 +1,6 @@
-value	sort_order	description	Date Disabled
-0%	1
-1%	2
-9%	3
-10%	4
-18%	5
-19%	6
-27%	7
-28%	8
-36%	9
-37%	10
-45%	11
-46%	12
-54%	13
-55%	14
-63%	15
-64%	16
-72%	17
-73%	18
-81%	19
-82%	20
-90%	21
-91%	22
-99%	23
-100%	24
+value	title	sort_order	description	Date Disabled
+Very good coat condition (1)	Very good coat condition (1)	1
+1-25% hair loss (2)	1-25% hair loss (2)	2
+25-50% hair loss (3)	25-50% hair loss (3)	3
+More than 50% (4)	More than 50% (4)	4
+Completely bald (5)	Completely bald (5)	5

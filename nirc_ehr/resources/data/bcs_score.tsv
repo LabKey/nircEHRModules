@@ -1,10 +1,10 @@
 value	title	category	description	sort_order	date_disabled
-1	Emaciated
-1.5	Very Thin
-2	Thin
-2.5	Lean
-3	Optimum
-3.5	Slightly Overweight
-4	Heavy
-4.5	Obese
-5	Grossly Obese
+Emaciated (1)				1
+Very Thin (1.5)				2
+Thin (2)				3
+Lean (2.5)				4
+Optimum (3)				5
+Slightly Overweight (3.5)				6
+Heavy (4)				7
+Obese (4.5)				8
+Grossly Obese (5)				9

@@ -1041,7 +1041,7 @@
         </columns>
     </table>
     <table tableName="cases" tableDbType="TABLE">
-        <tableTitle>Clinical Treatment Cases</tableTitle>
+        <tableTitle>Treatment Cases</tableTitle>
         <columns>
             <column columnName="Id">
                 <datatype>varchar</datatype>

@@ -1040,7 +1040,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             {
                                 if (caseid != null)
                                 {
-                                    linkAction.addParameter("formType", "Behavior Rounds");
+                                    linkAction.addParameter("formType", "Behavioral Rounds");
                                     linkAction.addParameter("caseid", caseid);
                                 }
                                 else
@@ -1123,10 +1123,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
                         {
                             String status = (String) getBoundColumn().getValue(ctx);
-                            String stat = status;
+                            String stat = null;
                             if (status != null)
                             {
                                 Set<String> dailies = new HashSet<>();
+                                Set<String> sib = new HashSet<>();
                                 Set<String> nonDailies = new HashSet<>();
                                 String[] sts = status.split(";");
 
@@ -1136,21 +1137,64 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                     {
                                         dailies.add(st);
                                     }
+                                    else if (NIRC_EHRManager.SIB_OBS.contains(st))
+                                    {
+                                        sib.add(st);
+                                    }
                                     else
                                     {
                                         nonDailies.add(st);
                                     }
                                 }
 
+                                // Compress to daily clinical observations
                                 if (dailies.size() == NIRC_EHRManager.DAILY_CLINICAL_OBS.size())
                                 {
                                     stat = NIRC_EHRManager.DAILY_CLINICAL_OBS_TITLE;
-                                    if (!nonDailies.isEmpty())
+                                }
+                                else if (!dailies.isEmpty())
+                                {
+                                    stat = String.join("; ", dailies);
+                                }
+
+                                // Compress to SIB observations
+                                if (sib.size() == NIRC_EHRManager.SIB_OBS.size())
+                                {
+                                    if (stat == null)
+                                    {
+                                        stat = NIRC_EHRManager.SIB_OBS_TITLE;
+                                    }
+                                    else
+                                    {
+                                        stat += "; " + NIRC_EHRManager.SIB_OBS_TITLE;
+                                    }
+                                }
+                                else if (!sib.isEmpty())
+                                {
+                                    if (stat == null)
+                                    {
+                                        stat = String.join("; ", sib);
+                                    }
+                                    else
+                                    {
+                                        stat += "; " + String.join("; ", sib);
+                                    }
+                                }
+
+                                // Add list of the rest of the observations
+                                if (!nonDailies.isEmpty())
+                                {
+                                    if (stat == null)
+                                    {
+                                        stat = String.join("; ", nonDailies);
+                                    }
+                                    else
                                     {
                                         stat += "; " + String.join("; ", nonDailies);
                                     }
                                 }
-                                else
+
+                                if (stat == null)
                                 {
                                     stat = status;
                                 }

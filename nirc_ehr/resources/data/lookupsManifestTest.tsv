@@ -11,6 +11,7 @@ app_score
 arrival_type
 arthritis_types
 bcs_score
+behavior_mgmt_codes
 behavior_types
 blood_draw_reason
 blood_draw_tube_type
@@ -24,6 +25,7 @@ congenital_abnormalities
 cost_type
 country
 country_category
+daily_enrich_codes
 data_category
 death_reason
 delivery_state
@@ -109,4 +111,6 @@ vendor_production_location
 volume_units
 weight_ranges
 wound_score
-yesno
+wound_severity
+wound_status
+yes_no_order

@@ -12,6 +12,9 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             },
             performedby: {
                 hidden: true
+            },
+            enddate: {
+                allowBlank: true,
             }
         },
         'study.drug': {
@@ -27,6 +30,9 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             },
             treatmentId: {
                 hidden: true
+            },
+            date: {
+                header: 'Date/Time',
             }
         },
         'study.prc': {
