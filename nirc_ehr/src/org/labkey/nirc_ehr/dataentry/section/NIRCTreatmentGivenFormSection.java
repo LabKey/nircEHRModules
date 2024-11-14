@@ -9,6 +9,8 @@ public class NIRCTreatmentGivenFormSection extends BaseFormSection
     public NIRCTreatmentGivenFormSection()
     {
         super("study", "drug", LABEL, "ehr-gridpanel", true, true, true);
+        setClientStoreClass("EHR.data.DrugAdministrationRunsClientStore");
+        addClientDependency(ClientDependency.supplierFromPath("ehr/data/DrugAdministrationRunsClientStore.js"));
     }
 
     public NIRCTreatmentGivenFormSection(boolean isChild, String parentQueryName)
@@ -19,8 +21,8 @@ public class NIRCTreatmentGivenFormSection extends BaseFormSection
             addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ParentChild.js"));
             addConfigSource("ParentChild");
 
-            addClientDependency(ClientDependency.supplierFromPath("ehr/data/ChildClientStore.js"));
-            setClientStoreClass("EHR.data.ChildClientStore");
+            addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/DrugAdministrationRunsChildClientStore.js"));
+            setClientStoreClass("NIRC_EHR.data.DrugAdministrationRunsChildClientStore");
             addExtraProperty("parentQueryName", parentQueryName);
         }
     }
