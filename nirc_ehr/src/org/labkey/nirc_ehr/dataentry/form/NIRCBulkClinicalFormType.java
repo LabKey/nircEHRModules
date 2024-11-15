@@ -47,6 +47,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/BulkClinical.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/MedicationEndDate.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
 
@@ -58,6 +59,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
             s.addConfigSource("ClinicalDefaults");
             s.addConfigSource("BulkClinical");
             s.addConfigSource("TreatmentSchedule");
+            s.addConfigSource("MedicationEndDate");
         };
     }
 
