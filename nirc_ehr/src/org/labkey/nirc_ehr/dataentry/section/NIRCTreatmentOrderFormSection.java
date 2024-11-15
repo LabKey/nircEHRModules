@@ -2,6 +2,8 @@ package org.labkey.nirc_ehr.dataentry.section;
 
 import org.labkey.api.view.template.ClientDependency;
 
+import java.util.List;
+
 public class NIRCTreatmentOrderFormSection extends BaseFormSection
 {
     public static final String LABEL = "Medications/Treatments Orders";
@@ -25,5 +27,17 @@ public class NIRCTreatmentOrderFormSection extends BaseFormSection
             setClientStoreClass("NIRC_EHR.data.DrugAdministrationRunsChildClientStore");
             addExtraProperty("parentQueryName", parentQueryName);
         }
+    }
+
+    @Override
+    public List<String> getTbarButtons()
+    {
+        List<String> defaultButtons = super.getTbarButtons();
+        int idx = defaultButtons.indexOf("SELECTALL");
+        if (idx > -1)
+            defaultButtons.add(idx + 1, "DRUGAMOUNTHELPER");
+        else
+            defaultButtons.add("DRUGAMOUNTHELPER");
+        return defaultButtons;
     }
 }

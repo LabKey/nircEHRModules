@@ -276,3 +276,20 @@ Ext4.define('NIRC_EHR.window.DrugAmountWindow', {
     },
 
 });
+
+EHR.DataEntryUtils.registerGridButton('NIRC_DRUG_AMOUNT_HELPER', function(config){
+    return Ext4.Object.merge({
+        text: 'Review Drug Amount(s)',
+        xtype: 'button',
+        tooltip: 'Click to set the drug amounts',
+        handler: function(btn){
+            var grid = btn.up('gridpanel');
+
+            Ext4.create('NIRC_EHR.window.DrugAmountWindow', {
+                targetGrid: grid,
+                targetStore: grid.store,
+                formConfig: grid.formConfig
+            }).show();
+        }
+    });
+});
