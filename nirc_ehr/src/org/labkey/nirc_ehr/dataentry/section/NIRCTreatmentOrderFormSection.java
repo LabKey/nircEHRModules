@@ -35,7 +35,7 @@ public class NIRCTreatmentOrderFormSection extends BaseFormSection
         List<String> defaultButtons = super.getTbarButtons();
         int idx = defaultButtons.indexOf("SELECTALL");
         if (idx > -1)
-            defaultButtons.add(idx + 1, "DRUGAMOUNTHELPER");
+            defaultButtons.add(idx + 1, "NIRC_DRUG_AMOUNT_HELPER");
         else
             defaultButtons.add("DRUGAMOUNTHELPER");
         return defaultButtons;
