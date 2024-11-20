@@ -220,7 +220,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         insertRowsCommand.addRow(new HashMap<String, Object>()
         {
             {
-                put("code", "E-70590");
+                put("code", "NIRC-001");
             }
         });
 
