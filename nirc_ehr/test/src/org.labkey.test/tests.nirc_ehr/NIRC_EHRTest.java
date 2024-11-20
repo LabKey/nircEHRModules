@@ -27,6 +27,7 @@ import org.labkey.remoteapi.CommandException;
 import org.labkey.remoteapi.core.SaveModulePropertiesCommand;
 import org.labkey.remoteapi.query.ImportDataCommand;
 import org.labkey.remoteapi.query.InsertRowsCommand;
+import org.labkey.remoteapi.query.SaveRowsResponse;
 import org.labkey.remoteapi.security.CreateUserResponse;
 import org.labkey.test.Locator;
 import org.labkey.test.TestFileUtils;
@@ -210,6 +211,20 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         waitFor(() -> Input(Locator.textarea("populateLookupResults"), getDriver()).waitFor().getValue().contains("Loading reports is complete."),
                 "Reports didn't finish loading", 60000);
+        populateFormulary();
+    }
+
+    private void populateFormulary() throws IOException, CommandException
+    {
+        InsertRowsCommand insertRowsCommand = new InsertRowsCommand("ehr_lookups", "drug_defaults");
+        insertRowsCommand.addRow(new HashMap<String, Object>()
+        {
+            {
+                put("code", "E-70590");
+            }
+        });
+
+        SaveRowsResponse saveRowsResponse = insertRowsCommand.execute(getApiHelper().getConnection(), getContainerPath());
     }
 
     @Override
