@@ -1,3 +1,28 @@
+(function getSnomedStore(){
+    if (NIRC_EHR._snomedStore)
+        return NIRC_EHR._snomedStore;
+
+    let storeId = ['ehr_lookups', 'snomed', 'code', 'meaning'].join('||');
+
+    NIRC_EHR._snomedStore = Ext4.create('LABKEY.ext4.data.Store', {
+        type: 'labkey-store',
+        schemaName: 'ehr_lookups',
+        queryName: 'snomed',
+        columns: 'code,meaning',
+        sort: 'meaning',
+        storeId: storeId,
+        autoLoad: true,
+        getRecordForCode: function(code){
+            let recIdx = this.findExact('code', code);
+            if (recIdx != -1){
+                return this.getAt(recIdx);
+            }
+        }
+    });
+
+    return NIRC_EHR._snomedStore;
+})();
+
 Ext4.define('NIRC_EHR.window.DrugAmountWindow', {
     extend: 'EHR.window.DrugAmountWindow',
 
@@ -5,33 +30,8 @@ Ext4.define('NIRC_EHR.window.DrugAmountWindow', {
         this.callParent(arguments);
     },
 
-    getSnomedStore: function(){
-        if (NIRC_EHR._snomedStore)
-            return NIRC_EHR._snomedStore;
-
-        var storeId = ['ehr_lookups', 'snomed', 'code', 'meaning'].join('||');
-
-        NIRC_EHR._snomedStore = Ext4.create('LABKEY.ext4.data.Store', {
-            type: 'labkey-store',
-            schemaName: 'ehr_lookups',
-            queryName: 'snomed',
-            columns: 'code,meaning',
-            sort: 'meaning',
-            storeId: storeId,
-            autoLoad: true,
-            getRecordForCode: function(code){
-                var recIdx = this.findExact('code', code);
-                if (recIdx != -1){
-                    return this.getAt(recIdx);
-                }
-            }
-        });
-
-        return NIRC_EHR._snomedStore;
-    },
-
     getDrugItems: function(){
-        this.getSnomedStore();
+
         var numCols = 13;
         var items = [{
             html: '<b>Animal</b>'
