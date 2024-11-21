@@ -8,7 +8,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
     if (row.code) {
         let drugFormulary = triggerHelper.getFormularyForDrug(row.code);
         if (drugFormulary && drugFormulary.maxAmount && row.amount > drugFormulary.maxAmount) {
-            EHR.Server.Utils.addError(scriptErrors, 'amount', 'Amount is greater than the maximum reasonable amount - ' + drugFormulary.maxAmount, 'ERROR');
+            EHR.Server.Utils.addError(scriptErrors, 'amount', 'Amount is greater than the maximum reasonable amount: ' + drugFormulary.maxAmount, 'ERROR');
         }
     }
     if (row.volume && !row.vol_units) {
