@@ -1,3 +1,28 @@
+(function getSnomedStore(){
+    if (NIRC_EHR._snomedStore)
+        return NIRC_EHR._snomedStore;
+
+    let storeId = ['ehr_lookups', 'snomed', 'code', 'meaning'].join('||');
+
+    NIRC_EHR._snomedStore = Ext4.create('LABKEY.ext4.data.Store', {
+        type: 'labkey-store',
+        schemaName: 'ehr_lookups',
+        queryName: 'snomed',
+        columns: 'code,meaning',
+        sort: 'meaning',
+        storeId: storeId,
+        autoLoad: true,
+        getRecordForCode: function(code){
+            let recIdx = this.findExact('code', code);
+            if (recIdx != -1){
+                return this.getAt(recIdx);
+            }
+        }
+    });
+
+    return NIRC_EHR._snomedStore;
+})();
+
 Ext4.define('NIRC_EHR.window.DrugAmountWindow', {
     extend: 'EHR.window.DrugAmountWindow',
 
@@ -6,6 +31,7 @@ Ext4.define('NIRC_EHR.window.DrugAmountWindow', {
     },
 
     getDrugItems: function(){
+
         var numCols = 13;
         var items = [{
             html: '<b>Animal</b>'
@@ -275,4 +301,21 @@ Ext4.define('NIRC_EHR.window.DrugAmountWindow', {
         return codeMap;
     },
 
+});
+
+EHR.DataEntryUtils.registerGridButton('NIRC_DRUG_AMOUNT_HELPER', function(config){
+    return Ext4.Object.merge({
+        text: 'Review Drug Amount(s)',
+        xtype: 'button',
+        tooltip: 'Click to set the drug amounts',
+        handler: function(btn){
+            var grid = btn.up('gridpanel');
+
+            Ext4.create('NIRC_EHR.window.DrugAmountWindow', {
+                targetGrid: grid,
+                targetStore: grid.store,
+                formConfig: grid.formConfig
+            }).show();
+        }
+    });
 });
