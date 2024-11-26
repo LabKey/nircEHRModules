@@ -40,6 +40,7 @@ public class NIRCBulkBehaviorFormType extends NIRCBaseTaskFormType
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/TreatmentSchedule.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/DrugVolumeField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/DrugAmountWindow.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/MedicationEndDate.js"));
 
         // Needed for scheduled date/time when navigating from treatment or observation schedule
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/treatmentSubmit.js"));
@@ -48,6 +49,7 @@ public class NIRCBulkBehaviorFormType extends NIRCBaseTaskFormType
         {
             s.addConfigSource("BehaviorDefaults");
             s.addConfigSource("TreatmentSchedule");
+            s.addConfigSource("MedicationEndDate");
         };
     }
 

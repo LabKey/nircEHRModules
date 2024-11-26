@@ -57,6 +57,7 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
             s.addConfigSource("ClinicalCase");
             s.addConfigSource("ClinicalRounds");
             s.addConfigSource("TreatmentSchedule");
+            s.addConfigSource("MedicationEndDate");
 
             if (s instanceof SimpleFormSection && !s.getName().equals("tasks"))
                 s.setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);
@@ -75,6 +76,7 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalCase.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalRounds.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/MedicationEndDate.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/panel/ExamDataEntryPanel.js"));
         setJavascriptClass("EHR.panel.ExamDataEntryPanel");
 

@@ -61,6 +61,7 @@ public class NIRC_EHRTriggerHelper
     private static final Logger _log = LogManager.getLogger(NIRC_EHRTriggerHelper.class);
     private Integer _nextProjectId = null;
     private Integer _nextProtocolId = null;
+    private Map<String,Object> _cachedDrugFormulary = new HashMap<>();
 
     private SimpleDateFormat _dateFormat;
 
@@ -745,5 +746,27 @@ public class NIRC_EHRTriggerHelper
     public void reportDataChange(String schema, String query, final List<String> ids)
     {
         EHRDemographicsService.get().reportDataChange(_container, schema, query, ids);
+    }
+
+    public Object getFormularyForDrug(String drugCode) throws SQLException
+    {
+        if (_cachedDrugFormulary.containsKey(drugCode))
+            return _cachedDrugFormulary.get(drugCode);
+
+        TableInfo ti = getTableInfo("ehr_lookups", "drug_defaults");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("code"), drugCode);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("code", "amount_max"), filter, null);
+        Map<String, Object> drugFormulary = new HashMap<>();
+        try (Results rs = ts.getResults())
+        {
+            for (Map<String, Object> r : rs)
+            {
+                drugFormulary.put("code", r.get("code"));
+                drugFormulary.put("maxAmount", r.get("amount_max"));
+            }
+        }
+
+        _cachedDrugFormulary.put(drugCode, drugFormulary);
+        return drugFormulary;
     }
 }
