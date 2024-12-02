@@ -37,14 +37,17 @@ import org.labkey.api.study.StudyService;
 import org.labkey.api.util.GUID;
 import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
-import org.labkey.api.util.Pair;
-import org.labkey.nirc_ehr.NIRCDeathNotification;
 import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
+import org.labkey.nirc_ehr.notification.NIRCClinicalMoveNotification;
+import org.labkey.nirc_ehr.notification.NIRCDeathNotification;
 import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -335,6 +338,49 @@ public class NIRC_EHRTriggerHelper
             throw errors;
     }
 
+    public void clinicalMoveNotification(final String animalId, final String date)
+    {
+        //check whether Death Notification is enabled
+        if (!NotificationService.get().isActive(new NIRCClinicalMoveNotification(), _container) || !NotificationService.get().isServiceEnabled())
+        {
+            _log.info("NIRC Clinical Move notification service is not enabled, will not send clinical move notification.");
+            return;
+        }
+
+        try (DbScope.Transaction transaction = StudyService.get().getDatasetSchema().getScope().ensureTransaction())
+        {
+            // Add a post commit task to run provider update in another thread once this transaction is complete.
+            transaction.addCommitTask(() ->
+                    JobRunner.getDefault().execute(() -> {
+                        final Container container = _container;
+                        final User user = _user;
+                        NIRCClinicalMoveNotification notification = new NIRCClinicalMoveNotification();
+                        String subject = "Clinical Move Notification: " + animalId;
+
+                        // get recipients
+                        Set<UserPrincipal> recipients = NotificationService.get().getRecipients(notification, container);
+                        if (recipients.size() == 0)
+                        {
+                            _log.warn("No NIRC recipients set, skipping clinical move notification");
+                            return;
+                        }
+
+                        //construct html for email notification
+                        final StringBuilder html = new StringBuilder();
+                        html.append("Animal ").append(PageFlowUtil.filter(animalId)).append(" has been moved for Veterinary Treatment on ").append(date).append(".<br><br>");
+
+                        //append animal details
+                        appendAnimalDetails(html, animalId, container);
+
+                        // send Clinical Move Notification
+                        _log.debug("NIRC Clinical Move notification job sending email for animal " + animalId + " in container " + container.getPath());
+                        TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
+                    }), DbScope.CommitTaskOption.POSTCOMMIT);
+
+            transaction.commit();
+        }
+    }
+
     public void sendDeathNotification(final String animalId) throws Exception
     {
         //check whether Death Notification is enabled
@@ -413,8 +459,20 @@ public class NIRC_EHRTriggerHelper
     private void appendAnimalDetails(StringBuilder html, String id, final Container container)
     {
         String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" + container.getPath() + "/participantView.view?participantId=" + id;
-        html.append("Project: ").append(PageFlowUtil.filter(getProject(id))).append("<br>");
-        html.append("Protocol: ").append(PageFlowUtil.filter(getProtocol(id))).append("<br><br>");
+
+        String tdFieldStyle = "\"border: 1px solid #000000;padding:5px;background-color:lightgray\"";
+        String tdValueStyle = "\"border: 1px solid #000000;padding:5px;\"";
+
+        String tableStyle = "\"" +
+                "        border-collapse: collapse;" +
+                "        border: 1px solid #000000;\"";
+
+        html.append("<table style=").append(tableStyle).append(">");
+        html.append("<tr><td style=").append(tdFieldStyle).append(">").append("Id").append("</td>").append("<td style=").append(tdValueStyle).append(">").append(PageFlowUtil.filter(id)).append("</td></tr>");
+        html.append("<tr><td style=").append(tdFieldStyle).append(">").append("Project").append("</td>").append("<td style=").append(tdValueStyle).append(">").append(PageFlowUtil.filter(getProject(id))).append("</td></tr>");
+        html.append("<tr><td style=").append(tdFieldStyle).append(">").append("Protocol").append("</td>").append("<td style=").append(tdValueStyle).append(">").append(PageFlowUtil.filter(getProtocol(id))).append("</td></tr>");
+        html.append("</table>");
+        html.append("<br>");
         html.append("<a href='").append(url).append("'>");
         html.append("Click here to view this animal's clinical details</a><br>");
     }
@@ -633,13 +691,19 @@ public class NIRC_EHRTriggerHelper
             try
             {
                 List<Map<String, Object>> rows = new ArrayList<>();
+
+                // Get tomorrow's date at 8:00 AM
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime tomorrowAtEightAM = now.plusDays(1).with(LocalTime.of(8, 0));
+                Date date = Date.from(tomorrowAtEightAM.atZone(ZoneId.systemDefault()).toInstant());
+
                 for (String category : missing)
                 {
                     Map<String, Object> row = new CaseInsensitiveHashMap<>();
                     row.put("category", category);
                     row.put("frequency", sidRowid);
                     row.put("caseid", caseid);
-                    row.put("date", new Date());
+                    row.put("date", date);
                     row.put("Id", id);
                     row.put("qcstate", qcstate);
                     row.put("area", "N/A");

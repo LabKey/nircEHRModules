@@ -17,6 +17,11 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             prevAnimalId = row.Id;
             prevDate = row.date;
         }
+        else {
+            if (!helper.isValidateOnly() && row.reason === 'Veterinary Treatment' && !oldRow) {
+                triggerHelper.clinicalMoveNotification(row.Id, row.date);
+            }
+        }
     });
 
 function onComplete(event, errors, helper){
