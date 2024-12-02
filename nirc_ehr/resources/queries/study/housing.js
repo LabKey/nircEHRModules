@@ -18,7 +18,11 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             prevDate = row.date;
         }
         else {
-            if (!helper.isValidateOnly() && row.reason === 'Veterinary Treatment' && !oldRow) {
+            if (row.reason === 'Veterinary Treatment' && !row.remark) {
+                EHR.Server.Utils.addError(scriptErrors, 'remark', 'Reason For Move - Veterinary Treatment requires a remark.', 'ERROR');
+            }
+
+            if (!helper.isValidateOnly() && row.reason === 'Veterinary Treatment' && (!oldRow || oldRow.reason !== 'Veterinary Treatment')) {
                 triggerHelper.clinicalMoveNotification(row.Id, row.date);
             }
         }
@@ -39,7 +43,6 @@ function onComplete(event, errors, helper){
             var idsToClose = [];
             for (var i = 0; i < updateRows.length; i++) {
                 if (EHR.Server.Security.getQCStateByLabel(updateRows[i].row.QCStateLabel).PublicData && updateRows[i].row.date) {
-                    updateRows[i].row.date.setHours(12);  // Necessary to clear EHR warning
                     idsToClose.push({
                         Id: updateRows[i].row.Id,
                         date: EHR.Server.Utils.datetimeToString(updateRows[i].row.date),  //stringify to serialize properly

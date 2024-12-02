@@ -40,7 +40,7 @@ public class HousingDemographicsProvider extends AbstractListDemographicsProvide
         keys.add(FieldKey.fromString("cage/cage"));
         keys.add(FieldKey.fromString("date"));
         keys.add(FieldKey.fromString("reason"));
-
+        keys.add(FieldKey.fromString("remark"));
         keys.add(FieldKey.fromString("location"));
 
         return keys;

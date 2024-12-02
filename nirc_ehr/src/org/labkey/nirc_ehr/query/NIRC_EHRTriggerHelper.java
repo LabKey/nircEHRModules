@@ -365,9 +365,13 @@ public class NIRC_EHRTriggerHelper
                             return;
                         }
 
+                        String remark = (String) EHRDemographicsService.get().getAnimal(container, animalId).getActiveHousing().get(0).get("remark");
+
                         //construct html for email notification
                         final StringBuilder html = new StringBuilder();
-                        html.append("Animal ").append(PageFlowUtil.filter(animalId)).append(" has been moved for Veterinary Treatment on ").append(date).append(".<br><br>");
+                        html.append("Animal ").append(PageFlowUtil.filter(animalId)).append(" has been moved for Veterinary Treatment on ").append(date).append(".<br>");
+                        if (remark != null)
+                            html.append("Remark: ").append(PageFlowUtil.filter(remark)).append("<br><br>");
 
                         //append animal details
                         appendAnimalDetails(html, animalId, container);
@@ -467,8 +471,11 @@ public class NIRC_EHRTriggerHelper
                 "        border-collapse: collapse;" +
                 "        border: 1px solid #000000;\"";
 
+        String cage = (String) EHRDemographicsService.get().getAnimal(container, id).getActiveHousing().get(0).get("cage/cage");
+
         html.append("<table style=").append(tableStyle).append(">");
         html.append("<tr><td style=").append(tdFieldStyle).append(">").append("Id").append("</td>").append("<td style=").append(tdValueStyle).append(">").append(PageFlowUtil.filter(id)).append("</td></tr>");
+        html.append("<tr><td style=").append(tdFieldStyle).append(">").append("Location").append("</td>").append("<td style=").append(tdValueStyle).append(">").append(PageFlowUtil.filter(cage)).append("</td></tr>");
         html.append("<tr><td style=").append(tdFieldStyle).append(">").append("Project").append("</td>").append("<td style=").append(tdValueStyle).append(">").append(PageFlowUtil.filter(getProject(id))).append("</td></tr>");
         html.append("<tr><td style=").append(tdFieldStyle).append(">").append("Protocol").append("</td>").append("<td style=").append(tdValueStyle).append(">").append(PageFlowUtil.filter(getProtocol(id))).append("</td></tr>");
         html.append("</table>");
