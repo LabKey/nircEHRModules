@@ -46,7 +46,6 @@ import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -669,7 +668,7 @@ public class NIRC_EHRTriggerHelper
         }
     }
 
-    public void ensureDailyClinicalObservationOrders(String id, String caseid, String performedby, String qcstate, String taskid, List<Map<String, Object>> ordersInTransaction) throws SQLException
+    public void ensureDailyClinicalObservationOrders(String id, String caseid, final Date date, String performedby, String qcstate, String taskid, List<Map<String, Object>> ordersInTransaction) throws SQLException
     {
         TableInfo freqTi = getTableInfo("ehr_lookups", "treatment_frequency");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("meaning"), "SID");
@@ -700,9 +699,16 @@ public class NIRC_EHRTriggerHelper
                 List<Map<String, Object>> rows = new ArrayList<>();
 
                 // Get tomorrow's date at 8:00 AM
-                LocalDateTime now = LocalDateTime.now();
-                LocalDateTime tomorrowAtEightAM = now.plusDays(1).with(LocalTime.of(8, 0));
-                Date date = Date.from(tomorrowAtEightAM.atZone(ZoneId.systemDefault()).toInstant());
+                LocalDateTime localDateTime = date.toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime();
+                LocalDateTime nextDayAtEight = localDateTime.plusDays(1)
+                        .withHour(8)
+                        .withMinute(0)
+                        .withSecond(0)
+                        .withNano(0);
+
+                Date obsDate = Date.from(nextDayAtEight.atZone(ZoneId.systemDefault()).toInstant());
 
                 for (String category : missing)
                 {
@@ -710,7 +716,7 @@ public class NIRC_EHRTriggerHelper
                     row.put("category", category);
                     row.put("frequency", sidRowid);
                     row.put("caseid", caseid);
-                    row.put("date", date);
+                    row.put("date", obsDate);
                     row.put("Id", id);
                     row.put("qcstate", qcstate);
                     row.put("area", "N/A");
