@@ -11,7 +11,7 @@ Environmental Change	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_looku
 Special Enrichment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
 Preferences	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"preferences","displayField":"value","valueField":"value"}	ehr_lookups	preferences	value
 Temperament	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"temperament","displayField":"value","valueField":"value"}	ehr_lookups	temperament	value
-BCS		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"bcs_score","forceSelection":true,"displayField":"value","valueField":"value"}	ehr_lookups	bcs_score	value
+BCS		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"bcs_score","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	bcs_score	value
 CRT		{"xtype":"textfield","defaultValue":"1-2"}
 Mucous Membrane		{"xtype":"textfield","defaultValue":"Pink"}
 Pain Score		{"xtype":"ldk-numberfield","minValue":0,"maxValue":12}

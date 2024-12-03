@@ -36,16 +36,16 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
                 new NIRCCasesFormPanelSection("Clinical Case", ctx, false),
-                new NIRCProcedureFormSection(true, "cases"),
+                new NIRCWeightFormSection(true, false, true, "cases"),
                 new NIRCClinicalObservationsFormSection(true, "cases"),
                 new NIRCObservationOrdersFormSection(null, true, "cases"),
+                new NIRCProcedureFormSection(true, "cases"),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
                 new NIRCTreatmentOrderFormSection(true,
                         "cases"),
-                new NIRCWeightFormSection(true, false, true, "cases"),
                 new NIRCVitalsFormSection(true, "cases"),
-                new NIRCHousingFormSection(true, true, true, "cases"),
-                new NIRCBloodDrawFormSection(true, "cases")
+                new NIRCBloodDrawFormSection(true, "cases"),
+                new NIRCHousingFormSection(true, true, true, "cases")
         ));
 
         setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);

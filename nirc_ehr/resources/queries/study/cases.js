@@ -42,7 +42,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 if (ordersInTransaction && ordersInTransaction.length) {
                     oit = ordersInTransaction;
                 }
-                triggerHelper.ensureDailyClinicalObservationOrders(row.Id, row.caseid, row.performedby, qc.RowId, row.taskid, oit);
+                triggerHelper.ensureDailyClinicalObservationOrders(row.Id, row.caseid, row.date, row.performedby, qc.RowId, row.taskid, oit);
             }
         }
     }

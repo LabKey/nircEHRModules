@@ -915,6 +915,10 @@
             <column columnName="procedure">
                 <datatype>integer</datatype>
             </column>
+            <column columnName="orderedby">
+                <columnTitle>Ordered By</columnTitle>
+                <datatype>varchar</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="serology" tableDbType="TABLE">

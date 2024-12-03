@@ -58,11 +58,6 @@ EHR.model.DataModelManager.registerMetadata('BulkBehavior', {
             },
         },
         'study.clinical_observations': {
-            category: {
-                lookup: {
-                    filterArray: [LABKEY.Filter.create('category', 'Behavior')]
-                }
-            },
             type: {
                 hidden: true,
                 defaultValue: 'Behavior'
