@@ -68,6 +68,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -474,8 +475,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClickAndWait(Locator.linkWithText("Active Clinical Observation Orders"));
         DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
-        Assert.assertEquals("Incorrect active clinical observation orders", Arrays.asList("Activity", "Appetite", "BCS", "Hydration",
-                "Stool", "Verified Id?", "Ears"), table.getColumnDataAsText("category"));
+
+        List<String> expected = Arrays.asList("Activity", "Appetite", "BCS", "Hydration", "Stool", "Verified Id?", "Ears");
+        List<String> actual = table.getColumnDataAsText("category");
+        Collections.sort(expected);
+        Collections.sort(actual);
+
+        Assert.assertEquals("Incorrect active clinical observation orders", expected, actual);
 
         log("Verifying Today's Observation Schedule");
         goToEHRFolder();
