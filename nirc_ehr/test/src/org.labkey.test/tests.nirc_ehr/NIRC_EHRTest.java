@@ -296,7 +296,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         EHRAdminPage.beginAt(this, getContainerPath());
         NotificationAdminPage notificationAdminPage = EHRAdminPage.clickNotificationService(this);
         notificationAdminPage.setNotificationUserAndReplyEmail(DATA_ADMIN_USER);
-        notificationAdminPage.addManageUsers("org.labkey.nirc_ehr.NIRCDeathNotification", "EHR Administrators");
+        notificationAdminPage.addManageUsers("org.labkey.nirc_ehr.notification.NIRCDeathNotification", "EHR Administrators");
         notificationAdminPage.enableRequestAdminAlerts(notification);
     }
 
@@ -474,8 +474,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClickAndWait(Locator.linkWithText("Active Clinical Observation Orders"));
         DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
-        Assert.assertEquals("Incorrect active clinical observation orders", Arrays.asList("Ears", "Activity", "Appetite", "BCS", "Hydration",
-                "Stool", "Verified Id?"), table.getColumnDataAsText("category"));
+        Assert.assertEquals("Incorrect active clinical observation orders", Arrays.asList("Activity", "Appetite", "BCS", "Hydration",
+                "Stool", "Verified Id?", "Ears"), table.getColumnDataAsText("category"));
 
         log("Verifying Today's Observation Schedule");
         goToEHRFolder();
@@ -658,7 +658,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @Test
     public void testDeathNecropsyForm() throws IOException, CommandException
     {
-        enableNotification("status_org.labkey.nirc_ehr.NIRCDeathNotification");
+        enableNotification("status_org.labkey.nirc_ehr.notification.NIRCDeathNotification");
         createSubjectsForDeathForm();
 
         log("Go to EHR page > Enter Data > Death/Necropsy");
