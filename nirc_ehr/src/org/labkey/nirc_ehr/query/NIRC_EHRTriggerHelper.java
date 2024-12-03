@@ -470,7 +470,16 @@ public class NIRC_EHRTriggerHelper
                 "        border-collapse: collapse;" +
                 "        border: 1px solid #000000;\"";
 
-        String cage = (String) EHRDemographicsService.get().getAnimal(container, id).getActiveHousing().get(0).get("cage/cage");
+        String cage;
+        List<Map<String, Object>> activeHousing = EHRDemographicsService.get().getAnimal(container, id).getActiveHousing();
+        if (null != activeHousing && !activeHousing.isEmpty())
+        {
+            cage = (String) activeHousing.get(0).get("cage/cage");
+        }
+        else
+        {
+            cage = "Not Found";
+        }
 
         html.append("<table style=").append(tableStyle).append(">");
         html.append("<tr><td style=").append(tdFieldStyle).append(">").append("Id").append("</td>").append("<td style=").append(tdValueStyle).append(">").append(PageFlowUtil.filter(id)).append("</td></tr>");
