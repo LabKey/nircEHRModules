@@ -34,12 +34,12 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
                 new NIRCClinicalRemarksFormSection(ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
-                new NIRCProcedureFormSection(),
+                new NIRCWeightFormSection(true, true),
                 new NIRCClinicalObservationsFormSection(false, null),
                 new NIRCObservationOrdersFormSection("NIRC_DAILY_CLINICAL_OBS_ORDERS", false, null),
+                new NIRCProcedureFormSection(),
                 new NIRCTreatmentGivenFormSection(),
                 new NIRCTreatmentOrderFormSection(),
-                new NIRCWeightFormSection(true, true),
                 new NIRCVitalsFormSection(),
                 new NIRCBloodDrawFormSection(true, true, true)
         ));
