@@ -58,22 +58,12 @@ EHR.model.DataModelManager.registerMetadata('BehaviorDefaults', {
             },
         },
         'study.clinical_observations': {
-            category: {
-                lookup: {
-                    filterArray: [LABKEY.Filter.create('category', 'Behavior')]
-                }
-            },
             type: {
                 hidden: true,
                 defaultValue: 'Behavior'
             }
         },
         'study.observation_order': {
-            category: {
-                lookup: {
-                    filterArray: [LABKEY.Filter.create('category', 'Behavior')]
-                }
-            },
             type: {
                 hidden: true,
                 defaultValue: 'Behavior'

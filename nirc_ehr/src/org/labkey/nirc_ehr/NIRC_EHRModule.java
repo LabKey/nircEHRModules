@@ -54,6 +54,8 @@ import org.labkey.nirc_ehr.demographics.HousingDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.NecropsyStatusDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ProtocolAssignmentDemographicsProvider;
 import org.labkey.nirc_ehr.history.*;
+import org.labkey.nirc_ehr.notification.NIRCClinicalMoveNotification;
+import org.labkey.nirc_ehr.notification.NIRCDeathNotification;
 import org.labkey.nirc_ehr.query.NIRC_EHRUserSchema;
 import org.labkey.nirc_ehr.security.NIRCEHRVetTechRole;
 import org.labkey.nirc_ehr.table.NIRC_EHRCustomizer;
@@ -186,6 +188,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());
+        NotificationService.get().registerNotification(new NIRCClinicalMoveNotification());
 
         // Ensure N: is mounted if it's configured, as it's being mapped in via a symlink/shortcut, so we can't
         // recognize paths using it based solely on their drive letter and mount just-in-time
