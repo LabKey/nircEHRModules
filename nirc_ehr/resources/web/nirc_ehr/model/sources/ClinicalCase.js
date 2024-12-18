@@ -36,6 +36,16 @@ EHR.model.DataModelManager.registerMetadata('ClinicalCase', {
                     editable: true
                 }
             },
+            date: {
+                formEditorConfig: {
+                    id: 'openDate',
+                }
+            },
+            enddate: {
+                formEditorConfig: {
+                    id: 'closeDate'
+                }
+            },
             category: {
                 getInitialValue: function (v, rec){
                     return 'Clinical'
