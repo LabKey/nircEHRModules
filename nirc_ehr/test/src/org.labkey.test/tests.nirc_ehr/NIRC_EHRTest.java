@@ -1007,7 +1007,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Incomplete Past Observations"));
         animalHistoryPage = new AnimalHistoryPage<>(getDriver());
-        //Add verification
+        Assert.assertEquals("Incorrect rows in Incomplete Past Observations.", 31, animalHistoryPage.getActiveReportDataRegion().getDataRowCount());
 
         log("Verifying Close case");
         goToEHRFolder();
