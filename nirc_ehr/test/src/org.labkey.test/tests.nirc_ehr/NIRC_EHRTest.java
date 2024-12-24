@@ -925,6 +925,114 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         checker().verifyEquals("Navigated to incorrect query", "ageclass", getUrlParam("query.queryName"));
     }
 
+    @Test
+    public void testBehavioralCases()
+    {
+        String animalId1 = "56789";
+        String animalId2 = "44444";
+
+        log("Adding behavioral case for " + animalId1);
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Behavioral Cases"));
+        _helper.setDataEntryField("remark", "Behavioral case remarks");
+        _helper.getExt4FieldForFormSection("Behavior Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
+        setFormElement(Locator.name("Id"), animalId1);
+
+        log("Adding Observations for " + animalId1);
+        Ext4GridRef observationOrder = _helper.getExt4GridForFormSection("Observation Orders");
+        _helper.addRecordToGrid(observationOrder);
+        observationOrder.setGridCellJS(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
+        observationOrder.setGridCell(1, "category", "Abnormal Behaviors");
+        observationOrder.setGridCell(1, "frequency", "Alternating Days");
+
+        log("Adding Medications/Treatments Orders for " + animalId1);
+        Ext4GridRef treatmentOrder = _helper.getExt4GridForFormSection("Medications/Treatments Orders");
+        _helper.addRecordToGrid(treatmentOrder);
+        treatmentOrder.setGridCellJS(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
+        treatmentOrder.setGridCell(1, "code", "Aluminum Hydroxide");
+        treatmentOrder.setGridCell(1, "frequency", "QID");
+        treatmentOrder.setGridCell(1, "route", "IV");
+        treatmentOrder.setGridCell(1, "orderedby", NIRC_VET_NAME);
+        submitForm("Submit Final", "Finalize");
+
+        log("Adding behavioral case 31 days old for " + animalId2);
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Behavioral Cases"));
+        _helper.setDataEntryField("remark", "Behavioral case remarks ");
+        _helper.getExt4FieldForFormSection("Behavior Case", "Open Date").setValue(LocalDateTime.now().minusDays(31).format(_dateFormat));
+        setFormElement(Locator.name("Id"), animalId2);
+
+        log("Adding Observations for " + animalId2);
+        observationOrder = _helper.getExt4GridForFormSection("Observation Orders");
+        _helper.addRecordToGrid(observationOrder);
+        observationOrder.setGridCellJS(1, "date", LocalDateTime.now().minusDays(31).format(_dateFormat));
+        observationOrder.setGridCell(1, "category", "Abnormal Behaviors");
+        observationOrder.setGridCell(1, "frequency", "SID");
+        submitForm("Submit Final", "Finalize");
+
+        log("Verify reports and schedule");
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Active Behavior Cases"));
+        AnimalHistoryPage animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        DataRegionTable activeCase = animalHistoryPage.getActiveReportDataRegion();
+        Assert.assertEquals("Behavioral case did not get created", 2, activeCase.getDataRowCount());
+
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Active Behavior Medication Orders"));
+        animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        DataRegionTable medicationOrderTable = animalHistoryPage.getActiveReportDataRegion();
+        Assert.assertEquals("Medication order was not created for the behavioral case", 1, medicationOrderTable.getDataRowCount());
+        Assert.assertEquals("Incorrect medication order", Arrays.asList(animalId1, "<Aluminum Hydroxide>", "QID", "IV", NIRC_VET_NAME),
+                medicationOrderTable.getRowDataAsText(0, "Id", "code", "frequency", "route", "orderedby"));
+
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Active Behavior Observation Orders"));
+        new AnimalHistoryPage<>(getDriver());
+        DataRegionTable observationOrderTable = animalHistoryPage.getActiveReportDataRegion();
+        Assert.assertEquals("Observation order was not created for the behavioral case", 2, observationOrderTable.getDataRowCount());
+        observationOrderTable.setFilter("Id", "Equals", animalId1);
+        Assert.assertEquals("Incorrect observation order", Arrays.asList(animalId1, "Abnormal Behaviors", "Alternating Days"),
+                observationOrderTable.getRowDataAsText(0, "Id", "category", "frequency"));
+
+        log("Navigating to Today's Medication/Treatment Schedule");
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Today's Medication/Treatment Schedule"));
+        animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        DataRegionTable medicationSchedule = animalHistoryPage.getActiveReportDataRegion();
+        medicationSchedule.link(0, "treatmentRecord").click();
+        switchToWindow(1);
+        submitForm("Submit Final", "Finalize");
+
+        log("Navigating to Incomplete Past Observations.");
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Incomplete Past Observations"));
+        animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        Assert.assertEquals("Incorrect rows in Incomplete Past Observations.", 31, animalHistoryPage.getActiveReportDataRegion().getDataRowCount());
+
+        log("Verifying Close case");
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Active Behavior Cases"));
+        animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        activeCase = animalHistoryPage.getActiveReportDataRegion();
+        activeCase.setFilter("Id", "Equals", animalId1);
+        activeCase.link(0, "caseCheck").click();
+        switchToWindow(2);
+
+        waitForText(animalId1);
+        waitForTextToDisappear("Id is required");
+        _helper.setDataEntryField("remark", "Closing the case");
+        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
+        _helper.getExt4FieldForFormSection("Behavior Case", "Close Date").setValue(LocalDateTime.now().format(_dateFormat));
+        submitForm("Submit Final", "Finalize");
+
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Active Behavior Cases"));
+        animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        activeCase = animalHistoryPage.getActiveReportDataRegion();
+        Assert.assertEquals("Case was not closed", 1, activeCase.getDataRowCount());
+    }
+
     private int countLines(String filePath) throws Exception
     {
         try (BufferedReader reader = Readers.getReader(new File(filePath)))
