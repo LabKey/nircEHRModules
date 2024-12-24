@@ -916,7 +916,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         clickAndWait(Locator.linkWithText("Manage Lookup Tables"));
 
         EHRLookupPage ehrLookupPage = new EHRLookupPage(this);
-        ehrLookupPage.waitForPage();
         QueryGrid grid = ehrLookupPage.getQueryGrid();
         checker().verifyEquals("Missing look up tables", countLines(TestFileUtils.getLabKeyRoot() + getModulePath() + "/resources/data/editable_lookups.tsv") - 1, grid.getRecordCount());
 
