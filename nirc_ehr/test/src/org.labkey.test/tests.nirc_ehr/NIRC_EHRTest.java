@@ -913,7 +913,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     public void testLookupPage() throws Exception
     {
         goToEHRFolder();
-        clickAndWait(Locator.linkWithText("Manage Lookup Tables"));
+        waitAndClickAndWait(Locator.linkWithText("Manage Lookup Tables"));
 
         EHRLookupPage ehrLookupPage = new EHRLookupPage(this);
         QueryGrid grid = ehrLookupPage.getQueryGrid();
