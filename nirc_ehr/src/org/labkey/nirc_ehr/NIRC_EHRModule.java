@@ -78,13 +78,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
     @Override
     public @Nullable Double getSchemaVersion()
     {
-        return 24.016;
-    }
-
-    @Override
-    public boolean hasScripts()
-    {
-        return true;
+        return 25.000;
     }
 
     @Override
@@ -236,7 +230,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         DefaultSchema.registerProvider(NIRC_EHRSchema.NAME, new DefaultSchema.SchemaProvider(this)
         {
             @Override
-            public @Nullable QuerySchema createSchema(DefaultSchema schema, Module module)
+            public @NotNull QuerySchema createSchema(DefaultSchema schema, Module module)
             {
                 return new NIRC_EHRUserSchema(NIRC_EHRSchema.NAME, null, schema.getUser(), schema.getContainer(), NIRC_EHRSchema.get_instance().getSchema());
             }
