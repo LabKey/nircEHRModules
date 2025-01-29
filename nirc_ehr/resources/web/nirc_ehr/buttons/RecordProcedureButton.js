@@ -1,0 +1,136 @@
+Ext4.namespace('NIRC_EHR.RecordProcedureButton');
+
+Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
+    extend: 'Ext.window.Window',
+
+    initComponent: function() {
+        Ext4.apply(this, {
+            title: 'Record Procedures',
+            modal: true,
+            width: 450,
+            bodyStyle: 'padding: 5px;',
+            closeAction: 'destroy',
+            items: [{
+                xtype: 'labkey-combo',
+                fieldLabel: 'Performed By',
+                width: 350,
+                labelWidth: 100,
+                value: LABKEY.Security.currentUser.id,
+                itemId: 'performedBy',
+                displayField: 'DisplayName',
+                valueField: 'UserId',
+                queryMode: 'local',
+                forceSelection: true,
+                matchFieldWidth: false,
+                store: {
+                    type: 'labkey-store',
+                    schemaName: 'core',
+                    queryName: 'PrincipalsWithoutAdmin',
+                    columns: 'UserId,DisplayName,FirstName,LastName',
+                    sort: 'Type,DisplayName',
+                    autoLoad: true
+                },
+                anyMatch: true,
+                caseSensitive: false,
+            }, {
+                xtype: 'xdatetime',
+                itemId: 'dateField',
+                width: 350,
+                labelWidth: 100,
+                fieldLabel: 'Date',
+                allowBlank: false,
+                name: 'date',
+                value: new Date()
+            },],
+            buttons: [{
+                text:'Submit',
+                scope: this,
+                handler: function (btn) {
+                    this.recordProcedure(btn, this.dataRegion);
+                }
+            },{
+                text: 'Cancel',
+                scope: this,
+                handler: function(btn){
+                    btn.up('window').close();
+                }
+            }]
+        });
+
+        this.callParent(arguments);
+    },
+
+    recordProcedure: function(btn, dataRegion) {
+        let win = btn.up('window');
+        let windDate = win.down('#dateField').getValue();
+        let performedBy = win.down('#performedBy').getValue();
+        const selectedRows = dataRegion.getChecked();
+        dataRegion.clearSelected();
+        const objectIds = selectedRows.map(row => row.split('-pkSeparator-')[0]);
+        LABKEY.Query.selectRows({
+            schemaName: 'study',
+            queryName: 'prc_order',
+            filterArray: [LABKEY.Filter.create('objectid', objectIds.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
+            scope: this,
+            columns: 'Id,objectid,procedure,category,caseid,orderedby',
+            success: function (data) {
+                let rowsToInsert = [];
+                Ext4.each(data.rows, function(row) {
+                    Ext4.each(selectedRows, function(selectedRow) {
+                        if (row.objectid === selectedRow) {
+                            rowsToInsert.push({
+                                Id: row.Id,
+                                procedure: row.procedure,
+                                orderid: row.objectid,
+                                date: windDate,
+                                performedby: performedBy,
+                                objectid: LABKEY.Utils.generateUUID(),
+                                orderedby: row.orderedby,
+                                category: row.category,
+                                caseid: row.caseid
+                            });
+                        }
+                    });
+                });
+
+                LABKEY.Query.insertRows({
+                    schemaName: 'study',
+                    queryName: 'prc',
+                    rows: rowsToInsert,
+                    scope: this,
+                    success: function() {
+                        Ext4.Msg.alert('Success', 'Procedures recorded successfully.', function(){
+                            window.location = LABKEY.ActionURL.buildURL('ehr', 'animalHistory') + '#inputType:none&showReport:0&activeReport:prcSchedule';
+                            window.location.reload();
+                        });
+                        win.close();
+                    },
+                    failure: function(error) {
+                        Ext4.Msg.alert('Error', 'An error occurred while recording procedures.');
+                        console.error(error);
+                    }
+                });
+            },
+            failure: function(error) {
+                Ext4.Msg.alert('Error', 'An error occurred querying procedures.');
+                console.error(error);
+            }
+        });
+    }
+
+});
+
+NIRC_EHR.RecordProcedureButton = new function () {
+    return {
+        recordProceduresHandler: function(dataRegion) {
+            if (dataRegion && dataRegion.getChecked().length > 0) {
+                Ext4.create('NIRC_EHR.window.RecordProcedureWindow', {
+                    dataRegion: dataRegion
+                }).show();
+            }
+            else {
+                Ext4.Msg.alert('Error', 'Please select at least one procedure.');
+            }
+        },
+    }
+}

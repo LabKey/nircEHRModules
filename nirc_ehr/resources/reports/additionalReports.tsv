@@ -25,6 +25,7 @@ bloodSchedule
 cases	Clinical	query	Active Clinical Cases	true		study	cases	Active Clinical Cases		date	false	false		qcstate/publicdata	This displays active clinical cases
 clinCases	Clinical	query	All Clinical Cases	true		study	Cases	All Clinical Cases		date	false	false		qcstate/publicdata	This report contains one record for each clinical case
 clinMedicationSchedule	Daily Reports	js	Medication Schedule	true		study	clinMedicationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+prcSchedule	Daily Reports	query	Procedure Schedule	true		study	prcSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's procedures to be administered
 dietSchedule
 drug															
 incompleteTreatments	Daily Reports	js	Incomplete Treatments	true		study	incompleteTreatments			date	false	false		qcstate/publicdata	This report contains a list of incomplete treatments for the previous 30 days

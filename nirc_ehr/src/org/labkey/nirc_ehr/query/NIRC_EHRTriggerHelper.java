@@ -19,6 +19,7 @@ import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
 import org.labkey.api.ehr.EHRDemographicsService;
+import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
@@ -854,5 +855,27 @@ public class NIRC_EHRTriggerHelper
 
         _cachedDrugFormulary.put(drugCode, drugFormulary);
         return drugFormulary;
+    }
+
+    public void markProcedureOrderComplete(List<String> orderids)
+    {
+        TableInfo ti = getTableInfo("study", "prc_order");
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (String orderid : orderids)
+        {
+            Map<String, Object> r = new HashMap<>();
+            r.put("objectid", orderid);
+            r.put("qcstate", EHRService.get().getQCStates(_container).get("Completed").getRowId());
+            rows.add(r);
+        }
+
+        try
+        {
+            ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+        }
+        catch (Exception e)
+        {
+            _log.error("Error marking procedure order complete", e);
+        }
     }
 }

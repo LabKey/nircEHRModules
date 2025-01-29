@@ -22,7 +22,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
             const obsTask = LABKEY.ActionURL.getParameter('obsTask');
             const id = LABKEY.ActionURL.getParameter('id');
             const observations = LABKEY.ActionURL.getParameter('observations');
-            // const orderIds = LABKEY.ActionURL.getParameter('orderIds');
+            const prcOrderId = LABKEY.ActionURL.getParameter('prcOrderId');
 
             if (treatmentid) {
 
@@ -57,7 +57,8 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                         vol_units: row.vol_units.value,
                         performedby: row.performedby.value,
                         orderedby: row.orderedby.value,
-                        treatmentid: row.objectid.value
+                        treatmentid: row.objectid.value,
+                        caseid: row.caseid.value
                     };
 
                     if (scheduledDate) {
@@ -137,6 +138,52 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                     success: onObsSuccess,
                     failure: LDK.Utils.getErrorCallback()
                 });
+            }
+
+            if (prcOrderId) {
+
+                this.addEvents('animalchange');
+                this.enableBubble('animalchange');
+
+                function onSuccess(results) {
+                    if (results.rows.length === 0) {
+                        console.error('No procedure order found for procedure id ' + prcOrderId);
+                        return;
+                    }
+
+                    const prcGrid = this.up('ehr-dataentrypanel').query('grid').find(e => e.title === "Procedures");
+                    if (!prcGrid) {
+                        console.error('Procedures grid not found');
+                        return;
+                    }
+
+                    const row = results.rows[0];
+                    const record = {
+                        Id: row.Id.value,
+                        category: row.category.value,
+                        procedure: row.procedure.value,
+                        caseid: row.caseid.value,
+                        orderedby: row.orderedby.value,
+                        orderid: row.objectid.value
+                    };
+
+                    prcGrid.store.add(record);
+
+                    this.fireEvent('animalchange', row.Id.value);
+                    prcGrid.fireEvent('panelDataChange');
+                }
+
+                LABKEY.Query.selectRows({
+                    requiredVersion: 9.1,
+                    schemaName: 'study',
+                    queryName: 'prc_order',
+                    columns: 'Id,procedure,remark,category,objectid,orderedby,caseid',
+                    filterArray: [LABKEY.Filter.create('objectid', prcOrderId, LABKEY.Filter.Types.EQUAL)],
+                    scope: this,
+                    success: onSuccess,
+                    failure: LDK.Utils.getErrorCallback()
+                });
+
             }
 
         }

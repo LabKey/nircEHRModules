@@ -116,6 +116,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 customizeTreatmentOrder(ti);
             }
 
+            if (matches(ti, "study", "prc_order"))
+            {
+                customizeProcedureOrder(ti);
+            }
+
             if (matches(table, "study", "clinical_observations") || matches(ti, "study", "observation_order"))
             {
                 customizeClinicalObservations((AbstractTableInfo) table);
@@ -703,6 +708,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.activeAfterMidnightTonight);
         }
+        if (matches(ti, "study", "prc_order"))
+        {
+            EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.activeAfterMidnightTonight);
+        }
     }
 
     public void doSharedCustomization(AbstractTableInfo ti)
@@ -1077,6 +1086,79 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             super.addQueryFieldKeys(keys);
                             keys.add(getBoundColumn().getFieldKey());
                             keys.add(FieldKey.fromString("date"));
+                            keys.add(FieldKey.fromString("caseid"));
+                        }
+
+                        @Override
+                        public boolean isSortable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isFilterable()
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isEditable()
+                        {
+                            return false;
+                        }
+                    };
+                }
+            });
+            ti.addColumn(col);
+        }
+    }
+
+    private void customizeProcedureOrder(AbstractTableInfo ti)
+    {
+        if (ti.getColumn("procedureRecord") == null && ti.getColumn("objectid") != null)
+        {
+            WrappedColumn col = new WrappedColumn(ti.getColumn("objectid"), "procedureRecord");
+            col.setLabel("Record Procedure");
+            col.setDisplayColumnFactory(new DisplayColumnFactory() {
+
+                @Override
+                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                {
+                    return new DataColumn(colInfo){
+
+                        @Override
+                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        {
+                            String objectid = (String)getBoundColumn().getValue(ctx);
+                            String caseid = (String)ctx.get("caseid");
+                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
+                                return;
+
+                            if (caseid != null)
+                            {
+                                linkAction.addParameter("formType", "Clinical Rounds");
+                                linkAction.addParameter("caseid", caseid);
+                            }
+                            else
+                            {
+                                linkAction.addParameter("formType", "Bulk Clinical Entry");
+                            }
+
+                            linkAction.addParameter("prcOrderId", objectid);
+
+                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:prcSchedule";
+                            linkAction.addParameter("returnUrl", returnUrl);
+
+                            String href = linkAction.toString();
+                            out.write(PageFlowUtil.link("Record Procedure").href(href).target("_blank").toString());
+                        }
+
+                        @Override
+                        public void addQueryFieldKeys(Set<FieldKey> keys)
+                        {
+                            super.addQueryFieldKeys(keys);
+                            keys.add(getBoundColumn().getFieldKey());
                             keys.add(FieldKey.fromString("caseid"));
                         }
 

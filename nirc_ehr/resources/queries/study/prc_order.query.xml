@@ -1,10 +1,18 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="prc" tableDbType="TABLE" useColumnOrder="true">
+            <table tableName="prc_order" tableDbType="TABLE" useColumnOrder="true">
                 <columns>
                     <column columnName="Id" />
                     <column columnName="date" />
+                    <column columnName="windowStart">
+                        <columnTitle>Window Start</columnTitle>
+                        <nullable>false</nullable>
+                    </column>
+                    <column columnName="windowEnd">
+                        <columnTitle>Window End</columnTitle>
+                        <nullable>false</nullable>
+                    </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
@@ -22,14 +30,6 @@
                             <fkTable>procedures</fkTable>
                             <fkColumnName>rowid</fkColumnName>
                             <fkDisplayColumnName>name</fkDisplayColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="orderid">
-                        <columnTitle>Order Id</columnTitle>
-                        <fk>
-                            <fkDbSchema>study</fkDbSchema>
-                            <fkTable>prc_order</fkTable>
-                            <fkColumnName>objectid</fkColumnName>
                         </fk>
                     </column>
                 </columns>

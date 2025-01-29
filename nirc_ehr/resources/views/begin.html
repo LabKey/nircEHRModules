@@ -182,7 +182,17 @@
                             {name: 'Active Clinical Observation Orders', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:activeClinicalObservationOrders'},
                             {name: 'Active Behavior Observation Orders', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:activeBehaviorObservationOrders'},
                         ]
-                    }
+                    },
+                    {
+                        header: 'Procedures',
+                        itemDefaults: {
+                            linkCls: 'none',
+                            style: 'font-weight: bold;'
+                        },
+                        items: [
+                            {name: 'Today\'s Procedure Schedule', url: '<%=contextPath%>' + ctx['EHRStudyContainer'] + '/ehr-animalHistory.view#inputType:none&showReport:1&activeReport:prcSchedule'},
+                        ]
+                    },
                 ]
             });
 
