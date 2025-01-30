@@ -1,0 +1,22 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="Id"/>
+        <column name="Id/Demographics/species"/>
+        <column name="Id/curLocation/room"/>
+        <column name="Id/curLocation/cage"/>
+        <column name="date"/>
+        <column name="procedure"/>
+        <column name="windowStart"/>
+        <column name="windowEnd"/>
+        <column name="remark"/>
+        <column name="status"/>
+    </columns>
+    <filters>
+        <filter column="Id/Demographics/calculated_status" operator="eq" value="Alive"/>
+    </filters>
+    <sorts>
+        <sort column="status" descending="false"/>
+        <sort column="Id/curLocation/room"/>
+        <sort column="Id/curLocation/cage"/>
+    </sorts>
+</customView>

@@ -1,8 +1,8 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="prc_order" tableDbType="TABLE" useColumnOrder="true">
-                <tableTitle>Procedure Orders</tableTitle>
+            <table tableName="prc_order_report" tableDbType="TABLE" useColumnOrder="true">
+                <tableTitle>Procedure Order Report</tableTitle>
                 <insertUrl />
                 <importUrl />
                 <updateUrl />

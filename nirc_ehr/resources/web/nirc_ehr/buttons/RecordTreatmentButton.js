@@ -74,7 +74,7 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
             scope: this,
             columns: 'Id,objectid,code,reason,route,amount,amount_units,concentration,volume,vol_units,conc_units,dosage,dosage_units,orderedby,category,caseid',
             success: function (data) {
-                let rowsToInsert = [];
+                const rowsToInsert = [];
                 Ext4.each(data.rows, function(row) {
                     let scheduledDate;
                     Ext4.each(selectedRows, function(selectedRow) {

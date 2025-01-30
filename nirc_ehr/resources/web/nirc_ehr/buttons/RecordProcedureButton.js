@@ -66,15 +66,14 @@ Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
         let performedBy = win.down('#performedBy').getValue();
         const selectedRows = dataRegion.getChecked();
         dataRegion.clearSelected();
-        const objectIds = selectedRows.map(row => row.split('-pkSeparator-')[0]);
         LABKEY.Query.selectRows({
             schemaName: 'study',
             queryName: 'prc_order',
-            filterArray: [LABKEY.Filter.create('objectid', objectIds.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
+            filterArray: [LABKEY.Filter.create('objectid', selectedRows.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
             scope: this,
             columns: 'Id,objectid,procedure,category,caseid,orderedby',
             success: function (data) {
-                let rowsToInsert = [];
+                const rowsToInsert = [];
                 Ext4.each(data.rows, function(row) {
                     Ext4.each(selectedRows, function(selectedRow) {
                         if (row.objectid === selectedRow) {
