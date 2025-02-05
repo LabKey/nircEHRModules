@@ -857,6 +857,28 @@ public class NIRC_EHRTriggerHelper
         return drugFormulary;
     }
 
+    public boolean isTreatmentOrderEntered(String treatmentid, String date)
+    {
+        TableInfo ti = getTableInfo("study", "drug");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("treatmentid"), treatmentid);
+        filter.addCondition(FieldKey.fromString("scheduledDate"), date, CompareType.DATE_EQUAL);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("objectid"), filter, null);
+
+        return ts.exists();
+    }
+
+    public boolean isProcedureOrderEntered(String orderid)
+    {
+        TableInfo ti = getTableInfo("study", "prc_order");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("objectid"), orderid);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("qcstate"), filter, null);
+        Integer qcstate = ts.getArrayList(Integer.class).get(0);
+        if (EHRService.get().getQCStates(_container).get("Completed").getRowId() == qcstate)
+            return true;
+
+        return false;
+    }
+
     public void markProcedureOrderComplete(List<String> orderids)
     {
         TableInfo ti = getTableInfo("study", "prc_order");

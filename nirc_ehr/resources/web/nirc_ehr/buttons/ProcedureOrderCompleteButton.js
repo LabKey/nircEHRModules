@@ -13,7 +13,7 @@ Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
             items: [{
                 xtype: 'panel',
                 border: false,
-                html: '<p style="padding: 10px; border: 0px;">Marking procedure orders as completed only updates the orders. Ensure the procedure records are entered separately.</p>',
+                html: '<p style="padding: 10px; border: 0px;">This will mark the procedure order(s) completed without entering a procedure. Ensure the procedure has been entered separately if it should be recorded.</p>',
             }],
             buttons: [{
                 text:'Submit',
@@ -93,7 +93,7 @@ NIRC_EHR.ProcedureOrderCompleteButton = new function () {
                 }).show();
             }
             else {
-                Ext4.Msg.alert('Error', 'Please select at least one procedure.');
+                Ext4.Msg.alert('Error', 'Please select at least one procedure order.');
             }
         },
     }

@@ -43,22 +43,21 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
 
                     const row = results.rows[0];
                     const record = {
-                        Id: row.Id.value,
-                        category: row.category.value,
-                        code: row.code.value,
-                        route: row.route.value,
-                        concentration: row.concentration.value,
-                        conc_units: row.conc_units.value,
-                        amount: row.amount.value,
-                        amount_units: row.amount_units.value,
-                        dosage: row.dosage.value,
-                        dosage_units: row.dosage_units.value,
-                        volume: row.volume.value,
-                        vol_units: row.vol_units.value,
-                        performedby: row.performedby.value,
-                        orderedby: row.orderedby.value,
-                        treatmentid: row.objectid.value,
-                        caseid: row.caseid.value
+                        Id: row.Id?.value,
+                        category: row.category?.value,
+                        code: row.code?.value,
+                        route: row.route?.value,
+                        concentration: row.concentration?.value,
+                        conc_units: row.conc_units?.value,
+                        amount: row.amount?.value,
+                        amount_units: row.amount_units?.value,
+                        dosage: row.dosage?.value,
+                        dosage_units: row.dosage_units?.value,
+                        volume: row.volume?.value,
+                        vol_units: row.vol_units?.value,
+                        orderedby: row.orderedby?.value,
+                        treatmentid: row.objectid?.value,
+                        caseid: row.caseid?.value
                     };
 
                     if (scheduledDate) {
@@ -67,7 +66,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
 
                     drugGrid.store.add(record);
 
-                    this.fireEvent('animalchange', row.Id.value);
+                    this.fireEvent('animalchange', row.Id?.value);
                     drugGrid.fireEvent('panelDataChange');
                 }
 
@@ -75,7 +74,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                     requiredVersion: 9.1,
                     schemaName: 'study',
                     queryName: 'treatment_order',
-                    columns: 'Id,meaning,code,qualifier,route,concentration,conc_units,amount,amount_units,dosage,dosage_units,volume,vol_units,remark,category,performedby,objectid,orderedby',
+                    columns: 'Id,meaning,code,qualifier,route,concentration,conc_units,amount,amount_units,dosage,dosage_units,volume,vol_units,remark,category,objectid,orderedby',
                     filterArray: [LABKEY.Filter.create('objectid', treatmentid, LABKEY.Filter.Types.EQUAL)],
                     scope: this,
                     success: onSuccess,
@@ -106,11 +105,11 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
 
                         if (!categories.includes(row.category.value)) {
                             let record = {
-                                Id: row.Id.value,
-                                category: row.category.value,
-                                area: row.area.value,
-                                orderId: row.objectid.value,
-                                caseid: row.caseid.value
+                                Id: row.Id?.value,
+                                category: row.category?.value,
+                                area: row.area?.value,
+                                orderId: row.objectid?.value,
+                                caseid: row.caseid?.value
                             };
 
                             if (scheduledDate) {
@@ -118,7 +117,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                             }
 
                             obsGrid.store.add(record);
-                            categories.push(row.category.value);
+                            categories.push(row.category?.value);
                         }
                     }
 
@@ -159,12 +158,12 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
 
                     const row = results.rows[0];
                     const record = {
-                        Id: row.Id.value,
-                        category: row.category.value,
-                        procedure: row.procedure.value,
-                        caseid: row.caseid.value,
-                        orderedby: row.orderedby.value,
-                        orderid: row.objectid.value
+                        Id: row.Id?.value,
+                        category: row.category?.value,
+                        procedure: row.procedure?.value,
+                        caseid: row.caseid?.value,
+                        orderedby: row.orderedby?.value,
+                        orderid: row.objectid?.value
                     };
 
                     prcGrid.store.add(record);

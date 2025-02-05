@@ -5,7 +5,7 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
 
     initComponent: function() {
         Ext4.apply(this, {
-            title: 'Record Treatments',
+            title: 'Bulk Record Treatments',
             modal: true,
             width: 450,
             bodyStyle: 'padding: 5px;',
@@ -123,13 +123,13 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                         win.close();
                     },
                     failure: function(error) {
-                        Ext4.Msg.alert('Error', 'An error occurred while recording treatments.');
+                        Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred while recording treatments.');
                         console.error(error);
                     }
                 });
             },
             failure: function(error) {
-                Ext4.Msg.alert('Error', 'An error occurred querying treatments.');
+                Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred querying treatments.');
                 console.error(error);
             }
         });
