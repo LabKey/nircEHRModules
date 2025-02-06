@@ -2,6 +2,7 @@ Ext4.namespace('NIRC_EHR.ProcedureOrderCompleteButton');
 
 Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
     extend: 'Ext.window.Window',
+    returnLocation: null,
 
     initComponent: function() {
         Ext4.apply(this, {
@@ -36,8 +37,7 @@ Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
     recordProcedure: function(btn, dataRegion) {
         let win = btn.up('window');
         const selectedRows = dataRegion.getChecked();
-        dataRegion.clearSelected();
-        const rowsToInsert = [];
+        var me = this;
 
         LABKEY.Query.selectRows({
             schemaName: 'core',
@@ -51,7 +51,7 @@ Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
                 if (completedRowId) {
                     for (const row of selectedRows) {
                         rowsToInsert.push({
-                            lsid: row,
+                            objectid: row,
                             qcstate: completedRowId
                         });
                     }
@@ -64,19 +64,20 @@ Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
                     scope: this,
                     success: function() {
                         Ext4.Msg.alert('Success', 'Procedure order(s) marked completed.', function(){
-                            window.location = LABKEY.ActionURL.buildURL('ehr', 'animalHistory') + '#inputType:none&showReport:0&activeReport:prcOrders';
+                            dataRegion.clearSelected();
+                            window.location = me.returnLocation;
                             window.location.reload();
                         });
                         win.close();
                     },
                     failure: function(error) {
-                        Ext4.Msg.alert('Error', 'An error occurred while recording procedure orders.');
+                        Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred while recording procedure orders.');
                         console.error(error);
                     }
                 });
             },
             failure: function(error) {
-                Ext4.Msg.alert('Error', 'An error occurred querying qcstates.');
+                Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred querying qcstates.');
                 console.error(error);
             }
         });
@@ -89,7 +90,8 @@ NIRC_EHR.ProcedureOrderCompleteButton = new function () {
         procedureOrderCompleteHandler: function(dataRegion) {
             if (dataRegion && dataRegion.getChecked().length > 0) {
                 Ext4.create('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
-                    dataRegion: dataRegion
+                    dataRegion: dataRegion,
+                    returnLocation: window.location.href
                 }).show();
             }
             else {

@@ -2,6 +2,7 @@ Ext4.namespace('NIRC_EHR.RecordProcedureButton');
 
 Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
     extend: 'Ext.window.Window',
+    returnLocation: null,
 
     initComponent: function() {
         Ext4.apply(this, {
@@ -65,7 +66,8 @@ Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
         let windDate = win.down('#dateField').getValue();
         let performedBy = win.down('#performedBy').getValue();
         const selectedRows = dataRegion.getChecked();
-        dataRegion.clearSelected();
+        var me = this;
+
         LABKEY.Query.selectRows({
             schemaName: 'study',
             queryName: 'prc_order',
@@ -99,7 +101,8 @@ Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
                     scope: this,
                     success: function() {
                         Ext4.Msg.alert('Success', 'Procedures recorded successfully.', function(){
-                            window.location = LABKEY.ActionURL.buildURL('ehr', 'animalHistory') + '#inputType:none&showReport:0&activeReport:prcSchedule';
+                            dataRegion.clearSelected();
+                            window.location = me.returnLocation;
                             window.location.reload();
                         });
                         win.close();
@@ -124,7 +127,8 @@ NIRC_EHR.RecordProcedureButton = new function () {
         recordProceduresHandler: function(dataRegion) {
             if (dataRegion && dataRegion.getChecked().length > 0) {
                 Ext4.create('NIRC_EHR.window.RecordProcedureWindow', {
-                    dataRegion: dataRegion
+                    dataRegion: dataRegion,
+                    returnLocation: window.location.href
                 }).show();
             }
             else {

@@ -125,7 +125,7 @@
                         <originalText>Print</originalText>
                     </item>
                     <item text="More Actions" insertPosition="end" >
-                        <item text="Record Procedures">
+                        <item text="Bulk Record Procedures">
                             <onClick>
                                 NIRC_EHR.RecordProcedureButton.recordProceduresHandler(dataRegion);
                             </onClick>
