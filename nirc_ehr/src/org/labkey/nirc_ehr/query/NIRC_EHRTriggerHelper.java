@@ -62,8 +62,6 @@ public class NIRC_EHRTriggerHelper
     private Container _container = null;
     private User _user = null;
     private static final Logger _log = LogManager.getLogger(NIRC_EHRTriggerHelper.class);
-    private Integer _nextProjectId = null;
-    private Integer _nextProtocolId = null;
     private Map<String,Object> _cachedDrugFormulary = new HashMap<>();
 
     private SimpleDateFormat _dateFormat;
@@ -861,7 +859,7 @@ public class NIRC_EHRTriggerHelper
     {
         TableInfo ti = getTableInfo("study", "drug");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("treatmentid"), treatmentid);
-        filter.addCondition(FieldKey.fromString("scheduledDate"), date, CompareType.DATE_EQUAL);
+        filter.addCondition(FieldKey.fromString("scheduledDate"), ConvertHelper.convert(date, Date.class), CompareType.EQUAL);
         TableSelector ts = new TableSelector(ti, PageFlowUtil.set("objectid"), filter, null);
 
         return ts.exists();
