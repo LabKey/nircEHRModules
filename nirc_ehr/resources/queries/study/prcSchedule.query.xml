@@ -3,7 +3,6 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="prcSchedule" tableDbType="NOT_IN_DB">
                 <tableTitle>Procedure Schedule</tableTitle>
-<!--                <tableUrl>/EHR/treatmentDetails.view?key=${lsid}</tableUrl>-->
                 <pkColumnName>objectid</pkColumnName>
                 <columns>
                     <column columnName="objectid">
