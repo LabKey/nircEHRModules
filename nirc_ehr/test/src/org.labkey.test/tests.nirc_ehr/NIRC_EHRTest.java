@@ -929,10 +929,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     {
         String animalId1 = "56789";
         String animalId2 = "44444";
+        String drug1 = "Aluminum Hydroxide";
 
         log("Adding behavioral case for " + animalId1);
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Behavioral Cases"));
+        waitForText("The field: Id is required");
         _helper.setDataEntryField("remark", "Behavioral case remarks");
         _helper.getExt4FieldForFormSection("Behavior Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         setFormElement(Locator.name("Id"), animalId1);
@@ -948,7 +950,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Ext4GridRef treatmentOrder = _helper.getExt4GridForFormSection("Medications/Treatments Orders");
         _helper.addRecordToGrid(treatmentOrder);
         treatmentOrder.setGridCellJS(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
-        treatmentOrder.setGridCell(1, "code", "Aluminum Hydroxide");
+
+        treatmentOrder.clickDownArrowOnGrid(1, "code");
+        Locator drugLoc = Locator.tag("ul").append(Locator.tagContainingText("li", drug1));
+        shortWait().until(ExpectedConditions.visibilityOfElementLocated(drugLoc));
+        drugLoc.findElement(getDriver()).click();
+        treatmentOrder.completeEdit();
+
         treatmentOrder.setGridCell(1, "frequency", "QID");
         treatmentOrder.setGridCell(1, "route", "IV");
         treatmentOrder.setGridCell(1, "orderedby", NIRC_VET_NAME);
@@ -957,6 +965,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Adding behavioral case 31 days old for " + animalId2);
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Behavioral Cases"));
+        waitForText("The field: Id is required");
         _helper.setDataEntryField("remark", "Behavioral case remarks ");
         _helper.getExt4FieldForFormSection("Behavior Case", "Open Date").setValue(LocalDateTime.now().minusDays(31).format(_dateFormat));
         setFormElement(Locator.name("Id"), animalId2);
@@ -981,7 +990,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable medicationOrderTable = animalHistoryPage.getActiveReportDataRegion();
         Assert.assertEquals("Medication order was not created for the behavioral case", 1, medicationOrderTable.getDataRowCount());
-        Assert.assertEquals("Incorrect medication order", Arrays.asList(animalId1, "<Aluminum Hydroxide>", "QID", "IV", NIRC_VET_NAME),
+        Assert.assertEquals("Incorrect medication order", Arrays.asList(animalId1, drug1, "QID", "IV", NIRC_VET_NAME),
                 medicationOrderTable.getRowDataAsText(0, "Id", "code", "frequency", "route", "orderedby"));
 
         goToEHRFolder();
@@ -998,6 +1007,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClickAndWait(Locator.linkWithText("Today's Medication/Treatment Schedule"));
         animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable medicationSchedule = animalHistoryPage.getActiveReportDataRegion();
+        medicationSchedule.setFilter("code", "Equals", drug1);
+
         medicationSchedule.link(0, "treatmentRecord").click();
         switchToWindow(1);
         submitForm("Submit Final", "Finalize");
