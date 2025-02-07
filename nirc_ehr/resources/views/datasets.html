@@ -6,11 +6,9 @@ Ext4.onReady(function () {
 
     const config = {displayField: 'Label', headerField: 'categoryId/label', target: webpart.wrapperDivId};
 
-    const nonFormUpdates = [];
+    const nonFormUpdates = ["Cases", "Procedures", "Drug Administration"];
 
-    const hideUpdateRecords = [
-        "Cases", "Procedures", "Drug Administration"
-    ];
+    const hideUpdateRecords = [];
 
     EHR.Security.init({
         success: function(){
