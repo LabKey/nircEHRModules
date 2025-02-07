@@ -1,20 +1,13 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="treatmentSchedule" tableDbType="NOT_IN_DB">
-                <tableTitle>Treatment Schedule</tableTitle>
-                <tableUrl>/EHR/treatmentDetails.view?key=${lsid}</tableUrl>
-                <pkColumnName>primaryKey</pkColumnName>
+            <table tableName="prcOverdue" tableDbType="NOT_IN_DB">
+                <tableTitle>Overdue Procedures</tableTitle>
+                <pkColumnName>objectid</pkColumnName>
                 <columns>
-                    <column columnName="lsid">
-                        <isHidden>true</isHidden>
-                    </column>
-                    <column columnName="primaryKey">
-                        <isHidden>true</isHidden>
-                        <isKeyField>true</isKeyField>
-                    </column>
                     <column columnName="objectid">
                         <isHidden>true</isHidden>
+                        <isKeyField>true</isKeyField>
                     </column>
                     <column columnName="Id">
                         <fk>
@@ -23,44 +16,19 @@
                             <fkColumnName>Id</fkColumnName>
                         </fk>
                     </column>
-                    <column columnName="StartDate">
-                        <columnTitle>Treatment Start Date</columnTitle>
-                        <formatString>DateTime</formatString>
-                    </column>
-                    <column columnName="code">
-                        <nullable>false</nullable>
-                        <columnTitle>Treatment</columnTitle>
-                        <fk>
-                            <fkDbSchema>ehr_lookups</fkDbSchema>
-                            <fkTable>snomed</fkTable>
-                            <fkColumnName>code</fkColumnName>
-                        </fk>
-                    </column>
-                    <column columnName="treatmentid" />
-                    <column columnName="frequency">
-                        <isHidden>true</isHidden>
-                        <fk>
-                          <fkDbSchema>ehr_lookups</fkDbSchema>
-                          <fkTable>treatment_frequency</fkTable>
-                          <fkColumnName>rowid</fkColumnName>
-                        </fk>
-                    </column>
                     <column columnName="remark">
                         <displayWidth>250</displayWidth>
                     </column>
                     <column columnName="CurrentRoom">
                         <displayWidth>40</displayWidth>
                         <fk>
-                          <fkDbSchema>ehr_lookups</fkDbSchema>
-                          <fkTable>rooms</fkTable>
-                          <fkColumnName>Room</fkColumnName>
+                            <fkDbSchema>ehr_lookups</fkDbSchema>
+                            <fkTable>rooms</fkTable>
+                            <fkColumnName>Room</fkColumnName>
                         </fk>
                     </column>
                     <column columnName="Cage">
                         <displayWidth>40</displayWidth>
-                    </column>
-                    <column columnName="dataset">
-                        <isHidden>true</isHidden>
                     </column>
                     <column columnName="qcstate">
                         <isHidden>true</isHidden>
@@ -70,19 +38,10 @@
                             <fkColumnName>rowid</fkColumnName>
                         </fk>
                     </column>
-                    <column columnName="conc2">
-                        <columnTitle>Concentration</columnTitle>
-                    </column>
-                    <column columnName="amount2">
-                        <columnTitle>Amount</columnTitle>
-                    </column>
-                    <column columnName="volume2">
-                        <columnTitle>Volume</columnTitle>
-                    </column>
-                    <column columnName="treatmentStatus">
+                    <column columnName="status">
                         <isHidden>false</isHidden>
                         <shownInDetailsView>true</shownInDetailsView>
-                        <columnTitle>Treatment Status</columnTitle>
+                        <columnTitle>Procedure Status</columnTitle>
                         <displayWidth>150</displayWidth>
                         <conditionalFormats>
                             <conditionalFormat>
@@ -136,7 +95,7 @@
                         </conditionalFormats>
                     </column>
                     <column columnName="taskid">
-                        <isHidden>false</isHidden>
+                        <isHidden>true</isHidden>
                         <columnTitle>Task Id</columnTitle>
                         <fk>
                             <fkDbSchema>ehr</fkDbSchema>
@@ -149,7 +108,8 @@
                 <buttonBarOptions position="both" includeStandardButtons="false">
                     <includeScript>ehr.context</includeScript>
                     <includeScript>/ehr/studyButtons.js</includeScript>
-                    <includeScript>nirc_ehr/buttons/RecordTreatmentButton.js</includeScript>
+                    <includeScript>nirc_ehr/buttons/RecordProcedureButton.js</includeScript>
+                    <includeScript>nirc_ehr/buttons/ProcedureOrderCompleteButton.js</includeScript>
                     <onRender>EHR.DatasetButtons.moreActionsHandler</onRender>
                     <item text="Grid Views">
                         <originalText>Grid Views</originalText>
@@ -164,9 +124,14 @@
                         <originalText>Print</originalText>
                     </item>
                     <item text="More Actions" insertPosition="end" >
-                        <item text="Bulk Record Treatments">
+                        <item text="Bulk Record Procedures">
                             <onClick>
-                                NIRC_EHR.RecordTreatmentButton.recordTreatmentsHandler(dataRegion);
+                                NIRC_EHR.RecordProcedureButton.recordProceduresHandler(dataRegion);
+                            </onClick>
+                        </item>
+                        <item text="Mark Procedure Order Complete">
+                            <onClick>
+                                NIRC_EHR.ProcedureOrderCompleteButton.procedureOrderCompleteHandler(dataRegion);
                             </onClick>
                         </item>
                         <item text="Jump To History">

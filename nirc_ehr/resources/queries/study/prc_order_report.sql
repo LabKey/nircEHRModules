@@ -1,0 +1,1 @@
+SELECT *, CASE WHEN qcstate.label = 'Completed' THEN 'Completed' ELSE '' END as status FROM study.prc_order

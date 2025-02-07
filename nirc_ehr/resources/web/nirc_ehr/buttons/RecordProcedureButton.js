@@ -1,12 +1,12 @@
-Ext4.namespace('NIRC_EHR.RecordTreatmentButton');
+Ext4.namespace('NIRC_EHR.RecordProcedureButton');
 
-Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
+Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
     extend: 'Ext.window.Window',
     returnLocation: null,
 
     initComponent: function() {
         Ext4.apply(this, {
-            title: 'Bulk Record Treatments',
+            title: 'Record Procedures',
             modal: true,
             width: 450,
             bodyStyle: 'padding: 5px;',
@@ -47,7 +47,7 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                 text:'Submit',
                 scope: this,
                 handler: function (btn) {
-                    this.recordTreatment(btn, this.dataRegion);
+                    this.recordProcedure(btn, this.dataRegion);
                 }
             },{
                 text: 'Cancel',
@@ -61,52 +61,34 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
         this.callParent(arguments);
     },
 
-    recordTreatment: function(btn, dataRegion) {
+    recordProcedure: function(btn, dataRegion) {
         let win = btn.up('window');
         let windDate = win.down('#dateField').getValue();
         let performedBy = win.down('#performedBy').getValue();
         const selectedRows = dataRegion.getChecked();
-        const objectIds = selectedRows.map(row => row.split('-pkSeparator-')[0]);
         var me = this;
 
         LABKEY.Query.selectRows({
             schemaName: 'study',
-            queryName: 'treatment_order',
-            filterArray: [LABKEY.Filter.create('objectid', objectIds.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
+            queryName: 'prc_order',
+            filterArray: [LABKEY.Filter.create('objectid', selectedRows.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
             scope: this,
-            columns: 'Id,objectid,code,reason,route,amount,amount_units,concentration,volume,vol_units,conc_units,dosage,dosage_units,orderedby,category,caseid',
+            columns: 'Id,objectid,procedure,category,caseid,orderedby',
             success: function (data) {
                 const rowsToInsert = [];
                 Ext4.each(data.rows, function(row) {
-                    let scheduledDate;
                     Ext4.each(selectedRows, function(selectedRow) {
-                        const parts = selectedRow.split('-pkSeparator-');
-                        const objectId = parts[0];
-                        const date = parts[1];
-                        if (row.objectid === objectId) {
-                            scheduledDate = date;
+                        if (row.objectid === selectedRow) {
                             rowsToInsert.push({
                                 Id: row.Id,
-                                treatmentid: row.objectid,
+                                procedure: row.procedure,
+                                orderid: row.objectid,
                                 date: windDate,
                                 performedby: performedBy,
                                 objectid: LABKEY.Utils.generateUUID(),
-                                scheduledDate: scheduledDate,
-                                code: row.code,
-                                reason: row.reason,
-                                route: row.route,
-                                amount: row.amount,
-                                amount_units: row.amount_units,
-                                concentration: row.concentration,
-                                conc_units: row.conc_units,
-                                dosage: row.dosage,
-                                dosage_units: row.dosage_units,
-                                volume: row.volume,
-                                vol_units: row.vol_units,
                                 orderedby: row.orderedby,
                                 category: row.category,
-                                caseid: row.caseid,
-                                outcome: 'Normal'
+                                caseid: row.caseid
                             });
                         }
                     });
@@ -114,11 +96,11 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
 
                 LABKEY.Query.insertRows({
                     schemaName: 'study',
-                    queryName: 'drug',
+                    queryName: 'prc',
                     rows: rowsToInsert,
                     scope: this,
                     success: function() {
-                        Ext4.Msg.alert('Success', 'Treatments recorded successfully.', function(){
+                        Ext4.Msg.alert('Success', 'Procedures recorded successfully.', function(){
                             dataRegion.clearSelected();
                             window.location = me.returnLocation;
                             window.location.reload();
@@ -126,13 +108,13 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                         win.close();
                     },
                     failure: function(error) {
-                        Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred while recording treatments.');
+                        Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred while recording procedures.');
                         console.error(error);
                     }
                 });
             },
             failure: function(error) {
-                Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred querying treatments.');
+                Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred querying procedures.');
                 console.error(error);
             }
         });
@@ -140,17 +122,17 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
 
 });
 
-NIRC_EHR.RecordTreatmentButton = new function () {
+NIRC_EHR.RecordProcedureButton = new function () {
     return {
-        recordTreatmentsHandler: function(dataRegion) {
+        recordProceduresHandler: function(dataRegion) {
             if (dataRegion && dataRegion.getChecked().length > 0) {
-                Ext4.create('NIRC_EHR.window.RecordTreatmentWindow', {
+                Ext4.create('NIRC_EHR.window.RecordProcedureWindow', {
                     dataRegion: dataRegion,
                     returnLocation: window.location.href
                 }).show();
             }
             else {
-                Ext4.Msg.alert('Error', 'Please select at least one treatment.');
+                Ext4.Msg.alert('Error', 'Please select at least one procedure.');
             }
         },
     }

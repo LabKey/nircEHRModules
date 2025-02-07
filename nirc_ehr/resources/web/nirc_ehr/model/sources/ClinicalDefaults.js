@@ -17,6 +17,47 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                 allowBlank: true,
             }
         },
+        'study.prc_order': {
+            category: {
+                defaultValue: 'Clinical',
+                hidden: true
+            },
+            performedby: {
+                hidden: true
+            },
+            windowStart: {
+                columnConfig: {
+                    fixed: true,
+                    width: 150
+                },
+                getInitialValue: function(v, rec){
+                    if (v)
+                        return v;
+
+                    return new Date();
+                }
+            },
+            windowEnd: {
+                columnConfig: {
+                    fixed: true,
+                    width: 150
+                },
+                getInitialValue: function(v, rec){
+                    if (v)
+                        return v;
+
+                    let ret = Ext4.Date.clearTime(new Date());
+                    ret = Ext4.Date.add(ret, Ext4.Date.DAY, 1);
+                    ret.setHours(8);
+                    return ret;
+                }
+            },
+            procedure: {
+                columnConfig: {
+                    width: 250
+                }
+            }
+        },
         'study.drug': {
             category: {
                 defaultValue: 'Clinical',
@@ -45,6 +86,9 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                 columnConfig: {
                     width: 250
                 }
+            },
+            orderid: {
+                hidden: true
             }
         },
         'study.clinremarks': {
