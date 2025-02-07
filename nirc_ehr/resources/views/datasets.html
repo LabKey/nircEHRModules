@@ -1,12 +1,16 @@
 <script type="text/javascript" nonce="<%=scriptNonce%>">
 
 Ext4.onReady(function () {
-    var webpart = <%=webpartContext%>;
+    const webpart = <%=webpartContext%>;
     Ext4.get(webpart.wrapperDivId).update('Loading...');
 
-    var config = {displayField: 'Label', headerField: 'categoryId/label', target: webpart.wrapperDivId};
+    const config = {displayField: 'Label', headerField: 'categoryId/label', target: webpart.wrapperDivId};
 
-    var nonFormUpdates = [];
+    const nonFormUpdates = [];
+
+    const hideUpdateRecords = [
+        "Cases", "Procedures", "Drug Administration"
+    ];
 
     EHR.Security.init({
         success: function(){
@@ -63,7 +67,7 @@ Ext4.onReady(function () {
                 if (nonFormUpdates.indexOf(item.queryName) !== -1)
                     params.queryUpdateURL = true;
 
-                if(EHR.Security.hasPermission('Completed', 'update', {schemaName: 'study', queryName: item.queryName})){
+                if(EHR.Security.hasPermission('Completed', 'update', {schemaName: 'study', queryName: item.queryName}) && hideUpdateRecords.indexOf(item.queryName) === -1){
                     cfg.items.push({
                         xtype: 'ldk-linkbutton',
                         tooltip: item.searchTooltip || 'Click to update records',

@@ -124,6 +124,46 @@
                         <columnTitle>Parent ID</columnTitle>
                     </column>
                 </columns>
+                <buttonBarOptions position="both" includeStandardButtons="false">
+                    <includeScript>ehr.context</includeScript>
+                    <includeScript>/ehr/studyButtons.js</includeScript>
+                    <includeScript>/nirc_ehr/MarkTreatmentCompletedButton.js</includeScript>
+                    <onRender>EHR.DatasetButtons.moreActionsHandler</onRender>
+                    <item text="Grid Views">
+                        <originalText>Grid Views</originalText>
+                    </item>
+                    <item text="Charts">
+                        <originalText>Charts</originalText>
+                    </item>
+                    <item text="Export">
+                        <originalText>Export</originalText>
+                    </item>
+                    <item text="Print">
+                        <originalText>Print</originalText>
+                    </item>
+                    <item text="More Actions" insertPosition="end" >
+                        <item text="Jump To History">
+                            <onClick>
+                                EHR.DatasetButtons.historyHandler(dataRegion, dataRegionName);
+                            </onClick>
+                        </item>
+                        <item text="Return Distinct Values">
+                            <onClick>
+                                EHR.window.GetDistinctWindow.getDistinctHandler(dataRegionName);
+                            </onClick>
+                        </item>
+                        <item text="Show Record History">
+                            <onClick>
+                                EHR.DatasetButtons.showAuditHistoryHandler(dataRegionName);
+                            </onClick>
+                        </item>
+                        <item text="Set End Date">
+                            <onClick>
+                                NIRC_EHR.window.MarkTreatmentCompletedWindow.buttonHandler(dataRegionName, 'study', 'treatment_order', 'datefield', 'lsid');
+                            </onClick>
+                        </item>
+                    </item>
+                </buttonBarOptions>
             </table>
         </tables>
     </metadata>

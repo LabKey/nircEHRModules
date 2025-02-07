@@ -43,7 +43,6 @@ import org.labkey.api.security.roles.RoleManager;
 import org.labkey.api.util.NetworkDrive;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.api.view.template.ClientDependency;
-import org.labkey.nirc_ehr.buttons.MarkTreatmentCompletedButton;
 import org.labkey.nirc_ehr.dataentry.form.*;
 import org.labkey.nirc_ehr.demographics.ActiveAssignmentsDemographicsProvider;
 import org.labkey.nirc_ehr.demographics.ActiveCasesDemographicsProvider;
@@ -178,7 +177,6 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerMoreActionsButton(new ShowEditUIButton(this, "ehr", "observation_types", EHRDataAdminPermission.class), "ehr", "observation_types");
 
         EHRService.get().unregisterMoreActionsButtons("study", "treatment_order");
-        EHRService.get().registerMoreActionsButton(new MarkTreatmentCompletedButton(this, "study", "treatment_order", "Set End Date"), "study", "treatment_order");
         EHRService.get().registerMoreActionsButton(new MarkCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
 
         registerDataEntry();
