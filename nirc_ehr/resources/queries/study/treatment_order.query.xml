@@ -127,7 +127,7 @@
                 <buttonBarOptions position="both" includeStandardButtons="false">
                     <includeScript>ehr.context</includeScript>
                     <includeScript>/ehr/studyButtons.js</includeScript>
-                    <includeScript>/nirc_ehr/MarkTreatmentCompletedButton.js</includeScript>
+                    <includeScript>/nirc_ehr/window/MarkTreatmentCompletedWindow.js</includeScript>
                     <onRender>EHR.DatasetButtons.moreActionsHandler</onRender>
                     <item text="Grid Views">
                         <originalText>Grid Views</originalText>
