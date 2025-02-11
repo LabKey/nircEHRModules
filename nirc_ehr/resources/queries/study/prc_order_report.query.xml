@@ -1,10 +1,23 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="prc" tableDbType="TABLE" useColumnOrder="true">
+            <table tableName="prc_order_report" tableDbType="TABLE" useColumnOrder="true">
+                <tableTitle>Procedure Order Report</tableTitle>
+                <insertUrl />
+                <importUrl />
+                <updateUrl />
+                <deleteUrl />
                 <columns>
                     <column columnName="Id" />
                     <column columnName="date" />
+                    <column columnName="windowStart">
+                        <columnTitle>Window Start</columnTitle>
+                        <nullable>false</nullable>
+                    </column>
+                    <column columnName="windowEnd">
+                        <columnTitle>Window End</columnTitle>
+                        <nullable>false</nullable>
+                    </column>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                         <fk>
@@ -24,18 +37,11 @@
                             <fkDisplayColumnName>name</fkDisplayColumnName>
                         </fk>
                     </column>
-                    <column columnName="orderid">
-                        <columnTitle>Order Id</columnTitle>
-                        <fk>
-                            <fkDbSchema>study</fkDbSchema>
-                            <fkTable>prc_order</fkTable>
-                            <fkColumnName>objectid</fkColumnName>
-                        </fk>
-                    </column>
                 </columns>
                 <buttonBarOptions position="both" includeStandardButtons="false">
                     <includeScript>ehr.context</includeScript>
                     <includeScript>/ehr/studyButtons.js</includeScript>
+                    <includeScript>nirc_ehr/buttons/ProcedureOrderCompleteButton.js</includeScript>
                     <onRender>EHR.DatasetButtons.moreActionsHandler</onRender>
                     <item text="Grid Views">
                         <originalText>Grid Views</originalText>
@@ -50,6 +56,11 @@
                         <originalText>Print</originalText>
                     </item>
                     <item text="More Actions" insertPosition="end" >
+                        <item text="Mark Procedure Order Complete">
+                            <onClick>
+                                NIRC_EHR.ProcedureOrderCompleteButton.procedureOrderCompleteHandler(dataRegion);
+                            </onClick>
+                        </item>
                         <item text="Jump To History">
                             <onClick>
                                 EHR.DatasetButtons.historyHandler(dataRegion, dataRegionName);

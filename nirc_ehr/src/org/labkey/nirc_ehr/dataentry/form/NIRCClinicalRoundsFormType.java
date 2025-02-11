@@ -15,6 +15,7 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection
 import org.labkey.nirc_ehr.dataentry.section.NIRCHousingFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureFormSection;
+import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureOrderFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
@@ -40,6 +41,7 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
                 new NIRCClinicalObservationsFormSection(true, "cases"),
                 new NIRCObservationOrdersFormSection(null, true, "cases"),
                 new NIRCProcedureFormSection(true, "cases"),
+                new NIRCProcedureOrderFormSection(true, "cases"),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
                 new NIRCTreatmentOrderFormSection(true,
                         "cases"),
