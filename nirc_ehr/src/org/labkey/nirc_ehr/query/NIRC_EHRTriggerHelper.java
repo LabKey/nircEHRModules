@@ -19,6 +19,7 @@ import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
 import org.labkey.api.ehr.EHRDemographicsService;
+import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.query.BatchValidationException;
@@ -61,8 +62,6 @@ public class NIRC_EHRTriggerHelper
     private Container _container = null;
     private User _user = null;
     private static final Logger _log = LogManager.getLogger(NIRC_EHRTriggerHelper.class);
-    private Integer _nextProjectId = null;
-    private Integer _nextProtocolId = null;
     private Map<String,Object> _cachedDrugFormulary = new HashMap<>();
 
     private SimpleDateFormat _dateFormat;
@@ -854,5 +853,49 @@ public class NIRC_EHRTriggerHelper
 
         _cachedDrugFormulary.put(drugCode, drugFormulary);
         return drugFormulary;
+    }
+
+    public boolean isTreatmentOrderEntered(String treatmentid, String date)
+    {
+        TableInfo ti = getTableInfo("study", "drug");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("treatmentid"), treatmentid);
+        filter.addCondition(FieldKey.fromString("scheduledDate"), ConvertHelper.convert(date, Date.class), CompareType.EQUAL);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("objectid"), filter, null);
+
+        return ts.exists();
+    }
+
+    public boolean isProcedureOrderEntered(String orderid)
+    {
+        TableInfo ti = getTableInfo("study", "prc_order");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("objectid"), orderid);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("qcstate"), filter, null);
+        Integer qcstate = ts.getArrayList(Integer.class).get(0);
+        if (EHRService.get().getQCStates(_container).get("Completed").getRowId() == qcstate)
+            return true;
+
+        return false;
+    }
+
+    public void markProcedureOrderComplete(List<String> orderids)
+    {
+        TableInfo ti = getTableInfo("study", "prc_order");
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (String orderid : orderids)
+        {
+            Map<String, Object> r = new HashMap<>();
+            r.put("objectid", orderid);
+            r.put("qcstate", EHRService.get().getQCStates(_container).get("Completed").getRowId());
+            rows.add(r);
+        }
+
+        try
+        {
+            ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+        }
+        catch (Exception e)
+        {
+            _log.error("Error marking procedure order complete", e);
+        }
     }
 }

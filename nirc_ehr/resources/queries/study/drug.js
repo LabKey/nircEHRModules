@@ -3,6 +3,12 @@ require("ehr/triggers").initScript(this);
 
 let triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 
+EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_INSERT, 'study', 'drug', function(helper, scriptErrors, row, oldRow) {
+    if(row.treatmentid && row.scheduledDate && triggerHelper.isTreatmentOrderEntered(row.treatmentid, row.scheduledDate)) {
+        EHR.Server.Utils.addError(scriptErrors, 'scheduledDate', 'A treatment has already been entered for this order for this date and time.', 'ERROR');
+    }
+});
+
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'drug', function(helper, scriptErrors, row, oldRow) {
     // Max reasonable amount warning. Error when the amount is greater than the max reasonable amount
     if (row.code) {

@@ -13,7 +13,7 @@ activeBehaviorTreatmentOrders	Behavior	query	Active Behavior Medication Orders	t
 allTreatments	Clinical	query	All Treatment Orders	true		study	treatment_order				false	false		qcstate/publicdata	This report shows all treatment orders
 behTreatments	Behavior	query	All Behavior Medication Orders	true		study	treatment_order	behavior			false	false		qcstate/publicdata	This report shows all treatment orders
 FileRepository	General	js	File Repository	true		study	FileRepository				false	false		qcstate/publicdata	File Repository for uploading and viewing animal related files
-observationSchedule	Daily Reports	js	Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+observationSchedule	Daily Reports	js	Today's Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeClinicalObservationOrders	Clinical	query	Active Clinical Observation Orders	true		study	observation_order	Active Clinical Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeBehaviorObservationOrders	Behavior	query	Active Behavior Observation Orders	true		study	observation_order	Active Behavior Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 observationOrders	Clinical	query	Observation Orders	true		study	observation_order			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
@@ -24,7 +24,10 @@ behaviorRemarks
 bloodSchedule															
 cases	Clinical	query	Active Clinical Cases	true		study	cases	Active Clinical Cases		date	false	false		qcstate/publicdata	This displays active clinical cases
 clinCases	Clinical	query	All Clinical Cases	true		study	Cases	All Clinical Cases		date	false	false		qcstate/publicdata	This report contains one record for each clinical case
-clinMedicationSchedule	Daily Reports	js	Medication Schedule	true		study	clinMedicationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+prcOrders	Clinical	query	Procedure Orders	true		study	prc_order_report			date	false	false		qcstate/publicdata	This report contains one record for each procedure order
+prcOverdue	Daily Reports	query	Overdue Procedures	true		study	prcOverdue			date	false	false		qcstate/publicdata	This report contains one record for each overdue procedure
+clinMedicationSchedule	Daily Reports	js	Today's Medication Schedule	true		study	clinMedicationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
+prcSchedule	Daily Reports	query	Today's Procedure Schedule	true		study	prcSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's procedures to be administered
 dietSchedule
 drug															
 incompleteTreatments	Daily Reports	js	Incomplete Treatments	true		study	incompleteTreatments			date	false	false		qcstate/publicdata	This report contains a list of incomplete treatments for the previous 30 days

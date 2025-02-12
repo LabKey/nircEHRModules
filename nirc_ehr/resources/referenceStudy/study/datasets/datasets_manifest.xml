@@ -32,6 +32,7 @@
         <dataset name="physicalExam" id="1029" category="Clinical" type="Standard"/>
         <dataset name="problem" id="1030" category="Clinical" type="Standard"/>
         <dataset name="prc" id="1034" category="Clinical" type="Standard"/>
+        <dataset name="prc_order" id="1041" category="Clinical" type="Standard"/>
         <dataset name="protocolAssignment" id="1031" category="Colony Management" type="Standard"/>
         <dataset name="serology" id="1032" category="ClinPath" type="Standard"/>
         <dataset name="pregnancy" id="1035" category="Reproductive Management" type="Standard"/>
