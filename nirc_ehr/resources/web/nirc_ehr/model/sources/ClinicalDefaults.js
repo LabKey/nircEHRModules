@@ -53,6 +53,9 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
                 }
             },
             procedure: {
+                lookup: {
+                    filterArray: [LABKEY.Filter.create('active', true, LABKEY.Filter.Types.EQUAL)]
+                },
                 columnConfig: {
                     width: 250
                 }
@@ -61,15 +64,6 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
         'study.drug': {
             category: {
                 defaultValue: 'Clinical',
-                hidden: true
-            },
-            scheduledDate: {
-                columnConfig: {
-                    width: 130,
-                    fixed: true
-                },
-            },
-            treatmentId: {
                 hidden: true
             },
             date: {
@@ -83,6 +77,9 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             },
             // procedure data is not categorized, so not using procedure_category based selection
             procedure: {
+                lookup: {
+                    filterArray: [LABKEY.Filter.create('active', true, LABKEY.Filter.Types.EQUAL)]
+                },
                 columnConfig: {
                     width: 250
                 }

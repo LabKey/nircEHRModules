@@ -57,6 +57,7 @@ EHR.model.DataModelManager.registerMetadata('BehavioralCase', {
                 }
             },
             problemCategory: {
+                nullable: false,
                 editorConfig: {
                     listeners: {
                         select: function (field, recs) {

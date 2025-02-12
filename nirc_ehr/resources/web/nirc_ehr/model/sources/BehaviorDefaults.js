@@ -73,15 +73,6 @@ EHR.model.DataModelManager.registerMetadata('BehaviorDefaults', {
             category: {
                 defaultValue: 'Behavior',
                 hidden: true
-            },
-            scheduledDate: {
-                columnConfig: {
-                    width: 130,
-                    fixed: true
-                },
-            },
-            treatmentId: {
-                hidden: true
             }
         },
         'study.treatment_order': {
