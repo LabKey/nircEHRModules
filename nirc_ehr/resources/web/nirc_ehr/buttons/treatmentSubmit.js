@@ -9,11 +9,83 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
     disabled: true,
     itemId: 'submitBtn',
     handler: function(btn){
-        var panel = btn.up('ehr-dataentrypanel');
-        Ext4.Msg.confirm('Finalize Form', 'You are about to finalize this form.  Do you want to do this?', function(v){
-            if(v == 'yes')
-                this.onSubmit(btn);
-        }, this);
+
+        const panel = btn.up('ehr-dataentrypanel');
+        const casesStore = panel?.storeCollection?.getClientStoreByName('cases');
+        if (casesStore) {
+            const rec = casesStore.getAt(0);
+            const caseid = casesStore.getAt(0).get('caseid');
+            if (!caseid) { // only check for new cases
+                const id = rec.get('Id');
+                const problemCategory = rec.get('problemCategory');
+                const category = rec.get('category');
+                if (id && problemCategory && category) {
+                    const filters = [
+                        LABKEY.Filter.create('Id', id),
+                        LABKEY.Filter.create('category', category),
+                        LABKEY.Filter.create('problemCategory', problemCategory),
+                        LABKEY.Filter.create('isActive', true),
+                        LABKEY.Filter.create('QCState/Label', "Completed", LABKEY.Filter.Types.EQUAL)
+                    ]
+                    const caseid = rec.get('caseid');
+                    if (caseid) {
+                        filters.push(LABKEY.Filter.create('caseid', caseid, LABKEY.Filter.Types.NEQ))
+                    }
+                    LABKEY.Query.selectRows({
+                        schemaName: 'study',
+                        queryName: 'cases',
+                        filterArray: filters,
+                        columns: 'problemSubcategory',
+                        scope: this,
+                        failure: LDK.Utils.getErrorCallback(),
+                        success: function (results) {
+                            if (results.rows.length > 0) {
+                                const subcategories = [];
+                                for (let i = 0; i < results.rows.length; i++) {
+                                    subcategories.push(results.rows[i].problemSubcategory);
+                                }
+                                let msg;
+                                if (subcategories.length === 1) {
+                                    msg = 'This animal already has a case with the problem ' + problemCategory + '. The subcategory is ' + results.rows[0].problemSubcategory + '. Do you still want to submit this case?';
+                                }
+                                else {
+                                    msg = 'This animal already has ' + subcategories.length + ' cases with the problem ' + problemCategory + '. The subcategories are ' + subcategories.join(', ') + '. Do you still want to submit this case?';
+                                }
+
+                                Ext4.Msg.confirm('Similar Case Exists', msg, function (v) {
+                                    if (v == 'yes')
+                                        this.onSubmit(btn);
+                                }, this);
+                            }
+                            else {
+                                Ext4.Msg.confirm('Finalize Form', 'You are about to finalize this form.  Do you want to do this?', function (v) {
+                                    if (v == 'yes')
+                                        this.onSubmit(btn);
+                                }, this);
+                            }
+                        }
+                    });
+                }
+                else {
+                    Ext4.Msg.confirm('Finalize Form', 'You are about to finalize this form.  Do you want to do this?', function (v) {
+                        if (v == 'yes')
+                            this.onSubmit(btn);
+                    }, this);
+                }
+            }
+            else {
+                Ext4.Msg.confirm('Finalize Form', 'You are about to finalize this form.  Do you want to do this?', function (v) {
+                    if (v == 'yes')
+                        this.onSubmit(btn);
+                }, this);
+            }
+        }
+        else {
+            Ext4.Msg.confirm('Finalize Form', 'You are about to finalize this form.  Do you want to do this?', function (v) {
+                if (v == 'yes')
+                    this.onSubmit(btn);
+            }, this);
+        }
     },
     listeners: {
         afterRender: function(btn){

@@ -36,8 +36,8 @@ Ext4.define('NIRC_EHR.form.field.SelectCaseButton', {
             if (taskid) {
                 let record = EHR.DataEntryUtils.getBoundRecord(this.up('panel'));
                 if (!record || !record.get('Id')) {
-                    let clinRemarksPanel = this.up('#upperPanel')?.query('ehr-formpanel')?.find(panel => panel.formConfig.name === 'clinremarks');
-                    let caseid = clinRemarksPanel?.store?.data?.get(0)?.get('caseid');
+                    let tasksPanel = this.up('#upperPanel')?.query('ehr-formpanel')?.find(panel => panel.formConfig.name === 'tasks');
+                    let caseid = tasksPanel?.store?.data?.get(0)?.get('caseid');
                     if (caseid) {
                         this.handleCaseSelect(caseid, false);
                     }
