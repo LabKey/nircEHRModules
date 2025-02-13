@@ -16,12 +16,12 @@ function onInit(event, helper) {
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'cases', function(helper, errors, row, oldRow){
     if (!helper.isETL()) {
         if (row.enddate) {
-            if(!triggerHelper.canCloseCase(row.category)) {
-                EHR.Server.Utils.addError(errors, 'enddate', 'Veterinarian permission required to close a case.', 'ERROR');
-            }
-
             if (!row.closeRemark) {
                 EHR.Server.Utils.addError(errors, 'closeRemark', 'Close remark required when closing a case.', 'ERROR');
+            }
+
+            if(!triggerHelper.canCloseCase(row.category)) {
+                EHR.Server.Utils.addError(errors, 'enddate', 'Veterinarian permission required to close a case.', 'ERROR');
             }
         }
 
