@@ -11,7 +11,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
     handler: function(btn){
 
         const panel = btn.up('ehr-dataentrypanel');
-        const casesStore = panel.storeCollection.getClientStoreByName('cases');
+        const casesStore = panel?.storeCollection?.getClientStoreByName('cases');
         if (casesStore) {
             const rec = casesStore.getAt(0);
             const caseid = casesStore.getAt(0).get('caseid');
