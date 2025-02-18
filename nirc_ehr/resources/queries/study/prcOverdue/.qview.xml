@@ -7,8 +7,10 @@
         <column name="Id/curLocation/cage"/>
         <column name="date"/>
         <column name="procedure"/>
+        <column name="orderedby"/>
         <column name="windowStart"/>
         <column name="windowEnd"/>
+        <column name="daysOverdue"/>
         <column name="remark"/>
         <column name="status"/>
     </columns>
@@ -16,6 +18,7 @@
         <filter column="Id/Demographics/calculated_status" operator="eq" value="Alive"/>
     </filters>
     <sorts>
+        <sort column="daysOverdue" descending="true"/>
         <sort column="status" descending="false"/>
         <sort column="Id/curLocation/room"/>
         <sort column="Id/curLocation/cage"/>

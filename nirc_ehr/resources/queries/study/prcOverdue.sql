@@ -4,6 +4,7 @@ SELECT
     po.procedure,
     po.windowStart,
     po.windowEnd,
+    timestampdiff('SQL_TSI_DAY', po.windowEnd, now()) as daysOverdue,
     po.orderedby,
     po.remark,
     po.objectid,
