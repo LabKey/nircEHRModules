@@ -2,7 +2,6 @@ package org.labkey.nirc_ehr.notification;
 
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.Container;
-import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
 import org.labkey.api.ehr.notification.AbstractEHRNotification;
