@@ -61,6 +61,8 @@ public class NIRCCasesFormPanelSection extends ParentFormPanelSection
             keys.remove(FieldKey.fromString("closeRemark"));
         }
 
+        keys.add(FieldKey.fromString("qcstate/label"));
+
         return keys;
     }
 }

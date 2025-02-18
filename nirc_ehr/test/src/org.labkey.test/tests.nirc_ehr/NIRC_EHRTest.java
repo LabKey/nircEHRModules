@@ -456,6 +456,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClickAndWait(Locator.linkWithText("Clinical Cases"));
 
         //Fill out Clinical Case section with Id, Date, Open Remark
+        Ext4FieldRef problem = _helper.getExt4FieldForFormSection("Clinical Case", "Problem Area");
+        problem.clickTrigger();
+        problem.setValue("General abnormality");
         _helper.setDataEntryField("openRemark", "Clinical Case WorkFlow - Test");
         _helper.setDataEntryField("plan", "Case plan - Test");
         _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
@@ -534,6 +537,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
         _helper.getExt4FieldForFormSection("Clinical Case", "Close Date").setValue(LocalDateTime.now().format(_dateFormat));
+        _helper.setDataEntryField("closeRemark", "Case closed.");
+
         submitForm("Submit Final", "Finalize");
 
         goToEHRFolder();
@@ -799,6 +804,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClickAndWait(Locator.linkWithText("Clinical Cases"));
 
         //Fill out Clinical Case section with Id, Date, Open Remark
+        Ext4FieldRef problem = _helper.getExt4FieldForFormSection("Clinical Case", "Problem Area");
+        problem.clickTrigger();
+        problem.setValue("Circulatory abnormality");
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
         setFormElement(Locator.textarea("plan"), "Case plan");
         setFormElement(Locator.name("Id"), animalId);
@@ -876,6 +884,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
             Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click(); //click again
         enddateField.setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
 
+        // Verify close remark required
+        waitForText("Close remark required when closing a case.");
+        _helper.setDataEntryField("closeRemark", "Case closed.");
+
         //'Submit Final'
         submitForm("Submit Final", "Finalize Form");
 
@@ -935,6 +947,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Behavioral Cases"));
         waitForText("The field: Id is required");
+        Ext4FieldRef problem = _helper.getExt4FieldForFormSection("Behavior Case", "Problem Area");
+        problem.clickTrigger();
+        problem.setValue("Behavioral");
+        _helper.setDataEntryField("problemCategory", "Behavioral");
         _helper.setDataEntryField("remark", "Behavioral case remarks");
         _helper.getExt4FieldForFormSection("Behavior Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         setFormElement(Locator.name("Id"), animalId1);
@@ -966,6 +982,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Behavioral Cases"));
         waitForText("The field: Id is required");
+
+        // Set case problem
+        problem = _helper.getExt4FieldForFormSection("Behavior Case", "Problem Area");
+        problem.clickTrigger();
+        problem.setValue("Behavioral");
+
         _helper.setDataEntryField("remark", "Behavioral case remarks ");
         _helper.getExt4FieldForFormSection("Behavior Case", "Open Date").setValue(LocalDateTime.now().minusDays(31).format(_dateFormat));
         setFormElement(Locator.name("Id"), animalId2);
@@ -1033,7 +1055,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         _helper.setDataEntryField("remark", "Closing the case");
         waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
+
+        // Verify close remark required
         _helper.getExt4FieldForFormSection("Behavior Case", "Close Date").setValue(LocalDateTime.now().format(_dateFormat));
+        waitForText("Close remark required when closing a case.");
+        _helper.setDataEntryField("closeRemark", "Case closed.");
+
         submitForm("Submit Final", "Finalize");
 
         goToEHRFolder();

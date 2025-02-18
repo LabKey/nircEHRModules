@@ -13,12 +13,9 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCCaseTemplateFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCasesFormPanelSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCHousingFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCProcedureOrderFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCVitalsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 
@@ -39,12 +36,8 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
                 new NIRCCasesFormPanelSection("Clinical Case", ctx, false),
                 new NIRCWeightFormSection(true, false, true, "cases"),
                 new NIRCClinicalObservationsFormSection(true, "cases"),
-                new NIRCObservationOrdersFormSection(null, true, "cases"),
                 new NIRCProcedureFormSection(true, "cases"),
-                new NIRCProcedureOrderFormSection(true, "cases"),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
-                new NIRCTreatmentOrderFormSection(true,
-                        "cases"),
                 new NIRCVitalsFormSection(true, "cases"),
                 new NIRCBloodDrawFormSection(true, "cases"),
                 new NIRCHousingFormSection(true, true, true, "cases")
