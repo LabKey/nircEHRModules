@@ -12,10 +12,8 @@ import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCaseTemplateFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCCasesFormPanelSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCClinicalObservationsFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCObservationOrdersFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentGivenFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCTreatmentOrderFormSection;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,9 +32,7 @@ public class NIRCBehaviorRoundsFormType extends NIRCBaseTaskFormType
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
                 new NIRCCasesFormPanelSection("Behavior Case", ctx, true),
                 new NIRCClinicalObservationsFormSection(true, "cases"),
-                new NIRCObservationOrdersFormSection(null, true, "cases"),
-                new NIRCTreatmentGivenFormSection(true, "cases"),
-                new NIRCTreatmentOrderFormSection(true, "cases")
+                new NIRCTreatmentGivenFormSection(true, "cases")
         ));
 
         setTemplateMode(AbstractFormSection.TEMPLATE_MODE.NO_ID);
