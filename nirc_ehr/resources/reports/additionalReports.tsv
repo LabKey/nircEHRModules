@@ -8,6 +8,7 @@ foster	Reproductive Management	query	Fostering	TRUE		study	foster				FALSE	FALSE
 projects	Colony Management	query	Project Assignment	TRUE		study	assignment				FALSE	FALSE		qcstate/publicdata	This is for project assignments
 chemistry	Clinical	query	Chemistry	TRUE		study	chemistryResults				FALSE	FALSE		qcstate/publicdata	This is for chemistry results
 alias	Colony Management	query	Aliases	true		study	demographicsAliases				false	false		qcstate/publicdata	This report shows the animal aliases
+notes	Colony Management	query	Notes	true		study	notes				false	false		qcstate/publicdata	This report shows the animal notes
 activeClinTreatmentOrders	Clinical	query	Active Clinical Medication Orders	true		study	treatment_order	Clinical Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
 activeBehaviorTreatmentOrders	Behavior	query	Active Behavior Medication Orders	true		study	treatment_order	Behavior Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
 allTreatments	Clinical	query	All Treatment Orders	true		study	treatment_order				false	false		qcstate/publicdata	This report shows all treatment orders
