@@ -6,6 +6,7 @@ SELECT
     po.windowEnd,
     po.orderedby,
     po.remark,
+    po.caseid,
     po.objectid,
     CASE WHEN po.qcstate.label = 'Completed' THEN 'Completed' ELSE '' END as status
 FROM prc_order po
