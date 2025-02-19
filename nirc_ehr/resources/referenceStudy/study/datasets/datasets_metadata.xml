@@ -1459,7 +1459,7 @@
                 <datatype>integer</datatype>
             </column>
             <column columnName="frequency">
-                <datatype>integer</datatype>
+                <datatype>varchar</datatype>
             </column>
             <column columnName="type">
                 <datatype>varchar</datatype>
