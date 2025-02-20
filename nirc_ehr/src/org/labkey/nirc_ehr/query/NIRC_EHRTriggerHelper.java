@@ -678,16 +678,11 @@ public class NIRC_EHRTriggerHelper
 
     public void ensureDailyClinicalObservationOrders(String id, String caseid, final Date date, String performedby, String qcstate, String taskid, List<Map<String, Object>> ordersInTransaction) throws SQLException
     {
-        TableInfo freqTi = getTableInfo("ehr_lookups", "treatment_frequency");
-        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("meaning"), "SID");
-        TableSelector ts = new TableSelector(freqTi, PageFlowUtil.set("rowid"), filter, null);
-        Integer sidRowid = ts.getObject(Integer.class);
-
         TableInfo ti = getTableInfo("study", "observation_order");
-        filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
         filter.addCondition(FieldKey.fromString("caseid"), caseid);
-        filter.addCondition(FieldKey.fromParts("frequency"), sidRowid);
-        ts = new TableSelector(ti, PageFlowUtil.set("category","frequency"), filter, null);
+        filter.addCondition(FieldKey.fromParts("frequency"), "SID");
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("category","frequency"), filter, null);
 
         List<String> missing = new ArrayList<>(NIRC_EHRManager.DAILY_CLINICAL_OBS);
         ts.forEach(row -> {
@@ -696,7 +691,7 @@ public class NIRC_EHRTriggerHelper
         });
 
         ordersInTransaction.forEach(row -> {
-            if (row.get("category") != null && row.get("frequency") != null && row.get("frequency").equals(sidRowid))
+            if (row.get("category") != null && row.get("frequency") != null && row.get("frequency").equals("SID"))
                 missing.remove((String)row.get("category"));
         });
 
@@ -722,7 +717,7 @@ public class NIRC_EHRTriggerHelper
                 {
                     Map<String, Object> row = new CaseInsensitiveHashMap<>();
                     row.put("category", category);
-                    row.put("frequency", sidRowid);
+                    row.put("frequency", "SID");
                     row.put("caseid", caseid);
                     row.put("date", obsDate);
                     row.put("Id", id);

@@ -48,7 +48,7 @@
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>treatment_frequency</fkTable>
-                            <fkColumnName>rowid</fkColumnName>
+                            <fkColumnName>meaning</fkColumnName>
                             <filters>
                                 <filterGroup>
                                     <filter column="active" operator="eq" value="true"/> <!-- filter applied only during insert and update, will not be used during grid view -->

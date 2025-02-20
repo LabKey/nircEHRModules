@@ -9,8 +9,6 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCBirthFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCBirthInstructionsFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCProjectAssignmentFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCProtocolAssignmentFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 
 import java.util.ArrayList;
@@ -48,5 +46,14 @@ public class NIRCBirthFormType extends BirthFormType
         defaultButtons.add("BIRTHARRIVALFINAL");
 
         return defaultButtons;
+    }
+
+    @Override
+    protected List<String> getMoreActionButtonConfigs()
+    {
+        List<String> configs = super.getMoreActionButtonConfigs();
+        configs.remove("REVIEW");
+        configs.remove("DISCARD");
+        return configs;
     }
 }
