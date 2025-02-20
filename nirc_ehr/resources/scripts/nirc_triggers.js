@@ -21,7 +21,7 @@ exports.init = function (EHR) {
         EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('study', 'cases', EHR.Server.TriggerManager.Events.AFTER_DELETE);
 
         helper.setScriptOptions({
-            datasetsToClose: ['assignment', 'protocolAssignment' , 'housing', 'treatment_order', 'observation_order', 'cases', 'pairings', 'exemptions', 'flags', 'prc_order']
+            datasetsToClose: ['assignment', 'protocolAssignment' , 'housing', 'treatment_order', 'observation_order', 'cases', 'pairings', 'exemptions', 'flags']
         });
     });
 
