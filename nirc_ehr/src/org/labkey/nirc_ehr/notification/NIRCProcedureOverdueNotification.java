@@ -111,7 +111,7 @@ public class NIRCProcedureOverdueNotification extends AbstractEHRNotification
             throw new IllegalStateException("Expected 'prcOverdueNotification' query for the 'NIRC Procedure Overdue' notification");
         }
 
-        TableSelector tableSelector = new TableSelector(tableInfo, Set.of("Id", "species", "room", "cage", "cageObjectId", "procedure", "orderedBy", "windowStart", "windowEnd", "daysOverdue", "remark"));
+        TableSelector tableSelector = new TableSelector(tableInfo, Set.of("Id", "species", "room", "cage", "procedure", "orderedBy", "windowStart", "windowEnd", "daysOverdue", "remark"));
         return tableSelector.getArrayList(ProcedureOverdue.class);
     }
 
