@@ -15,7 +15,8 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
         if (casesStore) {
             const rec = casesStore.getAt(0);
             const caseid = casesStore.getAt(0).get('caseid');
-            if (!caseid) { // only check for new cases
+            const qcstate = casesStore.getAt(0).get('qcstate/label');
+            if (!caseid || (qcstate && qcstate !== 'Completed')) { // only check for new cases or cases going from some other state to Completed
                 const id = rec.get('Id');
                 const problemCategory = rec.get('problemCategory');
                 const category = rec.get('category');

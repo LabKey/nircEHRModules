@@ -19,6 +19,10 @@ exports.init = function (EHR) {
         EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('study', 'blood', EHR.Server.TriggerManager.Events.BEFORE_UPSERT);
         EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('study', 'cases', EHR.Server.TriggerManager.Events.AFTER_UPSERT);
         EHR.Server.TriggerManager.unregisterAllHandlersForQueryNameAndEvent('study', 'cases', EHR.Server.TriggerManager.Events.AFTER_DELETE);
+
+        helper.setScriptOptions({
+            datasetsToClose: ['assignment', 'protocolAssignment' , 'housing', 'treatment_order', 'observation_order', 'cases', 'pairings', 'exemptions', 'flags']
+        });
     });
 
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'assignment', function(event, helper) {

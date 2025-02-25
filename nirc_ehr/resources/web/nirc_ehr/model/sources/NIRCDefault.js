@@ -66,11 +66,25 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             },
         },
         QCState: {
+            hidden: true,
+            editable: false,
+            editorConfig: {
+                hidden: true,
+                editable: false
+            },
             getInitialValue: function (v) {
                 var qc;
                 if (!v && EHR.Security.getQCStateByLabel('In Progress'))
                     qc = EHR.Security.getQCStateByLabel('In Progress').RowId;
                 return v || qc || 'In Progress';
+            }
+        },
+        'qcstate/label': {
+            hidden: true,
+            editable: false,
+            editorConfig: {
+                hidden: true,
+                editable: false
             }
         }
     },

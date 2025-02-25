@@ -44,11 +44,57 @@
                 xtype: 'ehr-locationfiltertype',
                 inputValue: EHR.panel.LocationFilterType.filterName,
                 label: EHR.panel.LocationFilterType.label,
-                searchOptions: {
-                    area: true,
-                    room: true,
-                    cage: false
-                }
+                getItems: function() {
+                    var toAdd = [], searchItems = [];
+                    var ctx = this.filterContext;
+
+                    toAdd.push({
+                        width: 200,
+                        html: 'Search By Location:<br>'
+                                + '<div style="width: 175px;"></div>'
+                    });
+
+                    searchItems.push({
+                        xtype: 'ehr-simplecombo',
+                        itemId: 'cageField',
+                        fieldLabel: 'Cage',
+                        name: 'cageField',
+                        value: ctx.cage,
+                        schemaName: 'ehr_lookups',
+                        queryName: 'cage',
+                        displayField: 'cage',
+                        valueField: 'location'
+
+                    })
+
+                    toAdd.push({
+                        xtype: 'panel',
+                        defaults: {
+                            border: false,
+                            width: 200,
+                            labelWidth: 90,
+                            labelAlign: 'top'
+                        },
+                        keys: [{
+                            key: Ext4.EventObject.ENTER,
+                            handler: this.tabbedReportPanel.onSubmit,
+                            scope: this.tabbedReportPanel
+                        }],
+                        items: searchItems
+                    });
+
+                    return toAdd;
+                },
+                isValid: function(){
+                    if(!this.down('#cageField').getValue()){
+                        return false;
+                    }
+
+                    return true;
+                },
+                getTitle: function(){
+                    return 'Cage: ' + this.down('#cageField').getDisplayValue();
+                },
             },{
                 xtype: 'ldk-nofiltersfiltertype',
                 inputValue: LDK.panel.NoFiltersFilterType.filterName,
