@@ -11,8 +11,9 @@ public class NIRCTreatmentGivenFormSection extends BaseFormSection
     public NIRCTreatmentGivenFormSection()
     {
         super("study", "drug", LABEL, "ehr-gridpanel", true, true, true);
-        setClientStoreClass("EHR.data.DrugAdministrationRunsClientStore");
+        setClientStoreClass("NIRC_EHR.data.DrugAdministrationRunsClientStore");
         addClientDependency(ClientDependency.supplierFromPath("ehr/data/DrugAdministrationRunsClientStore.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/DrugAdministrationRunsClientStore.js"));
     }
 
     public NIRCTreatmentGivenFormSection(boolean isChild, String parentQueryName)
