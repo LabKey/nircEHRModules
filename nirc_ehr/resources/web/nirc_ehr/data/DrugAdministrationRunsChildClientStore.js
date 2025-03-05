@@ -1,6 +1,6 @@
 
 Ext4.define('NIRC_EHR.data.DrugAdministrationRunsChildClientStore', {
-    extend: 'EHR.data.DrugAdministrationRunsClientStore',
+    extend: 'NIRC_EHR.data.DrugAdministrationRunsClientStore',
 
     insert: function(index, records) {
         var ret = this.callParent(arguments);
