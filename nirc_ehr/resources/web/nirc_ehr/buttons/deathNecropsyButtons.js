@@ -48,7 +48,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('DEATH_NECROPSY_VET_REVIEW', {
     requiredQC: 'Review Required',
     targetQC: 'Review Required',
     errorThreshold: 'WARN',
-    successURL: LABKEY.ActionURL.getParameter('srcURL') || LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
+    successURL: LABKEY.ActionURL.getParameter('returnUrl') || LABKEY.ActionURL.buildURL('ehr', 'enterData.view'),
     disabled: true,
     itemId: 'reviewBtn',
     disableOn: 'ERROR',
