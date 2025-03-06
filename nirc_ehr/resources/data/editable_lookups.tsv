@@ -1,4 +1,6 @@
 Value	Category	title	description
+abdominal_obs_types	Clinical	Abdominal Observation Types	Used in clinical observations.
+abnormal_behavior_types	Clinical	Abnormal Behavior Observation Types	Used in clinical observations.
 acquisition_type	Colony Management	Acquisition Type	Types of acquisition for Arrivals.
 activity	Behavior	Activity	Behavior observation fixed values.
 ageclass	Colony Management	Age Class	Categories of age, such as infant or adult, by species. Used in various reports grouping animals by age class.
@@ -19,6 +21,7 @@ blood_draw_tube_type	Clinical	Blood Draw Tube Type	Used in blood draw datasets.
 blood_sample_type	Clinical	Blood Sample Types	Used in blood draw datasets.
 blood_tube_volumes	Clinical	Blood Tube Volumes	Used in blood draw datasets.
 cage_type	Colony Management	Cage Type	Used in cage details.
+capillary_refill_time	Clinical	Capillary Refill Times	Used clinical observations.
 card_format	Colony Management	Card Format
 census_activity_status	Colony Management	Census Activity Status
 clinical_obs_required	Clinical	Required Clinical Observations	Clinical Observations that are required.
@@ -33,8 +36,8 @@ daily_enrich_codes	Behavior	Daily enrichment codes.
 data_category	Clinical	Data Categories	Used in datasets.
 death_reason	Colony Management	Death Reason
 delivery_state	Colony Management	Delivery State
-dental_disease	Clinical	Dental Disease	Clinical observation fixed values.
-dental_trauma	Clinical	Dental Trauma	Clinical observation fixed values.
+dental_obs	Clinical	Dental Observation Types	Clinical observation values.
+derm_obs	Clinical	Dermatologic Observation Types	Clinical observation values.
 digit_amputation	Clinical	Digit Amputation	Clinical observation fixed values.
 divider_types	Colony Management	Divider Type	Used in cage details.
 dosage_units	Clinical	Dosage Units	Used in drug and treatment datasets.
@@ -47,20 +50,24 @@ expense_class	Colony Management	Expense Class
 fecal_score	Clinical	Fecal Score	Clinical observation fixed values.
 fecal_smear_score	Clinical	Fecal Smear Score	Clinical observation fixed values.
 feed_assess_types	Behavior	Fecal Assessment Types	Behavior observation fixed values.
+flag_categories	Colony Management	Flag Categories	Used to specify flag behavior.
+flag_values	Colony Management	Flag Values	Animal flag values.
 gastro_types	Clinical	Gastrointestinal Types	Clinical observation fixed values.
-gender_codes	Colony Management	Gender Codes	Used in demographics dataset.
+gender_codes	Colony Management	Sex Codes	Used in demographics dataset.
+general_obs	Clinical	General Observation Types	Clinical observation types.
 genital_types	Colony Management	Genital Types	Clinical observation fixed values.
+genitourinary_obs	Clinical	Genitourinary Observation Types	Clinical observation fixed values.
 geographic_origins	Colony Management	Geographic Origins	Used in demographics dataset.
 hernia_types	Clinical	Hernia Types	Clinical observation fixed values.
 housing_reason	Housing	Housing Move Reason	Used in housing dataset for location transfers.
 hyd_score	Clinical	Hydration Score	Clinical observation fixed values.
 id_history_type	Colony Management	Id History Type
-incision_score	Clinical	Incision Score	Clinical observation fixed values.
+incision_score	Clinical	Incision Status	Clinical observation fixed values.
 indoor_outdoor	Colony Management	Indoor/Outdoor	Cage details
 keyword	Clinical	Keyword	Clinical observation fixed values.
 lameness	Clinical	Lameness	Clinical observation fixed values.
 mass_type	Clinical	Mass Type	Clinical observation fixed values.
-mens_score	Clinical	Menses Score	Clinical observation fixed values.
+mens_score	Clinical	Menses Types	Clinical observation fixed values.
 musculoskeletal_types	Clinical	Musculoskeletal Types	Clinical observation fixed values.
 necropsy_disposition_codes	Colony Management	Necropsy Disposition Codes
 necropsy_exam_reason	Colony Management	Necropsy Exam Reason
@@ -73,6 +80,7 @@ neurologic_types	Clinical	Neurologic Types	Clinical observation fixed values.
 nhp_training_reason	Behavior	NHP Training Reason	Behavior training reason values
 nhp_training_result	Behavior	NHP Training Result	Behavior training result values
 nhp_training_type	Behavior	NHP Training Type	Behavior training type values
+normal_abnormal_only	Clinical	Normal/Abnormal Values	Clinical observation values.
 numeric_unit	Colony Management	Numeric Unit
 observation_types	Clinical	Clin remarks observation types
 observation_areas	Clinical	Observation Areas	Clinical observation areas.

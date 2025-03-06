@@ -1,4 +1,6 @@
 name
+abdominal_obs_types
+abnormal_behavior_types
 acquisition_type
 activity
 ageclass
@@ -19,6 +21,7 @@ blood_draw_tube_type
 blood_sample_type
 blood_tube_volumes
 cage_type
+capillary_refill_time
 card_format
 census_activity_status
 congenital_abnormalities
@@ -30,8 +33,8 @@ daily_enrich_codes
 data_category
 death_reason
 delivery_state
-dental_disease
-dental_trauma
+dental_obs
+derm_obs
 digit_amputation
 divider_types
 dosage_units
@@ -46,7 +49,9 @@ fecal_smear_score
 feed_assess_types
 gastro_types
 gender_codes
+general_obs
 genital_types
+genitourinary_obs
 geographic_origins
 hernia_types
 housing_reason
@@ -69,6 +74,7 @@ neurologic_types
 nhp_training_reason
 nhp_training_result
 nhp_training_type
+normal_abnormal_only
 numeric_unit
 observation_areas
 ocular_problem

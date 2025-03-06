@@ -1,4 +1,6 @@
 setname	label	keyfield	titleColumn
+abdominal_obs_types	Abdominal Observation Types	value
+abnormal_behavior_types	Abnormal Behavior Types	value
 acquisition_type	Acquisition Type	value
 activity	Activity	value
 alias_category	Alias Category	value	title
@@ -16,6 +18,7 @@ blood_draw_reason	Blood Draw Reason	value
 blood_sample_type	Blood Sample Types	value
 card_format	Card Format	value	title
 cage_type	Cage Type	value	title
+capillary_refill_time	Capillary Refill Time	value
 census_activity_status	Census Activity Status	value	title
 clinremarks_category	Clinremarks Category	value	title
 congenital_abnormalities	Congenital Abnormalities	value	title
@@ -27,8 +30,8 @@ daily_enrich_codes	Daily Enrichment Codes	value
 data_category	Data Category Field Values	value
 death_reason	Death Reason	value
 delivery_state	Delivery State	value	title
-dental_disease	Dental Disease	value	title
-dental_trauma	Dental Trauma	value	title
+dental_obs	Dental Observations	value
+derm_obs	Dermatologic Observations	value
 digit_amputation	Digit Amputation	value	title
 ear_types	Ear Types	value	title
 editable_lookups	List of UI editable lookup values	value
@@ -40,17 +43,19 @@ fecal_score	Fecal Score	value	description
 fecal_smear_score	Fecal Smear Scores	value
 feed_assess_types	Feed Assessment Types	value
 gastro_types	Gastrointestinal Types	value
+general_obs	General Observations	value
 genital_types	Genital Types	value
+genitourinary_obs	Genitourinary Observations	value
 hernia_types	Hernia Types	value
 housing_reason	Housing Reason	value
 hyd_score	Hyd Score	value
 id_history_type	Id History Type	value	title
-incision_score	Incision Score	value
+incision_score	Incision Status	value
 indoor_outdoor	Indoor/Outdoor	value
 keyword	Keyword	value	title
 lameness	Lameness	value	title
 mass_type	Mass Type	value	title
-mens_score	Mens Score	value
+mens_score	Menses Type	value
 musculoskeletal_types	Musculoskeletal Types	value
 necropsy_disposition_codes	Tissue Disposition Codes	value	title
 necropsy_exam_reason	Necropsy Reason	value	title
@@ -63,6 +68,7 @@ neurologic_types	Neurologic Types	value	title
 nhp_training_reason	NHP Training Reason	value
 nhp_training_result	NHP Training Result	value
 nhp_training_type	NHP Training Type	value
+normal_abnormal_only	Normal/Abnormal Type	value
 numeric_unit	Numeric Units	value	title
 observation_areas	Observation Areas	value
 ocular_problem	Ocular Problem	value
