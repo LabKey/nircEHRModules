@@ -13,6 +13,7 @@ app_score	Behavior	Appetite Score	Behavior observation fixed values.
 arrival_type	Colony Management	Arrival Type	Types of arrivals.
 arthritis_types	Clinical	Arthritis Types	Clinical observation fixed values.
 att_score	Behavior	Attitude Score	Behavior observation fixed values.
+bandage_observations	Clinical	Bandage Observations	Clinical observation fixed values.
 bcs_score	Clinical	Body Condition Score	Clinical observation fixed values.
 behavior_mgmt_codes	Behavior	Behavior Managment Codes	Behavior observation fixed values.
 behavior_types	Behavior	Behavior Types	Behavior observation fixed values.
@@ -68,7 +69,8 @@ keyword	Clinical	Keyword	Clinical observation fixed values.
 lameness	Clinical	Lameness	Clinical observation fixed values.
 mass_type	Clinical	Mass Type	Clinical observation fixed values.
 mens_score	Clinical	Menses Types	Clinical observation fixed values.
-musculoskeletal_types	Clinical	Musculoskeletal Types	Clinical observation fixed values.
+mucous_membranes	Clinical	Mucous Membranes	Used in clinical observations.
+musculoskeletal_observations	Clinical	Musculoskeletal Observations	Used in clinical observations.
 necropsy_disposition_codes	Colony Management	Necropsy Disposition Codes
 necropsy_exam_reason	Colony Management	Necropsy Exam Reason
 necropsy_organ_appearance	Colony Management	Necropsy Organ Appearance
@@ -76,7 +78,7 @@ necropsy_organ_systems	Colony Management	Necropsy Organ Systems
 necropsy_physical_condition	Colony Management	Necropsy Physical Condition
 necropsy_specimen_condition	Colony Management	Necropsy Specimen Condition
 necropsy_tissue	Colony Management	Necropsy Tissue
-neurologic_types	Clinical	Neurologic Types	Clinical observation fixed values.
+neurologic_observations	Clinical	Neurologic Observations	Used in clinical observations..
 nhp_training_reason	Behavior	NHP Training Reason	Behavior training reason values
 nhp_training_result	Behavior	NHP Training Result	Behavior training result values
 nhp_training_type	Behavior	NHP Training Type	Behavior training type values
@@ -84,6 +86,8 @@ normal_abnormal_only	Clinical	Normal/Abnormal Values	Clinical observation values
 numeric_unit	Colony Management	Numeric Unit
 observation_types	Clinical	Clin remarks observation types
 observation_areas	Clinical	Observation Areas	Clinical observation areas.
+obstetric_observations	Clinical	Obstetric Observations	Obstetric Observations Fixed Values.
+ocular_observations	Clinical	Ocular Observations	Ocular Observations Fixed Values.
 ocular_problem	Clinical	Ocular Problem	Clinical observation fixed values.
 pairing_formation_types	Pairing Formation Type	value
 pairing_goal	Behavior	Pairing Goal	Used in pairing dataset.
@@ -101,10 +105,11 @@ protocol_state	Colony Management	Protocol State
 protocol_type	Colony Management	Protocol Type
 qualifier	Colony Management	Qualifier
 questionnaire	Colony Management	Questionnaire
+rectal_prolapse	Clinical	Rectal Prolapse	Used in clinical observations.
 regulatory_stress_levels	Colony Management	Regulatory Stress Levels
 req_order_state	Colony Management	Request Order State
 req_order_type	Colony Management	Request Order Type
-respiratory_types	Clinical	Respiratory Types	Clinical observation fixed values.
+respiratory_observations	Clinical	Respiratory Observations	Used in clinical observations.
 routes	Clinical	Treatment Routes	Used in drug and treatment datasets.
 sib_score	Behavior	SIB Score	Behavior observation fixed values.
 skin_problem	Clinical	Skin Problems	Clinical observation fixed values.
@@ -120,6 +125,7 @@ trauma_size	Clinical	Trauma Size	Clinical observation fixed values.
 treatment_frequency	Clinical	Treatment Frequency	Used in treatment and drug datasets.
 treatment_frequency_times	Clinical	Treatment Frequency Times	Used in treatment, drug and observation datasets.
 turgor_score	Clinical	Turgor Score	Clinical observation fixed values.
+vaginal_uterine_prolapse	Clinical	Vaginal Uterine Prolapse	Clinical observation fixed values.
 vendor_approval_code	Colony Management	Vendor Approval Code
 vendor_production_location	Colony Management	Vendor Production Location
 volume_units	Clinical	Volume Units	Used in drug and treatment datasets.

@@ -12,6 +12,7 @@ amount_units
 app_score
 arrival_type
 arthritis_types
+bandage_observations
 bcs_score
 behavior_mgmt_codes
 behavior_types
@@ -61,7 +62,8 @@ indoor_outdoor
 lameness
 mass_type
 mens_score
-musculoskeletal_types
+mucous_membranes
+musculoskeletal_observations
 necropsy_disposition_codes
 necropsy_exam_reason
 necropsy_organ_appearance
@@ -69,13 +71,15 @@ necropsy_organ_systems
 necropsy_physical_condition
 necropsy_specimen_condition
 necropsy_tissue
-neurologic_types
+neurologic_observations
 nhp_training_reason
 nhp_training_result
 nhp_training_type
 normal_abnormal_only
 numeric_unit
 observation_areas
+obstetric_observations
+ocular_observations
 ocular_problem
 pairing_formation_types
 pairing_goal
@@ -93,10 +97,11 @@ protocol_state
 protocol_type
 qualifier
 questionnaire
+rectal_prolapse
 regulatory_stress_levels
 req_order_state
 req_order_type
-respiratory_types
+respiratory_observations
 routes
 sib_score
 skin_problem
@@ -112,6 +117,7 @@ trauma_size
 treatment_frequency
 treatment_frequency_times
 turgor_score
+vaginal_uterine_prolapse
 vendor_approval_code
 vendor_production_location
 volume_units
