@@ -11,6 +11,7 @@
         <column name="o"/>
         <column name="a"/>
         <column name="p"/>
+        <column name="vetreview"/>
         <column name="hx"/>
         <column name="QCState"/>
     </columns>
