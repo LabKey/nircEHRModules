@@ -4,7 +4,7 @@ import org.labkey.api.ehr.dataentry.AbstractFormSection;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.ehr.dataentry.SimpleFormSection;
-import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
+import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
 import org.labkey.api.module.Module;
 import org.labkey.api.query.Queryable;
 import org.labkey.api.view.template.ClientDependency;
@@ -81,7 +81,7 @@ public class NIRCBehavioralCasesFormType extends NIRCBaseTaskFormType
     @Override
     protected boolean canInsert()
     {
-        if (!getCtx().getContainer().hasPermission(getCtx().getUser(), EHRClinicalEntryPermission.class))
+        if (!getCtx().getContainer().hasPermission(getCtx().getUser(), EHRBehaviorEntryPermission.class))
             return false;
 
         return super.canInsert();
