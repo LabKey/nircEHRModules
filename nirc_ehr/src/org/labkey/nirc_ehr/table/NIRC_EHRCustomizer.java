@@ -39,6 +39,7 @@ import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
 import org.labkey.api.view.template.ClientDependency;
+import org.labkey.api.writer.HtmlWriter;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
 import org.labkey.nirc_ehr.dataentry.form.NIRCClinicalObservationsFormType;
 
@@ -259,12 +260,12 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     }
 
                     @Override
-                    public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                    public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                     {
                         String objectid = (String)ctx.get("objectid");
                         String id = (String)getBoundColumn().getValue(ctx);
 
-                        out.write(PageFlowUtil.link("Show Case Hx").onClick("NIRC_EHR.window.CaseHistoryWindow.showCaseHistory(" + PageFlowUtil.jsString(objectid) + ", " + PageFlowUtil.jsString(id) + ", this)").toString());
+                        oldWriter.write(PageFlowUtil.link("Show Case Hx").onClick("NIRC_EHR.window.CaseHistoryWindow.showCaseHistory(" + PageFlowUtil.jsString(objectid) + ", " + PageFlowUtil.jsString(id) + ", this)").toString());
                     }
 
                     @Override
@@ -317,7 +318,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 return new DataColumn(colInfo){
 
                     @Override
-                    public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                    public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                     {
                         ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                         if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRBehaviorEntryPermission.class))
@@ -330,7 +331,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         {
                             linkAction.addParameter("taskid", taskId);
                             String href = linkAction.toString();
-                            out.write(PageFlowUtil.link(label).href(href).target("_blank").toString());
+                            oldWriter.write(PageFlowUtil.link(label).href(href).target("_blank").toString());
                         }
                     }
 
@@ -382,7 +383,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 return new DataColumn(colInfo){
 
                     @Override
-                    public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                    public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                     {
                         String category = (String)ctx.get("category");
                         ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
@@ -405,7 +406,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         linkAction.addParameter("caseid", caseId);
                         linkAction.addParameter("edit", true);
                         String href = linkAction.toString();
-                        out.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
+                        oldWriter.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
                     }
 
                     @Override
@@ -457,7 +458,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                         {
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRVeterinarianPermission.class))
                                 return;
@@ -474,7 +475,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("returnUrl", returnUrl.toString());
 
                             String href = linkAction.toString();
-                            out.write(PageFlowUtil.link("Enter/Update Necropsy").href(href).target("_blank").toString());
+                            oldWriter.write(PageFlowUtil.link("Enter/Update Necropsy").href(href).target("_blank").toString());
 
                         }
 
@@ -523,7 +524,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                         {
                             String taskid = (String)getBoundColumn().getValue(ctx);
 
@@ -532,7 +533,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("taskid", taskid);
 
                             String href = linkAction.toString();
-                            out.write(PageFlowUtil.link("View Report").href(href).target("_blank").toString());
+                            oldWriter.write(PageFlowUtil.link("View Report").href(href).target("_blank").toString());
                         }
 
                         @Override
@@ -1022,7 +1023,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                         {
                             String objectid = (String)getBoundColumn().getValue(ctx);
                             Date date = (Date)ctx.get("date");
@@ -1064,7 +1065,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("returnUrl", returnUrl);
 
                             String href = linkAction.toString();
-                            out.write(PageFlowUtil.link("Record Treatment").href(href).target("_blank").toString());
+                            oldWriter.write(PageFlowUtil.link("Record Treatment").href(href).target("_blank").toString());
                         }
 
                         @Override
@@ -1114,7 +1115,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                         {
                             String objectid = (String)getBoundColumn().getValue(ctx);
                             String caseid = (String)ctx.get("caseid");
@@ -1138,7 +1139,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("returnUrl", returnUrl);
 
                             String href = linkAction.toString();
-                            out.write(PageFlowUtil.link("Record Procedure").href(href).target("_blank").toString());
+                            oldWriter.write(PageFlowUtil.link("Record Procedure").href(href).target("_blank").toString());
                         }
 
                         @Override
@@ -1189,7 +1190,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     {
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                         {
                             String status = (String) getBoundColumn().getValue(ctx);
                             String stat = null;
@@ -1269,7 +1270,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                 }
                             }
 
-                            out.write(stat);
+                            oldWriter.write(stat);
                         }
                     };
                 }
@@ -1289,7 +1290,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                         {
                             String taskids = (String)getBoundColumn().getValue(ctx);
                             Date date = (Date)ctx.get("scheduledDate");
@@ -1309,7 +1310,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("returnUrl", returnUrl);
 
                             String href = linkAction.toString();
-                            out.write(PageFlowUtil.link("Record Observations").href(href).target("_blank").toString());
+                            oldWriter.write(PageFlowUtil.link("Record Observations").href(href).target("_blank").toString());
                         }
 
                         @Override
@@ -1361,7 +1362,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     {
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
                         {
                             String status = (String) getBoundColumn().getValue(ctx);
                             BigDecimal obsCount = (BigDecimal)ctx.get("obsCount");
@@ -1383,7 +1384,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                 }
                             }
 
-                            out.write(stat);
+                            oldWriter.write(stat);
                         }
 
                         @Override
