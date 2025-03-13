@@ -15,6 +15,7 @@ arthritis_types	Clinical	Arthritis Types	Clinical observation fixed values.
 att_score	Behavior	Attitude Score	Behavior observation fixed values.
 bandage_observations	Clinical	Bandage Observations	Clinical observation fixed values.
 bcs_score	Clinical	Body Condition Score	Clinical observation fixed values.
+behavior_abnormality	Clinical	Behavior Abnormality	Clinical observation fixed values.
 behavior_mgmt_codes	Behavior	Behavior Managment Codes	Behavior observation fixed values.
 behavior_types	Behavior	Behavior Types	Behavior observation fixed values.
 blood_draw_reason	Clinical	Blood Draw Reason	Used in blood draw datasets.

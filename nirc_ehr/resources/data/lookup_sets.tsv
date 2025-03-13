@@ -13,6 +13,7 @@ arthritis_types	Arthritis Types	value
 att_score	Attitude Score	value
 bandage_observations	Bandage/splint Observations	value
 bcs_score	BCS Store	value	title
+behavior_abnormality	Behavior Abnormality	value
 behavior_mgmt_codes	Behavior Management Codes	value
 behavior_types	Behavior Types	value
 blood_draw_reason	Blood Draw Reason	value
