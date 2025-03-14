@@ -469,7 +469,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
         _helper.addRecordToGrid(observationOrders);
-        observationOrders.setGridCell(1, "category", "Ears");
+        observationOrders.setGridCell(1, "category", "Lameness/Disuse");
         observationOrders.setGridCell(1, "frequency", "QID");
         submitForm("Submit Final", "Finalize");
 
@@ -479,7 +479,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
 
-        List<String> expected = Arrays.asList("Activity", "Appetite", "BCS", "Hydration", "Stool", "Verified Id?", "Ears");
+        List<String> expected = Arrays.asList("Activity", "Appetite", "BCS", "Hydration", "Stool", "Verified Id?", "Lameness/Disuse");
         List<String> actual = table.getColumnDataAsText("category");
         Collections.sort(expected);
         Collections.sort(actual);
@@ -492,15 +492,15 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Incorrect rows in Today's Observation Schedule", 4, table.getDataRowCount());
-        Assert.assertEquals("Incorrect observation title", "Daily Clinical Observations; Ears", table.getDataAsText(0, "observationList"));
+        Assert.assertEquals("Incorrect observation title", "Daily Clinical Observations; Lameness/Disuse", table.getDataAsText(0, "observationList"));
         Assert.assertEquals("Status is not updated", "", table.getDataAsText(0, "observationStatus"));
         table.link(0, "observationRecord").click();
 
         switchToWindow(1);
         waitForText(animalId);
         Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
-        observation.setGridCell(1, "observation", "Discharge");
-        observation.setGridCellJS(1, "remark", "remark for Ears");
+        observation.setGridCell(1, "observation", "Lame on left leg");
+        observation.setGridCellJS(1, "remark", "remark for lameness");
 
         observation.setGridCell(2, "observation", "0-1 Extremely Lethargic");
         observation.setGridCellJS(2, "remark", "remark for activity");
@@ -559,7 +559,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
         _helper.addRecordToGrid(observationOrders);
         observationOrders.setGridCell(1, "Id", animalId);
-        observationOrders.setGridCell(1, "category", "Mass/Soft Tissue Swelling");
+        observationOrders.setGridCell(1, "category", "Dental/Oral Observations");
         observationOrders.setGridCell(1, "frequency", "TID");
         waitAndClick(_helper.getDataEntryButton("Submit for Review"));
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
@@ -585,7 +585,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(1);
         waitForText(animalId);
         Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
-        observation.setGridCell(1, "observation", "Seroma");
+        observation.setGridCell(1, "observation", "Fractured Tooth");
         observation.setGridCellJS(1, "remark", "remark for " + animalId);
         submitForm("Submit Final", "Finalize");
 
