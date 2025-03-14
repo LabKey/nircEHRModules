@@ -15,4 +15,7 @@
         <column name="hx"/>
         <column name="QCState"/>
     </columns>
+    <filters>
+        <filter column="category" operator="eq" value="Clinical"/>
+    </filters>
 </customView>
