@@ -200,14 +200,13 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             }
         },
         'study.pairings': {
-            date : {
+            date: {
+                header: 'Start Date',
                 getInitialValue: function(v, rec){
                     if (v)
                         return v;
 
-                    let curDate = new Date();
-                    curDate.setHours(0, 0, 0, 0);
-                    return curDate;
+                    return new Date();
                 }
             },
             type: {
@@ -215,6 +214,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             },
             pairid: {
                 hidden: false,
+                nullable: false,
                 columnConfig: {
                     width: 150
                 },
