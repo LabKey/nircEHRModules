@@ -1,4 +1,6 @@
 name
+abdominal_obs_types
+abnormal_behavior_types
 acquisition_type
 activity
 ageclass
@@ -10,7 +12,9 @@ amount_units
 app_score
 arrival_type
 arthritis_types
+bandage_observations
 bcs_score
+behavior_abnormality
 behavior_mgmt_codes
 behavior_types
 blood_draw_reason
@@ -18,6 +22,7 @@ blood_draw_tube_type
 blood_sample_type
 blood_tube_volumes
 cage_type
+capillary_refill_time
 card_format
 census_activity_status
 conc_units
@@ -29,8 +34,8 @@ daily_enrich_codes
 data_category
 death_reason
 delivery_state
-dental_disease
-dental_trauma
+dental_obs
+derm_obs
 divider_types
 digit_amputation
 dosage_units
@@ -45,7 +50,9 @@ fecal_smear_score
 feed_assess_types
 gastro_types
 gender_codes
+general_obs
 genital_types
+genitourinary_obs
 geographic_origins
 hernia_types
 housing_reason
@@ -56,7 +63,8 @@ indoor_outdoor
 lameness
 mass_type
 mens_score
-musculoskeletal_types
+mucous_membranes
+musculoskeletal_observations
 necropsy_disposition_codes
 necropsy_exam_reason
 necropsy_organ_appearance
@@ -64,12 +72,15 @@ necropsy_organ_systems
 necropsy_physical_condition
 necropsy_specimen_condition
 necropsy_tissue
-neurologic_types
+neurologic_observations
 nhp_training_reason
 nhp_training_result
 nhp_training_type
+normal_abnormal_only
 numeric_unit
 observation_areas
+obstetric_observations
+ocular_observations
 ocular_problem
 pairing_formation_types
 pairing_goal
@@ -87,10 +98,11 @@ protocol_state
 protocol_type
 qualifier
 questionnaire
+rectal_prolapse
 regulatory_stress_levels
 req_order_state
 req_order_type
-respiratory_types
+respiratory_observations
 routes
 sib_score
 skin_problem
@@ -106,6 +118,7 @@ trauma_size
 treatment_frequency
 treatment_frequency_times
 turgor_score
+vaginal_uterine_prolapse
 vendor_approval_code
 vendor_production_location
 volume_units
