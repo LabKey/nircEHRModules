@@ -1,4 +1,5 @@
-Value	Title	Category	Description	Sort Order	Date Disabled
-Inguinal	Inguinal			1
-Umbilical	Umbilical			2
-Other	Other			3
+value	sort_order
+Inguinal Hernia on Right Side	1
+Inguinal Hernia on Left Side	2
+Umbilical Hernia	3
+Other	4

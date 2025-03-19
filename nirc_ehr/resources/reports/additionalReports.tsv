@@ -37,7 +37,7 @@ pairingsBehavior
 pairingHousingSummary
 pairingSummary	Behavior	query	Pairing Summary	TRUE		study	pairingSummary			date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
 activePairing	Behavior	query	Active Pairing	TRUE		study	pairingSummary	Active Pairing		date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
-pairingHistory	Behavior	query	Pairing History	TRUE		study	pairingSummary	Pairing History		date	FALSE	FALSE		qcstate/publicdata	This report displays animal pairings
+pairingHistory
 nhpTraining	Behavior	query	Animal Training	TRUE		study	nhpTraining			date	FALSE	FALSE		qcstate/publicdata	This report displays animal training data
 roommateHistoryBehavior
 surgicalCases															
@@ -46,3 +46,4 @@ surgMedicationScheduleDaily
 pairings
 behaviorRemarks	Behavior	query	Behavior Remarks	true		study	Clinical Remarks	Behavior		date	false	false		qcstate/publicdata	This report contains the behavior remarks entered about each animal
 clinObsBehavior	Behavior	query	Observations	true		study	clinical_observations	Behavior		date	false	false		qcstate/publicdata	This report contains one record for each encounter with each animal, including surergies, exams, procedures, etc.
+clinremarks	Clinical	query	Clinical Remarks	true		study	Clinical Remarks	Clinical		date	false	false		qcstate/publicdata	This report contains the clinical remarks entered about each animal

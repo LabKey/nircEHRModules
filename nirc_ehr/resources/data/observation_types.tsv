@@ -1,70 +1,48 @@
 value	category	editorconfig	schemaName	queryName	valueColumn
+Abdominal Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"abdominal_obs_type","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	abdominal_obs_type	value
+Abnormal Behaviors	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"behavior_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	behavior_types	value
+Activity	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"activity","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	activity	value
+Alopecia Regrowth	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_regrowth","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_regrowth	value
 Alopecia Score	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_score","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_score	value
 Alopecia Type	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_type","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_type	value
-Alopecia Regrowth	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_regrowth","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_regrowth	value
-Behavior Managment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"behavior_mgmt_codes","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	behavior_mgmt_codes	value
-Daily Enrichment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"daily_enrich_codes","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	daily_enrich_codes	value
-Self Biting Observed	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
-New Injury Observed	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
-Other Stereotopy	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
-Environmental Change	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
-Special Enrichment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
-Preferences	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"preferences","displayField":"value","valueField":"value"}	ehr_lookups	preferences	value
-Temperament	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"temperament","displayField":"value","valueField":"value"}	ehr_lookups	temperament	value
+Appetite	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"app_score","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	app_score	value
+Attitude	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"att_score","displayField":"value","valueField":"value"}	ehr_lookups	att_score	value
+Auscultation		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"normal_abnormal_only","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	normal_abnormal_only	value
+Bandage/Splint Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"bandage_observations","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	bandage_observations	value
 BCS		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"bcs_score","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	bcs_score	value
-CRT		{"xtype":"textfield","defaultValue":"1-2"}
-Mucous Membrane		{"xtype":"textfield","defaultValue":"Pink"}
-Pain Score		{"xtype":"ldk-numberfield","minValue":0,"maxValue":12}
-Other		{"xtype":"textfield"}
-Menses		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"mens_score","displayField":"value","sortFields":"sort_order","valueField":"value"}
-Appetite	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"app_score","displayField":"value","sortFields":"sort_order","valueField":"value"}
-Attitude	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"att_score","displayField":"value","valueField":"value"}
-Hydration		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"hyd_score","displayField":"value","sortFields":"sort_order","valueField":"value"}
-Incision		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"incision_score","displayField":"value","sortFields":"sort_order","valueField":"value"}
-Temperature		{"xtype":"ldk-numberfield","minValue":0}
-Pulse		{"xtype":"ldk-numberfield","minValue":0}
-Abnormal Behaviors	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"behavior_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	behavior_types	value
-TB TST Score (Day 1)		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"tb_obs_score","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	tb_obs_score	value
-TB TST Score (Day 2)		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"tb_obs_score","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	tb_obs_score	value
-TB TST Score (Day 3)		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"tb_obs_score","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	tb_obs_score	value
-Auscultation		{"xtype":"textfield"}
-Abdominal Palpation		{"xtype":"textfield"}
-Pregnant		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
-Dental Disease		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"dental_disease","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	dental_disease	value
-Congenital Abnormalities		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"congenital_abnormalities","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	congenital_abnormalities	value
-Urine		{"xtype":"textfield"}
-Temperature Time		{"xtype": "timefield","useDisplayValue":"true"}
-Gait/Posture		{"xtype":"textfield"}
-Digit Amputation		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"digit_amputation","displayField":"value","valueField":"value"}
-Dental Trauma		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"dental_trauma","displayField":"value","valueField":"value","sortFields":"sort_order"}
-Wound Score		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"wound_score","displayField":"value","valueField":"value","sortFields":"sort_order"}
-Wound Status	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"wound_status","displayField":"value","valueField":"value","sortFields":"sort_order"}
-Wound Severity	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"wound_severity","displayField":"value","valueField":"value","sortFields":"sort_order"}
-Fecal Score		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"fecal_score","displayField":"value","valueField":"value"}	ehr_lookups	fecal_score	value
-Trauma: Laceration		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"trauma_size","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	trauma_size	value
-Trauma: Degloving		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"trauma_size","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	trauma_size	value
-Trauma: Scratch		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"trauma_size","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	trauma_size	value
-Trauma: Crush		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"trauma_size","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	trauma_size	value
-Trauma: Puncture		{"xtype":"textfield"}	ehr_lookups	trauma_size	value
-Trauma: Bruise		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"trauma_size","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	trauma_size	value
-Mass/Soft Tissue Swelling		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"mass_type","displayField":"value","valueField":"value"}	ehr_lookups	mass_type	value
-Skin		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"skin_problem","displayField":"value","valueField":"value"}	ehr_lookups	skin_problem	value
-Ocular		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"ocular_problem","displayField":"value","valueField":"value"}	ehr_lookups	ocular_problem	value
-Lameness/Disuse		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"lameness","displayField":"value","valueField":"value"}	ehr_lookups	lameness	value
-Hernia		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"hernia_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	hernia_types	value
-Arthritis		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"arthritis_types","displayField":"value","valueField":"value"}	ehr_lookups	arthritis_types	value
-Prolapse: Rectal		{"xtype":"textfield"}
-Prolapse: Vaginal		{"xtype":"textfield"}
-Prolapse: Uterine		{"xtype":"textfield"}
-Ears		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"ear_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	ear_types	value
-Genitals		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"genital_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	genital_types	value
-Gastrointestinal		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"gastro_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	gastro_types	value
-Neurologic		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"neurologic_types","displayField":"value","valueField":"value"}	ehr_lookups	neurologic_types	value
-Musculoskeletal		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"musculoskeletal_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	musculoskeletal_types	value
-Respiratory Tract		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"respiratory_types","displayField":"value","valueField":"value"}	ehr_lookups	respiratory_types	value
+Behavior Abnormality		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"behavior_abnormality","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	behavior_abnormality	value
+Behavior Managment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"behavior_mgmt_codes","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	behavior_mgmt_codes	value
+Capillary Refill Time		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"capillary_refill_time","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	capillary_refill_time	value
+Daily Enrichment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"daily_enrich_codes","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	daily_enrich_codes	value
+Dental/Oral Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"dental_obs","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	dental_obs	value
+Dermatologic Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"derm_obs","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	derm_obs	value
+Environmental Change	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
 Feed Assessment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"feed_assess_types","displayField":"value","valueField":"value"}	ehr_lookups	feed_assess_types	value
-Stool		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"stool_types","displayField":"value","sortFields":"sort_order","valueField":"value"}
-Activity	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"activity","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	activity	value
-Verified Id?		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
-Turgor		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"turgor_score","displayField":"value","sortFields":"sort_order","valueField":"value"}
+General Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"general_obs","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	general_obs	value
+Genitourinary Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"genitourinary_obs","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	genitourinary_obs	value
+Hernia		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"hernia_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	hernia_types	value
+Hydration		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"hyd_score","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	hyd_score	value
+Incision Status		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"incision_score","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	incision_score	value
+Lameness/Disuse		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"lameness","displayField":"value","valueField":"value"}	ehr_lookups	lameness	value
+Mass		{"xtype":"textfield"}
+Menses		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"mens_score","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	mens_score	value
+Mucous membranes		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"mucous_membranes","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	mucous_membranes	value
+Musculoskeletal Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"musculoskeletal_observations","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	musculoskeletal_types	value
+Neurologic Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"neurologic_observations","displayField":"value","valueField":"value"}	ehr_lookups	neurologic_observations	value
+New Injury Observed	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
+Obstetric observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"obstetric_observations","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	obstetric_observations	value
+Ocular Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"ocular_observations","displayField":"value","valueField":"value"}	ehr_lookups	ocular_problem	value
+Other Stereotopy	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
+Preferences	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"preferences","displayField":"value","valueField":"value"}	ehr_lookups	preferences	value
+Rectal prolapse		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"rectal_prolapse","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	rectal_prolapse	value
+Respiratory observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"respiratory_observations","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	respiratory_observations	value
+Respiratory rate		{"xtype":"textfield"}
+Self Biting Observed	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
 SIB Score	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"sib_score","forceSelection":true,"displayField":"value","valueField":"value"}	ehr_lookups	sib_score	value
+Special Enrichment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
+Stool		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"stool_types","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	stool_types	value
+Temperament	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"temperament","displayField":"value","valueField":"value"}	ehr_lookups	temperament	value
+Vaginal/uterine prolapse		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"vaginal_uterine_prolapse","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	vaginal_uterine_prolapse	value
+Verified Id?		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
+Wound Severity	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"wound_severity","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	wound_severity	value
+Wound Status	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"wound_status","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	wound_status	value
