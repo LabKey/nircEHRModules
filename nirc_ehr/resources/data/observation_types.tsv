@@ -1,12 +1,12 @@
 value	category	editorconfig	schemaName	queryName	valueColumn
 Abdominal Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"abdominal_obs_type","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	abdominal_obs_type	value
 Abnormal Behaviors	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"behavior_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	behavior_types	value
-Activity	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"activity","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	activity	value
+Activity		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"activity","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	activity	value
 Alopecia Regrowth	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_regrowth","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_regrowth	value
 Alopecia Score	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_score","forceSelection":true,"displayField":"title","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_score	value
 Alopecia Type	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"alopecia_type","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	alopecia_type	value
-Appetite	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"app_score","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	app_score	value
-Attitude	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"att_score","displayField":"value","valueField":"value"}	ehr_lookups	att_score	value
+Appetite		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"app_score","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	app_score	value
+Attitude		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"att_score","displayField":"value","valueField":"value"}	ehr_lookups	att_score	value
 Auscultation		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"normal_abnormal_only","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	normal_abnormal_only	value
 Bandage/Splint Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"bandage_observations","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	bandage_observations	value
 BCS		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"bcs_score","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	bcs_score	value
@@ -17,7 +17,7 @@ Daily Enrichment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups",
 Dental/Oral Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"dental_obs","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	dental_obs	value
 Dermatologic Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"derm_obs","displayField":"value","sortFields":"sort_order","valueField":"value"}	ehr_lookups	derm_obs	value
 Environmental Change	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"yes_no_order","forceSelection":true,"displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	yes_no_order	value
-Feed Assessment	Behavior	{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"feed_assess_types","displayField":"value","valueField":"value"}	ehr_lookups	feed_assess_types	value
+Feed Assessment		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"feed_assess_types","displayField":"value","valueField":"value"}	ehr_lookups	feed_assess_types	value
 General Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"general_obs","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	general_obs	value
 Genitourinary Observations		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"genitourinary_obs","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	genitourinary_obs	value
 Hernia		{"xtype":"ehr-simplecombo","schemaName":"ehr_lookups","queryName":"hernia_types","displayField":"value","valueField":"value","sortFields":"sort_order"}	ehr_lookups	hernia_types	value
