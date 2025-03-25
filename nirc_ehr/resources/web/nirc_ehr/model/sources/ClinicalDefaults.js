@@ -199,7 +199,15 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             type: {
                 hidden: true,
                 defaultValue: 'Clinical'
-            }
+            },
+            category: {
+                lookup: {
+                    columns: 'value,description',
+                    filterArray: [
+                        LABKEY.Filter.create('category', null, LABKEY.Filter.Types.ISBLANK)
+                    ],
+                }
+            },
         },
         'study.vitals': {
             category: {
@@ -214,6 +222,14 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             type: {
                 hidden: true,
                 defaultValue: 'Clinical'
+            },
+            category: {
+                lookup: {
+                    columns: 'value,description',
+                    filterArray: [
+                        LABKEY.Filter.create('category', null, LABKEY.Filter.Types.ISBLANK)
+                    ],
+                }
             }
         }
     }

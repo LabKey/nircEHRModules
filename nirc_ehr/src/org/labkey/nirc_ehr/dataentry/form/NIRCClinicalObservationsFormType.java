@@ -26,6 +26,7 @@ public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
         ));
 
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ClinicalDefaults.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/ObsDefaults.js"));
 
         // Needed for case and scheduled date/time when navigating from treatment or observation schedule
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/treatmentSubmit.js"));
@@ -33,6 +34,7 @@ public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
         for (FormSection s : this.getFormSections())
         {
             s.addConfigSource("ClinicalDefaults");
+            s.addConfigSource("ObsDefaults");
         }
     }
 
