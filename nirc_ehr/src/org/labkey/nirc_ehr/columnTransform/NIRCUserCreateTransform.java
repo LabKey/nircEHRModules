@@ -156,7 +156,7 @@ public class NIRCUserCreateTransform extends ColumnTransform
                     {
                         //createGroup() throws an error if security groups are not associated with a project,
                         // so get the project instead of just getContainerUser().getContainer(), which could be a folder
-                        group = SecurityManager.createGroup(getContainerUser().getContainer().getProject(), userGrp);
+                        group = SecurityManager.createGroup(getContainerUser().getContainer().getProject(), userGrp, getContainerUser().getUser());
                     }
                     else
                     {
