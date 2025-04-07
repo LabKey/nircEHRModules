@@ -118,4 +118,10 @@ exports.init = function (EHR) {
             removeTimeFromDate: false
         });
     });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'cases', function(event, helper) {
+        helper.setScriptOptions({
+            allowDatesInDistantPast: true
+        });
+    });
 }
