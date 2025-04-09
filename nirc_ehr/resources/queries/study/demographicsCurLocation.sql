@@ -27,7 +27,9 @@ coalesce(d2.room, '') as room_order,
 d2.room_sortValue @hidden,
 
 coalesce(d2.cage, '') as cage_order,
-d2.cage_sortValue @hidden
+d2.cage_sortValue @hidden,
+
+d2.performedBy.displayName AS performedBy
 
 FROM study.housing d2
 

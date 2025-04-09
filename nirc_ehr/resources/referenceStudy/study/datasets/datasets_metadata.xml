@@ -643,6 +643,11 @@
                 <propertyURI>urn:ehr.labkey.org/#CaseId</propertyURI>
             </column>
         </columns>
+        <indices>
+            <index type="non-unique">
+                <column>cage</column>
+            </index>
+        </indices>
     </table>
     <table tableName="inbreeding" tableDbType="TABLE">
         <columns>
