@@ -3,6 +3,17 @@
         <column name="viewNecropsy"/>
         <column name="enterNecropsyData"/>
         <column name="animalId"/>
+        <column name="animalId/curLocation/cage">
+            <properties>
+                <property name="columnTitle" value="Location"/>
+            </properties>
+        </column>
+        <column name="animalId/activeProjectAssignments/project"/>
+        <column name="animalId/activeProtocolAssignments/protocolDisplayName">
+            <properties>
+                <property name="columnTitle" value="Protocol"/>
+            </properties>
+        </column>
         <column name="assignedTo"/>
         <column name="created"/>
         <column name="createdBy"/>

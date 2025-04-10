@@ -8,6 +8,10 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        anmEvt.EVENT_ID.EVENT_ID                                                  AS category,
        anmEvt.DIAGNOSIS                                                          AS vetreview,
        anmCmt.TEXT                                                               AS remark,
+       CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
+            ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'
+                || substring(anmEvt.ATTACHMENT_PATH, LENGTH('N:\'), LENGTH(anmEvt.ATTACHMENT_PATH)))
+       ELSE NULL END AS attachmentFile,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP)        AS modified
 FROM ANIMAL_EVENT anmEvt
          LEFT JOIN ANIMAL_EVENT_COMMENT anmCmt ON anmEvt.ANIMAL_EVENT_ID = anmCmt.ANIMAL_EVENT_ID
