@@ -35,6 +35,7 @@ import org.labkey.api.query.UserSchema;
 import org.labkey.api.study.Dataset;
 import org.labkey.api.study.DatasetTable;
 import org.labkey.api.study.StudyService;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringExpressionFactory;
 import org.labkey.api.view.ActionURL;
@@ -265,7 +266,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         String objectid = (String)ctx.get("objectid");
                         String id = (String)getBoundColumn().getValue(ctx);
 
-                        oldWriter.write(PageFlowUtil.link("Show Case Hx").onClick("NIRC_EHR.window.CaseHistoryWindow.showCaseHistory(" + PageFlowUtil.jsString(objectid) + ", " + PageFlowUtil.jsString(id) + ", this)").toString());
+                        oldWriter.write(LinkBuilder.labkeyLink("Show Case Hx").onClick("NIRC_EHR.window.CaseHistoryWindow.showCaseHistory(" + PageFlowUtil.jsString(objectid) + ", " + PageFlowUtil.jsString(id) + ", this)").toString());
                     }
 
                     @Override
@@ -331,7 +332,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         {
                             linkAction.addParameter("taskid", taskId);
                             String href = linkAction.toString();
-                            oldWriter.write(PageFlowUtil.link(label).href(href).target("_blank").toString());
+                            oldWriter.write(LinkBuilder.labkeyLink(label, href).target("_blank").toString());
                         }
                     }
 
@@ -406,7 +407,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                         linkAction.addParameter("caseid", caseId);
                         linkAction.addParameter("edit", true);
                         String href = linkAction.toString();
-                        oldWriter.write(PageFlowUtil.link(linkLabel).href(href).target("_blank").toString());
+                        oldWriter.write(LinkBuilder.labkeyLink(linkLabel, href).target("_blank").toString());
                     }
 
                     @Override
@@ -475,7 +476,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("returnUrl", returnUrl.toString());
 
                             String href = linkAction.toString();
-                            oldWriter.write(PageFlowUtil.link("Enter/Update Necropsy").href(href).target("_blank").toString());
+                            oldWriter.write(LinkBuilder.labkeyLink("Enter/Update Necropsy", href).target("_blank").toString());
 
                         }
 
@@ -533,7 +534,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("taskid", taskid);
 
                             String href = linkAction.toString();
-                            oldWriter.write(PageFlowUtil.link("View Report").href(href).target("_blank").toString());
+                            oldWriter.write(LinkBuilder.labkeyLink("View Report", href).target("_blank").toString());
                         }
 
                         @Override
@@ -1061,11 +1062,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("treatmentid", objectid);
                             linkAction.addParameter("scheduledDate", date.toString());
 
-                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:clinMedicationSchedule";
+                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()) + "#inputType:none&showReport:0&activeReport:clinMedicationSchedule";
                             linkAction.addParameter("returnUrl", returnUrl);
 
                             String href = linkAction.toString();
-                            oldWriter.write(PageFlowUtil.link("Record Treatment").href(href).target("_blank").toString());
+                            oldWriter.write(LinkBuilder.labkeyLink("Record Treatment", href).target("_blank").toString());
                         }
 
                         @Override
@@ -1135,11 +1136,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
 
                             linkAction.addParameter("prcOrderId", objectid);
 
-                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:prcSchedule";
+                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()) + "#inputType:none&showReport:0&activeReport:prcSchedule";
                             linkAction.addParameter("returnUrl", returnUrl);
 
                             String href = linkAction.toString();
-                            oldWriter.write(PageFlowUtil.link("Record Procedure").href(href).target("_blank").toString());
+                            oldWriter.write(LinkBuilder.labkeyLink("Record Procedure", href).target("_blank").toString());
                         }
 
                         @Override
@@ -1306,11 +1307,11 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             linkAction.addParameter("scheduledDate", date.toString());
                             linkAction.addParameter("obsTask", taskids);
                             linkAction.addParameter("observations", observationList);
-                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()).toString() + "#inputType:none&showReport:0&activeReport:observationSchedule";
+                            String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()) + "#inputType:none&showReport:0&activeReport:observationSchedule";
                             linkAction.addParameter("returnUrl", returnUrl);
 
                             String href = linkAction.toString();
-                            oldWriter.write(PageFlowUtil.link("Record Observations").href(href).target("_blank").toString());
+                            oldWriter.write(LinkBuilder.labkeyLink("Record Observations", href).target("_blank").toString());
                         }
 
                         @Override
