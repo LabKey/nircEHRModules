@@ -49,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -364,12 +365,13 @@ public class NIRC_EHRTriggerHelper
                         }
 
                         String remark = (String) EHRDemographicsService.get().getAnimal(container, animalId).getActiveHousing().get(0).get("remark");
+                        String performedBy = (String) EHRDemographicsService.get().getAnimal(container, animalId).getActiveHousing().get(0).get("performedBy");
 
                         //construct html for email notification
                         final StringBuilder html = new StringBuilder();
                         html.append("Animal ").append(PageFlowUtil.filter(animalId)).append(" has been moved for Veterinary Treatment on ").append(date).append(".<br>");
-                        if (remark != null)
-                            html.append("Remark: ").append(PageFlowUtil.filter(remark)).append("<br><br>");
+                        html.append("Performed By: ").append(PageFlowUtil.filter(performedBy)).append("<br>");
+                        html.append("Remark: ").append(PageFlowUtil.filter(remark)).append("<br><br>");
 
                         //append animal details
                         appendAnimalDetails(html, animalId, container);
@@ -410,16 +412,20 @@ public class NIRC_EHRTriggerHelper
                         }
 
                         //get death info
-                        TableInfo deaths = getTableInfo("study", "deaths");
-                        TableSelector deathsTs = new TableSelector(deaths, PageFlowUtil.set("Id", "date", "taskid"), new SimpleFilter(FieldKey.fromString("Id"), animalId), null);
+                        TableInfo deaths = getTableInfo("study", "deathNotification");
+                        TableSelector deathsTs = new TableSelector(deaths, PageFlowUtil.set("Id", "date", "taskid", "performedBy", "reason"), new SimpleFilter(FieldKey.fromString("Id"), animalId), null);
                         final Mutable<Date> deathDate = new MutableObject<>();
                         final Mutable<String> taskId = new MutableObject<>();
+                        final Mutable<String> performedBy = new MutableObject<>();
+                        final Mutable<String> disposition = new MutableObject<>();
                         deathsTs.forEach(rs -> {
                             if (rs.getString("date") != null)
                             {
                                 Date date = ConvertHelper.convert(rs.getString("date"), Date.class);
                                 deathDate.setValue(date);
                                 taskId.setValue(rs.getString("taskid"));
+                                performedBy.setValue(rs.getString("performedBy"));
+                                disposition.setValue(rs.getString("reason"));
                             }
                         });
 
@@ -431,7 +437,9 @@ public class NIRC_EHRTriggerHelper
                             html.append("Death date not found. Please contact system administrator.").append("<br>");
                             return;
                         }
-                        html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been declared dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br><br>");
+                        html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been declared dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br>");
+                        html.append("Performed By: ").append(PageFlowUtil.filter(performedBy.getValue())).append("<br>");
+                        html.append("Disposition: ").append(PageFlowUtil.filter(disposition.getValue())).append("<br><br>");
 
                         //append animal details
                         appendAnimalDetails(html, animalId, container);
@@ -493,9 +501,8 @@ public class NIRC_EHRTriggerHelper
 
     private String getProject(String id)
     {
-        TableInfo ti = getTableInfo("study", "assignment");
+        TableInfo ti = getTableInfo("study", "notificationAnimalProject");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
-        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.ISBLANK);
         TableSelector ts = new TableSelector(ti, PageFlowUtil.set("project"), filter, null);
         final Mutable<String> project = new MutableObject<>();
         ts.forEach(rs -> {

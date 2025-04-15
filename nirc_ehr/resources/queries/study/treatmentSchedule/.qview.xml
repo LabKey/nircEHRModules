@@ -7,7 +7,6 @@
         <column name="Id/curLocation/cage"/>
 
         <column name="date"/>
-        <column name="timeOfDay"/>
         <column name="daysElapsed"/>
 
         <column name="frequency"/>

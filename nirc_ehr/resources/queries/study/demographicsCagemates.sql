@@ -18,8 +18,7 @@ FROM study.housing h
 
 JOIN study.housing h2
 ON (h2.Id.demographics.calculated_status = 'Alive'
---         AND h.room = h2.room
-        AND (h.cage = h2.cage OR (h.cage IS NULL and h2.cage IS NULL)))
+        AND (h.cage = h2.cage))
 
 WHERE h.enddateTimeCoalesced >= now()
 GROUP BY h.id, h.room, h.cage
