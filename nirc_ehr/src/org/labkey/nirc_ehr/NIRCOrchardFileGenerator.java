@@ -1,11 +1,14 @@
 package org.labkey.nirc_ehr;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.DbScope;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.exp.OntologyManager;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.module.ModuleProperty;
@@ -16,6 +19,7 @@ import org.labkey.api.security.User;
 import org.labkey.api.study.StudyService;
 import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
+import org.labkey.api.util.logging.LogHelper;
 import org.labkey.api.writer.PrintWriters;
 
 import java.io.File;
@@ -33,6 +37,7 @@ import java.util.Objects;
 public class NIRCOrchardFileGenerator
 {
     public static final String NIRCOrchardFileLocation = "NIRCOrchardFileLocation";
+    private static final Logger _log = LogHelper.getLogger(NIRCOrchardFileGenerator.class, "Orchard update on trigger.");
 
     public void generateOrchardFile(Container c, User u, String taskid)
     {
@@ -80,6 +85,13 @@ public class NIRCOrchardFileGenerator
         @Override
         public void run()
         {
+            if (orchardFileLocation == null)
+            {
+                // Don't run if we don't have a location to write the file
+                _log.warn("Orchard file location is null, cannot generate Orchard file for taskid: " + taskid);
+                return;
+            }
+
             JobRunner.getDefault().execute(() ->
             {
                 TableInfo ti = getTableInfo(c, u, "study", "orchardData");

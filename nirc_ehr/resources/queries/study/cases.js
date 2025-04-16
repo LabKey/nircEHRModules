@@ -42,7 +42,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             if (!qc) {
                 console.error('Unable to find QCState: ' + row.QCState + '/' + row.QCStateLabel);
             }
-            else if (qc.Label == 'Completed' && row.caseid && row.Id && row.performedby && row.taskid && qc) {
+            else if ((qc.Label == 'Completed' || qc.Label == 'Review Required') && row.caseid && row.Id && row.performedby && row.taskid && qc) {
                 var ordersInTransaction = helper.getProperty('ordersInTransaction');
                 var oit = [];
                 if (ordersInTransaction && ordersInTransaction.length) {

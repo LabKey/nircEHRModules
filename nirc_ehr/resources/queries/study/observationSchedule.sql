@@ -80,7 +80,7 @@ FROM
 
         LEFT JOIN ehr_lookups.treatment_frequency_times ft ON ft.frequency = t1.frequency.meaning
 
-        WHERE t1.date is not null AND t1.qcstate.publicdata = true
+        WHERE t1.date is not null
 
         ) s1
 
