@@ -123,5 +123,6 @@ volume_units
 weight_ranges
 wound_score
 wound_severity
-wound_status
+wound_status_behavior
+wound_status_clinical
 yes_no_order
