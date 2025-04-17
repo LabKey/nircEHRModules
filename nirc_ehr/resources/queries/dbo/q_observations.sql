@@ -7,6 +7,10 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
                 || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        anmEvt.EVENT_ID.NAME                                                      AS category,
        (CASE
+            WHEN evtEvtGrp.EVENT_GROUP_ID = 30 THEN 'Clinical'
+            WHEN evtEvtGrp.EVENT_GROUP_ID = 40 THEN 'Behavior'
+            ELSE 'Unknown' END) AS type,
+       (CASE
             WHEN anmEvt.DIAGNOSIS IS NOT NULL THEN (anmCmt.TEXT || ';' || anmEvt.DIAGNOSIS)
             ELSE anmCmt.TEXT END) AS remark,
        CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP) AS modified
