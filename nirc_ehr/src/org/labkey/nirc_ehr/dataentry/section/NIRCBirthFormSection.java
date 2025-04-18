@@ -41,9 +41,21 @@ public class NIRCBirthFormSection extends NewAnimalFormSection
     @Override
     public List<String> getTbarButtons()
     {
-        List<String> defaults = super.getTbarButtons();
-        defaults.remove("COPYFROMSECTION");
-        return defaults;
+        List<String> defaultButtons = super.getTbarButtons();
+
+        int idx = defaultButtons.indexOf("ADDANIMALS");
+        if (idx > -1)
+        {
+            defaultButtons.remove(idx);
+            defaultButtons.add(idx, "NIRC_ADDANIMALS");
+        }
+
+        idx = defaultButtons.indexOf("COPYFROMSECTION");
+        if (idx > -1)
+        {
+            defaultButtons.remove(idx);
+        }
+        return defaultButtons;
     }
 
     @Override
