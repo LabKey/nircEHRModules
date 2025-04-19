@@ -5,6 +5,7 @@ import org.labkey.api.data.TableInfo;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.forms.NewAnimalFormSection;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.view.template.ClientDependency;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ public class NIRCBirthFormSection extends NewAnimalFormSection
     public NIRCBirthFormSection()
     {
         super("study", "birth", "Births", false);
+        addClientDependency(ClientDependency.supplierFromPath("ehr/window/FormBulkAddWindow.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/FormBulkAddWindow.js"));
     }
 
     @Override
@@ -63,6 +66,7 @@ public class NIRCBirthFormSection extends NewAnimalFormSection
     {
         List<String> defaultButtons = super.getTbarMoreActionButtons();
         defaultButtons.remove("GUESSPROJECT");
+        defaultButtons.add("NIRC_FORM_BULK_ADD");
         return defaultButtons;
     }
 }

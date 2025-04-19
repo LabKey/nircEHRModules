@@ -1,50 +1,10 @@
 
 Ext4.define('NIRC_EHR.window.AddAnimalsWindow', {
     extend: 'EHR.window.AddAnimalsWindow',
+    upperCaseAnimalId: true,
 
     initComponent: function(){
         this.callParent(arguments);
-    },
-
-    addSubjects: function(subjectList){
-        if (subjectList.length && this.targetStore){
-            var date = this.down('#dateField').getValue();
-            var choose = this.down('#chooseValues').getValue();
-
-            subjectList = Ext4.Array.unique(subjectList);
-            if (subjectList.length > this.MAX_ANIMALS){
-                Ext4.Msg.alert('Error', 'Too many animals were returned: ' + subjectList.length);
-                return;
-            }
-
-            var records = [];
-            Ext4.Array.forEach(subjectList, function(s){
-                var model = Ext4.isObject(s) ? s : {Id: s.toUpperCase()}; //This is required if adding Animals via Add Batch functionality. Otherwise it throws an error.
-                if (date) {
-                    model.date = date;
-                }
-
-                records.push(this.targetStore.createModel(model));
-            }, this);
-
-            if (choose){
-                Ext4.create('EHR.window.BulkEditWindow', {
-                    suppressConfirmMsg: true,
-                    records: records,
-                    targetStore: this.targetStore,
-                    formConfig: this.formConfig
-                }).show();
-                this.close();
-            }
-            else {
-                this.targetStore.add(records);
-            }
-        }
-
-        if (Ext4.Msg.isVisible())
-            Ext4.Msg.hide();
-
-        this.close();
     },
 
     locationHandler: function(){
