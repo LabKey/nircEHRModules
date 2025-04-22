@@ -52,12 +52,7 @@ public class NIRCBirthFormSection extends NewAnimalFormSection
             defaultButtons.remove(idx);
             defaultButtons.add(idx, "NIRC_ADDANIMALS");
         }
-
-        idx = defaultButtons.indexOf("COPYFROMSECTION");
-        if (idx > -1)
-        {
-            defaultButtons.remove(idx);
-        }
+        defaultButtons.remove("COPYFROMSECTION");
         return defaultButtons;
     }
 
