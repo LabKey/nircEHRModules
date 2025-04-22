@@ -3,6 +3,11 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="buildings" tableDbType="TABLE">
                 <tableTitle>Buildings</tableTitle>
+                    <!-- Commenting out DefaultEHRCustomizer here because it does a shared customization on the
+                    'Description' (labeled as 'Building' in NIRC for 'buildings' view) and sets a fixed width,
+                    which causes the column to appear unusually wide.
+                    Update when we do Buildings related customizations in the future -->
+                    <!-- <javaCustomizer class="org.labkey.ehr.table.DefaultEHRCustomizer" />-->
                 <columns>
                     <column columnName="area">
                         <columnTitle>Area</columnTitle>
