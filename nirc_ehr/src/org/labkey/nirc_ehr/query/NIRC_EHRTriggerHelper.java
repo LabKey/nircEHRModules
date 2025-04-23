@@ -42,6 +42,7 @@ import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
 import org.labkey.nirc_ehr.notification.NIRCClinicalMoveNotification;
 import org.labkey.nirc_ehr.notification.NIRCDeathNotification;
+import org.labkey.nirc_ehr.notification.NIRCPregnancyOutcomeNotification;
 import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
 
 import java.sql.SQLException;
@@ -49,13 +50,13 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class NIRC_EHRTriggerHelper
@@ -899,5 +900,82 @@ public class NIRC_EHRTriggerHelper
         {
             _log.error("Error marking procedure order complete", e);
         }
+    }
+
+    public void sendPregnancyOutcomeNotification(final String animalId, Map<String, Object> row) throws Exception
+    {
+        //check whether Notification is enabled
+        if (!NotificationService.get().isActive(new NIRCPregnancyOutcomeNotification(), _container) || !NotificationService.get().isServiceEnabled())
+        {
+            _log.info("NIRC Pregnancy Outcome notification service is not enabled, will not send notification.");
+            return;
+        }
+
+        try (DbScope.Transaction transaction = Objects.requireNonNull(StudyService.get()).getDatasetSchema().getScope().ensureTransaction())
+        {
+            // Add a post commit task to run provider update in another thread once this transaction is complete.
+            transaction.addCommitTask(() ->
+                    JobRunner.getDefault().execute(() -> {
+                        final Container container = _container;
+                        final User user = _user;
+                        String subject = "Pregnancy Outcome Notification for: " + animalId;
+
+                        // get recipients
+                        Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new NIRCPregnancyOutcomeNotification(), container);
+                        if (recipients.isEmpty())
+                        {
+                            _log.warn("No NIRC recipients set for pregnancy outcome notification, skipping notification");
+                            return;
+                        }
+                        //get pregnancy outcome info
+                        Date date = ConvertHelper.convert(row.get("date"), Date.class);
+                        String result = ConvertHelper.convert(row.get("result"), String.class);
+                        String outcome = null;
+                        try
+                        {
+                            outcome = getPregnancyResultTitle(result);
+                        }
+                        catch (SQLException e)
+                        {
+                            throw new RuntimeException("Unable to find the outcome for value '" + result + "'", e);
+                        }
+
+                        //construct html for email notification
+                        final StringBuilder html = new StringBuilder();
+                        html.append("Pregnancy outcome for animal '").append(PageFlowUtil.filter(animalId)).
+                                append("' recorded on '").append(_dateFormat.format(date)).append("': ").
+                                append(PageFlowUtil.filter(outcome)).append("<br><br>");
+
+                        //append animal details
+                        appendAnimalDetails(html, animalId, container);
+
+                        // send Pregnancy Outcome notification
+                        _log.debug("NIRC Pregnancy Outcome notification job sending email for animal " + animalId + " in container " + container.getPath());
+                        TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
+                    }), DbScope.CommitTaskOption.POSTCOMMIT);
+
+            transaction.commit();
+        }
+    }
+
+    public String getPregnancyResultTitle(String val) throws SQLException
+    {
+        TableInfo ti = getTableInfo("ehr_lookups", "pregnancy_result");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("value"), val);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("value", "title"), filter, null);
+        String title = null;
+        try (Results rs = ts.getResults())
+        {
+            for (Map<String, Object> r : rs)
+            {
+                String value = ConvertHelper.convert(r.get("value"), String.class);
+
+                if (null != value && value.equals(val))
+                {
+                    title = ConvertHelper.convert(r.get("title"), String.class);
+                }
+            }
+        }
+        return title;
     }
 }
