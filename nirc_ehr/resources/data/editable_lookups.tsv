@@ -114,6 +114,7 @@ respiratory_observations	Clinical	Respiratory Observations	Used in clinical obse
 routes	Clinical	Treatment Routes	Used in drug and treatment datasets.
 sib_score	Behavior	SIB Score	Behavior observation fixed values.
 skin_problem	Clinical	Skin Problems	Clinical observation fixed values.
+source	Colony Management	Source
 species	Colony Management	Species
 snomed	Research	Treatments	List of animal treatments.
 species_codes	Colony Management	Species Codes
@@ -133,5 +134,6 @@ volume_units	Clinical	Volume Units	Used in drug and treatment datasets.
 weight_ranges	Clinical	Weight Ranges	Min/Max allowable weight per species. Used in various weight reports.
 wound_score	Clinical	Wound Score	Clinical observation fixed values.
 wound_severity	Clinical	Wound Severity	Clinical observation fixed values.
-wound_status	Clinical	Wound Status	Clinical observation fixed values.
+wound_status_behavior	Behavior	Wound Status	Behavioral observation fixed values.
+wound_status_clinical	Clinical	Wound Status	Clinical observation fixed values.
 yes_no_order	Clinical	Yes/No Values in Order	Used for yes/no values in various datasets. Includes sort order.

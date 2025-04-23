@@ -70,6 +70,9 @@ public class BaseFormSection extends SimpleFormSection
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/AddAnimalsWindow.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/field/LocationField.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/CopyFromSectionWindow.js"));
+        addClientDependency(ClientDependency.supplierFromPath("ehr/window/FormBulkAddWindow.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/FormBulkAddWindow.js"));
+
         setSupportFormSort(false);
     }
 
@@ -105,7 +108,7 @@ public class BaseFormSection extends SimpleFormSection
     {
         List<String> defaultButtons = super.getTbarMoreActionButtons();
         defaultButtons.remove("GUESSPROJECT");
-//        defaultButtons.add("FORM_BULK_ADD");
+        defaultButtons.add("NIRC_FORM_BULK_ADD");
         return defaultButtons;
     }
 

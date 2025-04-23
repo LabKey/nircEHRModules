@@ -30,6 +30,7 @@ public class NIRCBirthFormType extends BirthFormType
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/plugin/RowEditor.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/NIRCDefault.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Birth.js"));
+        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/AddAnimalsWindow.js"));
 
         for (FormSection s : getFormSections())
         {

@@ -139,12 +139,6 @@ EHR.model.DataModelManager.registerMetadata('ClinicalDefaults', {
             qcstate: {
                 hidden: true
             },
-            openDiagnosis: {
-                hidden: true
-            },
-            closeDiagnosis: {
-                hidden: true
-            },
             attachmentFile: {
                 hidden: true
             },

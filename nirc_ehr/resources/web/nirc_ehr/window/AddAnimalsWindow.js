@@ -1,6 +1,7 @@
 
 Ext4.define('NIRC_EHR.window.AddAnimalsWindow', {
     extend: 'EHR.window.AddAnimalsWindow',
+    upperCaseAnimalId: true,
 
     initComponent: function(){
         this.callParent(arguments);
