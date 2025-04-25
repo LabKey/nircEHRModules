@@ -52,13 +52,13 @@ public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
         defaultButtons.add("NIRCSAVEDRAFTBUTTON");
         defaultButtons.add("DEATHSUBMIT");
 
-        if (isVetTech)
-        {
-            defaultButtons.add("DEATH_NECROPSY_VET_REVIEW"); //submit for review
-        }
-        else if (isVet)
+        if (isVet)
         {
             defaultButtons.add("SUBMIT"); //submit final
+        }
+        else if (isVetTech)
+        {
+            defaultButtons.add("DEATH_NECROPSY_VET_REVIEW"); //submit for review
         }
         return defaultButtons;
     }
