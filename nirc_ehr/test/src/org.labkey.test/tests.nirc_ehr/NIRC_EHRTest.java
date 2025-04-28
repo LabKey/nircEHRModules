@@ -469,7 +469,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
         _helper.addRecordToGrid(observationOrders);
-        observationOrders.setGridCell(1, "category", "Lameness/Disuse");
+        observationOrders.setGridCell(1, "category", "Lameness");
         observationOrders.setGridCell(1, "frequency", "QID");
         submitForm("Submit Final", "Finalize");
 
@@ -479,7 +479,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
 
-        List<String> expected = Arrays.asList("Activity", "Appetite", "BCS", "Hydration", "Stool", "Verified Id?", "Lameness/Disuse");
+        List<String> expected = Arrays.asList("Activity", "Appetite", "BCS", "Hydration", "Stool", "Verified Id?", "Lameness");
         List<String> actual = table.getColumnDataAsText("category");
         Collections.sort(expected);
         Collections.sort(actual);
@@ -492,7 +492,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Incorrect rows in Today's Observation Schedule", 4, table.getDataRowCount());
-        Assert.assertEquals("Incorrect observation title", "Daily Clinical Observations; Lameness/Disuse", table.getDataAsText(0, "observationList"));
+        Assert.assertEquals("Incorrect observation title", "Daily Clinical Observations; Lameness", table.getDataAsText(0, "observationList"));
         Assert.assertEquals("Status is not updated", "", table.getDataAsText(0, "observationStatus"));
         table.link(0, "observationRecord").click();
 
@@ -526,7 +526,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         log("Closing the case");
         goToEHRFolder();
-        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+        waitAndClickAndWait(Locator.linkWithText("Active Clinical Cases"));
         DataRegionTable activeClinicalCases = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         activeClinicalCases.link(0, "caseCheck").click();
         switchToWindow(2);
