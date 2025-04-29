@@ -112,5 +112,6 @@ vendor_production_location	Vendor Production Location	value	title
 weight_ranges	Weight Ranges	value
 wound_score	Wound Score	value
 wound_severity	Wound Severity	value
-wound_status	Wound Status	value
+wound_status_behavior	Wound Status Behavior	value
+wound_status_clinical	Wound Status Clinical	value
 yes_no_order	Yes/No Values in Order	value

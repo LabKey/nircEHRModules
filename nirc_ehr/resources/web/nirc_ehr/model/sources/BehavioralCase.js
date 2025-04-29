@@ -91,12 +91,6 @@ EHR.model.DataModelManager.registerMetadata('BehavioralCase', {
             qcstate: {
                 hidden: true
             },
-            openDiagnosis: {
-                hidden: true
-            },
-            closeDiagnosis: {
-                hidden: true
-            },
             attachmentFile: {
                 hidden: true
             },

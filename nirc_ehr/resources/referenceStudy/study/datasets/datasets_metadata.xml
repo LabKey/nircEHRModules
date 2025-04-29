@@ -1127,14 +1127,6 @@
                 <columnTitle>Case category</columnTitle>
                 <datatype>varchar</datatype>
             </column>
-            <column columnName="openDiagnosis">
-                <columnTitle>Open Diagnosis</columnTitle>
-                <datatype>varchar</datatype>
-            </column>
-            <column columnName="closeDiagnosis">
-                <columnTitle>Close Diagnosis</columnTitle>
-                <datatype>varchar</datatype>
-            </column>
             <column columnName="openRemark">
                 <columnTitle>Open Remark</columnTitle>
                 <datatype>varchar</datatype>
