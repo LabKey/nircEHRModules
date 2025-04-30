@@ -5,6 +5,7 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
+        <column name="category"/>
         <column name="area"/>
         <column name="observation"/>
         <column name="remark"/>
@@ -12,6 +13,6 @@
         <column name="QCState"/>
     </columns>
     <filters>
-        <filter column="type" operator="eq" value="Behavior"/>
+        <filter column="Id/curLocation/room/floor/building" operator="eq" value="Building 31"/>
     </filters>
 </customView>

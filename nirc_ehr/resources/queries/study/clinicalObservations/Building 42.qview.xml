@@ -12,6 +12,6 @@
         <column name="QCState"/>
     </columns>
     <filters>
-        <filter column="type" operator="eq" value="Behavior"/>
+        <filter column="Id/curLocation/room/floor/building" operator="eq" value="Building 42"/>
     </filters>
 </customView>
