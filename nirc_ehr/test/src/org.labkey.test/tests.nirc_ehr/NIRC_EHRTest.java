@@ -810,12 +810,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
         setFormElement(Locator.textarea("plan"), "Case plan");
         setFormElement(Locator.name("Id"), animalId);
-        _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(2).format(_dateFormat));
+        _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
 
         //Fill out Clinical Remarks section with Date, Remark
         scrollIntoView(Locator.textarea("remark"));
-        _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(3).format(_dateFormat));
+        _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(2).format(_dateFormat));
         _helper.setDataEntryField("remark", "Clinical Remarks - Test");
         if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
             _helper.setDataEntryField("remark", "Clinical Remarks - Test");
@@ -824,13 +824,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
         _helper.addRecordToGrid(weight);
-        weight.setGridCellJS(1, "date", LocalDateTime.now().minusDays(2).format(_dateFormat));
+        weight.setGridCellJS(1, "date", LocalDateTime.now().minusDays(1).format(_dateFormat));
         weight.setGridCell(1, "weight", "6.000");
 
         log("Adding Medications/Treatments Orders");
         Ext4GridRef orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Orders");
         _helper.addRecordToGrid(orderGrid);
-        orderGrid.setGridCell(1, "date", LocalDateTime.now().minusDays(3).format(_dateFormat));
+        orderGrid.setGridCell(1, "date", LocalDateTime.now().minusDays(2).format(_dateFormat));
         orderGrid.clickDownArrowOnGrid(1, "code");
         orderGrid.setGridCell(1, "code", "Diazepam");
         orderGrid.clickDownArrowOnGrid(1, "frequency");
