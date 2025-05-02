@@ -10,6 +10,7 @@ SELECT
     QCState,
     type
 FROM clinical_observations
+WHERE type = 'Clinical'
 GROUP BY
     Id,
     date,

@@ -16,7 +16,7 @@ att_score	Behavior	Attitude Score	Behavior observation fixed values.
 bandage_observations	Clinical	Bandage Observations	Clinical observation fixed values.
 bcs_score	Clinical	Body Condition Score	Clinical observation fixed values.
 behavior_abnormality	Clinical	Behavior Abnormality	Clinical observation fixed values.
-behavior_mgmt_codes	Behavior	Behavior Managment Codes	Behavior observation fixed values.
+behavior_mgmt_codes	Behavior	Behavior Management Codes	Behavior observation fixed values.
 behavior_types	Behavior	Behavior Types	Behavior observation fixed values.
 blood_draw_reason	Clinical	Blood Draw Reason	Used in blood draw datasets.
 blood_draw_tube_type	Clinical	Blood Draw Tube Type	Used in blood draw datasets.
