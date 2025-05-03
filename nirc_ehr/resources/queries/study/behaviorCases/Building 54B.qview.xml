@@ -2,6 +2,9 @@
     <columns>
         <column name="caseCheck"/>
         <column name="Id"/>
+        <column name="Id/Demographics/species"/>
+        <column name="Id/curLocation/cage/room/floor/building"/>
+        <column name="Id/curLocation/cage"/>
         <column name="date"/>
         <column name="reviewdate"/>
         <column name="enddate"/>
@@ -23,6 +26,6 @@
         <sort column="date" descending="true"/>
     </sorts>
     <filters>
-        <filter column="Id/curLocation/room/floor/building" operator="eq" value="Building 54B"/>
+        <filter column="Id/curLocation/room/floor/building/Description" operator="eq" value="Building 54B"/>
     </filters>
 </customView>

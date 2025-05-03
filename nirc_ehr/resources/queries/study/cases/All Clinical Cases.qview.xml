@@ -1,13 +1,11 @@
-<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+<customView xmlns="http://labkey.org/data/xml/queryCustomView" canOverride="true">
     <columns>
         <column name="caseCheck"/>
         <column name="caseHistory"/>
         <column name="Id"/>
-        <column name="Id/curLocation/cage">
-            <properties>
-                <property name="columnTitle" value="Location"/>
-            </properties>
-        </column>
+        <column name="Id/Demographics/species"/>
+        <column name="Id/curLocation/cage/room/floor/building"/>
+        <column name="Id/curLocation/cage"/>
         <column name="Id/activeProjectAssignments/project"/>
         <column name="Id/activeProtocolAssignments/protocolDisplayName">
             <properties>
