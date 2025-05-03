@@ -1,5 +1,5 @@
 SELECT * FROM (
-    SELECT anmEvt.ANIMAL_EVENT_ID                                                 as objectid,
+    SELECT anmEvt.ANIMAL_EVENT_ID                                                AS objectid,
           anm.ANIMAL_ID_NUMBER                                                   AS Id,
           CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                               AS caseDate,
           CAST(COALESCE(adt.modified, anmEvt.CREATED_DATETIME) AS TIMESTAMP)     AS modified,
@@ -7,21 +7,21 @@ SELECT * FROM (
                WHEN (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME) IS NULL OR trim(anmEvt.STAFF_ID.STAFF_LAST_NAME) IS NULL)
                    THEN 'unknown'
                ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
-                   || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)               AS performedby,
+                   || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)         AS performedby,
            (CASE
                 WHEN anmEvt.EVENT_ID = 1580
                     THEN 'Open Remark: ' ||
                          (CASE WHEN anmCmt.TEXT IS NULL THEN 'None' ELSE anmCmt.TEXT END) ||
                          '; Open Diagnosis: ' ||
                          (CASE WHEN anmEvt.DIAGNOSIS IS NULL THEN 'None' ELSE anmEvt.DIAGNOSIS END)
-               END) AS openRemark,
+               END)                                                              AS openRemark,
            (CASE
                 WHEN anmEvt.EVENT_ID = 1677
                     THEN 'Close Remark: ' ||
                          (CASE WHEN anmCmt.TEXT IS NULL THEN 'None' ELSE anmCmt.TEXT END) ||
                          '; Close Diagnosis: ' ||
                          (CASE WHEN anmEvt.DIAGNOSIS IS NULL THEN 'None' ELSE anmEvt.DIAGNOSIS END)
-               END) AS closeRemark,
+               END)                                                              AS closeRemark,
           COALESCE(dea.deathDate, dep.eventDate)                                 AS enddate,
           anmEvt.EVENT_ID.NAME                                                   AS category,
           CASE
