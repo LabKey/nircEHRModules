@@ -1,4 +1,4 @@
-v<customView xmlns="http://labkey.org/data/xml/queryCustomView" canOverride="true">
+<customView xmlns="http://labkey.org/data/xml/queryCustomView" canOverride="true">
     <sorts>
         <sort column="date" descending="true"/>
     </sorts>
