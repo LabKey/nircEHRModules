@@ -34,11 +34,11 @@ public class NotificationHelper
 
         if (isHeader)
         {
-            return "<th style=\"" + NOTIFICATION_GRID_TD_STYLE + additionalStyle + "\"><b>" + formattedValue + "</b></th>";
+            return "<th style=\"" + NOTIFICATION_GRID_TD_STYLE + (additionalStyle == null ? "" : additionalStyle) + "\"><b>" + formattedValue + "</b></th>";
         }
         else
         {
-            return "<td style=\"" + NOTIFICATION_GRID_TD_STYLE + additionalStyle + "\">" + formattedValue + "</td>";
+            return "<td style=\"" + NOTIFICATION_GRID_TD_STYLE + (additionalStyle == null ? "" : additionalStyle) + "\">" + formattedValue + "</td>";
         }
     }
 

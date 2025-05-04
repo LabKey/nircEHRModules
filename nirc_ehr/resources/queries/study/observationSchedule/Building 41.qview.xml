@@ -15,6 +15,6 @@
     </sorts>
     <filters>
         <filter column="calculated_status" operator="eq" value="Alive"/>
-        <filter column="Id/curLocation/room/floor/building" operator="eq" value="Building 41"/>
+        <filter column="Id/curLocation/room/floor/building/Description" operator="eq" value="Building 41"/>
     </filters>
 </customView>

@@ -4,6 +4,9 @@
     </sorts>
     <columns>
         <column name="Id"/>
+        <column name="Id/Demographics/species"/>
+        <column name="Id/curLocation/cage/room/floor/building"/>
+        <column name="Id/curLocation/cage"/>
         <column name="date"/>
         <column name="area"/>
         <column name="observation"/>
@@ -12,6 +15,6 @@
         <column name="QCState"/>
     </columns>
     <filters>
-        <filter column="Id/curLocation/room/floor/building" operator="eq" value="Building 10"/>
+        <filter column="Id/curLocation/room/floor/building/Description" operator="eq" value="Building 10"/>
     </filters>
 </customView>

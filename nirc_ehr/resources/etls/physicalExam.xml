@@ -4,7 +4,7 @@
     <description>Physical Exam data</description>
     <transforms>
         <transform id="step1" type="org.labkey.di.pipeline.TransformTask">
-            <description>Copy to pairings target</description>
+            <description>Copy to physical exam target</description>
             <source schemaName="dbo" queryName="q_physicalExam"/>
             <destination schemaName="study" queryName="physicalExam"
                          bulkLoad="true" batchSize="5000" targetOption="merge">
