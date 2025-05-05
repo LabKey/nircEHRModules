@@ -526,7 +526,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         log("Closing the case");
         goToEHRFolder();
-        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+        waitAndClickAndWait(Locator.linkWithText("Active Clinical Cases"));
         DataRegionTable activeClinicalCases = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         activeClinicalCases.link(0, "caseCheck").click();
         switchToWindow(2);
