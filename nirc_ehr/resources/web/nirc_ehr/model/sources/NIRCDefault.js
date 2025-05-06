@@ -250,6 +250,32 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                     width: 200
                 }
             }
+        },
+        'study.flags': {
+            flag: {
+                allowBlank: false,
+                lookup: {
+                    columns: 'objectid,value,category,code',
+                    sort: 'category,code,value',
+                    filterArray: [LABKEY.Filter.create('datedisabled', null, LABKEY.Filter.Types.ISBLANK)]
+                },
+                columnConfig: {
+                    width: 300
+                },
+                editorConfig: {
+                    caseSensitive: false,
+                    anyMatch: true,
+                    plugins: [Ext4.create('LDK.plugin.UserEditableCombo', {
+                        allowChooseOther: false
+                    })],
+                    listConfig: {
+                        innerTpl: '{[(values.category ? ("<b>" + LABKEY.Utils.encodeHtml(values.category) + ":</b> ") : "") + LABKEY.Utils.encodeHtml(values.value)]}',
+                        getInnerTpl: function () {
+                            return this.innerTpl;
+                        }
+                    }
+                }
+            }
         }
     }
 });
