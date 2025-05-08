@@ -8,21 +8,9 @@ SELECT * FROM (
                    THEN 'unknown'
                ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
                    || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)               AS performedby,
-           (CASE
-                WHEN anmEvt.EVENT_ID = 1580
-                    THEN 'Open Remark: ' ||
-                         (CASE WHEN anmCmt.TEXT IS NULL THEN 'None' ELSE anmCmt.TEXT END) ||
-                         '; Open Diagnosis: ' ||
-                         (CASE WHEN anmEvt.DIAGNOSIS IS NULL THEN 'None' ELSE anmEvt.DIAGNOSIS END)
-               END) AS openRemark,
-           (CASE
-                WHEN anmEvt.EVENT_ID = 1677
-                    THEN 'Close Remark: ' ||
-                         (CASE WHEN anmCmt.TEXT IS NULL THEN 'None' ELSE anmCmt.TEXT END) ||
-                         '; Close Diagnosis: ' ||
-                         (CASE WHEN anmEvt.DIAGNOSIS IS NULL THEN 'None' ELSE anmEvt.DIAGNOSIS END)
-               END) AS closeRemark,
-          COALESCE(dea.deathDate, dep.eventDate)                                 AS enddate,
+           (CASE WHEN anmEvt.EVENT_ID = 1580 THEN ('Open Remark: ' || COALESCE(anmCmt.TEXT, 'None') || '; Open Diagnosis: ' || COALESCE(anmEvt.DIAGNOSIS, 'None')) ELSE NULL END)      AS openRemark,
+           (CASE WHEN anmEvt.EVENT_ID = 1677 THEN ('Close Remark: ' || COALESCE(anmCmt.TEXT, 'None') || '; Close Diagnosis: ' || COALESCE(anmEvt.DIAGNOSIS, 'None')) ELSE NULL END)      AS closeRemark,
+           COALESCE(dea.deathDate, dep.eventDate)                                 AS enddate,
           anmEvt.EVENT_ID.NAME                                                   AS category,
           CASE
               WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
