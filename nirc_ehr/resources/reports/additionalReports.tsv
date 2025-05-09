@@ -21,7 +21,6 @@ observationOrders	Clinical	query	Observation Orders	true		study	observation_orde
 alopecia	Clinical	query	Alopecia Scores	TRUE		study	clinical_observations	Alopecia Scores		date	FALSE	FALSE		qcstate/publicdata	This report contains the alopecia scores for the animal
 behaviorCases	Behavior	query	Active Behavior Cases	true		study	activeBehaviorCases			date	false	false		qcstate/publicdata	This displays active behavioral cases
 allBehaviorCases	Behavior	query	Behavior Cases	true		study	behaviorCases			date	false	false		qcstate/publicdata	This displays all behavioral cases
-behaviorRemarks
 bloodSchedule															
 cases	Clinical	query	Active Clinical Cases	true		study	activeClinicalCases			date	false	false		qcstate/publicdata	This displays active clinical cases
 clinCases	Clinical	query	All Clinical Cases	true		study	clinicalCases			date	false	false		qcstate/publicdata	This report contains one record for each clinical case
