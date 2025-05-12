@@ -4,6 +4,7 @@
     </sorts>
     <columns>
         <column name="Id"/>
+        <column name="Id/Demographics/species"/>
         <column name="date"/>
         <column name="systemExamined"/>
         <column name="appearance"/>
