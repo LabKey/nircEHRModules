@@ -2,6 +2,7 @@
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="protocol" tableDbType="TABLE">
+                <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer" />
                 <tableTitle>Protocol</tableTitle>
                 <columns>
                     <column columnName="InvestigatorId">

@@ -43,14 +43,22 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
                     schemaName: 'ehr',
                     queryName: 'project',
                     keyColumn: 'project',
-                    columns: 'project,name'
+                    columns: 'project,name',
+                    filterArray: [
+                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
+                    ]
                 }
             },
             birthProtocol: {
                 columnConfig: {
                     width: 200
                 },
-                allowBlank: false
+                allowBlank: false,
+                lookup: {
+                    filterArray: [
+                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
+                    ]
+                }
             },
             'Id/demographics/birth': {
                 allowBlank: false

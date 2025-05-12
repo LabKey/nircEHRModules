@@ -2,6 +2,7 @@
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="project" tableDbType="TABLE">
+                <javaCustomizer class="org.labkey.nirc_ehr.table.NIRC_EHRCustomizer" />
                 <tableUrl>/EHR/projectDetails.view?project=${project}</tableUrl>
                 <insertUrl />
                 <importUrl />
