@@ -24,7 +24,8 @@ SELECT
     d.id.demographics.calculated_status as status_code,
     d.id.demographics.species.common_name as species,
     '' as Display,
-    'Demographics' as source
+    'Demographics' as source,
+    d.modified
 
 FROM study.demographics d
 WHERE d.Dam IS NOT NULL OR d.Sire IS NOT NULL

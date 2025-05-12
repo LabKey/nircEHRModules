@@ -3,7 +3,6 @@ package org.labkey.nirc_ehr.dataentry.form;
 import org.json.JSONObject;
 import org.labkey.api.ehr.dataentry.AbstractDataEntryForm;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
-import org.labkey.api.ehr.security.EHRDataAdminPermission;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.ActionURL;
 
@@ -29,14 +28,5 @@ public class NIRCChemistryImportFormType extends AbstractDataEntryForm
         json.put("url", url);
 
         return json;
-    }
-
-    @Override
-    protected boolean canInsert()
-    {
-        if (!getCtx().getContainer().hasPermission(getCtx().getUser(), EHRDataAdminPermission.class))
-            return false;
-
-        return super.canInsert();
     }
 }

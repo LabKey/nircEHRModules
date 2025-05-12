@@ -8,6 +8,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
        anmEvt.EVENT_ID.EVENT_ID                                                  AS category,
        anmEvt.DIAGNOSIS                                                          AS vetreview,
        anmCmt.TEXT                                                               AS remark,
+       'Clinical'                                                                AS category,
        CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
             ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'
                 || substring(anmEvt.ATTACHMENT_PATH, LENGTH('N:\'), LENGTH(anmEvt.ATTACHMENT_PATH)))
