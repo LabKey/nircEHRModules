@@ -25,7 +25,4 @@
         <sort column="Id/curLocation/room/floor/building"/>
         <sort column="Id/curLocation/cage"/>
     </sorts>
-    <filters>
-        <filter column="calculated_status" operator="eq" value="Alive"/>
-    </filters>
 </customView>
