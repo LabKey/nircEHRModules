@@ -14,7 +14,10 @@ EHR.model.DataModelManager.registerMetadata('Assignment', {
                     schemaName: 'ehr',
                     queryName: 'project',
                     keyColumn: 'project',
-                    columns: 'project,name'
+                    columns: 'project,name',
+                    filterArray: [
+                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
+                    ]
                 }
             }
         },
@@ -29,6 +32,11 @@ EHR.model.DataModelManager.registerMetadata('Assignment', {
                     fixed: true,
                     width: 150
                 },
+                lookup: {
+                    filterArray: [
+                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
+                    ]
+                }
             }
         }
     }
