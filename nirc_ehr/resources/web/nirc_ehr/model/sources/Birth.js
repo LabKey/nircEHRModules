@@ -55,10 +55,11 @@ EHR.model.DataModelManager.registerMetadata('Birth', {
                 },
                 allowBlank: false,
                 lookup: {
-                    filterArray: [
-                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
-                    ]
-                }
+                    schemaName: 'ehr',
+                    queryName: 'activeProtocols',
+                    keyColumn: 'protocol',
+                    columns: 'protocol,title'
+                },
             },
             'Id/demographics/birth': {
                 allowBlank: false

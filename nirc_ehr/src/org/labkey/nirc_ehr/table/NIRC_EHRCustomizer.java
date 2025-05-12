@@ -682,11 +682,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (matches(ti, "ehr", "protocol"))
         {
             customizeProtocolTable(ti);
-            addIsActiveForProjectProtocolCol(ti, EHRService.EndingOption.activeAfterMidnightTonight);
         }
         if (matches(ti, "ehr", "project"))
         {
-            addIsActiveForProjectProtocolCol(ti, EHRService.EndingOption.activeAfterMidnightTonight);
+            addIsActiveForProject(ti, EHRService.EndingOption.activeAfterMidnightTonight);
         }
         if (matches(ti, "study", "protocolAssignment"))
         {
@@ -706,7 +705,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         }
     }
 
-    private void addIsActiveForProjectProtocolCol(AbstractTableInfo ti, EHRService.EndingOption... endOptions)
+    private void addIsActiveForProject(AbstractTableInfo ti, EHRService.EndingOption... endOptions)
     {
         String name = "isActive";
         if (ti.getColumn(name) == null)

@@ -33,10 +33,11 @@ EHR.model.DataModelManager.registerMetadata('Assignment', {
                     width: 150
                 },
                 lookup: {
-                    filterArray: [
-                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
-                    ]
-                }
+                    schemaName: 'ehr',
+                    queryName: 'activeProtocols',
+                    keyColumn: 'protocol',
+                    columns: 'protocol,title'
+                },
             }
         }
     }

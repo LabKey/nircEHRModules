@@ -68,9 +68,10 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                     width: 200
                 },
                 lookup: {
-                    filterArray: [
-                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
-                    ]
+                    schemaName: 'ehr',
+                    queryName: 'activeProtocols',
+                    keyColumn: 'protocol',
+                    columns: 'protocol,title'
                 },
             },
             performedby: {
