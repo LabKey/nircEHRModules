@@ -2,6 +2,7 @@ package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.forms.AdminLinksFormType;
+import org.labkey.api.ehr.security.EHRProtocolEditPermission;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.ActionURL;
 
@@ -22,5 +23,11 @@ public class NIRCProjectFormType extends AdminLinksFormType
         url.addParameter("query.queryName", "project");
         url.addParameter("showImport", "true");
         return url;
+    }
+
+    @Override
+    public boolean isAvailable()
+    {
+        return (super.isAvailable() || getCtx().getContainer().hasPermission(getCtx().getUser(), EHRProtocolEditPermission.class));
     }
 }
