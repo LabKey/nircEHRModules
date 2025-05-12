@@ -36,5 +36,6 @@
         <column name="isStock"/>
         <column name="isHonorReset"/>
         <column name="displayName"/>
+        <column name="isActive"/>
     </columns>
 </customView>
