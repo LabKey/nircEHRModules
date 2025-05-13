@@ -685,6 +685,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             customizeProtocolTable(ti);
         }
+        if (matches(ti, "ehr", "project"))
+        {
+            addIsActiveForProject(ti, EHRService.EndingOption.activeAfterMidnightTonight);
+        }
         if (matches(ti, "study", "protocolAssignment"))
         {
             EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.activeAfterMidnightTonight);
@@ -700,6 +704,29 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         if (matches(ti, "study", "prc_order"))
         {
             EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.activeAfterMidnightTonight);
+        }
+    }
+
+    private void addIsActiveForProject(AbstractTableInfo ti, EHRService.EndingOption... endOptions)
+    {
+        String name = "isActive";
+        if (ti.getColumn(name) == null)
+        {
+            SQLFragment sql = new SQLFragment("(CASE " +
+                    // when enddate is null, it is active
+                    " WHEN (" + ExprColumn.STR_TABLE_ALIAS + ".enddate IS NULL) THEN " + ti.getSqlDialect().getBooleanTRUE());
+            for (EHRService.EndingOption endOption : endOptions)
+            {
+                sql.append(endOption.getSql());
+            }
+            sql.append(
+                    " WHEN (CAST(" + ExprColumn.STR_TABLE_ALIAS + ".enddate AS DATE) > {fn curdate()}) THEN " + ti.getSqlDialect().getBooleanTRUE() +
+                            " ELSE " + ti.getSqlDialect().getBooleanFALSE() +
+                            " END)");
+
+            ExprColumn col = new ExprColumn(ti, name, sql, JdbcType.BOOLEAN, ti.getColumn("enddate"));
+            col.setLabel("Is Active?");
+            ti.addColumn(col);
         }
     }
 
