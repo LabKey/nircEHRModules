@@ -55,7 +55,10 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                     schemaName: 'ehr',
                     queryName: 'project',
                     keyColumn: 'project',
-                    columns: 'project,name'
+                    columns: 'project,name',
+                    filterArray: [
+                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
+                    ]
                 },
                 allowBlank: false
             },
@@ -63,7 +66,13 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                 allowBlank: false,
                 columnConfig: {
                     width: 200
-                }
+                },
+                lookup: {
+                    schemaName: 'ehr',
+                    queryName: 'activeProtocols',
+                    keyColumn: 'protocol',
+                    columns: 'protocol,title'
+                },
             },
             performedby: {
                 hidden: true,
