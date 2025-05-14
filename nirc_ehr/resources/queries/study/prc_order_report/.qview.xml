@@ -1,13 +1,11 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView" canOverride="true">
     <sorts>
         <sort column="date" descending="true"/>
-        <sort column="Id/curLocation/room"/>
-        <sort column="Id/curLocation/cage"/>
     </sorts>
     <columns>
         <column name="Id"/>
         <column name="Id/Demographics/species"/>
-        <column name="Id/curLocation/room"/>
+        <column name="Id/curLocation/room/floor/building"/>
         <column name="Id/curLocation/cage"/>
         <column name="date"/>
         <column name="procedure"/>
