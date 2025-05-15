@@ -44,8 +44,6 @@ import org.labkey.api.writer.HtmlWriter;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
 import org.labkey.nirc_ehr.dataentry.form.NIRCClinicalObservationsFormType;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -261,12 +259,12 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     }
 
                     @Override
-                    public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                    public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                     {
                         String objectid = (String)ctx.get("objectid");
                         String id = (String)getBoundColumn().getValue(ctx);
 
-                        oldWriter.write(LinkBuilder.labkeyLink("Show Case Hx").onClick("NIRC_EHR.window.CaseHistoryWindow.showCaseHistory(" + PageFlowUtil.jsString(objectid) + ", " + PageFlowUtil.jsString(id) + ", this)").toString());
+                        out.write(LinkBuilder.labkeyLink("Show Case Hx").onClick("NIRC_EHR.window.CaseHistoryWindow.showCaseHistory(" + PageFlowUtil.jsString(objectid) + ", " + PageFlowUtil.jsString(id) + ", this)"));
                     }
 
                     @Override
@@ -319,20 +317,19 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 return new DataColumn(colInfo){
 
                     @Override
-                    public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                    public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                     {
-                        ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                        ActionURL url = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                         if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRBehaviorEntryPermission.class))
                             return;
 
-                        linkAction.addParameter("formType", "Pairing Observations");
+                        url.addParameter("formType", "Pairing Observations");
 
                         String taskId = (String)ctx.get("taskid");
                         if (StringUtils.isNotEmpty(taskId))
                         {
-                            linkAction.addParameter("taskid", taskId);
-                            String href = linkAction.toString();
-                            oldWriter.write(LinkBuilder.labkeyLink(label, href).target("_blank").toString());
+                            url.addParameter("taskid", taskId);
+                            out.write(LinkBuilder.labkeyLink(label, url).target("_blank"));
                         }
                     }
 
@@ -384,30 +381,29 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 return new DataColumn(colInfo){
 
                     @Override
-                    public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                    public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                     {
                         String category = (String)ctx.get("category");
-                        ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                        ActionURL url = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                         if ("Behavior".equals(category))
                         {
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRBehaviorEntryPermission.class))
                                 return;
 
-                            linkAction.addParameter("formType", "Behavioral Cases");
+                            url.addParameter("formType", "Behavioral Cases");
                         }
                         else
                         {
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
                                 return;
 
-                            linkAction.addParameter("formType", "Clinical Cases");
+                            url.addParameter("formType", "Clinical Cases");
                         }
 
                         String caseId = (String)ctx.get("objectid");
-                        linkAction.addParameter("caseid", caseId);
-                        linkAction.addParameter("edit", true);
-                        String href = linkAction.toString();
-                        oldWriter.write(LinkBuilder.labkeyLink(linkLabel, href).target("_blank").toString());
+                        url.addParameter("caseid", caseId);
+                        url.addParameter("edit", true);
+                        out.write(LinkBuilder.labkeyLink(linkLabel, url).target("_blank"));
                     }
 
                     @Override
@@ -459,25 +455,23 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                         {
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRVeterinarianPermission.class))
                                 return;
 
                             String taskid = (String)getBoundColumn().getValue(ctx);
 
-                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
-                            linkAction.addParameter("formType", "Necropsy");
-                            linkAction.addParameter("taskid", taskid);
+                            ActionURL url = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            url.addParameter("formType", "Necropsy");
+                            url.addParameter("taskid", taskid);
 
                             ActionURL returnUrl = new ActionURL("query", "executeQuery", ti.getUserSchema().getContainer());
                             returnUrl.addParameter("schemaName", "nirc_ehr");
                             returnUrl.addParameter("queryName", "necropsyTasks");
-                            linkAction.addParameter("returnUrl", returnUrl.toString());
+                            url.addParameter("returnUrl", returnUrl.toString());
 
-                            String href = linkAction.toString();
-                            oldWriter.write(LinkBuilder.labkeyLink("Enter/Update Necropsy", href).target("_blank").toString());
-
+                            out.write(LinkBuilder.labkeyLink("Enter/Update Necropsy", url).target("_blank"));
                         }
 
                         @Override
@@ -525,16 +519,15 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                         {
                             String taskid = (String)getBoundColumn().getValue(ctx);
 
-                            ActionURL linkAction = new ActionURL("ehr", "dataEntryFormDetails", ti.getUserSchema().getContainer());
-                            linkAction.addParameter("formType", "Necropsy");
-                            linkAction.addParameter("taskid", taskid);
+                            ActionURL url = new ActionURL("ehr", "dataEntryFormDetails", ti.getUserSchema().getContainer());
+                            url.addParameter("formType", "Necropsy");
+                            url.addParameter("taskid", taskid);
 
-                            String href = linkAction.toString();
-                            oldWriter.write(LinkBuilder.labkeyLink("View Report", href).target("_blank").toString());
+                            out.write(LinkBuilder.labkeyLink("View Report", url).target("_blank"));
                         }
 
                         @Override
@@ -1051,13 +1044,13 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                         {
                             String objectid = (String)getBoundColumn().getValue(ctx);
                             Date date = (Date)ctx.get("date");
                             String caseid = (String)ctx.get("caseid");
                             String category = (String)ctx.get("category");
-                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            ActionURL url = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
                                 return;
 
@@ -1065,35 +1058,34 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             {
                                 if (caseid != null)
                                 {
-                                    linkAction.addParameter("formType", "Behavioral Rounds");
-                                    linkAction.addParameter("caseid", caseid);
+                                    url.addParameter("formType", "Behavioral Rounds");
+                                    url.addParameter("caseid", caseid);
                                 }
                                 else
                                 {
-                                    linkAction.addParameter("formType", "Bulk Behavior Entry");
+                                    url.addParameter("formType", "Bulk Behavior Entry");
                                 }
                             }
                             else
                             {
                                 if (caseid != null)
                                 {
-                                    linkAction.addParameter("formType", "Clinical Rounds");
-                                    linkAction.addParameter("caseid", caseid);
+                                    url.addParameter("formType", "Clinical Rounds");
+                                    url.addParameter("caseid", caseid);
                                 }
                                 else
                                 {
-                                    linkAction.addParameter("formType", "medicationTreatment");
+                                    url.addParameter("formType", "medicationTreatment");
                                 }
                             }
 
-                            linkAction.addParameter("treatmentid", objectid);
-                            linkAction.addParameter("scheduledDate", date.toString());
+                            url.addParameter("treatmentid", objectid);
+                            url.addParameter("scheduledDate", date.toString());
 
                             String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()) + "#inputType:none&showReport:0&activeReport:clinMedicationSchedule";
-                            linkAction.addParameter("returnUrl", returnUrl);
+                            url.addParameter("returnUrl", returnUrl);
 
-                            String href = linkAction.toString();
-                            oldWriter.write(LinkBuilder.labkeyLink("Record Treatment", href).target("_blank").toString());
+                            out.write(LinkBuilder.labkeyLink("Record Treatment", url).target("_blank"));
                         }
 
                         @Override
@@ -1143,31 +1135,30 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                         {
                             String objectid = (String)getBoundColumn().getValue(ctx);
                             String caseid = (String)ctx.get("caseid");
-                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            ActionURL url = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
                                 return;
 
                             if (caseid != null)
                             {
-                                linkAction.addParameter("formType", "Clinical Rounds");
-                                linkAction.addParameter("caseid", caseid);
+                                url.addParameter("formType", "Clinical Rounds");
+                                url.addParameter("caseid", caseid);
                             }
                             else
                             {
-                                linkAction.addParameter("formType", "Bulk Clinical Entry");
+                                url.addParameter("formType", "Bulk Clinical Entry");
                             }
 
-                            linkAction.addParameter("prcOrderId", objectid);
+                            url.addParameter("prcOrderId", objectid);
 
                             String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()) + "#inputType:none&showReport:0&activeReport:prcSchedule";
-                            linkAction.addParameter("returnUrl", returnUrl);
+                            url.addParameter("returnUrl", returnUrl);
 
-                            String href = linkAction.toString();
-                            oldWriter.write(LinkBuilder.labkeyLink("Record Procedure", href).target("_blank").toString());
+                            out.write(LinkBuilder.labkeyLink("Record Procedure", url).target("_blank"));
                         }
 
                         @Override
@@ -1208,99 +1199,90 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             WrappedColumn col = new WrappedColumn(ti.getColumn("observations"), "observationList");
             col.setLabel("Observations");
-            col.setDisplayColumnFactory(new DisplayColumnFactory()
+            col.setDisplayColumnFactory(colInfo -> new DataColumn(colInfo)
             {
-
                 @Override
-                public DisplayColumn createRenderer(final ColumnInfo colInfo)
+                public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                 {
-                    return new DataColumn(colInfo)
+                    String status = (String) getBoundColumn().getValue(ctx);
+                    String stat = null;
+                    if (status != null)
                     {
+                        Set<String> dailies = new HashSet<>();
+                        Set<String> sib = new HashSet<>();
+                        Set<String> nonDailies = new HashSet<>();
+                        String[] sts = status.split(";");
 
-                        @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                        for (String st : sts)
                         {
-                            String status = (String) getBoundColumn().getValue(ctx);
-                            String stat = null;
-                            if (status != null)
+                            if (NIRC_EHRManager.DAILY_CLINICAL_OBS.contains(st))
                             {
-                                Set<String> dailies = new HashSet<>();
-                                Set<String> sib = new HashSet<>();
-                                Set<String> nonDailies = new HashSet<>();
-                                String[] sts = status.split(";");
-
-                                for (String st : sts)
-                                {
-                                    if (NIRC_EHRManager.DAILY_CLINICAL_OBS.contains(st))
-                                    {
-                                        dailies.add(st);
-                                    }
-                                    else if (NIRC_EHRManager.SIB_OBS.contains(st))
-                                    {
-                                        sib.add(st);
-                                    }
-                                    else
-                                    {
-                                        nonDailies.add(st);
-                                    }
-                                }
-
-                                // Compress to daily clinical observations
-                                if (dailies.size() == NIRC_EHRManager.DAILY_CLINICAL_OBS.size())
-                                {
-                                    stat = NIRC_EHRManager.DAILY_CLINICAL_OBS_TITLE;
-                                }
-                                else if (!dailies.isEmpty())
-                                {
-                                    stat = String.join("; ", dailies);
-                                }
-
-                                // Compress to SIB observations
-                                if (sib.size() == NIRC_EHRManager.SIB_OBS.size())
-                                {
-                                    if (stat == null)
-                                    {
-                                        stat = NIRC_EHRManager.SIB_OBS_TITLE;
-                                    }
-                                    else
-                                    {
-                                        stat += "; " + NIRC_EHRManager.SIB_OBS_TITLE;
-                                    }
-                                }
-                                else if (!sib.isEmpty())
-                                {
-                                    if (stat == null)
-                                    {
-                                        stat = String.join("; ", sib);
-                                    }
-                                    else
-                                    {
-                                        stat += "; " + String.join("; ", sib);
-                                    }
-                                }
-
-                                // Add list of the rest of the observations
-                                if (!nonDailies.isEmpty())
-                                {
-                                    if (stat == null)
-                                    {
-                                        stat = String.join("; ", nonDailies);
-                                    }
-                                    else
-                                    {
-                                        stat += "; " + String.join("; ", nonDailies);
-                                    }
-                                }
-
-                                if (stat == null)
-                                {
-                                    stat = status;
-                                }
+                                dailies.add(st);
                             }
-
-                            oldWriter.write(stat);
+                            else if (NIRC_EHRManager.SIB_OBS.contains(st))
+                            {
+                                sib.add(st);
+                            }
+                            else
+                            {
+                                nonDailies.add(st);
+                            }
                         }
-                    };
+
+                        // Compress to daily clinical observations
+                        if (dailies.size() == NIRC_EHRManager.DAILY_CLINICAL_OBS.size())
+                        {
+                            stat = NIRC_EHRManager.DAILY_CLINICAL_OBS_TITLE;
+                        }
+                        else if (!dailies.isEmpty())
+                        {
+                            stat = String.join("; ", dailies);
+                        }
+
+                        // Compress to SIB observations
+                        if (sib.size() == NIRC_EHRManager.SIB_OBS.size())
+                        {
+                            if (stat == null)
+                            {
+                                stat = NIRC_EHRManager.SIB_OBS_TITLE;
+                            }
+                            else
+                            {
+                                stat += "; " + NIRC_EHRManager.SIB_OBS_TITLE;
+                            }
+                        }
+                        else if (!sib.isEmpty())
+                        {
+                            if (stat == null)
+                            {
+                                stat = String.join("; ", sib);
+                            }
+                            else
+                            {
+                                stat += "; " + String.join("; ", sib);
+                            }
+                        }
+
+                        // Add list of the rest of the observations
+                        if (!nonDailies.isEmpty())
+                        {
+                            if (stat == null)
+                            {
+                                stat = String.join("; ", nonDailies);
+                            }
+                            else
+                            {
+                                stat += "; " + String.join("; ", nonDailies);
+                            }
+                        }
+
+                        if (stat == null)
+                        {
+                            stat = status;
+                        }
+                    }
+
+                    out.write(stat);
                 }
             });
             ti.addColumn(col);
@@ -1311,34 +1293,32 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             WrappedColumn col = new WrappedColumn(ti.getColumn("taskids"), "observationRecord");
             col.setLabel("Record Observations");
             col.setDisplayColumnFactory(new DisplayColumnFactory() {
-
                 @Override
                 public DisplayColumn createRenderer(final ColumnInfo colInfo)
                 {
                     return new DataColumn(colInfo){
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                         {
                             String taskids = (String)getBoundColumn().getValue(ctx);
                             Date date = (Date)ctx.get("scheduledDate");
                             String observationList = (String)ctx.get("observationList");
                             String id = (String)ctx.get("id");
 
-                            ActionURL linkAction = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
+                            ActionURL url = new ActionURL("ehr", "dataEntryForm", ti.getUserSchema().getContainer());
                             if (!ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), EHRClinicalEntryPermission.class))
                                 return;
 
-                            linkAction.addParameter("formType", NIRCClinicalObservationsFormType.NAME);
-                            linkAction.addParameter("id", id);
-                            linkAction.addParameter("scheduledDate", date.toString());
-                            linkAction.addParameter("obsTask", taskids);
-                            linkAction.addParameter("observations", observationList);
+                            url.addParameter("formType", NIRCClinicalObservationsFormType.NAME);
+                            url.addParameter("id", id);
+                            url.addParameter("scheduledDate", date.toString());
+                            url.addParameter("obsTask", taskids);
+                            url.addParameter("observations", observationList);
                             String returnUrl = new ActionURL("ehr", "animalHistory", ti.getUserSchema().getContainer()) + "#inputType:none&showReport:0&activeReport:observationSchedule";
-                            linkAction.addParameter("returnUrl", returnUrl);
+                            url.addParameter("returnUrl", returnUrl);
 
-                            String href = linkAction.toString();
-                            oldWriter.write(LinkBuilder.labkeyLink("Record Observations", href).target("_blank").toString());
+                            out.write(LinkBuilder.labkeyLink("Record Observations", url).target("_blank"));
                         }
 
                         @Override
@@ -1390,7 +1370,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                     {
 
                         @Override
-                        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+                        public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
                         {
                             String status = (String) getBoundColumn().getValue(ctx);
                             BigDecimal obsCount = (BigDecimal)ctx.get("obsCount");
@@ -1412,7 +1392,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                                 }
                             }
 
-                            oldWriter.write(stat);
+                            out.write(stat);
                         }
 
                         @Override
