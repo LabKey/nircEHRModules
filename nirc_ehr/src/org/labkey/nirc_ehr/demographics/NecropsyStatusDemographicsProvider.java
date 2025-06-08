@@ -31,13 +31,14 @@ public class NecropsyStatusDemographicsProvider extends AbstractListDemographics
     @Override
     protected Collection<FieldKey> getFieldKeys()
     {
-        Set<FieldKey> keys = new HashSet<FieldKey>();
+        Set<FieldKey> keys = new HashSet<>();
         keys.add(FieldKey.fromString("Id"));
         keys.add(FieldKey.fromString("necropsy_status"));
 
         return keys;
     }
 
+    @Override
     protected SimpleFilter getFilter(Collection<String> ids)
     {
         List<String> qcStates = new ArrayList<>();

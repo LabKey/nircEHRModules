@@ -49,7 +49,7 @@ public class TriggerScriptNotification
                 }
             }
 
-            if (emails.size() == 0)
+            if (emails.isEmpty())
             {
                 _log.warn("No emails, unable to send EHR trigger script email");
                 return;

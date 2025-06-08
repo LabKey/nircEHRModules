@@ -8,7 +8,6 @@ import org.labkey.api.query.FieldKey;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ProtocolAssignmentDemographicsProvider extends AbstractListDemographicsProvider

@@ -61,12 +61,12 @@ import java.util.Set;
 
 public class NIRC_EHRTriggerHelper
 {
-    private Container _container = null;
-    private User _user = null;
+    private Container _container;
+    private User _user;
     private static final Logger _log = LogManager.getLogger(NIRC_EHRTriggerHelper.class);
-    private Map<String,Object> _cachedDrugFormulary = new HashMap<>();
+    private final Map<String,Object> _cachedDrugFormulary = new HashMap<>();
 
-    private SimpleDateFormat _dateFormat;
+    private final SimpleDateFormat _dateFormat;
 
     public NIRC_EHRTriggerHelper(int userId, String containerId)
     {
@@ -144,7 +144,7 @@ public class NIRC_EHRTriggerHelper
             nextFilter.addCondition(FieldKey.fromString("taskid"), taskId, CompareType.NEQ); // Don't include the current record
             TableSelector ts = new TableSelector(ti, PageFlowUtil.set("date"), nextFilter, new Sort("date"));
             List<Date> dates = ts.getArrayList(Date.class);
-            if (dates.size() > 0)
+            if (!dates.isEmpty())
                 enddate = dates.get(0);
         }
 
@@ -359,7 +359,7 @@ public class NIRC_EHRTriggerHelper
 
                         // get recipients
                         Set<UserPrincipal> recipients = NotificationService.get().getRecipients(notification, container);
-                        if (recipients.size() == 0)
+                        if (recipients.isEmpty())
                         {
                             _log.warn("No NIRC recipients set, skipping clinical move notification");
                             return;
@@ -406,7 +406,7 @@ public class NIRC_EHRTriggerHelper
 
                         // get recipients
                         Set<UserPrincipal> recipients = NotificationService.get().getRecipients(new NIRCDeathNotification(), container);
-                        if (recipients.size() == 0)
+                        if (recipients.isEmpty())
                         {
                             _log.warn("No NIRC recipients set, skipping death notification");
                             return;
@@ -930,7 +930,7 @@ public class NIRC_EHRTriggerHelper
                         //get pregnancy outcome info
                         Date date = ConvertHelper.convert(row.get("date"), Date.class);
                         String result = ConvertHelper.convert(row.get("result"), String.class);
-                        String outcome = null;
+                        String outcome;
                         try
                         {
                             outcome = getPregnancyResultTitle(result);

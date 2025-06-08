@@ -14,10 +14,10 @@ import java.util.List;
 
 public class NIRCCasesFormPanelSection extends ParentFormPanelSection
 {
-    private boolean isVetTech;
-    private boolean isVet;
-    private boolean isFolderAdmin;
-    private boolean isBehavior;
+    private final boolean isVetTech;
+    private final boolean isVet;
+    private final boolean isFolderAdmin;
+    private final boolean isBehavior;
 
     public NIRCCasesFormPanelSection(String label, DataEntryFormContext ctx, boolean isBehavior)
     {

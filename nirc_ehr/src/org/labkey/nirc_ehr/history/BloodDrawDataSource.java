@@ -41,12 +41,11 @@ public class BloodDrawDataSource extends AbstractDataSource
     @Override
     protected String getHtml(Container c, Results rs, boolean redacted) throws SQLException
     {
-        StringBuilder sb = new StringBuilder();
 
-        sb.append(safeAppend(rs, "Total Quantity", "quantity", " mL"));
-        sb.append(safeAppend(rs, "Sample Type", "type"));
-        sb.append(safeAppend(rs, "Remark", "remark"));
+        String sb = safeAppend(rs, "Total Quantity", "quantity", " mL") +
+                safeAppend(rs, "Sample Type", "type") +
+                safeAppend(rs, "Remark", "remark");
 
-        return sb.toString();
+        return sb;
     }
 }

@@ -40,11 +40,10 @@ public class FosteringDataSource extends AbstractDataSource
     @Override
     protected String getHtml(Container c, Results rs, boolean redacted) throws SQLException
     {
-        StringBuilder sb = new StringBuilder();
 
-        sb.append(safeAppend(rs, "Type", "type"));
-        sb.append(safeAppend(rs, "Remark", "remark"));
+        String sb = safeAppend(rs, "Type", "type") +
+                safeAppend(rs, "Remark", "remark");
 
-        return sb.toString();
+        return sb;
     }
 }

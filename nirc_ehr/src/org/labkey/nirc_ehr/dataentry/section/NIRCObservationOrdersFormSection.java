@@ -8,7 +8,7 @@ public class NIRCObservationOrdersFormSection extends BaseFormSection
 {
 
     public static final String LABEL = "Observation Orders";
-    private String _dailyObsOption;
+    private final String _dailyObsOption;
 
     public NIRCObservationOrdersFormSection(String dailyObsOption, boolean initCollapsed)
     {

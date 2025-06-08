@@ -10,9 +10,9 @@ import java.util.List;
 
 public class NIRCBloodDrawFormSection extends BloodDrawFormSection
 {
-    private boolean _collapsible = false;
-    private boolean _initCollapsed = false;
-    private boolean _addCopyFromSection = false;
+    private boolean _collapsible;
+    private boolean _initCollapsed;
+    private boolean _addCopyFromSection;
 
     public NIRCBloodDrawFormSection(boolean collapsible, boolean initCollapsed, boolean addCopyFromSection)
     {
@@ -41,6 +41,7 @@ public class NIRCBloodDrawFormSection extends BloodDrawFormSection
         }
     }
 
+    @Override
     public List<String> getTbarButtons()
     {
         List<String> defaultButtons = super.getTbarButtons();

@@ -62,7 +62,7 @@ public class NIRCBulkClinicalFormType extends NIRCBaseTaskFormType
             s.addConfigSource("BulkClinical");
             s.addConfigSource("TreatmentSchedule");
             s.addConfigSource("MedicationEndDate");
-        };
+        }
     }
 
     @Override

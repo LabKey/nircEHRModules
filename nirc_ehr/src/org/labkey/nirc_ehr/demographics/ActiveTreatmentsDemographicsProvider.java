@@ -20,7 +20,7 @@ public class ActiveTreatmentsDemographicsProvider extends AbstractListDemographi
     @Override
     protected Set<FieldKey> getFieldKeys()
     {
-        Set<FieldKey> keys = new HashSet<FieldKey>();
+        Set<FieldKey> keys = new HashSet<>();
         keys.add(FieldKey.fromString("lsid"));
         keys.add(FieldKey.fromString("Id"));
         keys.add(FieldKey.fromString("code"));
@@ -60,6 +60,7 @@ public class ActiveTreatmentsDemographicsProvider extends AbstractListDemographi
         return keys;
     }
 
+    @Override
     protected SimpleFilter getFilter(Collection<String> ids)
     {
         SimpleFilter filter = super.getFilter(ids);
