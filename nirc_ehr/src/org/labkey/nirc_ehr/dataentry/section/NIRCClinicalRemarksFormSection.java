@@ -8,9 +8,9 @@ import java.util.List;
 public class NIRCClinicalRemarksFormSection extends BaseFormSection
 {
     public static final String LABEL = "Clinical Remarks";
-    private boolean isVetTech;
-    private boolean isVet;
-    private boolean isFolderAdmin;
+    private final boolean isVetTech;
+    private final boolean isVet;
+    private final boolean isFolderAdmin;
 
     public NIRCClinicalRemarksFormSection(boolean isVetTech, boolean isVet, boolean isFolderAdmin)
     {

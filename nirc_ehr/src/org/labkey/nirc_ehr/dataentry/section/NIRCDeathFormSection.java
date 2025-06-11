@@ -12,6 +12,7 @@ public class NIRCDeathFormSection extends ParentFormPanelSection
         setSupportFormSort(false);
     }
 
+    @Override
     public JSONObject toJSON(DataEntryFormContext ctx, boolean includeFormElements)
     {
         JSONObject json = super.toJSON(ctx, includeFormElements);

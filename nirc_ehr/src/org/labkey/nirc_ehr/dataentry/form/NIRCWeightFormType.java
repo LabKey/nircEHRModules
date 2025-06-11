@@ -2,7 +2,6 @@ package org.labkey.nirc_ehr.dataentry.form;
 
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.module.Module;
-import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;

@@ -82,22 +82,22 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String PROJECT_NAME = "NIRC";
     private static final String PROJECT_TYPE = "NIRC EHR";
     private static final File orchardFileLocation = TestFileUtils.getTestTempDir();
-    private static String NIRC_BASIC_SUBMITTER = "ac_bs@nirctest.com";
-    private static String NIRC_BASIC_SUBMITTER_NAME = "ac bs";
-    private static String NIRC_BASIC_SUBMITTER_VET_TECH = "vet_tech_bs@nirctest.com";
-    private static String NIRC_FULL_SUBMITTER_VET_TECH = "vet_tech_fs@nirctest.com";
-    private static String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
-    private static String NIRC_VET_NAME = "vet fs";
+    private static final String NIRC_BASIC_SUBMITTER = "ac_bs@nirctest.com";
+    private static final String NIRC_BASIC_SUBMITTER_NAME = "ac bs";
+    private static final String NIRC_BASIC_SUBMITTER_VET_TECH = "vet_tech_bs@nirctest.com";
+    private static final String NIRC_FULL_SUBMITTER_VET_TECH = "vet_tech_fs@nirctest.com";
+    private static final String NIRC_FULL_SUBMITTER_VET = "vet_fs@nirctest.com";
+    private static final String NIRC_VET_NAME = "vet fs";
 
-    private static String deadAnimalId = "D5454";
-    private static String departedAnimalId = "H6767";
-    private static String aliveAnimalId = "A4545";
+    private static final String deadAnimalId = "D5454";
+    private static final String departedAnimalId = "H6767";
+    private static final String aliveAnimalId = "A4545";
     DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @BeforeClass
     public static void setupProject() throws Exception
     {
-        NIRC_EHRTest init = (NIRC_EHRTest) getCurrentTest();
+        NIRC_EHRTest init = getCurrentTest();
         init.doSetup();
     }
 
@@ -116,6 +116,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         return id.toUpperCase();
     }
 
+    @Override
     @LogMethod
     protected void populateProtocolRecords() throws Exception
     {
@@ -218,7 +219,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private void populateFormulary() throws IOException, CommandException
     {
         InsertRowsCommand insertRowsCommand = new InsertRowsCommand("ehr_lookups", "drug_defaults");
-        insertRowsCommand.addRow(new HashMap<String, Object>()
+        insertRowsCommand.addRow(new HashMap<>()
         {
             {
                 put("code", "NIRC-001");
@@ -853,7 +854,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitForText("Diazepam");
         waitForText(animalId);
         waitForTextToDisappear("Id is required");
-        orderGrid = _helper.getExt4GridForFormSection("Medications/Treatments Given");
+        _helper.getExt4GridForFormSection("Medications/Treatments Given");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
 
@@ -1099,7 +1100,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         try
         {
             // Use Files.walkFileTree to traverse the directory
-            Files.walkFileTree(orchardFileLocation.toPath(), new SimpleFileVisitor<Path>()
+            Files.walkFileTree(orchardFileLocation.toPath(), new SimpleFileVisitor<>()
             {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException

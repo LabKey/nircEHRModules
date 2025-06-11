@@ -8,8 +8,6 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.nirc_ehr.dataentry.section.NIRCAnimalDetailsFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCArrivalFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCArrivalInstructionsFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCProjectAssignmentFormSection;
-import org.labkey.nirc_ehr.dataentry.section.NIRCProtocolAssignmentFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCTaskFormSection;
 import org.labkey.nirc_ehr.dataentry.section.NIRCWeightFormSection;
 

@@ -7,7 +7,7 @@ import java.util.List;
 public class NIRCClinicalObservationsFormSection extends BaseFormSection
 {
     public static final String LABEL = "Observations";
-    private boolean _autoPopulateDailyObs = true;
+    private boolean _autoPopulateDailyObs;
 
     public NIRCClinicalObservationsFormSection(boolean autoPopulateDailyObs, boolean initCollapsed)
     {

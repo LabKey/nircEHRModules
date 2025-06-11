@@ -1,6 +1,5 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
-import org.labkey.api.ehr.EHRService;
 import org.labkey.api.view.template.ClientDependency;
 
 public class NIRCWeightFormSection extends BaseFormSection

@@ -59,7 +59,7 @@ public class NIRCClinicalObservationsDataSource extends AbstractDataSource
                 rowMap.put("html", html);
 
                 Date roundedDate = DateUtils.truncate((Date)rowMap.get("date"), Calendar.MINUTE);
-                String key = results.getString(FieldKey.fromString("taskid")) + "||" + rowMap.get("Id") + "||" + rowMap.get("categoryText") + "||" + rowMap.get("categoryGroup") + "||" + roundedDate.toString();
+                String key = results.getString(FieldKey.fromString("taskid")) + "||" + rowMap.get("Id") + "||" + rowMap.get("categoryText") + "||" + rowMap.get("categoryGroup") + "||" + roundedDate;
                 List<Map<String, Object>> obsRows = idMap.get(key);
                 if (obsRows == null)
                     obsRows = new ArrayList<>();
@@ -112,11 +112,8 @@ public class NIRCClinicalObservationsDataSource extends AbstractDataSource
             }
 
             HistoryRow row = new HistoryRowImpl(this, categoryText, categoryGroup, categoryColor, subjectId, date, html.toString(), qcStateLabel, publicData, taskId, taskRowId, formType, objectId);
-            if (row != null)
-            {
-                row.setShowTime(false);
-                rows.add(row);
-            }
+            row.setShowTime(false);
+            rows.add(row);
         }
 
         return rows;
@@ -158,12 +155,12 @@ public class NIRCClinicalObservationsDataSource extends AbstractDataSource
 
         if (rs.getString(FieldKey.fromString("remark")) != null)
         {
-            if (sb.length() > 0)
+            if (!sb.isEmpty())
                 sb.append(".  ");
             sb.append(PageFlowUtil.filter(rs.getString(FieldKey.fromString("remark"))));
         }
 
-        if (sb.length() > 0)
+        if (!sb.isEmpty())
             sb.append("\n");
 
         return sb.toString();

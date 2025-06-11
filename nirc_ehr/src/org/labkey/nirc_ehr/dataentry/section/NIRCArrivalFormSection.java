@@ -3,7 +3,6 @@ package org.labkey.nirc_ehr.dataentry.section;
 import org.json.JSONObject;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
-import org.labkey.api.ehr.dataentry.forms.NewAnimalFormSection;
 import org.labkey.api.query.FieldKey;
 
 import java.util.List;

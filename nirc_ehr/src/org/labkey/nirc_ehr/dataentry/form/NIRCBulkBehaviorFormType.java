@@ -50,7 +50,7 @@ public class NIRCBulkBehaviorFormType extends NIRCBaseTaskFormType
             s.addConfigSource("BehaviorDefaults");
             s.addConfigSource("TreatmentSchedule");
             s.addConfigSource("MedicationEndDate");
-        };
+        }
     }
 
     @Override

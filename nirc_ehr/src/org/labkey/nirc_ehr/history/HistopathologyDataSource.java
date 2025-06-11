@@ -40,11 +40,10 @@ public class HistopathologyDataSource extends AbstractDataSource
     @Override
     protected String getHtml(Container c, Results rs, boolean redacted) throws SQLException
     {
-        StringBuilder sb = new StringBuilder();
 
-        sb.append(safeAppend(rs, "Diagnosis", "diagnosis"));
-        sb.append(safeAppend(rs, "Remark", "remark"));
+        String sb = safeAppend(rs, "Diagnosis", "diagnosis") +
+                safeAppend(rs, "Remark", "remark");
 
-        return sb.toString();
+        return sb;
     }
 }

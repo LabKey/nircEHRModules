@@ -1,6 +1,5 @@
 package org.labkey.nirc_ehr.history;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.jetbrains.annotations.NotNull;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
@@ -31,14 +30,12 @@ public class NIRCCaseCloseDataSource extends AbstractDataSource
     {
         Date start = rs.getDate(FieldKey.fromString("date"));
 
-        StringBuilder sb = new StringBuilder();
+        String sb = "Opened Date: " + DateUtil.formatDate(c, start) +
+                "\n" +
+                safeAppend(rs, "Problem Area", "problemCategory") +
+                safeAppend(rs, "Close Remark", "closeRemark");
 
-        sb.append("Opened Date: ").append(DateUtil.formatDate(c, start));
-        sb.append("\n");
-        sb.append(safeAppend(rs, "Problem Area", "problemCategory"));
-        sb.append(safeAppend(rs, "Close Remark", "closeRemark"));
-
-        return sb.toString();
+        return sb;
     }
 
     @Override

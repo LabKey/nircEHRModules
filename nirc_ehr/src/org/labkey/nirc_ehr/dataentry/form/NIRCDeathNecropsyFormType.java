@@ -45,7 +45,7 @@ public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
     @Override
     protected List<String> getButtonConfigs()
     {
-        List<String> defaultButtons = new ArrayList<String>();
+        List<String> defaultButtons = new ArrayList<>();
         boolean isVetTech = getCtx().getContainer().hasPermission(getCtx().getUser(), NIRCEHRVetTechPermission.class);
         boolean isVet = getCtx().getContainer().hasPermission(getCtx().getUser(), EHRVeterinarianPermission.class);
 
