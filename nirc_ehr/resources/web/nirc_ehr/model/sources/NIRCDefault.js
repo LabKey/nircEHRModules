@@ -11,7 +11,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
         },
         performedby: {
             hidden: false,
-            defaultValue: LABKEY.Security.currentUser.id.toString(),
+            defaultValue: LABKEY.Security.currentUser.id,
             getInitialValue: function (v, rec) {
                 return LABKEY.Security.currentUser.id;
             },
@@ -35,6 +35,18 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             defaultValue: null,
             columnConfig: {
                 width: 160
+            },
+            editorConfig: {
+                store: {
+                    type: 'labkey-store',
+                    schemaName: 'ehr_lookups',
+
+                    // 'orderedby' is a text field in the dataset and its lookup to the userid is an int field - this mismatch causes it to disappear
+                    // from the display when a value is selected from the dropdown even though the 'userid' value gets saved as a text.
+                    // Casting it as a varchar when loading the store fixes this issue.
+                    sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName FROM ehr_lookups.veterinarians',
+                    autoLoad: true
+                }
             }
         },
         scheduleddate: {
@@ -151,6 +163,16 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             endTreatmentOrderedBy: {
                 columnConfig: {
                     width: 200
+                },
+                editorConfig: {
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'ehr_lookups',
+
+                        // see 'orderedby' comment above.
+                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName FROM ehr_lookups.veterinarians',
+                        autoLoad: true
+                    }
                 }
             }
         },

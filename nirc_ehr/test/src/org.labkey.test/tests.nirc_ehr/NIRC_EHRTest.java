@@ -837,9 +837,16 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         orderGrid.setGridCell(1, "frequency", "QID");
         orderGrid.clickDownArrowOnGrid(1, "route");
         orderGrid.setGridCell(1, "route", "IVAG");
-        orderGrid.clickDownArrowOnGrid(1, "orderedby");
-        orderGrid.setGridCell(1, "orderedby", NIRC_VET_NAME);
         orderGrid.completeEdit();
+
+        Locator.XPathLocator bulkEditWindow = _helper.openBulkEdit(orderGrid);
+        _helper.toggleBulkEditExactField("Ordered By");
+        _ext4Helper.selectComboBoxItem(Ext4Helper.Locators.formItemWithLabelContaining("Ordered By:"), NIRC_VET_NAME);
+        waitAndClick(bulkEditWindow.append(Ext4Helper.Locators.ext4Button("Submit")));
+
+        Window msgWindow = new Window.WindowFinder(this.getDriver()).withTitle("Set Values").waitFor();
+        msgWindow.clickButton("Yes", 0);
+
         submitForm("Submit Final", "Finalize Form");
 
         log("Completing today's Medication Schedule");
@@ -858,7 +865,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
 
-        // TODO: This will be reimplemented in a current PR, this can than be uncommented.
         //Go to NIRC/EHR main page
         goToEHRFolder();
         impersonate(NIRC_FULL_SUBMITTER_VET);

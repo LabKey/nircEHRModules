@@ -43,19 +43,7 @@ EHR.model.DataModelManager.registerMetadata('BulkBehavior', {
             },
             qcstate: {
                 hidden: true
-            },
-            performedby: {
-                hidden: false,
-                defaultValue: LABKEY.Security.currentUser.id.toString(),
-                editorConfig: {
-                    store: {
-                        type: 'labkey-store',
-                        schemaName: 'core',
-                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
-                        autoLoad: true
-                    }
-                }
-            },
+            }
         },
         'study.clinical_observations': {
             type: {
