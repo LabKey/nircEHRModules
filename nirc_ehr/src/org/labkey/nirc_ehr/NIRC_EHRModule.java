@@ -180,6 +180,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         EHRService.get().unregisterMoreActionsButtons("study", "treatment_order");
         EHRService.get().registerMoreActionsButton(new MarkCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
+        EHRService.get().registerMoreActionsButton(new MarkCompletedButton(this, "study", "flags", "Set End Date"), "study", "flags");
 
         registerDataEntry();
         NotificationService.get().registerNotification(new NIRCDeathNotification());
