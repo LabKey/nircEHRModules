@@ -167,9 +167,13 @@ Ext4.define('NIRC_EHR.data.CaseStoreCollection', {
                     cs.fireEvent('datachanged', cs);
             }, this);
         }
+        // Only validate once stores have loaded, otherwise can have perf issues when loading existing cases
+        else if( this.haveStoresLoaded ) {
+            // Validate across the sections, such as clin_remark not required if case close date entered
+            this.validateAll();
+        }
 
         this._cachedKey = cacheKey;
-        this.validateAll();
     },
 
     getTaskId: function(){
