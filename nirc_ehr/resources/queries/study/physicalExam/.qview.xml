@@ -12,5 +12,6 @@
         <column name="result"/>
         <column name="units"/>
         <column name="remark"/>
+        <column name="attachmentFile"/>
     </columns>
 </customView>
