@@ -4,6 +4,5 @@
     </sorts>
     <filters>
         <filter column="calculated_status" operator="eq" value="Alive"/>
-        <filter column="category" operator="neq" value="Surgery"/>
    </filters>
 </customView>
