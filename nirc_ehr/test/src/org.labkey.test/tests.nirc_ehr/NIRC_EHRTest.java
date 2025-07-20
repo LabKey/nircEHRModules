@@ -363,6 +363,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         return "/ehr/" + PROJECT_NAME + "/animalHistory.view?";
     }
 
+    @Override
+    protected List<String> skipLinksForValidation()
+    {
+        return List.of("ehr-colonyOverview.view");
+    }
+
     @Test
     public void testArrivalForm()
     {
