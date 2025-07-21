@@ -63,4 +63,12 @@ public class NIRCDeathNecropsyFormType extends NIRCBaseTaskFormType
         }
         return defaultButtons;
     }
+
+    @Override
+    protected List<String> getMoreActionButtonConfigs()
+    {
+        List<String> configs = super.getMoreActionButtonConfigs();
+        configs.remove("DISCARD");
+        return configs;
+    }
 }
