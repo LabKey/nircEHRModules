@@ -5,8 +5,7 @@ SELECT anmEvt.ANIMAL_EVENT_ID                                                   
             WHEN (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME) IS NULL OR trim(anmEvt.STAFF_ID.STAFF_LAST_NAME) IS NULL) THEN 'unknown'
             ELSE (trim(anmEvt.STAFF_ID.STAFF_FIRST_NAME)
                 || '|' || trim(anmEvt.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
-       anmEvt.DIAGNOSIS                                                          AS vetreview,
-       anmCmt.TEXT                                                               AS remark,
+       ('Note: ' || COALESCE(anmCmt.TEXT, 'None') || '; Diagnosis: ' || COALESCE(anmEvt.DIAGNOSIS, 'None')) AS remark,
        'Clinical'                                                                AS category,
        CASE WHEN anmEvt.ATTACHMENT_PATH IS NOT NULL THEN
             ('C:\Program Files\Labkey\labkey\files\NIRC\EHR\@files\attachments'
