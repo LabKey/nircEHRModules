@@ -36,7 +36,6 @@ public class NIRCBaseTaskFormType extends TaskForm
     {
         List<String> configs = super.getMoreActionButtonConfigs();
         configs.remove("REVIEW");
-        configs.remove("DISCARD");
         return configs;
     }
 }
