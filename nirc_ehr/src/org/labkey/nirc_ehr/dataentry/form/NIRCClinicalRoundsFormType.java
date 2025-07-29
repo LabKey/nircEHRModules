@@ -101,4 +101,12 @@ public class NIRCClinicalRoundsFormType extends NIRCBaseTaskFormType
 
         return ret;
     }
+
+    @Override
+    protected List<String> getMoreActionButtonConfigs()
+    {
+        List<String> configs = super.getMoreActionButtonConfigs();
+        configs.remove("DISCARD");
+        return configs;
+    }
 }
