@@ -368,7 +368,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     protected List<String> skipLinksForValidation()
     {
         List<String> links = new ArrayList<>(super.skipLinksForValidation());
-        links.add("ehr-colonyOverview.view");
+        links.add("ehr-colonyOverview.view"); // Not fully implemented
         return links;
     }
 
