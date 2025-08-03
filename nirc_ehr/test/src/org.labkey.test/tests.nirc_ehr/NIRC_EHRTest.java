@@ -67,6 +67,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -361,6 +362,14 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     protected String getAnimalHistoryPath()
     {
         return "/ehr/" + PROJECT_NAME + "/animalHistory.view?";
+    }
+
+    @Override
+    protected List<String> skipLinksForValidation()
+    {
+        List<String> links = new ArrayList<>(super.skipLinksForValidation());
+        links.add("ehr-colonyOverview.view"); // Not fully implemented
+        return links;
     }
 
     @Test
