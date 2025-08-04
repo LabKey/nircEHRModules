@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class NIRCClinicalObservationsDataSource extends AbstractDataSource
+public class NIRCBehaviorObservationsDataSource extends AbstractDataSource
 {
-    public NIRCClinicalObservationsDataSource(Module module)
+    public NIRCBehaviorObservationsDataSource(Module module)
     {
-        super("study", "clinicalObservations", "Clinical Observations", "Clinical Observations", module);
+        super("study", "behaviorObservations", "Behavior Observations", "Behavior Observations", module);
     }
 
     @Override
@@ -178,3 +178,4 @@ public class NIRCClinicalObservationsDataSource extends AbstractDataSource
         return PageFlowUtil.set("Id", "date", "category", "area", "observation", "remark", "performedby/displayName", "objectid");
     }
 }
+

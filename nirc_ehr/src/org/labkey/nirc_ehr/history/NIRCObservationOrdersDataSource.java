@@ -29,7 +29,7 @@ public class NIRCObservationOrdersDataSource extends AbstractDataSource
 {
     public NIRCObservationOrdersDataSource(Module module)
     {
-        super("study", "observation_order", "Observations", "Clinical", module);
+        super("study", "observation_order", "Observation Orders", "Clinical", module);
     }
 
     @Override
