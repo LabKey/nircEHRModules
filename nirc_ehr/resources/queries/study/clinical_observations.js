@@ -31,6 +31,14 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'Other' for 'Daily Enrichment', please enter Remark", "WARN");
         }
 
+        if (row.category === "Alopecia Score" && !row.observation) {
+            EHR.Server.Utils.addError(scriptErrors, 'observation', "Score required for 'Alopecia Score'.", "WARN");
+        }
+
+        if (row.category === "Alopecia Score" && !row.remark) {
+            EHR.Server.Utils.addError(scriptErrors, 'remark', "Remark required for 'Alopecia Score'.", "WARN");
+        }
+
         var yesRemarkRequired = (row.category === "Self Biting Observed" || row.category === "New Injury Observed" || row.category === "Other Stereotopy" || row.category === "Environmental Change" || row.category === "Special Enrichment");
         if (yesRemarkRequired && row.observation === "Yes" && !row.remark) {
             EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'Yes' for " + row.category + ", please explain in the Remark", "WARN");
@@ -55,9 +63,10 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                     var orderData = triggerHelper.handleScheduledObservations(row, qc.RowId, orderTasks[0]);
 
                     if (orderData) {
-                        row.caseid = orderData.caseId;
+                        row.caseId = orderData.caseId;
                         row.orderid = orderData.orderId;
                         row.area = orderData.area;
+                        row.type = orderData.type;
                     }
                 }
             }

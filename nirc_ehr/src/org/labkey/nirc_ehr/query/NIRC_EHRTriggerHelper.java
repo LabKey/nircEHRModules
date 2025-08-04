@@ -760,55 +760,56 @@ public class NIRC_EHRTriggerHelper
         String taskid = ConvertHelper.convert(row.get("taskid"), String.class);
 
         // Get observation orders for these tasks
-        TableInfo ti = getTableInfo("study", "observation_order");
+        TableInfo ti = getTableInfo("study", "observationOrdersByDate");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("taskid"), orderTasks, CompareType.IN);
         filter.addCondition(FieldKey.fromString("category"), category);
-        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("category,caseid,Id,area,objectid"), filter, null);
+        filter.addCondition(FieldKey.fromString("date"), scheduledDate);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("category","caseId","animalId","area","objectid","type","taskid"), filter, null);
+        ts.setNamedParameters(Map.of("StartDate", scheduledDate, "NumDays", "1"));
 
         Map<String, Object>[] orders = ts.getMapArray();
         Map<String, Object> triggerOrder = null;
 
-        if (orders.length > 0)
+        for (int i = 0; i < orders.length; i++)
         {
-            for (int i = 0; i < orders.length; i++)
+            Map<String, Object> order = orders[i];
+
+            // First order we find will fill out the information in the row passing through the trigger
+            if (i == 0)
             {
-                Map<String, Object> order = orders[i];
-
-                // First order we find will fill out the information in the row passing through the trigger
-                if (i == 0)
-                {
-                    triggerOrder = new HashMap<>();
-                    triggerOrder.put("caseid", order.get("caseid"));
-                    triggerOrder.put("area", order.get("area"));
-                    triggerOrder.put("orderId", order.get("objectid"));
-                    continue;
-                }
-
-                // If there are multiple treatment orders that match insert the others here
-                Map<String, Object> obsRow = new CaseInsensitiveHashMap<>();
-                obsRow.put("caseid", order.get("caseid"));
-                obsRow.put("category", order.get("category"));
-                obsRow.put("date", date);
-                obsRow.put("qcstate", qcstate);
-                obsRow.put("Id", order.get("Id"));
-                obsRow.put("scheduledDate", scheduledDate);
-                obsRow.put("area", order.get("area"));
-                obsRow.put("observation", observation);
-                obsRow.put("performedBy", performedBy);
-                obsRow.put("orderId", order.get("objectid"));
-                obsRow.put("taskid", order.get("taskid"));
-
-                List<Map<String, Object>> rows = new ArrayList<>();
-                rows.add(obsRow);
-
-                BatchValidationException errors = new BatchValidationException();
-                TableInfo obsTi = getTableInfo("study", "clinical_observations");
-                obsTi.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
-                if (errors.hasErrors())
-                    throw errors;
+                triggerOrder = new HashMap<>();
+                triggerOrder.put("caseId", order.get("caseId"));
+                triggerOrder.put("area", order.get("area"));
+                triggerOrder.put("orderId", order.get("objectid"));
+                triggerOrder.put("type", order.get("type"));
+                continue;
             }
 
+            // If there are multiple treatment orders that match insert the others here
+            Map<String, Object> obsRow = new CaseInsensitiveHashMap<>();
+            obsRow.put("caseId", order.get("caseId"));
+            obsRow.put("category", order.get("category"));
+            obsRow.put("date", date);
+            obsRow.put("qcstate", qcstate);
+            obsRow.put("Id", order.get("animalId"));
+            obsRow.put("scheduledDate", scheduledDate);
+            obsRow.put("area", order.get("area"));
+            obsRow.put("observation", observation);
+            obsRow.put("performedBy", performedBy);
+            obsRow.put("orderId", order.get("objectid"));
+            obsRow.put("type", order.get("type"));
+            obsRow.put("taskid", order.get("taskid"));
+
+            List<Map<String, Object>> rows = new ArrayList<>();
+            rows.add(obsRow);
+
+            BatchValidationException errors = new BatchValidationException();
+            TableInfo obsTi = getTableInfo("study", "clinical_observations");
+            obsTi.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+            if (errors.hasErrors())
+                throw errors;
         }
+
         return triggerOrder;
     }
 
