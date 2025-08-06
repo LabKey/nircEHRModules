@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class NIRCObservationOrdersDataSource extends AbstractDataSource
+public class NIRCObservationsDataSource extends AbstractDataSource
 {
-    public NIRCObservationOrdersDataSource(Module module)
+    public NIRCObservationsDataSource(String schema, String query, String categoryText, String primaryGroup, Module module)
     {
-        super("study", "observation_order", "Observation Orders", "Clinical", module);
+        super(schema, query, categoryText, primaryGroup, module);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class NIRCObservationOrdersDataSource extends AbstractDataSource
 
             if (performedBy != null && !redacted)
             {
-                html.append("Ordered By: ").append(PageFlowUtil.filter(performedBy)).append("\n");
+                html.append("Performed By: ").append(PageFlowUtil.filter(performedBy)).append("\n");
             }
 
             HistoryRow row = new HistoryRowImpl(this, categoryText, categoryGroup, categoryColor, subjectId, date, html.toString(), qcStateLabel, publicData, taskId, taskRowId, formType, objectId);
@@ -140,8 +140,18 @@ public class NIRCObservationOrdersDataSource extends AbstractDataSource
 
         sb.append(": ");
 
-        if (rs.getString(FieldKey.fromString("frequency")) != null)
-            sb.append(PageFlowUtil.filter(rs.getString(FieldKey.fromString("frequency"))));
+        if (rs.getString(FieldKey.fromString("observation")) != null)
+        {
+            // check if observation is hydration includes string &gt;10%
+            if (rs.getString(FieldKey.fromString("observation")).contains("&gt;10%"))
+            {
+                sb.append("Hydration: >10%");
+            }
+            else
+            {
+                sb.append(PageFlowUtil.filter(rs.getString(FieldKey.fromString("observation"))));
+            }
+        }
 
         if (rs.getString(FieldKey.fromString("remark")) != null)
         {
@@ -165,6 +175,6 @@ public class NIRCObservationOrdersDataSource extends AbstractDataSource
     @Override
     protected Set<String> getColumnNames()
     {
-        return PageFlowUtil.set("Id", "date", "category", "area", "frequency", "remark", "performedby/displayName", "objectid");
+        return PageFlowUtil.set("Id", "date", "category", "area", "observation", "remark", "performedby/displayName", "objectid");
     }
 }
