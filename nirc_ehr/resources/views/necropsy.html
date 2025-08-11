@@ -1,0 +1,140 @@
+
+<style>
+    .page-break {
+        page-break-before: always; /* Older CSS spec */
+        break-before: page;        /* Newer spec */
+    }
+
+    @media print {
+      .hide-on-print {
+        display: none !important;
+      }
+    }
+
+    /* Top border on panel header when printing */
+    .panel-heading {
+      border-top: 1px solid black;
+    }
+</style>
+<div class="hide-on-print">
+    <label for="animalId" style="margin-right: 10px;">Animal Id</label><input id="animalId" type="text" />
+    <button id="animalIdSubmit" name="animalIdSubmit">Submit</button>
+    <br>
+    <div id="animalIdError"></div>
+</div>
+<br>
+
+<div id="animalDeath"></div>
+<div id="animalNecropsy"></div>
+<div class="page-break"></div>
+<div id="grossPathology"></div>
+<div id="tissueDisposition"></div>
+
+<script type="text/javascript" nonce="<%=scriptNonce%>">
+    document.getElementById('animalIdSubmit')['onclick'] = function(){ submitNecropsyForm(); return false; }
+
+    const submitNecropsyForm = function() {
+        const animalId = document.getElementById('animalId').value;
+
+        if (!animalId) {
+            document.getElementById('animalIdError').innerHTML = 'Please enter an Animal Id';
+        }
+
+        const animalIdError = document.getElementById('animalIdError');
+        const animalDeath = document.getElementById('animalDeath');
+        const animalNecropsy = document.getElementById('animalNecropsy');
+        const grossPathology = document.getElementById('grossPathology');
+        const tissueDisposition = document.getElementById('tissueDisposition');
+
+        animalIdError.innerHTML = '';
+        animalDeath.innerHTML = '';
+        animalNecropsy.innerHTML = '';
+        grossPathology.innerHTML = '';
+        tissueDisposition.innerHTML = '';
+
+        const filterArray = [LABKEY.Filter.create('Id', animalId, LABKEY.Filter.Types.EQUAL)]
+
+        Ext4.create('LDK.panel.DetailsPanel', {
+            store: {
+                schemaName: 'study',
+                queryName: 'deaths',
+                filterArray: filterArray,
+                columns: 'Id,Id/demographics/species,date,reason,remark,performedby,Id/lastProtocol/protocol,Id/lastProject/project',
+            },
+            title: 'Death',
+            renderTo: 'animalDeath',
+            showBackBtn: false
+        });
+
+        Ext4.create('LDK.panel.DetailsPanel', {
+            store: {
+                schemaName: 'study',
+                queryName: 'necropsy',
+                filterArray: filterArray,
+                // columns: 'cage,room,room/floor,room/floor/building,room/floor/building/area,outdoor',
+            },
+            title: 'Necropsy',
+            renderTo: 'animalNecropsy',
+            showBackBtn: false
+        });
+
+        LDK.Utils.getReadOnlyQWP({
+            title: 'Gross Pathology',
+            schemaName: 'study',
+            queryName: 'grossPathology',
+            filterArray: filterArray,
+            // sort: '-Date'
+        }).render('grossPathology');
+
+        LDK.Utils.getReadOnlyQWP({
+            title: 'Tissue Disposition',
+            schemaName: 'study',
+            queryName: 'tissueDisposition',
+            filterArray: filterArray,
+            // sort: '-Date'
+        }).render('tissueDisposition');
+
+        // var multi = new LABKEY.MultiRequest();
+        // multi.add(LABKEY.Query.selectRows({
+        //     schemaName: 'study',
+        //     queryName: 'necropsy',
+        //     filterArray: filterArray,
+        //     scope: this,
+        //     failure: function(err) {
+        //         document.getElementById('animalIdError').innerHTML += ('<br>' + err.response.message);
+        //     },
+        //     success: function(data){
+        //         if(!data.rows.length){
+        //             document.getElementById('animalIdError').innerHTML = "Animal Id necropsy not found.";
+        //             return;
+        //         }
+        //
+        //         const necropsy = data.rows[0];
+        //         formType = row.formtype;
+        //         renderTaskForm(formType);
+        //     }
+        // });
+        //
+        // multi.send(this.onLoad, this);
+        //
+        // LABKEY.Query.selectRows({
+        //     schemaName: 'study',
+        //     queryName: 'necropsy',
+        //     filterArray: [LABKEY.Filter.create('Id', animalId, LABKEY.Filter.Types.EQUAL)],
+        //     scope: this,
+        //     failure: function(err) {
+        //         document.getElementById('animalIdError').innerHTML = err.response.message;
+        //     },
+        //     success: function(data){
+        //         if(!data.rows.length){
+        //             document.getElementById('animalIdError').innerHTML = "Animal Id necropsy not found.";
+        //             return;
+        //         }
+        //
+        //         const necropsy = data.rows[0];
+        //         formType = row.formtype;
+        //         renderTaskForm(formType);
+        //     }
+        // });
+    }
+</script>

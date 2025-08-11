@@ -5,6 +5,7 @@
                 <columns>
                     <column columnName="necropsyTissue">
                         <columnTitle>Tissue</columnTitle>
+                        <displayWidth>80</displayWidth>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>necropsy_tissue</fkTable>
@@ -12,7 +13,8 @@
                         </fk>
                     </column>
                     <column columnName="necropsyDispositionCode">
-                        <columnTitle>Tissue Disposition Codes</columnTitle>
+                        <columnTitle>Tissue Disposition Code</columnTitle>
+                        <displayWidth>180</displayWidth>
                         <fk>
                             <fkDbSchema>ehr_lookups</fkDbSchema>
                             <fkTable>necropsy_disposition_codes</fkTable>

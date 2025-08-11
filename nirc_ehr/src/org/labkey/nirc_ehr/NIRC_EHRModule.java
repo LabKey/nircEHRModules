@@ -37,6 +37,7 @@ import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.DefaultSchema;
+import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.QuerySchema;
 import org.labkey.api.resource.Resource;
 import org.labkey.api.security.roles.RoleManager;
@@ -187,6 +188,9 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         NotificationService.get().registerNotification(new NIRCClinicalMoveNotification());
         NotificationService.get().registerNotification(new NIRCProcedureOverdueNotification());
         NotificationService.get().registerNotification(new NIRCPregnancyOutcomeNotification());
+
+        EHRService.get().registerReportLink(EHRService.REPORT_LINK_TYPE.moreReports, "Printable Necropsy Report", this, DetailsURL.fromString("/nirc_ehr-necropsy.view"), "Pathology");
+
 
         // Ensure N: is mounted if it's configured, as it's being mapped in via a symlink/shortcut, so we can't
         // recognize paths using it based solely on their drive letter and mount just-in-time
