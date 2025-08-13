@@ -71,7 +71,6 @@
                 schemaName: 'study',
                 queryName: 'necropsy',
                 filterArray: filterArray,
-                // columns: 'cage,room,room/floor,room/floor/building,room/floor/building/area,outdoor',
             },
             title: 'Necropsy',
             renderTo: 'animalNecropsy',
@@ -83,7 +82,6 @@
             schemaName: 'study',
             queryName: 'grossPathology',
             filterArray: filterArray,
-            // sort: '-Date'
         }).render('grossPathology');
 
         LDK.Utils.getReadOnlyQWP({
@@ -91,50 +89,6 @@
             schemaName: 'study',
             queryName: 'tissueDisposition',
             filterArray: filterArray,
-            // sort: '-Date'
         }).render('tissueDisposition');
-
-        // var multi = new LABKEY.MultiRequest();
-        // multi.add(LABKEY.Query.selectRows({
-        //     schemaName: 'study',
-        //     queryName: 'necropsy',
-        //     filterArray: filterArray,
-        //     scope: this,
-        //     failure: function(err) {
-        //         document.getElementById('animalIdError').innerHTML += ('<br>' + err.response.message);
-        //     },
-        //     success: function(data){
-        //         if(!data.rows.length){
-        //             document.getElementById('animalIdError').innerHTML = "Animal Id necropsy not found.";
-        //             return;
-        //         }
-        //
-        //         const necropsy = data.rows[0];
-        //         formType = row.formtype;
-        //         renderTaskForm(formType);
-        //     }
-        // });
-        //
-        // multi.send(this.onLoad, this);
-        //
-        // LABKEY.Query.selectRows({
-        //     schemaName: 'study',
-        //     queryName: 'necropsy',
-        //     filterArray: [LABKEY.Filter.create('Id', animalId, LABKEY.Filter.Types.EQUAL)],
-        //     scope: this,
-        //     failure: function(err) {
-        //         document.getElementById('animalIdError').innerHTML = err.response.message;
-        //     },
-        //     success: function(data){
-        //         if(!data.rows.length){
-        //             document.getElementById('animalIdError').innerHTML = "Animal Id necropsy not found.";
-        //             return;
-        //         }
-        //
-        //         const necropsy = data.rows[0];
-        //         formType = row.formtype;
-        //         renderTaskForm(formType);
-        //     }
-        // });
     }
 </script>
