@@ -24,7 +24,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                     // from the display when a value is selected from the dropdown even though the 'userid' value gets saved as a text (this behavior was only seen
                     // in the form panel but not in the grid panel).
                     // casting it as a varchar when loading the store fixes this issue.
-                    sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.PrincipalsWithoutAdmin WHERE active = TRUE',
+                    sql: "SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.PrincipalsWithoutAdmin WHERE active = TRUE AND Type = 'u'",
                     autoLoad: true
                 }
             }
