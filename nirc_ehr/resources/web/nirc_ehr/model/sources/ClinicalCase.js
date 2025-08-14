@@ -134,7 +134,7 @@ EHR.model.DataModelManager.registerMetadata('ClinicalCase', {
                     store: {
                         type: 'labkey-store',
                         schemaName: 'core',
-                        sql: 'SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.users',
+                        sql: "SELECT CAST (UserId AS VARCHAR) AS UserId,DisplayName,FirstName,LastName FROM core.PrincipalsWithoutAdmin WHERE active = TRUE AND Type = 'u'",
                         autoLoad: true
                     }
                 }
