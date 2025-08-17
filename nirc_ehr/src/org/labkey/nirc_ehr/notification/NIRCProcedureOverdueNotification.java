@@ -5,6 +5,7 @@ import org.labkey.api.data.Container;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
 import org.labkey.api.ehr.notification.AbstractEHRNotification;
+import org.labkey.api.module.Module;
 import org.labkey.api.query.QueryService;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.security.User;
@@ -17,10 +18,15 @@ import java.util.Set;
 
 public class NIRCProcedureOverdueNotification extends AbstractEHRNotification
 {
+    public NIRCProcedureOverdueNotification(Module owner)
+    {
+        super(owner);
+    }
+
     @Override
     public String getName()
     {
-        return "NIRC Procedure Overdue Notification";
+        return "Procedure Overdue Notification";
     }
 
     @Override
