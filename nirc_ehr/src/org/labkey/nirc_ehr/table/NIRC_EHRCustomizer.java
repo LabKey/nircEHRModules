@@ -974,6 +974,20 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             col.setLabel("Alias");
             ds.addColumn(col);
         }
+        if (ds.getColumn("lastProtocol") == null)
+        {
+            var col = getWrappedCol(us, ds, "lastProtocol", "demographicsLastProtocol", "Id", "Id");
+            col.setLabel("Assignment - Final Protocol");
+            col.setDescription("This calculates the final protocol assignment for the animal.  This is distinct from active protocol assignment because it will return a protocol assignment for dead animals");
+            ds.addColumn(col);
+        }
+        if (ds.getColumn("lastProject") == null)
+        {
+            var col = getWrappedCol(us, ds, "lastProject", "demographicsLastProject", "Id", "Id");
+            col.setLabel("Assignment - Final Project");
+            col.setDescription("This calculates the final project assignment for the animal.  This is distinct from active project assignment because it will return a project assignment for dead animals");
+            ds.addColumn(col);
+        }
     }
 
     private void customizeProtocolTable(AbstractTableInfo ti)
