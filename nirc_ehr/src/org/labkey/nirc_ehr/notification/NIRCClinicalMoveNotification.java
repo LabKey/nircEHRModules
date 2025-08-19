@@ -3,12 +3,23 @@ package org.labkey.nirc_ehr.notification;
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.Container;
 import org.labkey.api.ehr.notification.AbstractEHRNotification;
+import org.labkey.api.module.Module;
 import org.labkey.api.security.User;
 
 import java.util.Date;
 
 public class NIRCClinicalMoveNotification extends AbstractEHRNotification
 {
+    public NIRCClinicalMoveNotification(Module owner)
+    {
+        super(owner);
+    }
+
+    public NIRCClinicalMoveNotification()
+    {
+        super();
+    }
+
     @Override
     public String getName()
     {

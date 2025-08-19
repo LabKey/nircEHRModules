@@ -184,10 +184,10 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerMoreActionsButton(new MarkCompletedButton(this, "study", "flags", "Set End Date"), "study", "flags");
 
         registerDataEntry();
-        NotificationService.get().registerNotification(new NIRCDeathNotification());
-        NotificationService.get().registerNotification(new NIRCClinicalMoveNotification());
-        NotificationService.get().registerNotification(new NIRCProcedureOverdueNotification());
-        NotificationService.get().registerNotification(new NIRCPregnancyOutcomeNotification());
+        NotificationService.get().registerNotification(new NIRCDeathNotification(this));
+        NotificationService.get().registerNotification(new NIRCClinicalMoveNotification(this));
+        NotificationService.get().registerNotification(new NIRCProcedureOverdueNotification(this));
+        NotificationService.get().registerNotification(new NIRCPregnancyOutcomeNotification(this));
 
         EHRService.get().registerReportLink(EHRService.REPORT_LINK_TYPE.moreReports, "Printable Necropsy Report", this, DetailsURL.fromString("/nirc_ehr-necropsy.view"), "Pathology");
 
