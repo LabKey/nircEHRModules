@@ -1,6 +1,7 @@
 
 SELECT
 d.id,
+d_alias.alias AS Name,
 d.calculated_status,
 s.*,
 s.objectid AS treatmentid,
@@ -63,6 +64,6 @@ JOIN(
 
 ) s ON (s.animalid = d.id) 
 LEFT JOIN study.drug drug ON s.objectid = drug.treatmentid AND s.date = IFDEFINED(drug.scheduledDate)
-
+LEFT JOIN (SELECT Id, GROUP_CONCAT(alias, ', ') alias FROM alias WHERE category.title = 'Name' GROUP BY Id) d_alias ON d.id = d_alias.id
 WHERE (d.lastDayatCenter IS NULL OR d.lastDayAtCenter > s.enddate OR s.enddate IS NULL)
     AND s.date >= s.startDate AND (s.enddate IS NULL OR s.date <= s.enddate)
