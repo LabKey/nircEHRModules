@@ -12,7 +12,4 @@
         <column name="diagnosis"/>
         <column name="remark"/>
     </columns>
-    <filters>
-        <filter column="category" operator="eq" value="Clinical"/>
-    </filters>
 </customView>
