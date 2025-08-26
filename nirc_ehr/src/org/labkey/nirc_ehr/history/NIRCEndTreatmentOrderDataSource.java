@@ -43,7 +43,7 @@ public class NIRCEndTreatmentOrderDataSource extends AbstractDataSource
         }
         else if (volumeExists)
         {
-            sb.append(safeAppend(rs, "Volume", rs.getString("volume") + " " + rs.getString("volume_units")));
+            sb.append(safeAppend(rs, "Volume", rs.getString("volume") + " " + rs.getString("vol_units")));
         }
         sb.append(safeAppend(rs, "End Ordered By", "orderedby/displayName"));
 
