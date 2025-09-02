@@ -112,24 +112,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     }
 
     @Override
-    @LogMethod
-    protected void populateHardTableRecords() throws Exception
-    {
-        log("Inserting initial records into EHR hard tables");
-
-        //verify delete first
-        deleteHardTableRecords();
-
-        //then do the inserts
-        populateProtocolRecords();
-        populateProjectRecords();
-        populateRoomRecords();
-
-        // procedures has to be populated after the study load due to being tied into EHR triggers and needing qcstate
-        populateLookup("procedures", false);
-    }
-
-    @Override
     protected String getExpectedAnimalIDCasing(String id)
     {
         return id.toUpperCase();
@@ -233,26 +215,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitFor(() -> Input(Locator.textarea("populateLookupResults"), getDriver()).waitFor().getValue().contains("Loading reports is complete."),
                 "Reports didn't finish loading", 60000);
         populateFormulary();
-    }
-
-    private void populateLookup(String name, boolean useTestManifest)
-    {
-        if (useTestManifest)
-        {
-            beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "populateLookupData", Map.of("manifest", "lookupsManifestTest")));
-        }
-        else
-        {
-            beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "populateLookupData"));
-        }
-
-        waitForElement(Locator.linkWithText("Populate Lookups"));
-        selectOptionByValue(Locator.tagWithAttribute("select", "id", "populateOptions"), name);
-        click(Locator.linkWithText("Populate Lookups"));
-        acceptAlert();
-
-        waitFor(() -> Input(Locator.textarea("populateLookupResults"), getDriver()).waitFor().getValue().contains("Loading lookups is complete."),
-                "Lookups didn't finish loading", 60000);
     }
 
     private void populateFormulary() throws IOException, CommandException
