@@ -12,6 +12,10 @@ function onInit(event, helper){
 }
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'Arrival', function(helper, scriptErrors, row, oldRow) {
 
+    if (triggerHelper.animalIdExists(row.Id)) {
+        EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal Id ' + row.Id + ' is already in use. Please use a different Id.', 'ERROR');
+    }
+
     if (row.eventDate) {
         row.date = row.eventDate;
     }
