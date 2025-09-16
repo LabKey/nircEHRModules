@@ -7,7 +7,5 @@
         <column name="Id/Demographics/species"/>
         <column name="date"/>
         <column name="reason"/>
-        <column name="remark"/>
-        <column name="performedBy"/>
     </columns>
 </customView>
