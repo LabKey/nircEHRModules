@@ -27,6 +27,7 @@ public class NIRCTissueDispositionFormSection extends BaseFormSection
         List<String> defaults = super.getTbarButtons();
         defaults.remove("ADDANIMALS");
         defaults.remove("TEMPLATE");
+        defaults.add("TEMPLATE_NO_ID_NO_DATE");
         return defaults;
     }
 

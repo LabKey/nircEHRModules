@@ -267,13 +267,9 @@ public class NIRC_EHRTriggerHelper
     public boolean animalIdExists(String id)
     {
         TableInfo ti = getTableInfo("study", "demographics");
-        if (ti != null)
-        {
-            SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
-            TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid"), filter, null);
-            return ts.exists();
-        }
-        return false;
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("lsid"), filter, null);
+        return ts.exists();
     }
 
     public boolean birthExists(String id)

@@ -12,6 +12,12 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                     dateFormat: 'Y-m-d',
                     timeFormat: 'H:i'
                 },
+            },
+            remark: {
+                hidden: true
+            },
+            performedby: {
+                hidden: true
             }
         },
         'study.necropsy': {
