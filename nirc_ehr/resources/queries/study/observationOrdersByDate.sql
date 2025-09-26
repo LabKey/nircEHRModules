@@ -43,7 +43,9 @@ FROM
         (SELECT * FROM study.observation_order ORDER BY category) t1
         ON (dr.dateOnly >= t1.dateOnly AND (dr.dateOnly <= t1.enddate OR t1.enddate IS NULL) AND
           --technically the first day of the treatment is day 1, not day 0
-        ((mod(CAST(timestampdiff('SQL_TSI_DAY', CAST(t1.dateOnly AS timestamp), dr.dateOnly) AS integer), t1.frequency.intervalindays) = 0 AND t1.frequency.intervalindays IS NOT NULL AND t1.frequency.dayofweek IS NULL)))
+        ((mod(CAST(timestampdiff('SQL_TSI_DAY', CAST(t1.dateOnly AS timestamp), dr.dateOnly) AS integer), t1.frequency.intervalindays) = 0 AND t1.frequency.intervalindays IS NOT NULL AND t1.frequency.dayofweek IS NULL))
+        AND (t1.frequency.weekDays IS NULL OR LOCATE(CAST(dr.DayOfWeek AS VARCHAR), t1.frequency.weekDays) > 0)
+        )
         LEFT JOIN ehr_lookups.treatment_frequency_times ft ON ft.frequency = t1.frequency.meaning
         WHERE t1.date IS NOT NULL
 

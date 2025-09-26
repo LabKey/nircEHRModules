@@ -1,4 +1,4 @@
-Meaning	Sort Order	Week of Month	Day of Month	Day of Week	Interval in Days	Short Name	Active?
+Meaning	Sort Order	Week of Month	Day of Month	Day of Week	Interval in Days	Short Name	Active?	Week Days
 Monthly					30		true
 Weekly					7		true
 Alternating Days					2		true
@@ -9,3 +9,4 @@ q7 days					7		true
 q14 days					14		true
 BID					1		true
 Every 3 months					90		true
+M-F (SID)					1		true	2,3,4,5,6

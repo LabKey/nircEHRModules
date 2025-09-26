@@ -174,6 +174,16 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                         autoLoad: true
                     }
                 }
+            },
+            frequency: {
+                columnConfig: {
+                    width: 180
+                },
+                nullable: false,
+                allowBlank: true,
+                lookup: {
+                    filterArray: [LABKEY.Filter.create('active', true, LABKEY.Filter.Types.EQUAL)]
+                },
             }
         },
         'study.drug': {
@@ -218,7 +228,10 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                     width: 180
                 },
                 nullable: false,
-                allowBlank: true
+                allowBlank: true,
+                lookup: {
+                    filterArray: [LABKEY.Filter.create('active', true, LABKEY.Filter.Types.EQUAL)]
+                },
             }
         },
         'study.pairings': {
