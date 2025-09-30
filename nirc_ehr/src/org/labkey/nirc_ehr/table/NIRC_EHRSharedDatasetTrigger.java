@@ -22,15 +22,26 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
         }
     }
 
+    private void verifyPerformedBy(TableInfo table, @Nullable Map<String, Object> newRow, ValidationException errors)
+    {
+        if (newRow != null && newRow.containsKey("performedby") && newRow.get("performedby") == null)
+        {
+            if (!newRow.containsKey("QCStateLabel") || newRow.get("QCStateLabel") == null)
+            {
+                errors.addFieldError("performedby", "Record in " + table.getTitle() + " cannot be submitted without Performed By if QCStateLabel is not found. Contact your administrator.");
+            }
+            else if (newRow.containsKey("QCStateLabel") && newRow.get("QCStateLabel").equals("Completed"))
+            {
+                errors.addFieldError("performedby", "Performed By must be entered in all records before submitting final. Table: " + table.getTitle());
+            }
+        }
+    }
+
     @Override
     public void beforeInsert(TableInfo table, Container c, User user, @Nullable Map<String, Object> newRow, ValidationException errors, Map<String, Object> extraContext) throws ValidationException
     {
         transformAnimalIdToUpperCase(newRow);
-        if (newRow != null && newRow.containsKey("performedby") && newRow.get("performedby") == null)
-        {
-            if (newRow.containsKey("QCStateLabel") && newRow.get("QCStateLabel").equals("Completed"))
-                errors.addFieldError("performedby", "Performed by must be entered in all " + table.getTitle() + " records before submitting final.");
-        }
+        verifyPerformedBy(table, newRow, errors);
     }
 
     @Override
@@ -38,10 +49,6 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
                              User user, @Nullable Map<String, Object> newRow, @Nullable Map<String, Object> oldRow,
                              ValidationException errors, Map<String, Object> extraContext) throws ValidationException
     {
-        if (newRow != null && newRow.containsKey("performedby") && newRow.get("performedby") == null)
-        {
-            if (newRow.containsKey("QCStateLabel") && newRow.get("QCStateLabel").equals("Completed"))
-                errors.addFieldError("performedby", "Performed by must be entered in all " + table.getTitle() + " records before submitting final.");
-        }
+        verifyPerformedBy(table, newRow, errors);
     }
 }
