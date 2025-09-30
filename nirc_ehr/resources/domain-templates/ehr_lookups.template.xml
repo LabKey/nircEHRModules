@@ -39,4 +39,14 @@
         </table>
     </template>
 
+    <template xsi:type="EHRLookupsTemplateType">
+        <table tableName="treatment_frequency" tableDbType="TABLE">
+            <dat:columns>
+                <dat:column columnName="weekDays">
+                    <dat:rangeURI>string</dat:rangeURI>
+                </dat:column>
+            </dat:columns>
+        </table>
+    </template>
+
 </templates>
