@@ -110,6 +110,7 @@ public class NIRC_EHRTriggerHelper
         Date date = ConvertHelper.convert(row.get("date"), Date.class);
         String location = ConvertHelper.convert(row.get("cage"), String.class);
         String reason = ConvertHelper.convert(row.get("reason"), String.class);
+        Integer performedby = ConvertHelper.convert(row.get("performedby"), Integer.class);
         if (id == null || date == null || location == null)
             return "Attempting to create a housing record with no id, date, or location";
 
@@ -166,6 +167,7 @@ public class NIRC_EHRTriggerHelper
         saveRow.put("taskId", taskId);
         saveRow.put("qcstate", qcstate);
         saveRow.put("reason", reason);
+        saveRow.put("performedby", performedby);
         if (updateRecord)
             saveRow.put("objectid", ts.getMap().get("objectid"));
         else
@@ -220,6 +222,11 @@ public class NIRC_EHRTriggerHelper
             return "Attempting to create a birth record with no qcstate";
         }
 
+        Integer performedby = ConvertHelper.convert(row.get("performedby"), Integer.class);
+        if (performedby == null) {
+            return "Attempting to create a birth record with no performedby";
+        }
+
         TableInfo ti = getTableInfo("study", "birth");
 
         // If there is already a housing record for this task, update that record
@@ -236,6 +243,7 @@ public class NIRC_EHRTriggerHelper
         saveRow.put("date", date);
         saveRow.put("taskId", taskId);
         saveRow.put("qcstate", qcstate);
+        saveRow.put("performedby", performedby);
         if (updateRecord)
         {
             saveRow.put("objectid", ts.getMap().get("objectid"));
@@ -570,6 +578,11 @@ public class NIRC_EHRTriggerHelper
             return "Attempting to create a project assignment record with no qcstate";
         }
 
+        String performedby = ConvertHelper.convert(row.get("performedby"), String.class);
+        if (performedby == null) {
+            return "Attempting to create a project assignment record with no performedby";
+        }
+
         boolean updateRecord = false;
 
         // If there is already a project assignment record for this task, update that record
@@ -586,6 +599,7 @@ public class NIRC_EHRTriggerHelper
         saveRow.put("date", date);
         saveRow.put("taskId", taskId);
         saveRow.put("qcstate", qcstate);
+        saveRow.put("performedby", performedby);
         if (updateRecord)
         {
             saveRow.put("objectid", ts.getMap().get("objectid"));

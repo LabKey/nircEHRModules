@@ -17,6 +17,7 @@
 package org.labkey.test.tests.nirc_ehr;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -24,7 +25,9 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.api.reader.Readers;
 import org.labkey.remoteapi.CommandException;
+import org.labkey.remoteapi.SimplePostCommand;
 import org.labkey.remoteapi.core.SaveModulePropertiesCommand;
+import org.labkey.remoteapi.query.Filter;
 import org.labkey.remoteapi.query.ImportDataCommand;
 import org.labkey.remoteapi.query.InsertRowsCommand;
 import org.labkey.remoteapi.query.SaveRowsResponse;
@@ -70,9 +73,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.labkey.test.components.html.Input.Input;
@@ -370,6 +375,84 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         List<String> links = new ArrayList<>(super.skipLinksForValidation());
         links.add("ehr-colonyOverview.view"); // Not fully implemented
         return links;
+    }
+
+    @Override
+    protected void createTestSubjects() throws Exception
+    {
+        String[] fields;
+        Object[][] data;
+        SimplePostCommand insertCommand;
+
+        //insert into demographics
+        log("Creating test subjects");
+        fields = new String[]{"Id", "Species", "Birth", "Gender", "date", "calculated_status", "objectid", "performedby"};
+        data = new Object[][]{
+                {SUBJECTS[0], "Rhesus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004},
+                {SUBJECTS[1], "Cynomolgus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004},
+                {SUBJECTS[2], "Marmoset", (new Date()).toString(), getFemale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004},
+                {SUBJECTS[3], "Cynomolgus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004},
+                {SUBJECTS[4], "Cynomolgus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "demographics", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "demographics", new Filter("Id", StringUtils.join(SUBJECTS, ";"), Filter.Operator.IN));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        //for simplicity, also create the animals from MORE_ANIMAL_IDS right now
+        data = new Object[][]{
+                {MORE_ANIMAL_IDS[0], "Rhesus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004},
+                {MORE_ANIMAL_IDS[1], "Cynomolgus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004},
+                {MORE_ANIMAL_IDS[2], "Marmoset", (new Date()).toString(), getFemale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004},
+                {MORE_ANIMAL_IDS[3], "Cynomolgus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004},
+                {MORE_ANIMAL_IDS[4], "Cynomolgus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "demographics", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "demographics", new Filter("Id", StringUtils.join(MORE_ANIMAL_IDS, ";"), Filter.Operator.IN));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        //used as initial dates
+        Date pastDate1 = TIME_FORMAT.parse("2012-01-03 09:30");
+        Date pastDate2 = TIME_FORMAT.parse("2012-05-03 19:20");
+
+        //set housing
+        log("Creating initial housing records");
+        fields = new String[]{"Id", "date", "enddate", "room", "cage", "performedby"};
+        data = new Object[][]{
+                {SUBJECTS[0], pastDate1, pastDate2, getRooms()[0], CAGES[0], 1004},
+                {SUBJECTS[0], pastDate2, null, getRooms()[0], CAGES[0], 1004},
+                {SUBJECTS[1], pastDate1, pastDate2, getRooms()[0], CAGES[0], 1004},
+                {SUBJECTS[1], pastDate2, null, getRooms()[2], CAGES[2], 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Housing", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Housing", new Filter("Id", StringUtils.join(SUBJECTS, ";"), Filter.Operator.IN));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        //set a base weight
+        log("Setting initial weights");
+        fields = new String[]{"Id", "date", "weight", "QCStateLabel", "performedby"};
+        data = new Object[][]{
+                {SUBJECTS[0], pastDate2, 10.5, EHRQCState.COMPLETED.label, 1004},
+                {SUBJECTS[0], new Date(), 12, EHRQCState.COMPLETED.label, 1004},
+                {SUBJECTS[1], new Date(), 12, EHRQCState.COMPLETED.label, 1004},
+                {SUBJECTS[2], new Date(), 12, EHRQCState.COMPLETED.label, 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Weight", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Weight", new Filter("Id", StringUtils.join(SUBJECTS, ";"), Filter.Operator.IN));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        //set assignment
+        log("Setting initial assignments");
+        fields = new String[]{"Id", "date", "enddate", "project", "performedby"};
+        data = new Object[][]{
+                {SUBJECTS[0], pastDate1, pastDate2, PROJECTS[0], 1004},
+                {SUBJECTS[1], pastDate1, pastDate2, PROJECTS[0], 1004},
+                {SUBJECTS[1], pastDate2, null, PROJECTS[2], 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Assignment", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Assignment", new Filter("Id", StringUtils.join(SUBJECTS, ";"), Filter.Operator.IN));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        primeCaches();
     }
 
     @Test
