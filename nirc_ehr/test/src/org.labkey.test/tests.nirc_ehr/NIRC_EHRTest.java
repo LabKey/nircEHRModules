@@ -473,6 +473,50 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     }
 
     @Test
+    public void testWeightValidation()
+    {
+        //initialize weight of subject 3
+        String[] fields;
+        Object[][] data;
+        SimplePostCommand insertCommand;
+        fields = new String[]{"Id", "date", "weight", "QCStateLabel", "performedby"};
+        data = new Object[][]{
+                {SUBJECTS[3], new Date(), 12, EHRQCState.COMPLETED.label, 1004},
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Weight", "lsid", fields, data);
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        //expect weight out of range
+        data = new Object[][]{
+                {SUBJECTS[3], new Date(), null, null, 120, EHRQCState.IN_PROGRESS.label, null, null, "recordID", 1004}
+        };
+        Map<String, List<String>> expected = new HashMap<>();
+        expected.put("weight", Arrays.asList(
+                "WARN: Weight above the allowable value of 20.0 kg for Cynomolgus",
+                "INFO: Weight gain of >10%. Last weight 12 kg")
+        );
+        getApiHelper().testValidationMessage(DATA_ADMIN.getEmail(), "study", "weight", getWeightFields(), data, expected);
+
+        //expect INFO for +10% diff
+        data = new Object[][]{
+                {SUBJECTS[3], new Date(), null, null, 20, EHRQCState.IN_PROGRESS.label, null, null, "recordID", 1004}
+        };
+        expected = new HashMap<>();
+        expected.put("weight", Collections.singletonList("INFO: Weight gain of >10%. Last weight 12 kg"));
+        getApiHelper().testValidationMessage(DATA_ADMIN.getEmail(), "study", "weight", getWeightFields(), data, expected);
+
+        //expect INFO for -10% diff
+        data = new Object[][]{
+                {SUBJECTS[3], new Date(), null, null, 5, EHRQCState.IN_PROGRESS.label, null, null, "recordID", 1004}
+        };
+        expected = new HashMap<>();
+        expected.put("weight", Collections.singletonList("INFO: Weight drop of >10%. Last weight 12 kg"));
+        getApiHelper().testValidationMessage(DATA_ADMIN.getEmail(), "study", "weight", getWeightFields(), data, expected);
+
+        //TODO: test error threshold
+    }
+
+    @Test
     public void testArrivalForm()
     {
         String arrivedAnimal = "30905";
