@@ -54,7 +54,8 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 date: row.date,
                 weight: row.necropsyWeight,
                 taskid: row.taskid,
-                qcstate: qcstate
+                qcstate: qcstate,
+                performedby: row.performedby
             };
             triggerHelper.upsertWeightRecord(weightRecord);
         }

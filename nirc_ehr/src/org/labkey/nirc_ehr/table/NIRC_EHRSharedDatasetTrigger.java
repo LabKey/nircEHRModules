@@ -11,14 +11,29 @@ import java.util.Map;
 
 /**
  * Shared dataset trigger to add triggers to act on all the study datasets.
- * */
+ */
 public class NIRC_EHRSharedDatasetTrigger implements Trigger
 {
     private void transformAnimalIdToUpperCase(Map<String, Object> row)
     {
-        if (row != null && row.containsKey("Id"))
+        if (row != null && row.containsKey("Id") && row.get("Id") != null)
         {
             row.put("Id", ((String) row.get("Id")).toUpperCase());
+        }
+    }
+
+    private void verifyPerformedBy(TableInfo table, @Nullable Map<String, Object> newRow, ValidationException errors)
+    {
+        if (newRow != null && newRow.containsKey("performedby") && newRow.get("performedby") == null)
+        {
+            if (!newRow.containsKey("QCStateLabel") || newRow.get("QCStateLabel") == null)
+            {
+                errors.addFieldError("performedby", "Record in " + table.getTitle() + " cannot be submitted without Performed By if QCStateLabel is not found. Contact your administrator.");
+            }
+            else if (newRow.containsKey("QCStateLabel") && newRow.get("QCStateLabel").equals("Completed"))
+            {
+                errors.addFieldError("performedby", "Performed By must be entered in all records before submitting final. Table: " + table.getTitle());
+            }
         }
     }
 
@@ -26,5 +41,14 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
     public void beforeInsert(TableInfo table, Container c, User user, @Nullable Map<String, Object> newRow, ValidationException errors, Map<String, Object> extraContext) throws ValidationException
     {
         transformAnimalIdToUpperCase(newRow);
+        verifyPerformedBy(table, newRow, errors);
+    }
+
+    @Override
+    public void beforeUpdate(TableInfo table, Container c,
+                             User user, @Nullable Map<String, Object> newRow, @Nullable Map<String, Object> oldRow,
+                             ValidationException errors, Map<String, Object> extraContext) throws ValidationException
+    {
+        verifyPerformedBy(table, newRow, errors);
     }
 }
