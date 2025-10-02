@@ -323,6 +323,7 @@ public class NIRC_EHRTriggerHelper
         saveRow.put("date", date);
         saveRow.put("taskid", taskId);
         saveRow.put("qcstate", row.get("qcstate"));
+        saveRow.put("performedby", row.get("performedby"));
         if (updateRecord)
         {
             saveRow.put("objectid", ts.getMap().get("objectid"));

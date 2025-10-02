@@ -53,6 +53,7 @@ import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
+import org.labkey.test.util.ehr.EHRClientAPIHelper;
 import org.labkey.test.util.ext4cmp.Ext4FieldRef;
 import org.labkey.test.util.ext4cmp.Ext4GridRef;
 import org.openqa.selenium.Keys;
@@ -98,6 +99,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String deadAnimalId = "D5454";
     private static final String departedAnimalId = "H6767";
     private static final String aliveAnimalId = "A4545";
+
+    private String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
+    private Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
+
     DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @BeforeClass
@@ -455,6 +460,18 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         primeCaches();
     }
 
+    @Override
+    protected String[] getWeightFields()
+    {
+        return weightFields;
+    }
+
+    @Override
+    protected Object[] getWeightData1()
+    {
+        return weightData1;
+    }
+
     @Test
     public void testArrivalForm()
     {
@@ -718,35 +735,35 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToSchemaBrowser();
         log("Creating animals");
         getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "birth", "lsid",
-                new String[]{"Id", "Date", "gender", "QCStateLabel"},
+                new String[]{"Id", "Date", "gender", "QCStateLabel", "performedby"},
                 new Object[][]{
-                        {aliveAnimalId, LocalDateTime.now().minusDays(30), "f", "Completed"},
-                        {deadAnimalId, LocalDateTime.now().minusDays(30), "m", "Completed"},
-                        {departedAnimalId, LocalDateTime.now().minusDays(30), "m", "Completed"},
+                        {aliveAnimalId, LocalDateTime.now().minusDays(30), "f", "Completed", 1004},
+                        {deadAnimalId, LocalDateTime.now().minusDays(30), "m", "Completed", 1004},
+                        {departedAnimalId, LocalDateTime.now().minusDays(30), "m", "Completed", 1004},
                 }
         ), getExtraContext());
 
         log("Inserting rows in assignments, protocolAssignment and housing");
         InsertRowsCommand protocol = new InsertRowsCommand("study", "protocolAssignment");
-        protocol.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "protocol", "protocol101", "QCStateLabel", "Completed"));
+        protocol.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "protocol", "protocol101", "QCStateLabel", "Completed", "performedby", 1004));
         protocol.execute(getApiHelper().getConnection(), getContainerPath());
 
         InsertRowsCommand project = new InsertRowsCommand("study", "assignment");
-        project.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "project", "640991", "QCStateLabel", "Completed"));
+        project.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "project", "640991", "QCStateLabel", "Completed", "performedby", 1004));
         project.execute(getApiHelper().getConnection(), getContainerPath());
 
         InsertRowsCommand housing = new InsertRowsCommand("study", "housing");
-        housing.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "cage", "C4", "QCStateLabel", "Completed"));
+        housing.addRow(Map.of("Id", aliveAnimalId, "date", LocalDateTime.now().minusDays(10), "cage", "C4", "QCStateLabel", "Completed", "performedby", 1004));
         housing.execute(getApiHelper().getConnection(), getContainerPath());
 
         log("Marking an animal dead");
         InsertRowsCommand deaths = new InsertRowsCommand("study", "deaths");
-        deaths.addRow(Map.of("Id", deadAnimalId, "date", LocalDateTime.now().minusDays(10), "reason", "4"));
+        deaths.addRow(Map.of("Id", deadAnimalId, "date", LocalDateTime.now().minusDays(10), "reason", "4", "performedby", 1004));
         deaths.execute(getApiHelper().getConnection(), getContainerPath());
 
         log("Marking an animal departed");
         InsertRowsCommand departure = new InsertRowsCommand("study", "departure");
-        departure.addRow(Map.of("Id", departedAnimalId, "date", LocalDateTime.now().minusDays(1), "destination", "Oregon NPRC"));
+        departure.addRow(Map.of("Id", departedAnimalId, "date", LocalDateTime.now().minusDays(1), "destination", "Oregon NPRC", "performedby", 1004));
         departure.execute(getApiHelper().getConnection(), getContainerPath());
     }
 
