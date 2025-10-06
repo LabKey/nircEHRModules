@@ -25,6 +25,7 @@ SELECT
         ELSE 0
         END as numParents
 FROM study.demographics d
+WHERE d.qcstate.publicdata = true
 
 -- TODO: Incorporate fostering? Genetic testing?
 

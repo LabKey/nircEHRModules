@@ -33,5 +33,5 @@ d2.performedBy.displayName AS performedBy
 
 FROM study.housing d2
 
-WHERE d2.enddate IS NULL
+WHERE d2.enddate IS NULL AND d2.qcstate.publicdata = true
 AND d2.qcstate.publicdata = true

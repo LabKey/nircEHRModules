@@ -17,5 +17,6 @@ FROM study.Demographics d
 
     INNER JOIN study.Demographics d2
 ON ((d2.sire = d.id OR d2.dam = d.id) AND d.id != d2.id)
+WHERE d.qcstate.publicdata = true
 
 group by d.id, d2.id, d2.birth, d2.sire, d2.dam, d2.gender, d.qcstate

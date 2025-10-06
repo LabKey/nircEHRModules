@@ -20,7 +20,7 @@ JOIN study.housing h2
 ON (h2.Id.demographics.calculated_status = 'Alive'
         AND (h.cage = h2.cage))
 
-WHERE h.enddateTimeCoalesced >= now()
+WHERE h.enddateTimeCoalesced >= now() AND h.qcstate.publicdata = true AND h2.qcstate.publicdata = true
 GROUP BY h.id, h.room, h.cage
 
 ) t ON (t.id = d.id)

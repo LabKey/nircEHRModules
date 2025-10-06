@@ -27,4 +27,5 @@ LEFT JOIN
   ON (T1.Id = d.Id)
 
 LEFT JOIN study.arrival T2 ON (t2.id = d.id AND t2.date = t1.earliestArrival)
+WHERE d.qcstate.publicdata = true AND t2.qcstate.publicdata = true AND t1.qcstate.publicdata = true
 
