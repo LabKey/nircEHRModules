@@ -11,3 +11,4 @@ SELECT
 
 FROM study.demographics d
 LEFT JOIN study.protocolAssignment a ON (a.id = d.id AND a.enddate IS NULL)
+WHERE a.qcstate.publicdata = true
