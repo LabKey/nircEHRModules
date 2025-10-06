@@ -46,6 +46,7 @@ drug_defaults	Clinical	Formulary	Default values in drug and treatment datasets.
 ear_types	Clinical	Ear Types	Clinical observation fixed values.
 esig_events	Colony Management	Esig Events
 euthanasia_type	Colony Management	Euthanasia Type
+exam_findings	Clinical	Exam Findings	Physical exam values.
 exemption_category	Colony Management	Exemption Category
 expense_class	Colony Management	Expense Class
 fecal_score	Clinical	Fecal Score	Clinical observation fixed values.
@@ -120,6 +121,7 @@ stool_score	Clinical	Stool Score
 stool_types	Clinical	Stool Types
 tb_obs_score	Clinical	TB Observation Scores	Clinical observation fixed values.
 temperament	Behavior	Temperament	Behavior observation fixed values.
+testicular_volume    	Clinical	Testicular Volume   	Testicular volume values.
 termination_reason_codes	Clinical	Termination Reason Codes	Clinical observation fixed values.
 trauma_size	Clinical	Trauma Size	Clinical observation fixed values.
 treatment_frequency	Clinical	Treatment Frequency	Used in treatment and drug datasets.
@@ -135,3 +137,4 @@ wound_severity	Clinical	Wound Severity	Clinical observation fixed values.
 wound_status_behavior	Behavior	Wound Status	Behavioral observation fixed values.
 wound_status_clinical	Clinical	Wound Status	Clinical observation fixed values.
 yes_no_order	Clinical	Yes/No Values in Order	Used for yes/no values in various datasets. Includes sort order.
+yes_no_only	Clinical	Yes/No Forced Selection	Must choose yes or no.

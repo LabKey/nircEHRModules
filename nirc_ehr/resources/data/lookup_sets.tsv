@@ -39,6 +39,7 @@ ear_types	Ear Types	value	title
 editable_lookups	List of UI editable lookup values	value
 esig_events	ESig Events	value	title
 euthanasia_type	Euthanasia Type	value	title
+exam_findings	Exam Findings	value
 exemption_category	Exemption Category	value	title
 expense_class	Expense Class	value	description
 fecal_score	Fecal Score	value	description
@@ -103,6 +104,7 @@ stool_score	Stool Score	value
 stool_types	Stool Types	value
 tb_obs_score	TB Obs Score	value
 temperament	Temperament	value	title
+testicular_volume	Testicular Volume	value	title
 trauma_size	Trauma Size	value
 turgor_score	Turgor Score	value
 termination_reason_codes	Termination Reason Codes Codes	value	title
@@ -115,3 +117,4 @@ wound_severity	Wound Severity	value
 wound_status_behavior	Wound Status Behavior	value
 wound_status_clinical	Wound Status Clinical	value
 yes_no_order	Yes/No Values in Order	value
+yes_no_only	Yes/No Forced Selection	value
