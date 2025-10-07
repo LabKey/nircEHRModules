@@ -38,7 +38,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 date: row.date,
                 taskid: row.taskid,
                 remark: row.remark,
-                qcstate: row.qcstate
+                qcstate: row.qcstate,
+                performedby: row.performedby
             }
 
             if (row.project) {
@@ -62,7 +63,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                     cage: row.cage,
                     taskid: row.taskid,
                     qcstate: row.qcstate,
-                    reason: 'Husbandry'
+                    reason: 'Husbandry',
+                    performedby: row.performedby
                 }
 
                 var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "birth");
@@ -87,7 +89,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 gender: row['Id/demographics/gender'] || null,
                 taskid: row.taskid,
                 remark: row.remark,
-                QCStateLabel: row.QCStateLabel
+                QCStateLabel: row.QCStateLabel,
+                performedby: row.performedby
             };
 
             //find dam, if provided
@@ -133,6 +136,11 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 
                 if (obj.dam && obj.dam !== data.dam) {
                     record.dam = obj.dam;
+                    hasUpdates = true;
+                }
+
+                if (obj.performedby && obj.performedby !== data.performedby) {
+                    record.performedby = obj.performedby;
                     hasUpdates = true;
                 }
 

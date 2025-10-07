@@ -51,7 +51,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 Id: row.Id,
                 date: row.birth,
                 qcstate: row.qcstate,
-                taskid: row.taskid
+                taskid: row.taskid,
+                performedby: row.performedby
             }
 
             var birthErrors = triggerHelper.saveBirthRecord(row.Id, birthInfo);
@@ -67,7 +68,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 date: row.date,
                 taskid: row.taskid,
                 remark: row.remark,
-                qcstate: row.qcstate
+                qcstate: row.qcstate,
+                performedby: row.performedby
             }
 
             if (row.project) {
@@ -89,7 +91,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 cage: row.cage,
                 taskid: row.taskid,
                 qcstate: row.qcstate,
-                reason: row.arrivalType
+                reason: row.arrivalType,
+                performedby: row.performedby
             }
 
             var housingErrors = triggerHelper.createHousingRecord(row.Id, housingRec, "arrival");
@@ -149,6 +152,12 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             if (row.QCStateLabel && row.QCStateLabel !== data.QCStateLabel)
             {
                 obj.QCStateLabel = row.QCStateLabel;
+                hasUpdates = true;
+            }
+
+            if (row.performedby && row.performedby !== data.performedby)
+            {
+                obj.performedby = row.performedby;
                 hasUpdates = true;
             }
 
