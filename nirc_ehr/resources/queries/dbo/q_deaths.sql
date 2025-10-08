@@ -2,6 +2,10 @@
 SELECT an.ANIMAL_ID_NUMBER AS participantId,
        an.DEATH_DATE AS deathDate,
        an.TERMINATION_REASON_ID as reason,
+       (CASE
+            WHEN (ae.STAFF_ID.STAFF_FIRST_NAME IS NULL OR ae.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
+            ELSE (trim(ae.STAFF_ID.STAFF_FIRST_NAME)
+                || '|' || trim(ae.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), ae.CREATED_DATETIME) AS modified
 FROM Animal an
 LEFT JOIN AUDIT_TRAIL adt ON an.ANIMAL_ID = substring(PRIMARY_KEY_VALUES, length('ANIMAL_ID = '))
@@ -12,4 +16,6 @@ AND an.TERMINATION_REASON_ID != 10 -- Invalid Id
 GROUP BY an.ANIMAL_ID_NUMBER,
     an.DEATH_DATE,
     an.TERMINATION_REASON_ID,
+    ae.STAFF_ID.STAFF_FIRST_NAME,
+    ae.STAFF_ID.STAFF_LAST_NAME,
     ae.CREATED_DATETIME
