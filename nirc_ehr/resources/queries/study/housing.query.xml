@@ -43,7 +43,8 @@
                         </fk>
                     </column>
                     <column columnName="remark"/>
-                    <column columnName="performedBy" />
+                    <column columnName="performedBy">
+                    </column>
                 </columns>
             </table>
         </tables>

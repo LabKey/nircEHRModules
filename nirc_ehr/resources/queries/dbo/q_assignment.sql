@@ -9,6 +9,10 @@ SELECT alt.ALTERNATE_ID AS "objectId",
        ae.EVENT_DATETIME AS assignmentDate,  -- Set to arrival/birth then updated by trigger
        CASE WHEN alt.DESCRIPTION IS NULL OR length(trim(alt.DESCRIPTION)) != 11 THEN NULL
        ELSE COALESCE(TO_DATE(alt.DESCRIPTION, 'DD-Mon-RR'), COALESCE(dea.deathDate, dep.eventDate)) END as endDate,
+       (CASE
+            WHEN (ae.STAFF_ID.STAFF_FIRST_NAME IS NULL OR ae.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
+            ELSE (trim(ae.STAFF_ID.STAFF_FIRST_NAME)
+                || '|' || trim(ae.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), ae.CREATED_DATETIME) AS modified
 FROM  ALTERNATE alt
 LEFT JOIN ANIMAL anm ON alt.ANIMAL_ID = anm.ANIMAL_ID
@@ -25,6 +29,8 @@ GROUP BY alt.ALTERNATE_ID,
          alt.DESCRIPTION,
          ae.CREATED_DATETIME,
          ae.EVENT_DATETIME,
+         ae.STAFF_ID.STAFF_FIRST_NAME,
+         ae.STAFF_ID.STAFF_LAST_NAME,
          dea.deathDate,
          dep.eventDate
 ORDER BY anm.ANIMAL_ID,alt.ALTERNATE_ID ASC
