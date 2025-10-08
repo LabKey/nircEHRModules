@@ -1,5 +1,9 @@
 SELECT anm.ANIMAL_ID_NUMBER AS participantId,
        anm.BIRTH_DATE       AS birthDate,
+       (CASE
+            WHEN (ae.STAFF_ID.STAFF_FIRST_NAME IS NULL OR ae.STAFF_ID.STAFF_LAST_NAME IS NULL) THEN 'unknown'
+            ELSE (trim(ae.STAFF_ID.STAFF_FIRST_NAME)
+                || '|' || trim(ae.STAFF_ID.STAFF_LAST_NAME)) END)                  AS performedby,
        -- audit timestamp for modifications or animal event received for created
        COALESCE(MAX(CAST(adt.CHANGE_DATETIME AS TIMESTAMP)), ae.CREATED_DATETIME) AS modified
 FROM Animal anm
@@ -12,4 +16,6 @@ AND anm.ANIMAL_ID_NUMBER LIKE 'A%' -- Animal born in centers are pre-appended wi
 AND alt.DESCRIPTION IS NOT NULL
 GROUP BY anm.ANIMAL_ID_NUMBER,
          anm.BIRTH_DATE,
+         ae.STAFF_ID.STAFF_FIRST_NAME,
+         ae.STAFF_ID.STAFF_LAST_NAME,
          ae.CREATED_DATETIME

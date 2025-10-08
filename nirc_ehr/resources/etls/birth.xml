@@ -13,6 +13,7 @@
                 </alternateKeys>
                 <columnTransforms>
                     <column source="birthDate" target="date"/>
+                    <column source="performedby" target="performedby" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
                 </columnTransforms>
             </destination>
         </transform>
