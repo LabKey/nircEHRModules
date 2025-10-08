@@ -26,11 +26,7 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
     {
         if (newRow != null && newRow.containsKey("performedby") && newRow.get("performedby") == null)
         {
-            if (!newRow.containsKey("QCStateLabel") || newRow.get("QCStateLabel") == null)
-            {
-                errors.addFieldError("performedby", "Record in " + table.getTitle() + " cannot be submitted without Performed By if QCStateLabel is not found. Contact your administrator.");
-            }
-            else if (newRow.containsKey("QCStateLabel") && newRow.get("QCStateLabel").equals("Completed"))
+            if (newRow.containsKey("QCStateLabel") && "Completed".equals(newRow.get("QCStateLabel")))
             {
                 errors.addFieldError("performedby", "Performed By must be entered in all records before submitting final. Table: " + table.getTitle());
             }
