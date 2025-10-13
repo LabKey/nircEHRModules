@@ -20,6 +20,7 @@
                          bulkLoad="true" batchSize="5000" targetOption="truncate">
                 <columnTransforms>
                     <column source="assignmentDate" target="date"/>
+                    <column source="performedby" target="performedby" transformClass="org.labkey.nirc_ehr.columnTransform.NIRCUserCreateTransform"/>
                 </columnTransforms>
             </destination>
         </transform>
