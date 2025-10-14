@@ -18,7 +18,7 @@ observationSchedule	Daily Reports	js	Today's Observation Schedule	true		study	ob
 activeClinicalObservationOrders	Clinical	query	Active Clinical Observation Orders	true		study	observation_order	Active Clinical Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeBehaviorObservationOrders	Behavior	query	Active Behavior Observation Orders	true		study	observation_order	Active Behavior Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 observationOrders	Clinical	query	Observation Orders	true		study	observation_order			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
-alopecia	Clinical	query	Alopecia Scores	TRUE		study	clinical_observations	Alopecia Scores		date	FALSE	FALSE		qcstate/publicdata	This report contains the alopecia scores for the animal
+alopecia	Behavior	query	Alopecia Scores	TRUE		study	clinical_observations	Alopecia Scores		date	FALSE	FALSE		qcstate/publicdata	This report contains the alopecia scores for the animal
 behaviorCases	Behavior	query	Active Behavior Cases	true		study	activeBehaviorCases			date	false	false		qcstate/publicdata	This displays active behavioral cases
 allBehaviorCases	Behavior	query	Behavior Cases	true		study	behaviorCases			date	false	false		qcstate/publicdata	This displays all behavioral cases
 bloodSchedule															
@@ -46,3 +46,4 @@ pairings
 behaviorRemarks	Behavior	query	Behavior Remarks	true		study	BehaviorClinRemarks			date	false	false		qcstate/publicdata	This report contains the behavior remarks entered about each animal
 clinObsBehavior	Behavior	query	Observations	true		study	behaviorObservations			date	false	false		qcstate/publicdata	This report contains one record for each encounter with each animal, including surergies, exams, procedures, etc.
 clinremarks	Clinical	query	Clinical Remarks	true		study	ClinicalClinRemarks			date	false	false		qcstate/publicdata	This report contains the clinical remarks entered about each animal
+physicalExam	Clinical	query	Exam History	True		study	physicalExam			date	false	false		qcstate/publicdata	This report displays physical exam data for the selected animal
