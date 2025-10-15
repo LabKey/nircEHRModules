@@ -43,6 +43,7 @@ ear_types
 editable_lookups
 esig_events
 euthanasia_type
+exam_findings
 exemption_category
 expense_class
 fecal_score
@@ -114,6 +115,7 @@ stool_score
 stool_types
 tb_obs_score
 temperament
+testicular_volume
 trauma_size
 treatment_frequency
 treatment_frequency_times
@@ -127,4 +129,5 @@ wound_score
 wound_severity
 wound_status_behavior
 wound_status_clinical
+yes_no_only
 yes_no_order
