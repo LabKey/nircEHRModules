@@ -29,7 +29,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         }
 
         if (!row.performedby) {
-            EHR.Server.Utils.addError(errors, 'performedby', 'Opened by is a required field.', 'ERROR');
+            EHR.Server.Utils.addError(errors, 'performedby', 'Opened By is a required field.', 'ERROR');
             error = true;
         }
 
