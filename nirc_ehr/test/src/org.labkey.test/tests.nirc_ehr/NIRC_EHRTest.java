@@ -1089,7 +1089,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         EHRLookupPage ehrLookupPage = new EHRLookupPage(this);
         QueryGrid grid = ehrLookupPage.getQueryGrid();
-        checker().verifyEquals("Missing look up tables", countLines(TestFileUtils.getLabKeyRoot() + getModulePath() + "/resources/data/editable_lookups.tsv") - 1, grid.getRecordCount());
+        checker().verifyEquals("Missing look up tables", countLines(new File(TestFileUtils.getLabKeyRoot(), getModulePath() + "/resources/data/editable_lookups.tsv").getPath()) - 1, grid.getRecordCount());
 
         clickAndWait(Locator.linkWithText("Age Class"));
         checker().verifyEquals("Navigated to incorrect schema", "ehr_lookups", getUrlParam("schemaName"));
