@@ -36,7 +36,6 @@ dental_obs	Dental Observations	value
 derm_obs	Dermatologic Observations	value
 digit_amputation	Digit Amputation	value	title
 ear_types	Ear Types	value	title
-editable_lookups	List of UI editable lookup values	value
 esig_events	ESig Events	value	title
 euthanasia_type	Euthanasia Type	value	title
 exam_findings	Exam Findings	value
