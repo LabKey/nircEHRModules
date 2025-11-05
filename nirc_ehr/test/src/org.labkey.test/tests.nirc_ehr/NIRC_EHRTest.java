@@ -18,12 +18,14 @@ package org.labkey.test.tests.nirc_ehr;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.api.reader.Readers;
+import org.labkey.api.util.FileUtil;
 import org.labkey.remoteapi.CommandException;
 import org.labkey.remoteapi.SimplePostCommand;
 import org.labkey.remoteapi.core.SaveModulePropertiesCommand;
@@ -100,8 +102,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String departedAnimalId = "H6767";
     private static final String aliveAnimalId = "A4545";
 
-    private String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
-    private Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
+    private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
+    private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
 
     DateTimeFormatter _dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -115,7 +117,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @Override
     public void importStudy()
     {
-        File path = new File(TestFileUtils.getLabKeyRoot(), getModulePath() + "/resources/referenceStudy");
+        File path = FileUtil.appendPath(TestFileUtils.getLabKeyRoot(), org.labkey.api.util.Path.parse(getModulePath() + "/resources/referenceStudy"));
         importFolderByPath(path, getContainerPath(), 1);
         path = TestFileUtils.getSampleData("nirc_ehr/study");
         importFolderByPath(path, getContainerPath(), 2);
@@ -278,7 +280,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private void populateEHRTables()
     {
         goToEHRFolder();
-        File fileName = new File(TestFileUtils.getLabKeyRoot(), getModulePath() + "/resources/data/observation_types.tsv");
+        File fileName = FileUtil.appendPath(TestFileUtils.getLabKeyRoot(), org.labkey.api.util.Path.parse(getModulePath() + "/resources/data/observation_types.tsv"));
         ImportDataCommand command = new ImportDataCommand("ehr", "observation_types");
         command.setFile(fileName);
         try
@@ -697,7 +699,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Active Clinical Cases"));
-        ParticipantViewPage reportPage = new AnimalHistoryPage(getDriver()).clickCategoryTab("Clinical")
+        ParticipantViewPage<?> reportPage = new AnimalHistoryPage<>(getDriver()).clickCategoryTab("Clinical")
                 .clickReportTab("All Clinical Cases");
         table = reportPage.getActiveReportDataRegion();
         Assert.assertEquals("Case not closed correctly ", LocalDateTime.now().format(_dateFormat) + " 00:00", table.getDataAsText(0, "enddate"));
@@ -893,7 +895,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         // The 'button' is actually a link tag.
         WebElement submitButton = Locator.tagWithText("a", "Submit").findWhenNeeded(submitForReview);
         scrollIntoView(submitButton);
-        doAndWaitForPageToLoad(() -> submitButton.click());
+        doAndWaitForPageToLoad(submitButton::click);
 
         stopImpersonating();
 
@@ -918,7 +920,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         verifyRowCreated("study", "weight", aliveAnimalId, 1);
 
         log("Verify animal is marked as dead");
-        AnimalHistoryPage historyPage = AnimalHistoryPage.beginAt(this);
+        AnimalHistoryPage<?> historyPage = AnimalHistoryPage.beginAt(this);
         historyPage.searchSingleAnimal(aliveAnimalId);
         waitForText(WAIT_FOR_PAGE, "Dead");
         waitForText("23 kg"); //checking latest weight is updated.
@@ -997,7 +999,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         _ext4Helper.selectComboBoxItem(Ext4Helper.Locators.formItemWithLabelContaining("Ordered By:"), NIRC_VET_NAME);
         waitAndClick(bulkEditWindow.append(Ext4Helper.Locators.ext4Button("Submit")));
 
-        Window msgWindow = new Window.WindowFinder(this.getDriver()).withTitle("Set Values").waitFor();
+        Window<?> msgWindow = new Window.WindowFinder(this.getDriver()).withTitle("Set Values").waitFor();
         msgWindow.clickButton("Yes", 0);
 
         submitForm("Submit Final", "Finalize Form");
@@ -1005,7 +1007,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Completing today's Medication Schedule");
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Today's Medication/Treatment Schedule"));
-        AnimalHistoryPage animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        AnimalHistoryPage<?> animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable scheduleTable = animalHistoryPage.getActiveReportDataRegion();
         Assert.assertEquals("Incorrect number of rows", 4, scheduleTable.getDataRowCount());
         scheduleTable.link(0, "treatmentRecord").click();
@@ -1026,7 +1028,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         clickAndWait(Locator.linkWithText("Active Clinical Cases"));
 
         //Click on 'Case Update' link
-        AnimalHistoryPage historyPage = new AnimalHistoryPage<>(getDriver());
+        AnimalHistoryPage<?> historyPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
         activeClinicalCases.link(0, "caseCheck").click();
         switchToWindow(2);
@@ -1089,7 +1091,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         EHRLookupPage ehrLookupPage = new EHRLookupPage(this);
         QueryGrid grid = ehrLookupPage.getQueryGrid();
-        checker().verifyEquals("Missing look up tables", countLines(TestFileUtils.getLabKeyRoot() + getModulePath() + "/resources/data/editable_lookups.tsv") - 1, grid.getRecordCount());
+        checker().verifyEquals("Missing look up tables", countLines(FileUtil.appendPath(TestFileUtils.getLabKeyRoot(), org.labkey.api.util.Path.parse(getModulePath() + "/resources/data/editable_lookups.tsv"))) - 1, grid.getRecordCount());
 
         clickAndWait(Locator.linkWithText("Age Class"));
         checker().verifyEquals("Navigated to incorrect schema", "ehr_lookups", getUrlParam("schemaName"));
@@ -1163,7 +1165,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Verify reports and schedule");
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Active Behavior Cases"));
-        AnimalHistoryPage animalHistoryPage = new AnimalHistoryPage<>(getDriver());
+        AnimalHistoryPage<?> animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable activeCase = animalHistoryPage.getActiveReportDataRegion();
         Assert.assertEquals("Behavioral case did not get created", 2, activeCase.getDataRowCount());
 
@@ -1230,9 +1232,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Assert.assertEquals("Case was not closed", 1, activeCase.getDataRowCount());
     }
 
-    private int countLines(String filePath) throws Exception
+    private int countLines(File file) throws Exception
     {
-        try (BufferedReader reader = Readers.getReader(new File(filePath)))
+        try (BufferedReader reader = Readers.getReader(file))
         {
             int count = 0;
             while (reader.readLine() != null)
@@ -1262,7 +1264,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
             Files.walkFileTree(orchardFileLocation.toPath(), new SimpleFileVisitor<>()
             {
                 @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+                public @NotNull FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attrs)
                 {
                     // Check if the file name starts with "orchardFile"
                     if (file.getFileName().toString().startsWith(prefix))
@@ -1281,7 +1283,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            log("Error while traversing the directory: " + e.getMessage());
         }
 
         if (largestTimestamp[0].equals("0"))
@@ -1290,7 +1292,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         }
 
         File orchardFile = new File(orchardFileLocation + "/orchardFile" + largestTimestamp[0] + ".txt");
-        waitFor(() -> orchardFile.exists(), WAIT_FOR_PAGE);
+        waitFor(orchardFile::exists, WAIT_FOR_PAGE);
         Assert.assertTrue("Edited animal is not present in the orchard file",
                 TestFileUtils.getFileContents(orchardFile).contains(animalId));
     }
