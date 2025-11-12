@@ -10,7 +10,7 @@ FROM
 (
    SELECT MAX(anmEvt.ANIMAL_EVENT_ID)                                                  AS objectid,
           anm.ANIMAL_ID_NUMBER                                                         AS Id,
-          anm.ANIMAL_DISPOSITION_ID                                                    AS destination,
+          src.NAME                                                                     AS destination,
           CAST(anmEvt.EVENT_DATETIME AS TIMESTAMP)                                     AS eventDate,
           evt.NAME                                                                     AS description,
           MAX(anmEvt.STAFF_ID)                                                         AS staff,
@@ -19,10 +19,12 @@ FROM
             LEFT JOIN ANIMAL anm ON anmEvt.ANIMAL_ID = anm.ANIMAL_ID
             LEFT JOIN EVENT evt ON anmEvt.EVENT_ID = evt.EVENT_ID
             LEFT JOIN q_modified_event adt ON anmEvt.ANIMAL_EVENT_ID = adt.event_id
+            LEFT JOIN ANIMAL_DISPOSITION src ON src.ID = anm.ANIMAL_DISPOSITION_ID
    WHERE anmEvt.EVENT_ID IN (SELECT EVENT_ID FROM EVENT WHERE NAME LIKE 'Lab Transfer To%' OR NAME LIKE 'Lab Transfer to%')
    GROUP BY anm.ANIMAL_ID_NUMBER,
             anm.ANIMAL_DISPOSITION_ID,
             anmEvt.EVENT_DATETIME,
-            evt.NAME
+            evt.NAME,
+            src.NAME
 ) i
 LEFT JOIN STAFF st ON i.staff = st.STAFF_ID
