@@ -970,10 +970,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //Fill out Clinical Remarks section with Date, Remark
         scrollIntoView(Locator.textarea("remark"));
         _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(2).format(_dateFormat));
-        _helper.setDataEntryField("remark", "Clinical Remarks - Test");
+        _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").setValue("Clinical Remarks - Test");
         if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
             _helper.setDataEntryField("remark", "Clinical Remarks - Test");
-        waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
+        waitForTextToDisappear("Remark: WARN: Must enter at least one comment", 1000);
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
         _helper.addRecordToGrid(weight);
