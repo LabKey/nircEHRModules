@@ -193,6 +193,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         NotificationService.get().registerNotification(new NIRCPregnancyOutcomeNotification(this));
 
         EHRService.get().registerReportLink(EHRService.REPORT_LINK_TYPE.moreReports, "Printable Necropsy Report", this, DetailsURL.fromString("/nirc_ehr-necropsy.view"), "Pathology");
+        EHRService.get().registerReportLink(EHRService.REPORT_LINK_TYPE.moreReports, "Acquisition Report", this, DetailsURL.fromString("/nirc_ehr-acquisitionReport.view"), "Population Overview");
 
 
         // Ensure N: is mounted if it's configured, as it's being mapped in via a symlink/shortcut, so we can't
