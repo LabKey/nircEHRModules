@@ -938,8 +938,8 @@ public class NIRC_EHRTriggerHelper
         TableInfo ti = getTableInfo("study", "prc_order");
 
         // Get the QC state IDs for "Request: Approved" and "Completed"
-        Integer approvedQcStateId = EHRService.get().getQCStates(_container).get("Request: Approved").getRowId();
-        Integer completedQcStateId = EHRService.get().getQCStates(_container).get("Completed").getRowId();
+        Integer approvedQcStateId = EHRService.get().getQCStates(_container).get(EHRService.QCSTATES.RequestApproved.getLabel()).getRowId();
+        Integer completedQcStateId = EHRService.get().getQCStates(_container).get(EHRService.QCSTATES.Completed.getLabel()).getRowId();
 
         // Query for rows matching the IDs and having "Request: Approved" status
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), ids, CompareType.IN);
