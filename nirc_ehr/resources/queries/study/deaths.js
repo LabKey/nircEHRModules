@@ -142,5 +142,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         if (!helper.isETL() && event === 'insert') {
             triggerHelper.sendDeathNotification(ids[0]);
         }
+
+        triggerHelper.updateProcedureOrdersToCompleted(ids);
     }
 });
