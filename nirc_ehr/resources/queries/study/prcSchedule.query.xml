@@ -7,7 +7,9 @@
                 <columns>
                     <column columnName="objectid">
                         <isHidden>true</isHidden>
-                        <isKeyField>true</isKeyField>
+                    </column>
+                    <column columnName="lsid">
+                        <isHidden>true</isHidden>
                     </column>
                     <column columnName="Id">
                         <fk>

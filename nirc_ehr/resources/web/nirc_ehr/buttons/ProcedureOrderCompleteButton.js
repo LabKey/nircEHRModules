@@ -51,7 +51,7 @@ Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
                 if (completedRowId) {
                     for (const row of selectedRows) {
                         rowsToInsert.push({
-                            objectid: row,
+                            lsid: row,
                             qcstate: completedRowId
                         });
                     }

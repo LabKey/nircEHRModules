@@ -927,6 +927,54 @@ public class NIRC_EHRTriggerHelper
         }
     }
 
+    public void updateProcedureOrdersToCompleted(List<String> ids)
+    {
+        if (ids == null || ids.size() < 1) // Native array doesn't support isEmpty
+        {
+            _log.warn("No IDs provided to updateProcedureOrdersToCompleted");
+            return;
+        }
+
+        TableInfo ti = getTableInfo("study", "prc_order");
+
+        // Get the QC state IDs for "Request: Approved" and "Completed"
+        Integer approvedQcStateId = EHRService.get().getQCStates(_container).get(EHRService.QCSTATES.RequestApproved.getLabel()).getRowId();
+        Integer completedQcStateId = EHRService.get().getQCStates(_container).get(EHRService.QCSTATES.Completed.getLabel()).getRowId();
+
+        // Query for rows matching the IDs and having "Request: Approved" status
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), ids, CompareType.IN);
+        filter.addCondition(FieldKey.fromString("qcstate"), approvedQcStateId, CompareType.EQUAL);
+
+        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("objectid"), filter, null);
+        Map<String, Object>[] results = ts.getMapArray();
+
+        if (results.length == 0)
+        {
+            _log.info("No prc_order rows found with 'Request: Approved' status for the provided IDs");
+            return;
+        }
+
+        // Build the update rows
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (Map<String, Object> result : results)
+        {
+            Map<String, Object> row = new HashMap<>();
+            row.put("objectid", result.get("objectid"));
+            row.put("qcstate", completedQcStateId);
+            rows.add(row);
+        }
+
+        try
+        {
+            ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+            _log.info("Successfully updated " + rows.size() + " prc_order rows to 'Completed' status");
+        }
+        catch (Exception e)
+        {
+            _log.error("Error updating prc_order rows to completed", e);
+        }
+    }
+
     public void sendPregnancyOutcomeNotification(final String animalId, Map<String, Object> row) throws Exception
     {
         //check whether Notification is enabled
