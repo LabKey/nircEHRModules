@@ -115,6 +115,7 @@ Ext4.define('NIRC_EHR.window.MarkTreatmentCompletedWindow', {
                 LABKEY.Filter.create(this.pkColName, checked.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)
             ],
             scope: this,
+            ignoreFilter: true,
             success: this.onSuccess,
             failure: LDK.Utils.getErrorCallback()
         });

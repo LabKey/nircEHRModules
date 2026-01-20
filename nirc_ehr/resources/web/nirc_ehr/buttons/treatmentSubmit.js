@@ -38,6 +38,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                         filterArray: filters,
                         columns: 'problemSubcategory',
                         scope: this,
+                        ignoreFilter: true,
                         failure: LDK.Utils.getErrorCallback(),
                         success: function (results) {
                             if (results.rows.length > 0) {
@@ -150,6 +151,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                     columns: 'Id,meaning,code,qualifier,route,concentration,conc_units,amount,amount_units,dosage,dosage_units,volume,vol_units,remark,category,objectid,orderedby',
                     filterArray: [LABKEY.Filter.create('objectid', treatmentid, LABKEY.Filter.Types.EQUAL)],
                     scope: this,
+                    ignoreFilter: true,
                     success: onSuccess,
                     failure: LDK.Utils.getErrorCallback()
                 });
@@ -207,6 +209,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                         LABKEY.Filter.create('id', id, LABKEY.Filter.Types.EQUAL),
                         LABKEY.Filter.create('category', observations, LABKEY.Filter.Types.EQUALS_ONE_OF)],
                     scope: this,
+                    ignoreFilter: true,
                     success: onObsSuccess,
                     failure: LDK.Utils.getErrorCallback()
                 });
@@ -251,6 +254,7 @@ EHR.DataEntryUtils.registerDataEntryFormButton('NIRC_TREATMENT_SUBMIT', {
                     queryName: 'prc_order',
                     columns: 'Id,procedure,remark,category,objectid,orderedby,caseid',
                     filterArray: [LABKEY.Filter.create('objectid', prcOrderId, LABKEY.Filter.Types.EQUAL)],
+                    ignoreFilter: true,
                     scope: this,
                     success: onSuccess,
                     failure: LDK.Utils.getErrorCallback()
