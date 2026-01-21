@@ -888,6 +888,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         click(Locator.tagWithNameContaining("input", "assignedTo"));
         WebElement assignedToElement = Locator.tagWithNameContaining("input", "assignedTo").findWhenNeeded(submitForReview);
         setFormElement(assignedToElement, _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
+        click(Locator.tagWithNameContaining("input", "assignedTo"));
 
         // Entering the text leaves the selection list visible, send 'Enter' to remove it.
         assignedToElement.sendKeys(Keys.ENTER);
