@@ -884,6 +884,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
 
         // Make sure to find the element in submitForReview window.
+        waitForElement(Locator.tagWithNameContaining("input", "assignedTo"));
+        click(Locator.tagWithNameContaining("input", "assignedTo"));
         WebElement assignedToElement = Locator.tagWithNameContaining("input", "assignedTo").findWhenNeeded(submitForReview);
         setFormElement(assignedToElement, _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
 
