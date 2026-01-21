@@ -963,6 +963,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         problem.setValue("Circulatory abnormality");
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
         setFormElement(Locator.textarea("plan"), "Case plan");
+        waitForElement(Locator.name("Id"));
+        click(Locator.name("Id"));
         setFormElement(Locator.name("Id"), animalId);
         _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
