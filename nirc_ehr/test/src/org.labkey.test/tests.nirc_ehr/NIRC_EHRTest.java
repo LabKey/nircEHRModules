@@ -964,8 +964,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Ext4FieldRef problem = _helper.getExt4FieldForFormSection("Clinical Case", "Problem Area");
         problem.clickTrigger();
         problem.setValue("Circulatory abnormality");
-        problem.clickTrigger();
+        click(Locator.textarea("openRemark"));
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
+        click(Locator.textarea("plan"));
         setFormElement(Locator.textarea("plan"), "Case plan");
         waitForElement(Locator.name("Id"));
         click(Locator.name("Id"));
