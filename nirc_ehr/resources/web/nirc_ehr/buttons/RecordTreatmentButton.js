@@ -74,6 +74,7 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
             queryName: 'treatment_order',
             filterArray: [LABKEY.Filter.create('objectid', objectIds.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
             scope: this,
+            ignoreFilter: true,
             columns: 'Id,objectid,code,reason,route,amount,amount_units,concentration,volume,vol_units,conc_units,dosage,dosage_units,orderedby,category,caseid',
             success: function (data) {
                 const rowsToInsert = [];

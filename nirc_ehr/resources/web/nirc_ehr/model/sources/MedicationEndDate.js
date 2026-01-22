@@ -15,6 +15,7 @@ EHR.model.DataModelManager.registerMetadata('MedicationEndDate', {
                                     queryName: 'drug_defaults',
                                     columns: ['duration','offset'],
                                     scope: this,
+                                    ignoreFilter: true,
                                     filterArray: [LABKEY.Filter.create('code', newVal)],
                                     success: function (data) {
                                         if (data.rows && data.rows.length > 0) {
