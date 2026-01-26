@@ -16,6 +16,6 @@
         <column name="QCState"/>
     </columns>
     <filters>
-        <filter column="category" operator="eq" value="Alopecia Score"/>
+        <filter column="category" operator="contains" value="lopecia"/>
     </filters>
 </customView>
