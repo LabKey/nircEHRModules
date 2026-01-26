@@ -8,10 +8,14 @@
         <column name="Id/curLocation/cage/room/floor/building"/>
         <column name="Id/curLocation/cage"/>
         <column name="date"/>
+        <column name="category"/>
         <column name="area"/>
         <column name="observation"/>
         <column name="remark"/>
         <column name="performedBy"/>
         <column name="QCState"/>
     </columns>
+    <filters>
+        <filter column="category" operator="eq" value="Alopecia Score"/>
+    </filters>
 </customView>
