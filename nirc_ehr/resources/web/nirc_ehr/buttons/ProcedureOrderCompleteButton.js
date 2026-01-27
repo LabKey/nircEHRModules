@@ -44,6 +44,7 @@ Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
             queryName: 'QCState',
             filterArray: [LABKEY.Filter.create('label', 'Completed', LABKEY.Filter.Types.EQUALS)],
             scope: this,
+            ignoreFilter: true,
             columns: 'RowId',
             success: function (data) {
                 const rowsToInsert = [];

@@ -7,6 +7,7 @@ EHR.DataEntryUtils.registerGridButton('NIRC_DAILY_CLINICAL_OBS', function(config
             LABKEY.Query.selectRows({
                 schemaName: 'ehr',
                 queryName: 'observation_types',
+                ignoreFilter: true,
                 success: function (results) {
                     var grid = btn.up('gridpanel');
                     if (results?.rows?.length > 0) {
@@ -46,6 +47,7 @@ EHR.DataEntryUtils.registerGridButton('NIRC_DAILY_CLINICAL_OBS_ORDERS', function
             LABKEY.Query.selectRows({
                 schemaName: 'ehr',
                 queryName: 'observation_types',
+                ignoreFilter: true,
                 success: function (results) {
                     var grid = btn.up('gridpanel');
                     if (results?.rows?.length > 0) {

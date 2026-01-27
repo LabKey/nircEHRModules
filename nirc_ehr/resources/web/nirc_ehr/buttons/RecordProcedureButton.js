@@ -73,6 +73,7 @@ Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
             queryName: 'prc_order',
             filterArray: [LABKEY.Filter.create('lsid', selectedRows.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
             scope: this,
+            ignoreFilter: true,
             columns: 'Id,objectid,procedure,category,caseid,orderedby,lsid',
             success: function (data) {
                 const rowsToInsert = [];

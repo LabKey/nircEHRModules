@@ -8,6 +8,7 @@ EHR.DataEntryUtils.registerGridButton('ADDGROSSPATHOLOGY', function(config){
                 LABKEY.Query.selectRows({
                     schemaName: 'ehr_lookups',
                     queryName: 'necropsy_organ_systems',
+                    ignoreFilter: true,
                     success: function (results) {
                         var grid = btn.up('gridpanel');
                         if (grid && grid.store && grid.store.data && grid.store.data.getCount() === 0) {

@@ -18,7 +18,8 @@ EHR.model.DataModelManager.registerMetadata('TreatmentSchedule', {
                     schemaName: 'ehr_lookups',
                     queryName: 'snomed',
                     columns: 'code,meaning',
-                    sort: 'sort_order',
+                    sort: 'meaning,code',
+                    filterArray: [LABKEY.Filter.create('dateDisabled', null, LABKEY.Filter.Types.ISBLANK)],
                     autoLoad: true,
                     getRecordForCode: function(code){
                         debugger

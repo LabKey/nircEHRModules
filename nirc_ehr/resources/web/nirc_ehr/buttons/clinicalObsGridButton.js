@@ -13,6 +13,7 @@ EHR.DataEntryUtils.registerGridButton('NIRC_AUTO_POPULATE_DAILY_OBS', function(c
                 LABKEY.Query.selectRows({
                     schemaName: 'ehr',
                     queryName: 'observation_types',
+                    ignoreFilter: true,
                     success: function (results) {
                         var grid = btn.up('gridpanel');
                         if (grid?.store?.data?.getCount() === 0) {

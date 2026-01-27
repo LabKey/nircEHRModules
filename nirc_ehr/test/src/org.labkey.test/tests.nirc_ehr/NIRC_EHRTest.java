@@ -886,8 +886,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
 
         // Make sure to find the element in submitForReview window.
+        waitForElement(Locator.tagWithNameContaining("input", "assignedTo"));
+        click(Locator.tagWithNameContaining("input", "assignedTo"));
         WebElement assignedToElement = Locator.tagWithNameContaining("input", "assignedTo").findWhenNeeded(submitForReview);
         setFormElement(assignedToElement, _userHelper.getDisplayNameForEmail(NIRC_FULL_SUBMITTER_VET));
+        click(Locator.tagWithNameContaining("input", "assignedTo"));
 
         // Entering the text leaves the selection list visible, send 'Enter' to remove it.
         assignedToElement.sendKeys(Keys.ENTER);
@@ -963,8 +966,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Ext4FieldRef problem = _helper.getExt4FieldForFormSection("Clinical Case", "Problem Area");
         problem.clickTrigger();
         problem.setValue("Circulatory abnormality");
+        click(Locator.textarea("openRemark"));
         setFormElement(Locator.textarea("openRemark"), "Clinical Case WorkFlow - Test");
+        click(Locator.textarea("plan"));
         setFormElement(Locator.textarea("plan"), "Case plan");
+        waitForElement(Locator.name("Id"));
+        click(Locator.name("Id"));
         setFormElement(Locator.name("Id"), animalId);
         _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
         Assert.assertEquals("Performed by is incorrect ", "vet tech fs", getFormElement(Locator.name("performedby")));
