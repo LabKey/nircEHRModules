@@ -837,7 +837,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         setFormElement(Locator.name("Id"), aliveAnimalId);
         _ext4Helper.selectComboBoxItem("Disposition:", "Euthaniasia (project)");
-
+        waitForElement(Locator.name("deathWeight"));
+        setFormElement(Locator.name("deathWeight"), "23");
         Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit Necropsy for Review")));
         Assert.assertFalse(isElementPresent(Locator.linkWithText("Submit Final")));
         submitForm("Submit Death", "Confirm");
@@ -861,13 +862,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         beginAt(url);
         Ext4GridRef necropsy = _helper.getExt4GridForFormSection("Necropsy");
         necropsy.expand();
-        waitForElement(Locator.name("necropsyWeight"));
-        setFormElement(Locator.name("necropsyWeight"), "23");
         scrollIntoView(Locator.linkContainingText("More Actions"));
         _ext4Helper.selectComboBoxItem("Physical Condition:", "Excellent");
-        _ext4Helper.selectComboBoxItem("Reason for Examination:", "Natural Death");
         _ext4Helper.selectComboBoxItem("Condition of Specimen:", "Fresh");
         scrollIntoView(Locator.name("diagnosis"));
+        _helper.setDataEntryField("accessionNumber", "123");
         _helper.setDataEntryField("identification", "Extra information");
         _helper.setDataEntryField("grossAbnormalities", "Extra leg");
         _helper.setDataEntryField("diagnosis", "Dead");

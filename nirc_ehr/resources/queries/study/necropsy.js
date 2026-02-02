@@ -35,8 +35,6 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 (deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REQUEST: PENDING' ||
                 deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'REVIEW REQUIRED')) {
 
-            if (!row.examReason)
-                EHR.Server.Utils.addError(scriptErrors, 'examReason', "'Reason for Examination' is required", 'ERROR');
             if (!row.specimenCondition)
                 EHR.Server.Utils.addError(scriptErrors, 'specimenCondition', "'Condition of Specimen' is required", 'ERROR');
             if (!row.physicalCondition)
@@ -47,21 +45,6 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 EHR.Server.Utils.addError(scriptErrors, 'grossAbnormalities', "'Gross Abnormalities' is required", 'ERROR');
             if (!row.accessionNumber)
                 EHR.Server.Utils.addError(scriptErrors, 'accessionNumber', "'Accession Number' is required", 'ERROR');
-        }
-
-        if(row.QCStateLabel && EHR.Server.Security.getQCStateByLabel(row.QCStateLabel).PublicData) {
-            var qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
-
-            //add/update weight record
-            var weightRecord = {
-                Id: row.Id,
-                date: row.date,
-                weight: row.necropsyWeight,
-                taskid: row.taskid,
-                qcstate: qcstate,
-                performedby: row.performedby
-            };
-            triggerHelper.upsertWeightRecord(weightRecord);
         }
     }
 }

@@ -122,6 +122,21 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                     console.log(row.id + " is not a valid animal id");
                 }
             }
+
+            if(row.QCStateLabel && EHR.Server.Security.getQCStateByLabel(row.QCStateLabel).PublicData) {
+                var qcstate = helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId();
+
+                //add/update weight record
+                var weightRecord = {
+                    Id: row.Id,
+                    date: row.date,
+                    weight: row.deathWeight,
+                    taskid: row.taskid,
+                    qcstate: qcstate,
+                    performedby: row.performedby
+                };
+                triggerHelper.upsertWeightRecord(weightRecord);
+            }
         }
     }
 }

@@ -6,7 +6,6 @@
                     <column columnName="date">
                         <columnTitle>Exam Date</columnTitle>
                     </column>
-                    <column columnName="weight"/>
                     <column columnName="category">
                         <columnTitle>Category</columnTitle>
                     </column>
@@ -26,9 +25,6 @@
                             <fkTable>necropsy_physical_condition</fkTable>
                             <fkColumnName>value</fkColumnName>
                         </fk>
-                    </column>
-                    <column columnName="necropsyWeight">
-                        <columnTitle>Weight</columnTitle>
                     </column>
                     <column columnName="project">
                         <isHidden>true</isHidden>
