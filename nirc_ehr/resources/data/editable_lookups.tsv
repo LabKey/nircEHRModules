@@ -73,8 +73,7 @@ ehr_lookups	mens_score	Clinical	Menses Types	Clinical observation fixed values.
 ehr_lookups	mucous_membranes	Clinical	Mucous Membranes	Used in clinical observations.
 ehr_lookups	musculoskeletal_observations	Clinical	Musculoskeletal Observations	Used in clinical observations.
 ehr_lookups	necropsy_disposition_codes	Colony Management	Necropsy Disposition Codes	
-ehr_lookups	necropsy_exam_reason	Colony Management	Necropsy Exam Reason	
-ehr_lookups	necropsy_organ_appearance	Colony Management	Necropsy Organ Appearance	
+ehr_lookups	necropsy_organ_appearance	Colony Management	Necropsy Organ Appearance
 ehr_lookups	necropsy_organ_systems	Colony Management	Necropsy Organ Systems	
 ehr_lookups	necropsy_physical_condition	Colony Management	Necropsy Physical Condition	
 ehr_lookups	necropsy_specimen_condition	Colony Management	Necropsy Specimen Condition	

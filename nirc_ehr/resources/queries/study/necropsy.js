@@ -43,6 +43,10 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                 EHR.Server.Utils.addError(scriptErrors, 'physicalCondition', "'Physical Condition' is required", 'ERROR');
             if (!row.diagnosis)
                 EHR.Server.Utils.addError(scriptErrors, 'diagnosis', "'Diagnosis' is required", 'ERROR');
+            if (!row.grossAbnormalities)
+                EHR.Server.Utils.addError(scriptErrors, 'grossAbnormalities', "'Gross Abnormalities' is required", 'ERROR');
+            if (!row.accessionNumber)
+                EHR.Server.Utils.addError(scriptErrors, 'accessionNumber', "'Accession Number' is required", 'ERROR');
         }
 
         if(row.QCStateLabel && EHR.Server.Security.getQCStateByLabel(row.QCStateLabel).PublicData) {

@@ -12,12 +12,18 @@ EHR.model.DataModelManager.registerMetadata('DeathNecropsy', {
                     dateFormat: 'Y-m-d',
                     timeFormat: 'H:i'
                 },
+            },
+            deathWeight: {
+                label: 'Weight (kg)',
+                allowBlank: false,
+                nullable: false,
+            },
+            reason: {
+                allowBlank: false,
+                nullable: false,
             }
         },
         'study.necropsy': {
-            necropsyWeight: {
-                label: 'Weight (kg)'
-            },
             date: {
                 label: 'Exam Date',
                 xtype: 'xdatetime',

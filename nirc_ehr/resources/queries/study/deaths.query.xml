@@ -7,7 +7,6 @@
                     <column columnName="date">
                         <columnTitle>Death Date</columnTitle>
                     </column>
-                    <column columnName="disposition"/>
                     <column columnName="reason">
                         <columnTitle>Disposition</columnTitle>
                         <fk>
@@ -17,6 +16,7 @@
                             <fkDisplayColumnName>title</fkDisplayColumnName>
                         </fk>
                     </column>
+                    <column columnName="deathWeight"/>
                     <column columnName="remark" />
                     <column columnName="performedby" />
                     <column columnName="description">
