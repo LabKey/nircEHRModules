@@ -582,6 +582,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         births.setGridCellJS(1, "date", now.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
         births.setGridCell(1, "Id", bornAnimal);
         births.setGridCell(1, "cage", "C3");
+        births.setGridCell(1, "Id/demographics/species", "Cebus apella CAP");
+        births.setGridCell(1, "Id/demographics/gender", "female");
         births.setGridCell(1, "project", "795644");
         births.setGridCell(1, "birthProtocol", "protocol101");
         submitForm("Submit Final", "Finalize");
