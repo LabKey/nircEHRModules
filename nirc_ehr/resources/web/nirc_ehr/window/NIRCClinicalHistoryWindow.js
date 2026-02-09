@@ -45,7 +45,7 @@ Ext4.define('NIRC_EHR.window.ClinicalHistoryWindow', {
         },{
             xtype: 'tabpanel',
             items: [{
-                xtype: 'ehr-clinicalhistorypanel',
+                xtype: 'nirc_ehr-clinicalhistorypanel',
                 title: 'History',
                 border: true,
                 width: 1230,
