@@ -13,7 +13,8 @@ notes	Colony Management	query	Notes	true		study	notes				false	false		qcstate/pu
 activeClinTreatmentOrders	Clinical	query	Active Clinical Medication Orders	true		study	treatment_order	Clinical Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
 activeBehaviorTreatmentOrders	Behavior	query	Active Behavior Medication Orders	true		study	treatment_order	Behavior Active Treatment Orders		date	false	false		qcstate/publicdata	This report contains the treatment orders entered for each animal
 allTreatments	Clinical	query	All Treatment Orders	true		study	treatment_order				false	false		qcstate/publicdata	This report shows all treatment orders
-behTreatments	Behavior	query	All Behavior Medication Orders	true		study	treatment_order	behavior			false	false		qcstate/publicdata	This report shows all treatment orders
+behTreatments	Behavior	query	All Behavior Medication Orders	true		study	treatment_order	behavior			false	false		qcstate/publicdata	This report shows all behavior treatment orders
+behDrug	Behavior	query	Behavior Drug Administration	true		study	drug	Behavior			false	false		qcstate/publicdata	This report shows all behavior drug administrations
 FileRepository	General	js	File Repository	true		study	FileRepository				false	false		qcstate/publicdata	File Repository for uploading and viewing animal related files
 observationSchedule	Daily Reports	js	Today's Observation Schedule	true		study	observationSchedule			date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
 activeClinicalObservationOrders	Clinical	query	Active Clinical Observation Orders	true		study	observation_order	Active Clinical Orders		date	false	false		qcstate/publicdata	This report contains a list of today's treatments to be administered
