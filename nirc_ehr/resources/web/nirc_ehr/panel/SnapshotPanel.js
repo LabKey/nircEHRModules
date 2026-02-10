@@ -291,7 +291,7 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
             var html = '';
             var sep = '';
             Ext4.each(animals, function(id) {
-                html += sep + '<a href="' + LABKEY.ActionURL.buildURL('ehr', 'participantView', null, {participantId: id}) + '">' + LABKEY.Utils.encodeHtml(id) + '</a>';
+                html += sep + '<a href="' + LABKEY.ActionURL.buildURL('ehr', 'participantView', null, {participantId: encodeURIComponent(id)}) + '" target="_blank">' + encodeURIComponent(id) + '</a>';
                 sep = ', ';
             });
             toSet['cagemates'] = html;
@@ -345,5 +345,45 @@ Ext4.define('NIRC_EHR.panel.SnapshotPanel', {
                 style: 'white-space: normal !important;"'
             }
         }]);
+    },
+
+    appendParentageResults: function(toSet, results){
+        if (results){
+            var parentMap = {};
+            Ext4.each(results, function(row){
+                var parent = row.parent;
+                var relationship = row.relationship;
+
+                if (parent && relationship){
+                    var text = LABKEY.Utils.encodeHtml(relationship + ' - ' + parent);
+
+                    if (!parentMap[text])
+                        parentMap[text] = [];
+
+                    var method = row.method;
+                    if (method){
+                        parentMap[text].push(LABKEY.Utils.encodeHtml(method));
+                    }
+                }
+            }, this);
+
+            var values = [];
+            Ext4.Array.forEach(Ext4.Object.getKeys(parentMap).sort(), function(text){
+                parentMap[text] = Ext4.unique(parentMap[text]);
+                var subject = text;
+                var textParts = text.split(' - ');
+                if (textParts.length > 1){
+                    subject = textParts[1];
+                }
+
+                values.push('<a href="' + LABKEY.ActionURL.buildURL('ehr', 'participantView', null, {participantId: encodeURIComponent(subject)}) + '" target="_blank">' + encodeURIComponent(subject) + '</a>');
+            }, this);
+
+            if (values.length)
+                toSet['parents'] = values.join('<br>');
+        }
+        else {
+            toSet['parents'] = 'No data';
+        }
     },
 });

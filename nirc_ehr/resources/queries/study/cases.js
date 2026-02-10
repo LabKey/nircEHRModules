@@ -33,7 +33,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             error = true;
         }
 
-        if (!helper.isValidateOnly() && row.caseid && row.enddate && (row.enddate != oldRow.enddate)) {
+        if (!helper.isValidateOnly() && row.caseid && row.enddate && oldRow && (row.enddate != oldRow.enddate)) {
             triggerHelper.closeDailyClinicalObs(row.caseid, row.enddate);
         }
 
@@ -57,7 +57,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                     if (oldQc.Label != 'In Progress') {
                         EHR.Server.Utils.addError(errors, null, 'Cannot save a draft copy of a case already opened or in review.', 'ERROR');
                     }
-                } else if (row.category == 'Clinical' && (qc.Label == 'Completed' || qc.Label == 'Review Required') && row.caseid && row.Id && row.performedby && row.taskid) {
+                } else if (row.category == 'Clinical' && (qc.Label == 'Completed' || qc.Label == 'Review Required') && row.caseid && row.Id && row.performedby && row.taskid && !row.enddate) {
                     var ordersInTransaction = helper.getProperty('ordersInTransaction');
                     var oit = [];
                     if (ordersInTransaction && ordersInTransaction.length) {

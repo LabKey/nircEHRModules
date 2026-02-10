@@ -61,7 +61,6 @@ mens_score	Menses	value
 mucous_membranes	Mucous Membranes	value
 musculoskeletal_observations	Musculoskeletal Observations	value
 necropsy_disposition_codes	Tissue Disposition Codes	value	title
-necropsy_exam_reason	Necropsy Reason	value	title
 necropsy_organ_appearance	Appearance	value	title
 necropsy_organ_systems	Organ Systems	value	title
 necropsy_physical_condition	Physical Condition	value	title

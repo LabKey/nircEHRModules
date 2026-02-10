@@ -7,10 +7,8 @@
         <column name="Id/Demographics/species"/>
         <column name="date"/>
         <column name="accessionNumber"/>
-        <column name="examReason"/>
         <column name="specimenCondition"/>
         <column name="physicalCondition"/>
-        <column name="necropsyWeight"/>
         <column name="relevantHistory"/>
         <column name="grossAbnormalities"/>
         <column name="diagnosis"/>

@@ -20,7 +20,9 @@
         <column name="dosage_units"/>
         <column name="orderedby"/>
         <column name="performedBy"/>
-        <column name="category"/>
         <column name="remark"/>
     </columns>
+    <filters>
+        <filter column="category" operator="eq" value="Behavior"/>
+    </filters>
 </customView>
