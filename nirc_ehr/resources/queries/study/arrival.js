@@ -2,19 +2,15 @@ require("ehr/triggers").initScript(this);
 
 var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 
-function onInit(event, helper){
-    helper.setScriptOptions({
-        allowAnyId: true,
-        requiresStatusRecalc: true,
-        allowDatesInDistantPast: true,
-        skipAssignmentCheck: true,
-    });
-}
-
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'Arrival', function(helper, scriptErrors, row, oldRow) {
 
+    console.log('isRearrival:', row.rearrival);
+    if(!row.rearrival){
+        helper.setScriptOptions({requiresStatusRecalc: true});
+    }
+
     // Due to order of operation, this needs to be done in upsert instead of insert
-    if (helper.getEvent() == 'insert' && row.Id && triggerHelper.animalIdExists(row.Id)) {
+    if (!row.rearrival && helper.getEvent() == 'insert' && row.Id && triggerHelper.animalIdExists(row.Id)) {
         EHR.Server.Utils.addError(scriptErrors, 'Id', 'Animal Id ' + row.Id + ' is already in use. Please use a different Id.', 'ERROR');
     }
 
@@ -25,7 +21,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
     helper.registerArrival(row.Id, row.date);
 
     //Insert or update demographic and birth records
-    if (!helper.isETL() && !helper.isGeneratedByServer() && !helper.isValidateOnly()) {
+    if (!row.rearrival && !helper.isETL() && !helper.isGeneratedByServer() && !helper.isValidateOnly()) {
 
         // this allows demographic records in qcstates other than completed
         var extraDemographicsFieldMappings = {

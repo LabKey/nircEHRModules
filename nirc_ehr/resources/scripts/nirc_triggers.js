@@ -26,10 +26,27 @@ exports.init = function (EHR) {
         });
     });
 
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'arrival', function(event, helper) {
+        helper.setScriptOptions({
+            allowAnyId: true,
+            requiresStatusRecalc: false, // set in upsert to handle rearrival
+            allowDatesInDistantPast: true,
+            skipAssignmentCheck: true,
+        });
+    });
+
+    EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'protocolAssignment', function(event, helper) {
+        helper.setScriptOptions({
+            allowAnyId: false,
+            requiresStatusRecalc: false,
+            allowDatesInDistantPast: true
+        });
+    });
+
     EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.INIT, 'study', 'assignment', function(event, helper) {
         helper.setScriptOptions({
             allowAnyId: false,
-            requiresStatusRecalc: true,
+            requiresStatusRecalc: false,
             allowDatesInDistantPast: true,
             skipAssignmentCheck: true,
             removeTimeFromDate: false,

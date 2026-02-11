@@ -97,6 +97,11 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                 columnConfig: {
                     width: 200
                 }
+            },
+            rearrival: {
+                allowBlank: true,
+                hidden: true,
+                showInGrid: false
             }
         }
     }
