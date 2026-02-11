@@ -30,7 +30,7 @@ Ext4.define('NIRC_EHR.window.CaseHistoryWindow', {
         items[1].items[0].title = 'Entire History';
         items[1].items.splice(1, 0, {
             title: 'Case History',
-            xtype: 'ehr-casehistorypanel',
+            xtype: 'nirc_ehr-casehistorypanel',
             containerPath: this.containerPath,
             border: true,
             width: 1180,

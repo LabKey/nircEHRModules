@@ -101,10 +101,14 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/NIRCRecentRemarksWindow.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("ehr/sharedReports.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/SnapshotPanel.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/NarrowSnapshotPanel.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/BloodSummaryPanel.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/AnimalDetailsPanel.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/NIRCClinicalHistoryWindow.js"), this);
         ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/window/NIRCCaseHistoryWindow.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/ClinicalHistoryPanel.js"), this);
+        ehrService.registerClientDependency(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseHistoryPanel.js"), this);
+
     }
 
     @Override

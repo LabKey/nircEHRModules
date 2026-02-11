@@ -181,7 +181,7 @@ EHR.reports.clinicalHistory = function(panel, tab, showActionsBtn, includeAll){
             });
 
             toAdd.push({
-                xtype: 'ehr-clinicalhistorypanel',
+                xtype: 'nirc_ehr-clinicalhistorypanel',
                 border: true,
                 subjectId: s,
                 autoLoadRecords: true,
