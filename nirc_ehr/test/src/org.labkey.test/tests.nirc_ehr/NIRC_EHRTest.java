@@ -877,7 +877,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         scrollIntoView(Locator.linkContainingText("More Actions"));
         _ext4Helper.selectComboBoxItem("Physical Condition:", "Excellent");
         _ext4Helper.selectComboBoxItem("Condition of Specimen:", "Fresh");
-        _helper.setDataEntryField("accessionNumber", "123");
+        _helper.getExt4FieldForFormSection("Necropsy", "Accession Number").setValue("123");
         scrollIntoView(Locator.name("diagnosis"));
         _helper.setDataEntryField("identification", "Extra information");
         _helper.setDataEntryField("grossAbnormalities", "Extra leg");
