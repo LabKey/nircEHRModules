@@ -4,7 +4,6 @@ var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.S
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.BEFORE_UPSERT, 'study', 'Arrival', function(helper, scriptErrors, row, oldRow) {
 
-    console.log('isRearrival:', row.rearrival);
     if(!row.rearrival){
         helper.setScriptOptions({requiresStatusRecalc: true});
     }

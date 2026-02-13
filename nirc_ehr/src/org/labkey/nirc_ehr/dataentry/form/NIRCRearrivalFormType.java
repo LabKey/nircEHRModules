@@ -27,12 +27,10 @@ public class NIRCRearrivalFormType extends NIRCBaseTaskFormType
                 new NIRCRearrivalFormSection()
         ));
 
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Arrival.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/model/sources/Rearrival.js"));
 
         for (FormSection s : getFormSections())
         {
-            s.addConfigSource("Arrival");
             s.addConfigSource("Rearrival");
         }
     }
