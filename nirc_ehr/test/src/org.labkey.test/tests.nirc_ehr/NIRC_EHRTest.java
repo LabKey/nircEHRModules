@@ -878,11 +878,19 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         scrollIntoView(Locator.linkContainingText("More Actions"));
         _ext4Helper.selectComboBoxItem("Physical Condition:", "Excellent");
         _ext4Helper.selectComboBoxItem("Condition of Specimen:", "Fresh");
-        _helper.getExt4FieldForFormSection("Necropsy", "Accession Number").setValue("123");
+        Ext4FieldRef accessionNumber = _helper.getExt4FieldForFormSection("Necropsy", "Accession Number");
+        accessionNumber.setValue("123");
+        waitFor(() -> "123".equals(accessionNumber.getValue()), WAIT_FOR_JAVASCRIPT);
         scrollIntoView(Locator.name("diagnosis"));
-        _helper.setDataEntryField("identification", "Extra information");
-        _helper.setDataEntryField("grossAbnormalities", "Extra leg");
-        _helper.setDataEntryField("diagnosis", "Dead");
+        Ext4FieldRef identification = _helper.getExt4FieldForFormSection("Necropsy", "Name/State/License no. (quarantine only)");
+        identification.setValue("Extra information");
+        waitFor(() -> "Extra information".equals(identification.getValue()), WAIT_FOR_JAVASCRIPT);
+        Ext4FieldRef grossAbnormalities = _helper.getExt4FieldForFormSection("Necropsy", "Gross Abnormalities");
+        grossAbnormalities.setValue("Extra leg");
+        waitFor(() -> "Extra leg".equals(grossAbnormalities.getValue()), WAIT_FOR_JAVASCRIPT);
+        Ext4FieldRef diagnosis = _helper.getExt4FieldForFormSection("Necropsy", "Diagnosis");
+        diagnosis.setValue("Dead");
+        waitFor(() -> "Dead".equals(diagnosis.getValue()), WAIT_FOR_JAVASCRIPT);
         _ext4Helper.selectComboBoxItem("Performed By:", NIRC_BASIC_SUBMITTER_NAME);
 
         log("Entering Tissue Disposition");
