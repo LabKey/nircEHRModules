@@ -878,9 +878,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         scrollIntoView(Locator.name("accessionNumber"));
         _ext4Helper.selectComboBoxItem("Physical Condition:", "Excellent");
         _ext4Helper.selectComboBoxItem("Condition of Specimen:", "Fresh");
+        sleep(2000);
         Ext4FieldRef accessionNumber = _helper.getExt4FieldForFormSection("Necropsy", "Accession Number");
         accessionNumber.setValue("123");
         waitFor(() -> "123".equals(accessionNumber.getValue()), WAIT_FOR_JAVASCRIPT);
+        sleep(2000);
         scrollIntoView(Locator.name("diagnosis"));
         Ext4FieldRef identification = _helper.getExt4FieldForFormSection("Necropsy", "Name/State/License no. (quarantine only)");
         identification.setValue("Extra information");
