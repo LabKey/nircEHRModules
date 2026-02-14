@@ -878,7 +878,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         scrollIntoView(Locator.name("accessionNumber"));
         _ext4Helper.selectComboBoxItem("Physical Condition:", "Excellent");
         _ext4Helper.selectComboBoxItem("Condition of Specimen:", "Fresh");
-        sleep(2000);
+        sleep(1000);
         Ext4FieldRef accessionNumber = _helper.getExt4FieldForFormSection("Necropsy", "Accession Number");
         accessionNumber.setValue("123");
         waitFor(() -> "123".equals(accessionNumber.getValue()), WAIT_FOR_JAVASCRIPT);
