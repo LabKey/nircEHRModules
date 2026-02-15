@@ -6,7 +6,6 @@ var prevDate;
 var missing = [];
 
 var count = 0;
-let animalIds = [];
 
 var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.Security.currentUser.id, LABKEY.Security.currentContainer.id);
 
@@ -31,12 +30,7 @@ function getLastAssignment(id){
 }
 
 function onInit(event, helper){
-
-    helper.setScriptOptions({
-        allowAnyId: false,
-        requiresStatusRecalc: true,
-        allowDatesInDistantPast: true
-    });
+    
     if (helper.isETL()) {
         LABKEY.Query.selectRows({
             schemaName: 'ehr',
