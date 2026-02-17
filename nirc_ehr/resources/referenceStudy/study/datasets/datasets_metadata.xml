@@ -108,6 +108,9 @@
             <column columnName="arrivalType">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="rearrival">
+                <datatype>boolean</datatype>
+            </column>
         </columns>
     </table>
     <table tableName="assignment" tableDbType="TABLE">

@@ -5,15 +5,14 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="gender"/>
-        <column name="species"/>
+        <column name="Id/Demographics/gender"/>
+        <column name="Id/Demographics/species"/>
         <column name="Id/Demographics/dam"/>
         <column name="Id/Demographics/sire"/>
         <column name="sourceFacility"/>
         <column name="acquisitionType"/>
         <column name="performedBy"/>
         <column name="history"/>
-        <column name="lab"/>
         <column name="attachmentFile"/>
     </columns>
 </customView>

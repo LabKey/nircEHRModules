@@ -69,6 +69,9 @@
                             <fkColumnName>meaning</fkColumnName>
                         </fk>
                     </column>
+                    <column columnName="rearrival">
+                        <columnTitle>Rearrival</columnTitle>
+                    </column>
                 </columns>
             </table>
         </tables>

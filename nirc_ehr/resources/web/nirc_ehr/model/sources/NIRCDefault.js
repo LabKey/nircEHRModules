@@ -14,7 +14,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
             allowBlank: true,
             defaultValue: LABKEY.Security.currentUser.id,
             getInitialValue: function (v, rec) {
-                if (Number.isInteger(v)){
+                if (Number.isInteger(Number(v))){
                     return v;
                 }
 
@@ -140,7 +140,7 @@ EHR.model.DataModelManager.registerMetadata('Default', {
                     sort: 'Type,DisplayName'
                 },
                 getInitialValue: function (v, rec) {
-                    if (Number.isInteger(v)){
+                    if (Number.isInteger(Number(v))){
                         return v;
                     }
 
