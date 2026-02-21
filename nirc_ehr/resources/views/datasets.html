@@ -6,7 +6,7 @@ Ext4.onReady(function () {
 
     const config = {displayField: 'Label', headerField: 'categoryId/label', target: webpart.wrapperDivId};
 
-    const nonFormUpdates = ["Cases", "Procedures", "Drug Administration"];
+    const nonFormUpdates = ["Treatment Cases", "Procedures", "Drug Administration", "Deaths"];
 
     const hideUpdateRecords = [];
 
@@ -67,8 +67,7 @@ Ext4.onReady(function () {
 
                 if(EHR.Security.hasPermission('Completed', 'update', {schemaName: 'study', queryName: item.queryName}) && hideUpdateRecords.indexOf(item.queryName) === -1){
 
-                    //'Deaths' is a special case where we want to skip the 'Update Records' link, only Admins can update Death records.
-                    if(item.queryName === 'Deaths') {
+                    if(nonFormUpdates.indexOf(item.queryName) !== -1) {
                         //adding an item here so that the 'Admin Update Records' link aligns with other links in the same "column"
                         cfg.items.push({
                             xtype: 'box',
