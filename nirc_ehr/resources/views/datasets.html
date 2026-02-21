@@ -66,12 +66,20 @@ Ext4.onReady(function () {
                     params.queryUpdateURL = true;
 
                 if(EHR.Security.hasPermission('Completed', 'update', {schemaName: 'study', queryName: item.queryName}) && hideUpdateRecords.indexOf(item.queryName) === -1){
-                    cfg.items.push({
+                    if(item.queryName === 'Deaths') {
+                        cfg.items.push({
+                            xtype: 'box',
+                            html: '<span><a class="labkey-text-link" style="cursor: pointer; visibility: hidden;">Update Records</a></span>'
+                        });
+                    }
+                    else {
+                     cfg.items.push({
                         xtype: 'ldk-linkbutton',
                         tooltip: item.searchTooltip || 'Click to update records',
                         href: LABKEY.ActionURL.buildURL('ehr', 'updateQuery', null, params),
                         text: 'Update Records'
                     });
+                    }
                 }
 
                 params.queryUpdateURL = true;

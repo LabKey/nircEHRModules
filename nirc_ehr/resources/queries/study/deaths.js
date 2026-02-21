@@ -4,6 +4,7 @@ var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.S
 var validIds = [];
 var idMap = {};
 var deathIdMap = {};
+var taskIds = {};
 
 function onInit(event, helper){
 
@@ -71,11 +72,15 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 
     if (!helper.isETL()) {
 
-        //only allow death record to be created if animal is in demographics table
+        if (helper.getEvent() === 'update' && LABKEY.Security.currentUser.isAdmin) {
+            return;
+        }
+
+        //only allow death record to be created if the animal is in the demographics table
         if (idMap[row.Id]) {
 
-            // check if death record already exists for this animal
-            if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
+            // check if a death record already exists for this animal
+            if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'COMPLETED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
             }
             // check if the animal is at the center
