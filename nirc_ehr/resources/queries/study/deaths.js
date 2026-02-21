@@ -71,6 +71,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
 
     if (!helper.isETL()) {
 
+        //skip other checks so that admin to update a death record
         if (helper.getEvent() === 'update' && LABKEY.Security.currentUser.isAdmin) {
             return;
         }
