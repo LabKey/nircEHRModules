@@ -4,7 +4,6 @@ var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.S
 var validIds = [];
 var idMap = {};
 var deathIdMap = {};
-var taskIds = {};
 
 function onInit(event, helper){
 
