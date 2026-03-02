@@ -5,7 +5,7 @@ d_alias.alias AS Name,
 d.calculated_status,
 s.*,
 s.objectid AS treatmentid,
-drug.qcstate.label AS treatmentStatus,
+drug.treatmentStatus,
 s.objectid || '-pkSeparator-' || s.date AS primaryKey -- -pkSeparator- is used to separate the two parts of the primary key in RecordTreatmentButton.js
 FROM study.demographics d
 JOIN(
@@ -64,7 +64,11 @@ JOIN(
     ) s1
 
 ) s ON (s.animalid = d.id) 
-LEFT JOIN study.drug drug ON s.objectid = drug.treatmentid AND s.date = IFDEFINED(drug.scheduledDate)
+LEFT JOIN (
+    SELECT treatmentid, IFDEFINED(scheduledDate) AS scheduledDate, MAX(qcstate.label) AS treatmentStatus
+    FROM study.drug
+    GROUP BY treatmentid, IFDEFINED(scheduledDate)
+) drug ON s.objectid = drug.treatmentid AND s.date = drug.scheduledDate
 LEFT JOIN (SELECT Id, GROUP_CONCAT(alias, ', ') alias FROM alias WHERE category.title = 'Name' GROUP BY Id) d_alias ON d.id = d_alias.id
 WHERE (d.lastDayatCenter IS NULL OR d.lastDayAtCenter > s.enddate OR s.enddate IS NULL)
     AND s.date >= s.startDate AND (s.enddate IS NULL OR s.date <= s.enddate)
