@@ -65,8 +65,10 @@ Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
         let win = btn.up('window');
         let windDate = win.down('#dateField').getValue();
         let performedBy = win.down('#performedBy').getValue();
-        const selectedRows = dataRegion.getChecked();
+        const selectedRows = [...new Set(dataRegion.getChecked())];
         var me = this;
+        btn.setDisabled(true);
+        Ext4.Msg.wait('Recording procedures...');
 
         LABKEY.Query.selectRows({
             schemaName: 'study',
@@ -109,12 +111,14 @@ Ext4.define('NIRC_EHR.window.RecordProcedureWindow', {
                         win.close();
                     },
                     failure: function(error) {
+                        btn.setDisabled(false);
                         Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred while recording procedures.');
                         console.error(error);
                     }
                 });
             },
             failure: function(error) {
+                btn.setDisabled(false);
                 Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred querying procedures.');
                 console.error(error);
             }
