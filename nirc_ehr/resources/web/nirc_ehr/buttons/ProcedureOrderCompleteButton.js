@@ -36,8 +36,10 @@ Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
 
     recordProcedure: function(btn, dataRegion) {
         let win = btn.up('window');
-        const selectedRows = dataRegion.getChecked();
+        const selectedRows = [...new Set(dataRegion.getChecked())];
         var me = this;
+        btn.setDisabled(true);
+        Ext4.Msg.wait('Completing procedure orders...');
 
         LABKEY.Query.selectRows({
             schemaName: 'core',
@@ -72,12 +74,14 @@ Ext4.define('NIRC_EHR.window.ProcedureOrderCompleteWindow', {
                         win.close();
                     },
                     failure: function(error) {
+                        btn.setDisabled(false);
                         Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred while recording procedure orders.');
                         console.error(error);
                     }
                 });
             },
             failure: function(error) {
+                btn.setDisabled(false);
                 Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred querying qcstates.');
                 console.error(error);
             }
