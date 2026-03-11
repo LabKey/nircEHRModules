@@ -1109,6 +1109,7 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                             keys.add(getBoundColumn().getFieldKey());
                             keys.add(FieldKey.fromString("date"));
                             keys.add(FieldKey.fromString("caseid"));
+                            keys.add(FieldKey.fromString("category"));
                         }
 
                         @Override
