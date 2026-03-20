@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +57,7 @@ public class NIRCObservationsDataSource extends AbstractDataSource
                 rowMap.put("taskRowId", results.getInt(FieldKey.fromString("taskId/rowid")));
                 rowMap.put("formType", results.getString(FieldKey.fromString("taskId/formtype")));
                 rowMap.put("objectId", results.getString(FieldKey.fromString("objectId")));
+                rowMap.put("category", results.getString(FieldKey.fromString("category")));
                 rowMap.put("html", html);
 
                 Date roundedDate = DateUtils.truncate((Date)rowMap.get("date"), Calendar.MINUTE);
@@ -73,6 +75,7 @@ public class NIRCObservationsDataSource extends AbstractDataSource
         for (String key : idMap.keySet())
         {
             List<Map<String, Object>> toAdd = idMap.get(key);
+            toAdd.sort(Comparator.comparing(m -> String.valueOf(m.getOrDefault("category", "")), String.CASE_INSENSITIVE_ORDER));
 
             Date date = null;
             String subjectId = null;

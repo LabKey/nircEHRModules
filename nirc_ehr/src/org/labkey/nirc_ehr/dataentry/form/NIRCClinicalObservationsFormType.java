@@ -1,5 +1,6 @@
 package org.labkey.nirc_ehr.dataentry.form;
 
+import org.json.JSONObject;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
 import org.labkey.api.ehr.dataentry.FormSection;
 import org.labkey.api.module.Module;
@@ -45,6 +46,20 @@ public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
 
         ret.remove("SUBMIT");
         ret.add("NIRC_TREATMENT_SUBMIT");
+
+        return ret;
+    }
+
+    @Override
+    public JSONObject toJSON()
+    {
+        JSONObject ret = super.toJSON();
+
+        //this form involves extra work on save, so relax warning thresholds to reduce error logging
+        ret.put("perRowWarningThreshold", 0.5);
+        ret.put("totalTransactionWarningThrehsold", 60);
+        ret.put("perRowValidationWarningThrehsold", 6);
+        ret.put("totalValidationTransactionWarningThrehsold", 60);
 
         return ret;
     }
