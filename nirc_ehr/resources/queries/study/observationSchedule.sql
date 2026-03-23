@@ -2,11 +2,11 @@ SELECT
     g.id,
     g.scheduledDate,
     COUNT(g.caseid) cases,
-    GROUP_CONCAT(g.observations, ';') AS observations,
-    SUM(obsCount) AS obsCount,
-    GROUP_CONCAT(g.obsOrderIds, ';') AS orderIds,
-    GROUP_CONCAT(g.status, ';') AS status,
-    GROUP_CONCAT(g.taskids, ';') AS taskids,
+    o.observations,
+    SUM(g.obsCount) AS obsCount,
+    o.orderIds,
+    o.status,
+    o.taskids,
     MAX(g.type) AS type,
     MAX(g.caseid) AS caseid
 FROM
@@ -16,21 +16,29 @@ FROM
         sch.date AS scheduledDate,
         sch.caseid,
         sch.type,
-        GROUP_CONCAT(sch.objectid, ';') AS obsOrderIds,
-        GROUP_CONCAT(sch.category, ';') AS observations,
-        GROUP_CONCAT(obsStatus, ';') AS status,
-        GROUP_CONCAT(DISTINCT(sch.taskid), ';') AS taskids,
-        COUNT(sch.category) AS obsCount,
-        COUNT(sch.obsStatus) AS statusCount
-    FROM (
-        SELECT * FROM observationOrdersByDate
-    ) sch
+        COUNT(sch.category) AS obsCount
+    FROM observationOrdersByDate sch
     GROUP BY
         sch.animalId,
         sch.date,
         sch.caseid,
         sch.type
 ) g
+LEFT JOIN (
+    SELECT
+        obs.animalId AS id,
+        obs.date AS scheduledDate,
+        GROUP_CONCAT(DISTINCT obs.category, ';') AS observations,
+        GROUP_CONCAT(obs.objectid, ';') AS orderIds,
+        GROUP_CONCAT(obs.obsStatus, ';') AS status,
+        GROUP_CONCAT(DISTINCT(obs.taskid), ';') AS taskids
+    FROM observationOrdersByDate obs
+    GROUP BY obs.animalId, obs.date
+) o ON g.id = o.id AND g.scheduledDate = o.scheduledDate
 GROUP BY
     g.id,
-    g.scheduledDate
+    g.scheduledDate,
+    o.observations,
+    o.orderIds,
+    o.status,
+    o.taskids
