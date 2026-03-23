@@ -81,7 +81,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             var obj = {
                 Id: row.Id,
                 date: row.date,
-                calculated_status: 'Alive',
+                calculated_status: (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' || row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED') ? 'Alive - In Progress' : 'Alive',
                 dam: row['Id/demographics/dam'] || null,
                 sire: row['Id/demographics/sire'] || null,
                 species: row['Id/demographics/species'] || null,
