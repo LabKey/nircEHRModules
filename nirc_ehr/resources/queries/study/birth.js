@@ -78,10 +78,12 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 'qcstate': helper.getJavaHelper().getQCStateForLabel(row.QCStateLabel).getRowId()
             }
 
+            var calc_status = (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' || row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED') ? 'Alive - In Progress' : 'Alive';
+
             var obj = {
                 Id: row.Id,
                 date: row.date,
-                calculated_status: (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' || row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED') ? 'Alive - In Progress' : 'Alive',
+                calculated_status: calc_status,
                 dam: row['Id/demographics/dam'] || null,
                 sire: row['Id/demographics/sire'] || null,
                 species: row['Id/demographics/species'] || null,
