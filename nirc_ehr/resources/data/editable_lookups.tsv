@@ -23,6 +23,7 @@ ehr_lookups	blood_draw_tube_type	Clinical	Blood Draw Tube Type	Used in blood dra
 ehr_lookups	blood_sample_type	Clinical	Blood Sample Types	Used in blood draw datasets.
 ehr_lookups	blood_tube_volumes	Clinical	Blood Tube Volumes	Used in blood draw datasets.
 ehr_lookups	cage_type	Colony Management	Cage Type	Used in cage details.
+ehr_lookups	calculated_status_codes	Colony Management	Calculated Status	Animal status values.
 ehr_lookups	capillary_refill_time	Clinical	Capillary Refill Times	Used clinical observations.
 ehr_lookups	card_format	Colony Management	Card Format	
 ehr_lookups	census_activity_status	Colony Management	Census Activity Status	

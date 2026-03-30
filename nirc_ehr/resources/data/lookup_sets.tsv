@@ -18,9 +18,9 @@ behavior_mgmt_codes	Behavior Management Codes	value
 behavior_types	Behavior Types	value
 blood_draw_reason	Blood Draw Reason	value
 blood_sample_type	Blood Sample Types	value
-card_format	Card Format	value	title
 cage_type	Cage Type	value	title
 capillary_refill_time	Capillary Refill Time	value
+card_format	Card Format	value	title
 census_activity_status	Census Activity Status	value	title
 clinremarks_category	Clinremarks Category	value	title
 congenital_abnormalities	Congenital Abnormalities	value	title
