@@ -65,9 +65,11 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
         let win = btn.up('window');
         let windDate = win.down('#dateField').getValue();
         let performedBy = win.down('#performedBy').getValue();
-        const selectedRows = dataRegion.getChecked();
+        const selectedRows = [...new Set(dataRegion.getChecked())];
         const objectIds = selectedRows.map(row => row.split('-pkSeparator-')[0]);
         var me = this;
+        btn.setDisabled(true);
+        Ext4.Msg.wait('Recording treatments...');
 
         LABKEY.Query.selectRows({
             schemaName: 'study',
@@ -75,7 +77,7 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
             filterArray: [LABKEY.Filter.create('objectid', objectIds.join(';'), LABKEY.Filter.Types.EQUALS_ONE_OF)],
             scope: this,
             ignoreFilter: true,
-            columns: 'Id,objectid,code,reason,route,amount,amount_units,concentration,volume,vol_units,conc_units,dosage,dosage_units,orderedby,category,caseid',
+            columns: 'Id,objectid,code,route,amount,amount_units,concentration,volume,vol_units,conc_units,dosage,dosage_units,orderedby,category,caseid',
             success: function (data) {
                 const rowsToInsert = [];
                 Ext4.each(data.rows, function(row) {
@@ -94,7 +96,6 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                                 objectid: LABKEY.Utils.generateUUID(),
                                 scheduledDate: scheduledDate,
                                 code: row.code,
-                                reason: row.reason,
                                 route: row.route,
                                 amount: row.amount,
                                 amount_units: row.amount_units,
@@ -106,8 +107,7 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                                 vol_units: row.vol_units,
                                 orderedby: row.orderedby,
                                 category: row.category,
-                                caseid: row.caseid,
-                                outcome: 'Normal'
+                                caseid: row.caseid
                             });
                         }
                     });
@@ -127,12 +127,14 @@ Ext4.define('NIRC_EHR.window.RecordTreatmentWindow', {
                         win.close();
                     },
                     failure: function(error) {
+                        btn.setDisabled(false);
                         Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred while recording treatments.');
                         console.error(error);
                     }
                 });
             },
             failure: function(error) {
+                btn.setDisabled(false);
                 Ext4.Msg.alert('Error', error?.exception ?? 'An error occurred querying treatments.');
                 console.error(error);
             }

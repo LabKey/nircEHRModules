@@ -96,6 +96,8 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
             }
         }
 
+        row.calculated_status = (row.QCStateLabel.toUpperCase() === 'IN PROGRESS' || row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED') ? 'Alive - In Progress' : 'Alive';
+
         if(!oldRow) {
             //if not already present, insert into demographics
             helper.getJavaHelper().createDemographicsRecord(row.Id, row, extraDemographicsFieldMappings);
