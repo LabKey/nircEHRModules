@@ -21,7 +21,7 @@ public class NIRCHousingDataSource extends AbstractDataSource
     @Override
     protected Set<String> getColumnNames()
     {
-        return PageFlowUtil.set("Id", "date", "cage/cage", "room/fullRoom");
+        return PageFlowUtil.set("Id", "date", "cage/cage", "room/fullRoom", "reason", "remark");
     }
 
     @Override
@@ -41,7 +41,8 @@ public class NIRCHousingDataSource extends AbstractDataSource
             value = rs.getString(room);
         }
 
-        sb.append(safeAppend(rs, "Moved to", value));
+        sb.append(PageFlowUtil.filter("Moved to : " + value));
+        sb.append("\n");
         sb.append(safeAppend(rs, "Reason", "reason"));
         sb.append(safeAppend(rs, "Remark", "remark"));
 
