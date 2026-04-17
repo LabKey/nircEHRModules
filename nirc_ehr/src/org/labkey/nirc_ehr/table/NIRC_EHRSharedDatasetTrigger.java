@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.triggers.Trigger;
+import org.labkey.api.query.QueryUpdateService;
 import org.labkey.api.query.ValidationException;
 import org.labkey.api.security.User;
 
@@ -34,7 +35,7 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
     }
 
     @Override
-    public void beforeInsert(TableInfo table, Container c, User user, @Nullable Map<String, Object> newRow, ValidationException errors, Map<String, Object> extraContext) throws ValidationException
+    public void beforeInsert(TableInfo table, Container c, User user, @Nullable QueryUpdateService.InsertOption insertOption, @Nullable Map<String, Object> newRow, ValidationException errors, Map<String, Object> extraContext) throws ValidationException
     {
         transformAnimalIdToUpperCase(newRow);
         verifyPerformedBy(table, newRow, errors);
@@ -42,7 +43,7 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
 
     @Override
     public void beforeUpdate(TableInfo table, Container c,
-                             User user, @Nullable Map<String, Object> newRow, @Nullable Map<String, Object> oldRow,
+                             User user, @Nullable QueryUpdateService.InsertOption insertOption, @Nullable Map<String, Object> newRow, @Nullable Map<String, Object> oldRow,
                              ValidationException errors, Map<String, Object> extraContext) throws ValidationException
     {
         verifyPerformedBy(table, newRow, errors);
