@@ -1008,8 +1008,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         AnimalHistoryPage animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable scheduleTable = animalHistoryPage.getActiveReportDataRegion();
         Assert.assertEquals("Incorrect number of rows", 4, scheduleTable.getDataRowCount());
-        scheduleTable.link(0, "treatmentRecord").click();
+        doAndWaitForNewWindow(()-> scheduleTable.link(0, "treatmentRecord").click());
         switchToWindow(1);
+        // This probably not helpful, other than slowing the test down and giving the page a chance to load.
+        waitFor(()-> Locator.tagWithClass("div", "x4-panel-header-text-container").findElements(getDriver()).size() == 11, 5_000);
 
         waitForText("Diazepam");
         waitForText(animalId);
@@ -1023,13 +1025,15 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         impersonate(NIRC_FULL_SUBMITTER_VET);
 
         //Go to 'Active Clinical Cases'
-        clickAndWait(Locator.linkWithText("Active Clinical Cases"));
+        waitAndClickAndWait(Locator.linkWithText("Active Clinical Cases"));
 
         //Click on 'Case Update' link
         AnimalHistoryPage historyPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
-        activeClinicalCases.link(0, "caseCheck").click();
+        doAndWaitForNewWindow(()-> activeClinicalCases.link(0, "caseCheck").click());
         switchToWindow(2);
+        // This probably not helpful, other than slowing the test down and giving the page a chance to load.
+        waitFor(()-> Locator.tagWithClass("div", "x4-panel-header-text-container").findElements(getDriver()).size() == 15, 5_000);
 
         //Fill out Close Date
         waitForText(animalId);
@@ -1057,8 +1061,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         //Verify that the case is no longer present/is closed
         historyPage = new AnimalHistoryPage<>(getDriver());
-        activeClinicalCases = historyPage.getActiveReportDataRegion();
-        Assert.assertEquals("No active cases", 0, activeClinicalCases.getDataRowCount());
+        DataRegionTable validateClinicalCases = historyPage.getActiveReportDataRegion();
+        Assert.assertEquals("No active cases", 0, validateClinicalCases.getDataRowCount());
         stopImpersonating();
     }
 
