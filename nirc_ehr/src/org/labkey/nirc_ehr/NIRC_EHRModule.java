@@ -183,7 +183,6 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
 
         EHRService.get().registerMoreActionsButton(new ShowEditUIButton(this, "ehr", "observation_types", EHRDataAdminPermission.class), "ehr", "observation_types");
 
-        EHRService.get().unregisterMoreActionsButtons("study", "treatment_order");
         EHRService.get().registerMoreActionsButton(new MarkCompletedButton(this, "study", "observation_order", "Set End Date"), "study", "observation_order");
         EHRService.get().registerMoreActionsButton(new MarkCompletedButton(this, "study", "flags", "Set End Date"), "study", "flags");
 
