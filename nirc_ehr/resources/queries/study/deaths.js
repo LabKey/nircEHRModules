@@ -152,17 +152,21 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 });
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.COMPLETE, 'study', 'Deaths', function(event, errors, helper){
-    var deaths = helper.getDeaths();
+    var rows = helper.getRows() || [];
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i].row;
+        var oldRow = rows[i].oldRow;
 
-    if (deaths) {
-        var ids = [];
-        for (var id in deaths){
-            ids.push(id);
+        // Notification will get sent when:
+        // 1) a brand-new row saved directly as 'Request: Pending' (i.e., when a user clicks 'Submit Death'), or
+        // 2) a draft death record moving from 'In Progress' to 'Request: Pending'.
+        if (!helper.isETL() &&
+                row && row.Id &&
+                row.QCStateLabel &&
+                row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' &&
+                (!oldRow || !oldRow.QCStateLabel || oldRow.QCStateLabel.toUpperCase() === 'IN PROGRESS')) {
+            triggerHelper.sendDeathNotification(row.Id);
+            triggerHelper.updateProcedureOrdersToCompleted([row.Id]);
         }
-        if (!helper.isETL() && event === 'insert') {
-            triggerHelper.sendDeathNotification(ids[0]);
-        }
-
-        triggerHelper.updateProcedureOrdersToCompleted(ids);
     }
 });
