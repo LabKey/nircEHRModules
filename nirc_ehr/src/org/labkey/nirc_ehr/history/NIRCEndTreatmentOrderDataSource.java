@@ -45,8 +45,10 @@ public class NIRCEndTreatmentOrderDataSource extends AbstractDataSource
         {
             sb.append(safeAppend(rs, "Volume", rs.getString("volume") + " " + rs.getString("vol_units")));
         }
-        sb.append(safeAppend(rs, "End Ordered By", "orderedby/displayName"));
-
+        /*if (!redacted)
+        {
+            sb.append(safeAppend(rs, "End Ordered By", "orderedby/displayName"));
+        }*/
         return sb.toString();
     }
 

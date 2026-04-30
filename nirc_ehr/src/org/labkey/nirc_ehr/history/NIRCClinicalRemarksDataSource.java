@@ -43,11 +43,11 @@ public class NIRCClinicalRemarksDataSource extends AbstractDataSource
         StringBuilder sb = new StringBuilder();
         sb.append("<table>");
 
-        if (!redacted && rs.getObject(FieldKey.fromString("performedby/displayName")) != null)
+        /*if (!redacted && rs.getObject(FieldKey.fromString("performedby/displayName")) != null)
         {
             String label = "Entered By";
             appendNote(rs, "performedby/displayName", "<span style='white-space:nowrap'>" + label + "</span>", sb);
-        }
+        }*/
 
         appendNote(rs, "hx", "Hx", sb);
         appendNote(rs, "so", "S/O", sb);
