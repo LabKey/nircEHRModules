@@ -28,10 +28,10 @@ public class NIRCCaseOpenDataSource extends AbstractDataSource
         sb.append(safeAppend(rs, "Open Remark", "openRemark"));
         sb.append(safeAppend(rs, "Case Plan", "plan"));
 
-        if (!redacted)
+        /*if (!redacted)
         {
             sb.append(safeAppend(rs, "Opened By", "performedby/displayName"));
-        }
+        }*/
 
         if (rs.getObject(FieldKey.fromString("enddate")) != null)
         {
