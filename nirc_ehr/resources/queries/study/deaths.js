@@ -165,7 +165,10 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 row.QCStateLabel &&
                 row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' &&
                 (!oldRow || !oldRow.QCStateLabel || oldRow.QCStateLabel.toUpperCase() === 'IN PROGRESS')) {
+            console.log("Sending NIRC Death Notification")
             triggerHelper.sendDeathNotification(row.Id);
+
+            console.log("Updating Procedure Orders to Completed for Animal: " + row.Id + "")
             triggerHelper.updateProcedureOrdersToCompleted([row.Id]);
         }
     }
