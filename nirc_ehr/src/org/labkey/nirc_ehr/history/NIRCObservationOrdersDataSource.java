@@ -106,10 +106,10 @@ public class NIRCObservationOrdersDataSource extends AbstractDataSource
                 html.append(rowMap.get("html"));
             }
 
-            if (performedBy != null && !redacted)
+            /*if (performedBy != null && !redacted)
             {
                 html.append("Ordered By: ").append(PageFlowUtil.filter(performedBy)).append("\n");
-            }
+            }*/
 
             HistoryRow row = new HistoryRowImpl(this, categoryText, categoryGroup, categoryColor, subjectId, date, html.toString(), qcStateLabel, publicData, taskId, taskRowId, formType, objectId);
             row.setShowTime(false);

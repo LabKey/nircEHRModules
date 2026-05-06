@@ -48,7 +48,10 @@ public class DrugAdminDataSource extends AbstractDataSource
         {
             sb.append(safeAppend(rs, "Volume", rs.getString("volume") + " " + rs.getString("vol_units")));
         }
-        sb.append(safeAppend(rs, "Performed By", "performedby/displayName"));
+        /*if (!redacted)
+        {
+            sb.append(safeAppend(rs, "Performed By", "performedby/displayName"));
+        }*/
         sb.append(safeAppend(rs, "Remark", "remark"));
 
         return sb.toString();
