@@ -47,12 +47,6 @@ public class NIRCPregnancyOutcomeNotification extends AbstractEHRNotification
     }
 
     @Override
-    public String getCronString()
-    {
-        return null;
-    }
-
-    @Override
     public String getScheduleDescription()
     {
         return "Sent immediately upon Pregnancy Outcome form submission";

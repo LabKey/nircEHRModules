@@ -14,7 +14,7 @@ public class NIRC_EHRTriggerScriptFactory extends ScriptTriggerFactory
 {
     @Override
     @NotNull
-    protected Collection<Trigger> createTriggerScript(Container c, TableInfo table) throws ScriptException
+    protected Collection<Trigger> createTriggerScript(@NotNull Container c, TableInfo table) throws ScriptException
     {
         return Collections.singleton(new NIRC_EHRSharedDatasetTrigger());
     }

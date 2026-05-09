@@ -47,12 +47,6 @@ public class NIRCDeathNotification extends AbstractEHRNotification
     }
 
     @Override
-    public String getCronString()
-    {
-        return null;
-    }
-
-    @Override
     public String getScheduleDescription()
     {
         return "Sent immediately upon Death form submission";

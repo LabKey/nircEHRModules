@@ -146,7 +146,7 @@ public class NIRC_EHRTriggerHelper
             TableSelector ts = new TableSelector(ti, PageFlowUtil.set("date"), nextFilter, new Sort("date"));
             List<Date> dates = ts.getArrayList(Date.class);
             if (!dates.isEmpty())
-                enddate = dates.get(0);
+                enddate = dates.getFirst();
         }
 
         String qcstate = ConvertHelper.convert(row.get("qcstate"), String.class);
@@ -383,8 +383,8 @@ public class NIRC_EHRTriggerHelper
                             return;
                         }
 
-                        String remark = (String) EHRDemographicsService.get().getAnimal(container, animalId).getActiveHousing().get(0).get("remark");
-                        String performedBy = (String) EHRDemographicsService.get().getAnimal(container, animalId).getActiveHousing().get(0).get("performedBy");
+                        String remark = (String) EHRDemographicsService.get().getAnimal(container, animalId).getActiveHousing().getFirst().get("remark");
+                        String performedBy = (String) EHRDemographicsService.get().getAnimal(container, animalId).getActiveHousing().getFirst().get("performedBy");
 
                         //construct html for email notification
                         final StringBuilder html = new StringBuilder();
@@ -396,7 +396,7 @@ public class NIRC_EHRTriggerHelper
                         appendAnimalDetails(html, animalId, container);
 
                         // send Clinical Move Notification
-                        _log.debug("NIRC Clinical Move notification job sending email for animal " + animalId + " in container " + container.getPath());
+                        _log.debug("NIRC Clinical Move notification job sending email for animal {} in container {}", animalId, container.getPath());
                         TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
                     }), DbScope.CommitTaskOption.POSTCOMMIT);
 
@@ -404,7 +404,7 @@ public class NIRC_EHRTriggerHelper
         }
     }
 
-    public void sendDeathNotification(final String animalId) throws Exception
+    public void sendDeathNotification(final String animalId)
     {
         //check whether Death Notification is enabled
         if (!NotificationService.get().isActive(new NIRCDeathNotification(), _container) || !NotificationService.get().isServiceEnabled())
@@ -450,28 +450,28 @@ public class NIRC_EHRTriggerHelper
 
                         //construct html for email notification
                         final StringBuilder html = new StringBuilder();
-                        if (deathDate.getValue() == null)
+                        if (deathDate.get() == null)
                         {
-                            _log.error("NIRC death notification job found no death date for animal " + animalId + " in container " + _container.getPath());
+                            _log.error("NIRC death notification job found no death date for animal {} in container {}", animalId, _container.getPath());
                             html.append("Death date not found. Please contact system administrator.").append("<br>");
                             return;
                         }
-                        html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been declared dead on '").append(_dateFormat.format(deathDate.getValue())).append("'.<br>");
-                        html.append("Performed By: ").append(PageFlowUtil.filter(performedBy.getValue())).append("<br>");
-                        html.append("Disposition: ").append(PageFlowUtil.filter(disposition.getValue())).append("<br><br>");
+                        html.append("Animal '").append(PageFlowUtil.filter(animalId)).append("' has been declared dead on '").append(_dateFormat.format(deathDate.get())).append("'.<br>");
+                        html.append("Performed By: ").append(PageFlowUtil.filter(performedBy.get())).append("<br>");
+                        html.append("Disposition: ").append(PageFlowUtil.filter(disposition.get())).append("<br><br>");
 
                         //append animal details
                         appendAnimalDetails(html, animalId, container);
 
                         //append link to Necropsy form
                         String url = AppProps.getInstance().getBaseServerUrl() + AppProps.getInstance().getContextPath() + "/ehr" +
-                                container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskId.getValue();
+                                container.getPath() + "/dataEntryForm.view?formType=Necropsy&taskid=" + taskId.get();
                         html.append("<a href='").append(PageFlowUtil.filter(url)).append("'>");
 
                         html.append("Click here to record Necropsy</a><br>");
 
                         // send Death Notification
-                        _log.debug("NIRC Death notification job sending email for animal " + animalId + " in container " + container.getPath());
+                        _log.debug("NIRC Death notification job sending email for animal {} in container {}", animalId, container.getPath());
                         TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
                     }), DbScope.CommitTaskOption.POSTCOMMIT);
 
@@ -479,7 +479,7 @@ public class NIRC_EHRTriggerHelper
         }
     }
 
-    public void generateOrchardFile(final String taskid) throws Exception
+    public void generateOrchardFile(final String taskid)
     {
         NIRCOrchardFileGenerator orchardFileGenerator = NIRC_EHRManager.getOrchardFileGenerator();
         orchardFileGenerator.generateOrchardFile(_container, _user, taskid);
@@ -500,7 +500,7 @@ public class NIRC_EHRTriggerHelper
         List<Map<String, Object>> activeHousing = EHRDemographicsService.get().getAnimal(container, id).getActiveHousing();
         if (null != activeHousing && !activeHousing.isEmpty())
         {
-            cage = (String) activeHousing.get(0).get("cage/cage");
+            cage = (String) activeHousing.getFirst().get("cage/cage");
         }
         else
         {
@@ -524,10 +524,8 @@ public class NIRC_EHRTriggerHelper
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), id);
         TableSelector ts = new TableSelector(ti, PageFlowUtil.set("project"), filter, null);
         final Mutable<String> project = new MutableObject<>();
-        ts.forEach(rs -> {
-            project.setValue(rs.getString("project"));
-        });
-        return project.getValue();
+        ts.forEach(rs -> project.setValue(rs.getString("project")));
+        return project.get();
     }
 
     private String getProtocol(String id)
@@ -557,7 +555,7 @@ public class NIRC_EHRTriggerHelper
                 protocol.setValue(title + (inves == null ? "" : " - " + inves));
             }
         });
-        return protocol.getValue();
+        return protocol.get();
     }
 
     public String createAssignmentRecord(String dataset, String id, Map<String, Object> row) throws SQLException, BatchValidationException, QueryUpdateServiceException, InvalidKeyException, DuplicateKeyException
@@ -682,7 +680,7 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public void closeDailyClinicalObs(String caseid, String enddate) throws SQLException
+    public void closeDailyClinicalObs(String caseid, String enddate)
     {
         TableInfo ti = getTableInfo("study", "observation_order");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("caseid"), caseid);
@@ -708,7 +706,7 @@ public class NIRC_EHRTriggerHelper
         }
     }
 
-    public void ensureDailyClinicalObservationOrders(String id, String caseid, final Date date, String performedby, String qcstate, String taskid, List<Map<String, Object>> ordersInTransaction) throws SQLException
+    public void ensureDailyClinicalObservationOrders(String id, String caseid, final Date date, String performedby, String qcstate, String taskid, List<Map<String, Object>> ordersInTransaction)
     {
         TableInfo ti = getTableInfo("study", "observation_order");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromParts("category","value"), "Activity");
@@ -898,7 +896,7 @@ public class NIRC_EHRTriggerHelper
         TableInfo ti = getTableInfo("study", "prc_order");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("objectid"), orderid);
         TableSelector ts = new TableSelector(ti, PageFlowUtil.set("qcstate"), filter, null);
-        Integer qcstate = ts.getArrayList(Integer.class).get(0);
+        Integer qcstate = ts.getArrayList(Integer.class).getFirst();
         if (EHRService.get().getQCStates(_container).get("Completed").getRowId() == qcstate)
             return true;
 
@@ -967,7 +965,7 @@ public class NIRC_EHRTriggerHelper
         try
         {
             ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
-            _log.info("Successfully updated " + rows.size() + " prc_order rows to 'Completed' status");
+            _log.info("Successfully updated {} prc_order rows to 'Completed' status", rows.size());
         }
         catch (Exception e)
         {
@@ -1023,7 +1021,7 @@ public class NIRC_EHRTriggerHelper
                         appendAnimalDetails(html, animalId, container);
 
                         // send Pregnancy Outcome notification
-                        _log.debug("NIRC Pregnancy Outcome notification job sending email for animal " + animalId + " in container " + container.getPath());
+                        _log.debug("NIRC Pregnancy Outcome notification job sending email for animal {} in container {}", animalId, container.getPath());
                         TriggerScriptNotification.sendMessage(subject, html.toString(), recipients, container, user);
                     }), DbScope.CommitTaskOption.POSTCOMMIT);
 
