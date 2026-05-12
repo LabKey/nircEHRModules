@@ -35,7 +35,7 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
     }
 
     @Override
-    public void beforeInsert(TableInfo table, Container c, User user, @Nullable QueryUpdateService.InsertOption insertOption, @Nullable Map<String, Object> newRow, ValidationException errors, Map<String, Object> extraContext) throws ValidationException
+    public void beforeInsert(TableInfo table, Container c, User user, @Nullable QueryUpdateService.InsertOption insertOption, @Nullable Map<String, Object> newRow, ValidationException errors, Map<String, Object> extraContext)
     {
         transformAnimalIdToUpperCase(newRow);
         verifyPerformedBy(table, newRow, errors);
@@ -44,7 +44,7 @@ public class NIRC_EHRSharedDatasetTrigger implements Trigger
     @Override
     public void beforeUpdate(TableInfo table, Container c,
                              User user, @Nullable QueryUpdateService.InsertOption insertOption, @Nullable Map<String, Object> newRow, @Nullable Map<String, Object> oldRow,
-                             ValidationException errors, Map<String, Object> extraContext) throws ValidationException
+                             ValidationException errors, Map<String, Object> extraContext)
     {
         verifyPerformedBy(table, newRow, errors);
     }

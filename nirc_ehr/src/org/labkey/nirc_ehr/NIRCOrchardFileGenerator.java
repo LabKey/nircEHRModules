@@ -86,7 +86,7 @@ public class NIRCOrchardFileGenerator
             if (orchardFileLocation == null)
             {
                 // Don't run if we don't have a location to write the file
-                _log.warn("Orchard file location is null, cannot generate Orchard file for taskid: " + taskid);
+                _log.warn("Orchard file location is null, cannot generate Orchard file for taskid: {}", taskid);
                 return;
             }
 
