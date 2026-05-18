@@ -1002,9 +1002,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //Fill out Clinical Remarks section with Date, Remark
         scrollIntoView(Locator.textarea("remark"));
         _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(2).format(_dateFormat));
-        _helper.setDataEntryField("remark", "Clinical Remarks - Test");
-        if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
-            _helper.setDataEntryField("remark", "Clinical Remarks - Test");
+        // Set the Remark via the Ext4 field directly so the change event fires and the form re-validates.
+        // Writing the textarea DOM via setDataEntryField did not consistently update the Ext4 value, so the
+        // "Must enter at least one comment" warning stayed visible until the wait below timed out.
+        _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").setValue("Clinical Remarks - Test");
         waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
