@@ -703,6 +703,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         waitForText(animalId);
         waitForTextToDisappear("Id is required");
+        click(Locator.textarea("s"));
         _helper.setDataEntryField("s", "Closing the case");
         waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
@@ -1067,6 +1068,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //Fill out Close Date
         waitForText(animalId);
         waitForTextToDisappear("Id is required");
+        click(Locator.textarea("s"));
         _helper.setDataEntryField("s", "Closing the case");
         waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
 
@@ -1244,7 +1246,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(2);
 
         waitForText(animalId1);
+        // Behavior Case close form does not auto-populate the Id field the way Clinical Case close does;
+        // click into it to trigger Ext4 re-validation and clear the "Id is required" warning.
+        click(Locator.name("Id"));
         waitForTextToDisappear("Id is required");
+        click(Locator.textarea("remark"));
         _helper.setDataEntryField("remark", "Closing the case");
         waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
