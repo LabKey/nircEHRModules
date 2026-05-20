@@ -948,7 +948,7 @@ public class NIRC_EHRTriggerHelper
 
         if (results.length == 0)
         {
-            _log.info("No prc_order rows found with 'Request: Approved' status for the provided IDs");
+            _log.info("No Procedure Orders found with 'Request: Approved' status for the provided IDs");
             return;
         }
 
