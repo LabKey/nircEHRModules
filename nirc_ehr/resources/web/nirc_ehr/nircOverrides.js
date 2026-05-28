@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2024-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 EHR.Utils.rowEditorPlugin = 'NIRC_EHR.plugin.RowEditor';
 
 EHR.Utils.editUIButtonHandler = function(schemaName, queryName, dataRegionName, paramMap, copyFilters){

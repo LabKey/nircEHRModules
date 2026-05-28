@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 SELECT PROTOCOL_ID AS "protocolId",
        CASE WHEN PROTOCOL_NUMBER IS NULL THEN 'missing'
             ELSE PROTOCOL_NUMBER END AS "protocol",

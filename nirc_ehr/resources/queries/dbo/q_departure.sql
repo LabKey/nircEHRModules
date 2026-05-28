@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 -- Used for departure ETL. There are some duplicate departures in ANIMAL_EVENTS thus the GROUP BY and MAX values
 SELECT
     i.*,

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 SELECT pc.Protocol, pc.Species, COALESCE(pc.allowed, 0) as allowed, ssb.SSB_ID as ssb, eu.EUTHANASIA_TYPE_ID as Euthanasia FROM (
 SELECT
        sub.Protocol,

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 SELECT
        adt.modified,
        substring(adt.PRIMARY_KEY_VALUES, length('ANIMAL_EVENT_ID = ')) as event_id FROM
