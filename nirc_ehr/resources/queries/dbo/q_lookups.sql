@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 SELECT 'DISP_CD_' || ID AS objectid,
 'disposition_codes' AS set_name,
 ID AS "value",

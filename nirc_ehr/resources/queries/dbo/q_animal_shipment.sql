@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 SELECT
     ans.ANIMAL_SHIPMENT_ID          as AnimalShipmentId,
     ans.RECEIVED_BY_STAFF_ID.STAFF_FIRST_NAME

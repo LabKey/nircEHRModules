@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 SELECT
     ar.ANIMAL_REQ_ORDER_ID             as AnimalReqOrderId,
     ar.ANIMAL_VENDOR_ID                as AnimalVendor,

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021-2026 LabKey Corporation
+ *
+ * Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ */
 -- subquery to extract an animal event from AUDIT_TRAIL.REFERENCE to identify delete event
 SELECT
     auditSubQuery.objectid,
