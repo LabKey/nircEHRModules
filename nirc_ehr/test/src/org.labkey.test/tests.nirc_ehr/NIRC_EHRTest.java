@@ -56,6 +56,7 @@ import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 import org.labkey.test.util.ehr.EHRClientAPIHelper;
+import org.labkey.test.util.ext4cmp.Ext4ComboRef;
 import org.labkey.test.util.ext4cmp.Ext4FieldRef;
 import org.labkey.test.util.ext4cmp.Ext4GridRef;
 import org.openqa.selenium.Keys;
@@ -762,6 +763,79 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Status is not updated ", "Completed", table.getDataAsText(0, "observationStatus"));
+    }
+
+    @Test
+    public void testObservationBulkEdit()
+    {
+        log("Verifying the bulk edit Observation/Score editor follows the selected Category");
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Bulk Clinical Entry"));
+
+        Ext4GridRef observations = _helper.getExt4GridForFormSection("Observations");
+        _helper.addRecordToGrid(observations);
+        _helper.addRecordToGrid(observations);
+        int rowCount = observations.getRowCount();
+
+        observations.clickTbarButton("Select All");
+        observations.waitForSelected(rowCount);
+
+        Locator.XPathLocator bulkEditWindow = _helper.openBulkEdit(observations);
+
+        log("Selecting a Category whose observation editor is a lookup combo");
+        _helper.toggleBulkEditExactField("Category");
+        Ext4ComboRef categoryField = _ext4Helper.queryOne("window field[name=category]", Ext4ComboRef.class);
+        Assert.assertNotNull("Category field not found in Bulk Edit window", categoryField);
+        categoryField.waitForStoreLoad();
+        categoryField.setComboByDisplayValue("Appetite");
+        waitForObservationBulkEditFieldXtype("ehr-simplecombo", "Appetite");
+
+        log("Enabling the rebuilt Observation/Score field and selecting an Appetite-specific value");
+        _helper.toggleBulkEditExactField("Observation/Score");
+        Ext4ComboRef observationCombo = new Ext4ComboRef(getObservationBulkEditField(), this);
+        observationCombo.waitForStoreLoad();
+        observationCombo.setComboByDisplayValue("Normal to low");
+        Assert.assertEquals("Observation/Score value was not set from the Appetite lookup", "Normal to low", observationCombo.getValue());
+
+        log("Switching to a Category whose observation editor is free text");
+        categoryField.setComboByDisplayValue("Mass");
+        waitForObservationBulkEditFieldXtype("textfield", "Mass");
+
+        Ext4FieldRef observationField = getObservationBulkEditField();
+        Assert.assertFalse("Observation/Score field should remain enabled across Category changes", observationField.isDisabled());
+        Object staleValue = observationField.getValue();
+        Assert.assertTrue("Observation/Score value should be cleared when the Category changes, but was: " + staleValue,
+                staleValue == null || "".equals(staleValue));
+
+        String observationText = "3 cm mass on left arm";
+        observationField.setValue(observationText);
+
+        waitAndClick(bulkEditWindow.append(Ext4Helper.Locators.ext4Button("Submit")));
+        Window<?> msgWindow = new Window.WindowFinder(getDriver()).withTitle("Set Values").waitFor();
+        msgWindow.clickButton("Yes", 0);
+        waitForElementToDisappear(bulkEditWindow);
+
+        log("Verifying the bulk edit values were applied to every selected row");
+        for (int row = 1; row <= rowCount; row++)
+        {
+            Assert.assertEquals("Category was not bulk-set on row " + row, "Mass", observations.getFieldValue(row, "category"));
+            Assert.assertEquals("Observation was not bulk-set on row " + row, observationText, observations.getFieldValue(row, "observation"));
+        }
+
+        _helper.discardForm();
+    }
+
+    private Ext4FieldRef getObservationBulkEditField()
+    {
+        return _ext4Helper.queryOne("window field[name=observation]", Ext4FieldRef.class);
+    }
+
+    private void waitForObservationBulkEditFieldXtype(String xtype, String category)
+    {
+        waitFor(() -> {
+            Ext4FieldRef field = getObservationBulkEditField();
+            return field != null && xtype.equals(field.getEval("xtype"));
+        }, "Observation/Score editor was not rebuilt as '" + xtype + "' for the '" + category + "' category", WAIT_FOR_JAVASCRIPT);
     }
 
     @Override
