@@ -29,6 +29,7 @@ import org.labkey.api.util.FileUtil;
 import org.labkey.remoteapi.CommandException;
 import org.labkey.remoteapi.SimplePostCommand;
 import org.labkey.remoteapi.core.SaveModulePropertiesCommand;
+import org.labkey.remoteapi.query.ContainerFilter;
 import org.labkey.remoteapi.query.Filter;
 import org.labkey.remoteapi.query.ImportDataCommand;
 import org.labkey.remoteapi.query.InsertRowsCommand;
@@ -104,6 +105,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String deadAnimalId = "D5454";
     private static final String departedAnimalId = "H6767";
     private static final String aliveAnimalId = "A4545";
+    // Dedicated animal for testScheduledObservationTaskGrouping; provisioned (alive, housed, assigned) in
+    // createTestSubjects so the clinical case form raises no warnings that would keep the validation banner up.
+    private static final String taskGroupAnimalId = "TESTGRP9090";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -474,6 +478,33 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         getApiHelper().deleteAllRecords("study", "Assignment", new Filter("Id", StringUtils.join(SUBJECTS, ";"), Filter.Operator.IN));
         getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
 
+        // Fully provision the task-grouping test animal (alive demographics, current housing, active assignment) so
+        // the clinical case form has no unknown-animal warnings to keep the validation banner from clearing.
+        log("Creating task grouping test subject");
+        fields = new String[]{"Id", "Species", "Birth", "Gender", "date", "calculated_status", "objectid", "performedby"};
+        data = new Object[][]{
+                {taskGroupAnimalId, "Rhesus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "demographics", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "demographics", new Filter("Id", taskGroupAnimalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        fields = new String[]{"Id", "date", "enddate", "room", "cage", "performedby"};
+        data = new Object[][]{
+                {taskGroupAnimalId, pastDate1, null, getRooms()[0], CAGES[0], 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Housing", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Housing", new Filter("Id", taskGroupAnimalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        fields = new String[]{"Id", "date", "enddate", "project", "performedby"};
+        data = new Object[][]{
+                {taskGroupAnimalId, pastDate1, null, PROJECTS[0], 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Assignment", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Assignment", new Filter("Id", taskGroupAnimalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
         primeCaches();
     }
 
@@ -791,7 +822,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @Test
     public void testScheduledObservationTaskGrouping()
     {
-        String animalId = "TESTGRP9090";
+        String animalId = taskGroupAnimalId;
 
         // Two concurrent clinical cases for the same animal each generate their own set of daily
         // observation orders at the same scheduled slot (today at 8:00 AM). A single schedule entry
@@ -799,8 +830,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         // observations must be grouped by that order taskid -- the first group reuses the form's own
         // task and the second gets a freshly created task -- so the entries end up under exactly two
         // tasks with no empty task left behind.
-        createClinicalCase(animalId);
-        createClinicalCase(animalId);
+        // The first case finalizes through the normal "Finalize Form" confirmation. The second case is for
+        // the same animal and problem area, so its submission instead raises the "Similar Case Exists"
+        // confirmation -- acknowledge that one to finalize it.
+        createClinicalCase(animalId, "Finalize");
+        createClinicalCase(animalId, "Similar Case Exists");
 
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
@@ -828,7 +862,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     // Creates and finalizes a minimal clinical case for the animal. The case's open date is set to
     // yesterday so the auto-generated daily observation orders land on today's observation schedule.
-    private void createClinicalCase(String animalId)
+    // confirmWindowTitle is the finalize-confirmation dialog expected on submit: "Finalize" for a brand
+    // new case, or "Similar Case Exists" when the animal already has an active case for the same problem.
+    private void createClinicalCase(String animalId, String confirmWindowTitle)
     {
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Clinical Cases"));
@@ -841,7 +877,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         setFormElement(Locator.name("Id"), animalId);
         _helper.setDataEntryField("s", "Subjective for " + animalId);
         _helper.setDataEntryField("remark", "Remarks for " + animalId);
-        submitForm("Submit Final", "Finalize");
+        submitForm("Submit Final", confirmWindowTitle);
     }
 
     // Fills in the Observations grid opened from the schedule, setting a valid value and remark for each
@@ -889,13 +925,15 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private List<Map<String, Object>> getClinicalObservations(String animalId)
     {
-        return executeSelectRowCommand("study", "clinical_observations", List.of(new Filter("Id", animalId))).getRows();
+        // study datasets and ehr.tasks are defined in the EHR study folder, not the project root, so query
+        // that container explicitly rather than relying on the default project-scoped overload.
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId))).getRows();
     }
 
     private Set<String> getObservationFormTaskIds()
     {
         Set<String> taskIds = new HashSet<>();
-        for (Map<String, Object> row : executeSelectRowCommand("ehr", "tasks", List.of(new Filter("formtype", NIRC_OBSERVATIONS_FORM_TYPE))).getRows())
+        for (Map<String, Object> row : executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("formtype", NIRC_OBSERVATIONS_FORM_TYPE))).getRows())
         {
             if (row.get("taskid") != null)
                 taskIds.add(String.valueOf(row.get("taskid")));
@@ -905,7 +943,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private int countObservationsForTask(String taskId)
     {
-        return executeSelectRowCommand("study", "clinical_observations", List.of(new Filter("taskid", taskId))).getRowCount().intValue();
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("taskid", taskId))).getRowCount().intValue();
     }
 
     @Test
