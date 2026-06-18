@@ -29,6 +29,7 @@ import org.labkey.api.util.FileUtil;
 import org.labkey.remoteapi.CommandException;
 import org.labkey.remoteapi.SimplePostCommand;
 import org.labkey.remoteapi.core.SaveModulePropertiesCommand;
+import org.labkey.remoteapi.query.ContainerFilter;
 import org.labkey.remoteapi.query.Filter;
 import org.labkey.remoteapi.query.ImportDataCommand;
 import org.labkey.remoteapi.query.InsertRowsCommand;
@@ -79,8 +80,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -102,6 +105,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String deadAnimalId = "D5454";
     private static final String departedAnimalId = "H6767";
     private static final String aliveAnimalId = "A4545";
+    // Dedicated animal for testScheduledObservationTaskGrouping; provisioned (alive, housed, assigned) in
+    // createTestSubjects so the clinical case form raises no warnings that would keep the validation banner up.
+    private static final String taskGroupAnimalId = "TESTGRP9090";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -472,6 +478,33 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         getApiHelper().deleteAllRecords("study", "Assignment", new Filter("Id", StringUtils.join(SUBJECTS, ";"), Filter.Operator.IN));
         getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
 
+        // Fully provision the task-grouping test animal (alive demographics, current housing, active assignment) so
+        // the clinical case form has no unknown-animal warnings to keep the validation banner from clearing.
+        log("Creating task grouping test subject");
+        fields = new String[]{"Id", "Species", "Birth", "Gender", "date", "calculated_status", "objectid", "performedby"};
+        data = new Object[][]{
+                {taskGroupAnimalId, "Rhesus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "demographics", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "demographics", new Filter("Id", taskGroupAnimalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        fields = new String[]{"Id", "date", "enddate", "room", "cage", "performedby"};
+        data = new Object[][]{
+                {taskGroupAnimalId, pastDate1, null, getRooms()[0], CAGES[0], 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Housing", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Housing", new Filter("Id", taskGroupAnimalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        fields = new String[]{"Id", "date", "enddate", "project", "performedby"};
+        data = new Object[][]{
+                {taskGroupAnimalId, pastDate1, null, PROJECTS[0], 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Assignment", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Assignment", new Filter("Id", taskGroupAnimalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
         primeCaches();
     }
 
@@ -665,6 +698,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Assert.assertEquals("Incorrect rows in Today's Observation Schedule", 4, table.getDataRowCount());
         Assert.assertEquals("Incorrect observation title", "Daily Clinical Observations; Lameness", table.getDataAsText(0, "observationList"));
         Assert.assertEquals("Status is not updated", "", table.getDataAsText(0, "observationStatus"));
+
+        // Capture existing observation-form tasks so we can confirm that entering scheduled
+        // observations groups them onto the form's task without leaving an empty task behind.
+        Set<String> obsTasksBefore = getObservationFormTaskIds();
         table.link(0, "observationRecord").click();
 
         switchToWindow(1);
@@ -694,6 +731,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         Assert.assertEquals("Status is not updated", "Completed", table.getDataAsText(0, "observationStatus"));
+
+        // This animal has a single clinical case, so every scheduled observation belongs to that one
+        // order group and stays on the form's task: one task group, and no empty task created.
+        verifyScheduledObservationTaskGrouping(animalId, obsTasksBefore, 1);
 
         log("Closing the case");
         goToEHRFolder();
@@ -763,6 +804,146 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
         table.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Status is not updated ", "Completed", table.getDataAsText(0, "observationStatus"));
+    }
+
+    // The ehr.tasks formtype for the clinical observations data entry form (NIRCClinicalObservationsFormType.NAME).
+    private static final String NIRC_OBSERVATIONS_FORM_TYPE = "Observations";
+
+    // Valid Observation/Score values keyed by daily clinical observation category. The Observation/Score
+    // field is category-dependent, so each value must be legal for its category.
+    private static final Map<String, String> NIRC_DAILY_OBS_VALUES = Map.of(
+            "Activity", "0-1 Extremely Lethargic",
+            "Appetite", "Normal to low",
+            "BCS", "2.5",
+            "Hydration", "10%",
+            "Stool", "M/F",
+            "Verified Id?", "No");
+
+    @Test
+    public void testScheduledObservationTaskGrouping()
+    {
+        String animalId = taskGroupAnimalId;
+
+        // Two concurrent clinical cases for the same animal each generate their own set of daily
+        // observation orders at the same scheduled slot (today at 8:00 AM). A single schedule entry
+        // therefore matches two orders per category, each carrying a distinct order taskid. The entered
+        // observations must be grouped by that order taskid -- the first group reuses the form's own
+        // task and the second gets a freshly created task -- so the entries end up under exactly two
+        // tasks with no empty task left behind.
+        // The first case finalizes through the normal "Finalize Form" confirmation. The second case is for
+        // the same animal and problem area, so its submission instead raises the "Similar Case Exists"
+        // confirmation -- acknowledge that one to finalize it.
+        createClinicalCase(animalId, "Finalize");
+        createClinicalCase(animalId, "Similar Case Exists");
+
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
+        DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", animalId);
+        Assert.assertEquals("Both cases' orders should collapse to a single schedule row for " + animalId, 1, table.getDataRowCount());
+
+        Set<String> obsTasksBefore = getObservationFormTaskIds();
+        table.link(0, "observationRecord").click();
+        switchToWindow(1);
+        waitForText(animalId);
+        enterScheduledObservations();
+
+        // Each of the six daily categories matched two orders, so two entries per category were created,
+        // grouped into exactly two tasks (one per originating order taskid) with no empty task.
+        verifyScheduledObservationTaskGrouping(animalId, obsTasksBefore, 2);
+
+        Map<String, Integer> entriesPerCategory = new HashMap<>();
+        for (Map<String, Object> row : getClinicalObservations(animalId))
+            entriesPerCategory.merge(String.valueOf(row.get("category")), 1, Integer::sum);
+        Assert.assertEquals("Expected the six daily observation categories", NIRC_DAILY_OBS_VALUES.size(), entriesPerCategory.size());
+        entriesPerCategory.forEach((category, count) ->
+                Assert.assertEquals("Expected two entries (one per matching order) for category " + category, Integer.valueOf(2), count));
+    }
+
+    // Creates and finalizes a minimal clinical case for the animal. The case's open date is set to
+    // yesterday so the auto-generated daily observation orders land on today's observation schedule.
+    // confirmWindowTitle is the finalize-confirmation dialog expected on submit: "Finalize" for a brand
+    // new case, or "Similar Case Exists" when the animal already has an active case for the same problem.
+    private void createClinicalCase(String animalId, String confirmWindowTitle)
+    {
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Clinical Cases"));
+        Ext4FieldRef problem = _helper.getExt4FieldForFormSection("Clinical Case", "Problem Area");
+        problem.clickTrigger();
+        problem.setValue("General abnormality");
+        _helper.setDataEntryField("openRemark", "Clinical Case for " + animalId);
+        _helper.setDataEntryField("plan", "Case plan for " + animalId);
+        _helper.getExt4FieldForFormSection("Clinical Case", "Open Date").setValue(LocalDateTime.now().minusDays(1).format(_dateFormat));
+        setFormElement(Locator.name("Id"), animalId);
+        _helper.setDataEntryField("s", "Subjective for " + animalId);
+        _helper.setDataEntryField("remark", "Remarks for " + animalId);
+        submitForm("Submit Final", confirmWindowTitle);
+    }
+
+    // Fills in the Observations grid opened from the schedule, setting a valid value and remark for each
+    // category row regardless of the grid's row order, then submits.
+    private void enterScheduledObservations()
+    {
+        Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
+        int rowCount = observation.getRowCount();
+        for (int row = 1; row <= rowCount; row++)
+        {
+            String category = String.valueOf(observation.getFieldValue(row, "category"));
+            String value = NIRC_DAILY_OBS_VALUES.get(category);
+            if (value != null)
+                observation.setGridCell(row, "observation", value);
+            observation.setGridCellJS(row, "remark", "remark for " + category);
+        }
+        submitForm("Submit Final", "Finalize");
+    }
+
+    // Asserts that the animal's scheduled observations are grouped under the expected number of distinct
+    // tasks and that no observation-form task created while entering them was left empty.
+    private void verifyScheduledObservationTaskGrouping(String animalId, Set<String> obsTasksBefore, int expectedTaskGroups)
+    {
+        List<Map<String, Object>> obsRows = getClinicalObservations(animalId);
+        Assert.assertFalse("Expected scheduled clinical observations for " + animalId, obsRows.isEmpty());
+
+        Set<String> taskIds = new HashSet<>();
+        for (Map<String, Object> row : obsRows)
+        {
+            Object taskId = row.get("taskid");
+            Assert.assertNotNull("A scheduled observation is missing its taskid", taskId);
+            taskIds.add(String.valueOf(taskId));
+        }
+        Assert.assertEquals("Scheduled observations should be grouped under " + expectedTaskGroups + " task(s)", expectedTaskGroups, taskIds.size());
+
+        // No empty task: every observation-form task created while entering these observations must carry
+        // at least one observation. The old behavior abandoned the form's task (leaving it empty) when its
+        // entries were moved onto freshly created group tasks.
+        Set<String> newObsTasks = new HashSet<>(getObservationFormTaskIds());
+        newObsTasks.removeAll(obsTasksBefore);
+        Assert.assertFalse("Entering scheduled observations should have created at least one observation task", newObsTasks.isEmpty());
+        for (String taskId : newObsTasks)
+            Assert.assertTrue("An empty observation task was created: " + taskId, countObservationsForTask(taskId) > 0);
+    }
+
+    private List<Map<String, Object>> getClinicalObservations(String animalId)
+    {
+        // study datasets and ehr.tasks are defined in the EHR study folder, not the project root, so query
+        // that container explicitly rather than relying on the default project-scoped overload.
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId))).getRows();
+    }
+
+    private Set<String> getObservationFormTaskIds()
+    {
+        Set<String> taskIds = new HashSet<>();
+        for (Map<String, Object> row : executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("formtype", NIRC_OBSERVATIONS_FORM_TYPE))).getRows())
+        {
+            if (row.get("taskid") != null)
+                taskIds.add(String.valueOf(row.get("taskid")));
+        }
+        return taskIds;
+    }
+
+    private int countObservationsForTask(String taskId)
+    {
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("taskid", taskId))).getRowCount().intValue();
     }
 
     @Test
