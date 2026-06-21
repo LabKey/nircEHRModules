@@ -12,6 +12,7 @@ var triggerHelper = new org.labkey.nirc_ehr.query.NIRC_EHRTriggerHelper(LABKEY.S
 
 function onInit(event, helper) {
     helper.decodeExtraContextProperty('orderTasksInTransaction');
+    triggerHelper.clearScheduledObsTaskMap();
 }
 
 function onUpsert(helper, scriptErrors, row, oldRow) {
@@ -67,6 +68,7 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                         row.orderid = orderData.orderId;
                         row.area = orderData.area;
                         row.type = orderData.type;
+                        row.taskid = orderData.taskId;
                     }
                 }
             }
