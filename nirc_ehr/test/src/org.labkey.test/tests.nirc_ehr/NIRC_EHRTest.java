@@ -1587,42 +1587,40 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     /**
      * Wait for the EHR data-entry form to finish all in-flight, asynchronous server validation, and for
-     * the validation error/warning banner to be clear, before acting on the form.
+     * the validation error/warning banner to be clear, before submitting.
      *
      * Why this exists: the data-entry form revalidates edited records against the server after every change
-     * (EHR.data.StoreCollection.validateRecords, tracked by storeCollection.validationRequestsInFlight). The
-     * "errors and warnings" banner (EHR.panel.DataEntryErrorPanel) is only refreshed when that round-trip
-     * completes (EHR.panel.DataEntryPanel.onValidationComplete). A bare waitForElementToDisappear on the
-     * banner therefore passes vacuously whenever it runs before the asynchronous validation has rendered the
-     * banner, so the test submits a form that is still being validated. The intermittent NIRC_EHRTest
-     * failures ("The form has the following errors and warnings:" / "Id is required" / "Must enter at least
-     * one comment" still present after timeout) are all this race.
+     * (EHR.data.StoreCollection.validateRecords, tracked by storeCollection.validationRequestsInFlight, and
+     * the panel's validationInProgress flag). The "errors and warnings" banner (EHR.panel.DataEntryErrorPanel)
+     * is only refreshed when that round-trip completes (EHR.panel.DataEntryPanel.onValidationComplete). A bare
+     * waitForElementToDisappear on the banner therefore passes vacuously whenever it runs before the
+     * asynchronous validation has rendered the banner, so the test submits a form that is still being
+     * validated.
      *
-     * Fix: poll the form's own validation state - the live validationRequestsInFlight counter plus the
-     * panel's validationInProgress flag - and only proceed once validation has settled AND the banner is
-     * absent. Looping on the counter also absorbs cascading re-validation (e.g. a child record's Id resolving
-     * and triggering another pass).
+     * Approach: prime the form once by forcing a single synchronous client->server flush
+     * (StoreCollection.transformClientToServer, the same call the framework's buffered 'clientdatachanged'
+     * handler makes) so any edit still sitting in the 150ms change buffer is dispatched now -
+     * onValidationRequestStart increments the in-flight counter synchronously before the AJAX, so this avoids
+     * a fixed sleep. Then poll the in-flight counter (read-only) until validation has settled AND the banner
+     * is absent. The flush is done ONCE, not per poll: transformClientToServer revalidates every populated
+     * record, so calling it on every poll keeps a non-empty form perpetually in flight and it never settles.
+     * Guards return -1 ("nothing to wait on") when Ext4 or the data-entry panel isn't present, so this is a
+     * no-op on non-Ext4 forms / pages (e.g. after a navigation).
      */
     private void waitForFormValidationToSettle()
     {
-        // Poll the form's own validation state. While a validation pass is running we just wait. Once it is
-        // quiescent we force a synchronous client->server flush (StoreCollection.transformClientToServer -
-        // the same call the framework's buffered 'clientdatachanged' handler makes) so that anything still
-        // sitting in the 150ms change buffer, or a cascading re-validation triggered by a field resolving
-        // (e.g. a child record's Id), is surfaced immediately instead of being waited out with a sleep.
-        // onValidationRequestStart increments validationRequestsInFlight synchronously before the validation
-        // AJAX is dispatched, so the count read back right after the flush reliably reports whether another
-        // pass is now pending. The form is only considered settled when nothing is in flight AND the flush
-        // produced no new work AND the error/warning banner is absent.
-        final String pollScript =
+        // Shared guard: -1 => no Ext4 data-entry form on the page (proceed); 1 => form still loading (wait).
+        final String guard =
+                "if (typeof Ext4 === 'undefined' || !Ext4.ComponentQuery) return -1;" +
                 "var p = Ext4.ComponentQuery.query('ehr-dataentrypanel')[0];" +
-                "if (!p || !p.storeCollection) return -1;" +                                         // no data-entry form present
-                "var sc = p.storeCollection;" +
-                "if (!sc.hasLoaded) return 1;" +                                                     // form still loading; keep waiting
-                "var inFlight = (sc.validationRequestsInFlight || 0) + (p.validationInProgress ? 1 : 0);" +
-                "if (inFlight > 0) return inFlight;" +                                               // validation running; keep waiting
-                "sc.transformClientToServer();" +                                                   // flush buffered/cascading changes now
-                "return (sc.validationRequestsInFlight || 0) + (p.validationInProgress ? 1 : 0);";
+                "if (!p || !p.storeCollection) return -1;" +
+                "if (!p.storeCollection.hasLoaded) return 1;";
+
+        // Prime once: surface any edit still buffered behind the 150ms clientdatachanged delay.
+        executeScript(guard + "p.storeCollection.transformClientToServer(); return 0;");
+
+        final String pollScript = guard +
+                "return (p.storeCollection.validationRequestsInFlight || 0) + (p.validationInProgress ? 1 : 0);";
 
         Locator banner = Locator.tagContainingText("div", "The form has the following errors and warnings:");
 
@@ -1631,7 +1629,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
             if (!(inFlight instanceof Number))
                 return false;
             int count = ((Number) inFlight).intValue();
-            if (count < 0) // no data-entry panel on the page; nothing to wait on
+            if (count < 0) // no Ext4 data-entry form on the page; nothing to wait on
                 return true;
             return count == 0 && !isElementPresent(banner);
         }, "EHR data-entry form validation did not settle (validation still in flight or error/warning banner still present)", VALIDATION_SETTLE_TIMEOUT);
