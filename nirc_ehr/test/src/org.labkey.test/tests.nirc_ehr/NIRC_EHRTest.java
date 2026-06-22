@@ -1582,11 +1582,67 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 TestFileUtils.getFileContents(orchardFile).contains(animalId));
     }
 
+    // Max time to wait for the EHR data-entry form's asynchronous server validation to settle.
+    private static final int VALIDATION_SETTLE_TIMEOUT = 30_000;
+
+    /**
+     * Wait for the EHR data-entry form to finish all in-flight, asynchronous server validation, and for
+     * the validation error/warning banner to be clear, before acting on the form.
+     *
+     * Why this exists: the data-entry form revalidates edited records against the server after every change
+     * (EHR.data.StoreCollection.validateRecords, tracked by storeCollection.validationRequestsInFlight). The
+     * "errors and warnings" banner (EHR.panel.DataEntryErrorPanel) is only refreshed when that round-trip
+     * completes (EHR.panel.DataEntryPanel.onValidationComplete). A bare waitForElementToDisappear on the
+     * banner therefore passes vacuously whenever it runs before the asynchronous validation has rendered the
+     * banner, so the test submits a form that is still being validated. The intermittent NIRC_EHRTest
+     * failures ("The form has the following errors and warnings:" / "Id is required" / "Must enter at least
+     * one comment" still present after timeout) are all this race.
+     *
+     * Fix: poll the form's own validation state - the live validationRequestsInFlight counter plus the
+     * panel's validationInProgress flag - and only proceed once validation has settled AND the banner is
+     * absent. Looping on the counter also absorbs cascading re-validation (e.g. a child record's Id resolving
+     * and triggering another pass).
+     */
+    private void waitForFormValidationToSettle()
+    {
+        // Poll the form's own validation state. While a validation pass is running we just wait. Once it is
+        // quiescent we force a synchronous client->server flush (StoreCollection.transformClientToServer -
+        // the same call the framework's buffered 'clientdatachanged' handler makes) so that anything still
+        // sitting in the 150ms change buffer, or a cascading re-validation triggered by a field resolving
+        // (e.g. a child record's Id), is surfaced immediately instead of being waited out with a sleep.
+        // onValidationRequestStart increments validationRequestsInFlight synchronously before the validation
+        // AJAX is dispatched, so the count read back right after the flush reliably reports whether another
+        // pass is now pending. The form is only considered settled when nothing is in flight AND the flush
+        // produced no new work AND the error/warning banner is absent.
+        final String pollScript =
+                "var p = Ext4.ComponentQuery.query('ehr-dataentrypanel')[0];" +
+                "if (!p || !p.storeCollection) return -1;" +                                         // no data-entry form present
+                "var sc = p.storeCollection;" +
+                "if (!sc.hasLoaded) return 1;" +                                                     // form still loading; keep waiting
+                "var inFlight = (sc.validationRequestsInFlight || 0) + (p.validationInProgress ? 1 : 0);" +
+                "if (inFlight > 0) return inFlight;" +                                               // validation running; keep waiting
+                "sc.transformClientToServer();" +                                                   // flush buffered/cascading changes now
+                "return (sc.validationRequestsInFlight || 0) + (p.validationInProgress ? 1 : 0);";
+
+        Locator banner = Locator.tagContainingText("div", "The form has the following errors and warnings:");
+
+        waitFor(() -> {
+            Object inFlight = executeScript(pollScript);
+            if (!(inFlight instanceof Number))
+                return false;
+            int count = ((Number) inFlight).intValue();
+            if (count < 0) // no data-entry panel on the page; nothing to wait on
+                return true;
+            return count == 0 && !isElementPresent(banner);
+        }, "EHR data-entry form validation did not settle (validation still in flight or error/warning banner still present)", VALIDATION_SETTLE_TIMEOUT);
+    }
+
     private void submitForm(String buttonText, String windowTitle)
     {
-        //Give time for errors to disappear after validation
-        Locator.tagContainingText("div", "The form has the following errors and warnings:")
-                .waitForElementToDisappear(longWait());
+        // Wait for asynchronous server validation to settle and the error/warning banner to clear before
+        // submitting. A bare waitForElementToDisappear here is racy: it passes immediately when validation
+        // is still in flight and the banner has not rendered yet. See waitForFormValidationToSettle.
+        waitForFormValidationToSettle();
         Locator submitFinalBtn = Locator.linkWithText(buttonText);
         shortWait().until(ExpectedConditions.elementToBeClickable(submitFinalBtn));
         Window<?> msgWindow;
