@@ -744,9 +744,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(2);
 
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationMessageToClear("Id is required");
         _helper.setDataEntryField("s", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationMessageToClear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
         _helper.getExt4FieldForFormSection("Clinical Case", "Close Date").setValue(LocalDateTime.now().format(_dateFormat));
         _helper.setDataEntryField("closeRemark", "Case closed.");
@@ -1260,7 +1260,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         _helper.setDataEntryField("remark", "Clinical Remarks - Test");
         if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
             _helper.setDataEntryField("remark", "Clinical Remarks - Test");
-        waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
+        waitForValidationMessageToClear("Remark: WARN: Must enter at least one comment");
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
         _helper.addRecordToGrid(weight);
@@ -1300,7 +1300,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         waitForText("Diazepam");
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationMessageToClear("Id is required");
         _helper.getExt4GridForFormSection("Medications/Treatments Given");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
@@ -1320,9 +1320,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         //Fill out Close Date
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationMessageToClear("Id is required");
         _helper.setDataEntryField("s", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationMessageToClear("Subjective: WARN: Must enter at least one comment");
 
         waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
         Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
@@ -1498,9 +1498,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(2);
 
         waitForText(animalId1);
-        waitForTextToDisappear("Id is required");
+        waitForValidationMessageToClear("Id is required");
         _helper.setDataEntryField("remark", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationMessageToClear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
 
         // Verify close remark required
@@ -1633,6 +1633,41 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 return true;
             return count == 0 && !isElementPresent(banner);
         }, "EHR data-entry form validation did not settle (validation still in flight or error/warning banner still present)", VALIDATION_SETTLE_TIMEOUT);
+    }
+
+    /**
+     * Wait for the data-entry form's asynchronous record load/validation to drain, then for a specific
+     * transient validation message to clear.
+     *
+     * Used at intermediate steps - e.g. just after opening a case for edit in a new window - where the form
+     * is still loading its records (so a message like "Id is required" shows until the child records' Id
+     * propagates) and other warnings may legitimately remain. The full waitForFormValidationToSettle, which
+     * requires an empty banner, is not appropriate there; this only gates on validation having drained before
+     * checking the one message. A bare waitForTextToDisappear (the previous code) checks while the load
+     * validation is still running and times out at 10s when the load takes longer - the source of the
+     * intermittent "Id is required" failures. Read-only: it does not force a flush, since the form may still
+     * be mid-load.
+     */
+    private void waitForValidationMessageToClear(String text)
+    {
+        final String pollScript =
+                "if (typeof Ext4 === 'undefined' || !Ext4.ComponentQuery) return -1;" +     // no Ext4 on page
+                "var p = Ext4.ComponentQuery.query('ehr-dataentrypanel')[0];" +
+                "if (!p || !p.storeCollection) return -1;" +                                // no data-entry form
+                "if (!p.storeCollection.hasLoaded) return 1;" +                             // still loading; wait
+                "return (p.storeCollection.validationRequestsInFlight || 0) + (p.validationInProgress ? 1 : 0);";
+
+        waitFor(() -> {
+            Object inFlight = executeScript(pollScript);
+            if (!(inFlight instanceof Number))
+                return false;
+            int count = ((Number) inFlight).intValue();
+            if (count < 0) // no Ext4 data-entry form on the page; nothing to wait on
+                return true;
+            return count == 0;
+        }, "EHR data-entry form validation did not drain before checking for: " + text, VALIDATION_SETTLE_TIMEOUT);
+
+        waitForTextToDisappear(text);
     }
 
     private void submitForm(String buttonText, String windowTitle)
