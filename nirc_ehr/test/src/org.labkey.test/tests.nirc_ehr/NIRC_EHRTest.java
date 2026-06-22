@@ -1257,9 +1257,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //Fill out Clinical Remarks section with Date, Remark
         scrollIntoView(Locator.textarea("remark"));
         _helper.getExt4FieldForFormSection("Clinical Remarks", "Date").setValue(LocalDateTime.now().minusDays(2).format(_dateFormat));
-        _helper.setDataEntryField("remark", "Clinical Remarks - Test");
-        if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
-            _helper.setDataEntryField("remark", "Clinical Remarks - Test");
+        // Set the Remark through the Ext field (updates the record and fires change), not a DOM setFormElement
+        // on the ambiguous name="remark". The clinremarks validation only clears the "Must enter at least one
+        // comment" WARN once the record's remark/s/o/a/p is non-empty (study/clinremarks.js); the previous
+        // setDataEntryField blur intermittently failed to commit the value into the record, leaving the
+        // warning - and the test - stuck. This is the persistent testClinicalCasesWorkflow flake.
+        _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").setValue("Clinical Remarks - Test");
         waitForValidationMessageToClear("Remark: WARN: Must enter at least one comment");
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
