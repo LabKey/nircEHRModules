@@ -14,5 +14,6 @@
         <column name="remark"/>
         <column name="performedBy"/>
         <column name="QCState"/>
+        <column name="caseId/problemCategory" />
     </columns>
 </customView>

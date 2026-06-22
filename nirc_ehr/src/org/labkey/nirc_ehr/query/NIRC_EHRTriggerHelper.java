@@ -55,6 +55,7 @@ import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.nirc_ehr.NIRCOrchardFileGenerator;
 import org.labkey.nirc_ehr.NIRC_EHRManager;
+import org.labkey.nirc_ehr.dataentry.form.NIRCClinicalObservationsFormType;
 import org.labkey.nirc_ehr.notification.NIRCClinicalMoveNotification;
 import org.labkey.nirc_ehr.notification.NIRCDeathNotification;
 import org.labkey.nirc_ehr.notification.NIRCPregnancyOutcomeNotification;
@@ -80,6 +81,10 @@ public class NIRC_EHRTriggerHelper
     private User _user;
     private static final Logger _log = LogManager.getLogger(NIRC_EHRTriggerHelper.class);
     private final Map<String,Object> _cachedDrugFormulary = new HashMap<>();
+
+    // Maps an originating observation order's taskid to the task its scheduled observations are grouped under,
+    // for the duration of a single save batch (the same helper instance is reused across rows in the batch).
+    private final Map<String,String> _scheduledObsTaskMap = new HashMap<>();
 
     private final SimpleDateFormat _dateFormat;
 
@@ -811,6 +816,10 @@ public class NIRC_EHRTriggerHelper
         {
             Map<String, Object> order = orders[i];
 
+            // Group every entry by the originating order's taskid into a new task per group.
+            String orderTaskId = ConvertHelper.convert(order.get("taskid"), String.class);
+            String groupTaskId = resolveGroupTaskId(orderTaskId, taskid, qcstate);
+
             // First order we find will fill out the information in the row passing through the trigger
             if (i == 0)
             {
@@ -819,6 +828,7 @@ public class NIRC_EHRTriggerHelper
                 triggerOrder.put("area", order.get("area"));
                 triggerOrder.put("orderId", order.get("objectid"));
                 triggerOrder.put("type", order.get("type"));
+                triggerOrder.put("taskId", groupTaskId);
                 continue;
             }
 
@@ -835,7 +845,7 @@ public class NIRC_EHRTriggerHelper
             obsRow.put("performedBy", performedBy);
             obsRow.put("orderId", order.get("objectid"));
             obsRow.put("type", order.get("type"));
-            obsRow.put("taskid", order.get("taskid"));
+            obsRow.put("taskid", groupTaskId);
 
             List<Map<String, Object>> rows = new ArrayList<>();
             rows.add(obsRow);
@@ -848,6 +858,88 @@ public class NIRC_EHRTriggerHelper
         }
 
         return triggerOrder;
+    }
+
+    /**
+     * Resets the per-batch grouping map. Called from the clinical_observations onInit trigger so no
+     * grouping state can leak between save batches.
+     */
+    public void clearScheduledObsTaskMap()
+    {
+        _scheduledObsTaskMap.clear();
+    }
+
+    /**
+     * Resolves the task that a scheduled observation entry should be grouped under, keyed by the
+     * originating observation order's taskid. The first distinct order taskid seen in a save batch
+     * reuses the form's own task ({@code formTaskId}); each subsequent distinct order taskid gets a
+     * freshly created task that clones the form task. This groups all observations that came from the
+     * same order under one task, with a new task per additional group, while reusing the form's task
+     * for the first group so it is not left empty.
+     */
+    private String resolveGroupTaskId(String orderTaskId, String formTaskId, String qcstate) throws SQLException, BatchValidationException, QueryUpdateServiceException, DuplicateKeyException
+    {
+        // Defensive: an order with no taskid can't be grouped, so fall back to the form's task.
+        if (orderTaskId == null)
+            return formTaskId;
+
+        if (_scheduledObsTaskMap.containsKey(orderTaskId))
+            return _scheduledObsTaskMap.get(orderTaskId);
+
+        // Reuse the form's already-created task for the first group; create new tasks for the rest.
+        String groupTaskId = _scheduledObsTaskMap.isEmpty() ? formTaskId : createTaskFromForm(formTaskId, qcstate);
+        _scheduledObsTaskMap.put(orderTaskId, groupTaskId);
+        return groupTaskId;
+    }
+
+    /**
+     * Creates a new ehr.tasks record for a group of scheduled observations, cloning the form's task
+     * ({@code formTaskId}) so the new task carries the same title/form/category/etc. Returns the new taskid.
+     */
+    private String createTaskFromForm(String formTaskId, String qcstate) throws SQLException, BatchValidationException, QueryUpdateServiceException, DuplicateKeyException
+    {
+        String newTaskId = new GUID().toString();
+        TableInfo tasksTi = getTableInfo("ehr", "tasks");
+
+        Map<String, Object> formTask = null;
+        if (formTaskId != null)
+        {
+            SimpleFilter filter = new SimpleFilter(FieldKey.fromString("taskid"), formTaskId);
+            formTask = new TableSelector(tasksTi, PageFlowUtil.set("title", "formtype", "category", "qcstate", "assignedto", "duedate", "caseid", "description"), filter, null).getMap();
+        }
+
+        Map<String, Object> taskRow = new CaseInsensitiveHashMap<>();
+        taskRow.put("taskid", newTaskId);
+        if (formTask != null)
+        {
+            taskRow.put("title", formTask.get("title"));
+            taskRow.put("formtype", formTask.get("formtype"));
+            taskRow.put("category", formTask.get("category"));
+            taskRow.put("qcstate", formTask.get("qcstate"));
+            taskRow.put("assignedto", formTask.get("assignedto"));
+            taskRow.put("duedate", formTask.get("duedate"));
+            taskRow.put("caseid", formTask.get("caseid"));
+            taskRow.put("description", formTask.get("description"));
+        }
+        else
+        {
+            // Fallback if the form task is not visible yet: populate the required non-null columns.
+            taskRow.put("title", "Clinical Observations");
+            taskRow.put("category", "task");
+            taskRow.put("formtype", NIRCClinicalObservationsFormType.NAME);
+            taskRow.put("qcstate", qcstate);
+            taskRow.put("assignedto", _user.getUserId());
+        }
+
+        List<Map<String, Object>> rows = new ArrayList<>();
+        rows.add(taskRow);
+
+        BatchValidationException errors = new BatchValidationException();
+        tasksTi.getUpdateService().insertRows(_user, _container, rows, errors, null, getExtraContext());
+        if (errors.hasErrors())
+            throw errors;
+
+        return newTaskId;
     }
 
     public boolean validateHousing(String id, String cage, Date date)
