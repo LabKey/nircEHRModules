@@ -19,7 +19,6 @@ import org.labkey.api.data.Container;
 import org.labkey.api.data.Results;
 import org.labkey.api.ehr.history.AbstractDataSource;
 import org.labkey.api.module.Module;
-import org.labkey.api.query.FieldKey;
 import org.labkey.api.util.PageFlowUtil;
 
 import java.sql.SQLException;
@@ -45,8 +44,7 @@ public class ArrivalDataSource extends AbstractDataSource
 
         sb.append(safeAppend(rs, "Arrival Type", "arrivalType"));
         sb.append(safeAppend(rs, "Acquisition Type", "acquisitionType"));
-        if (rs.hasColumn(FieldKey.fromString("sourceFacility")) && rs.getObject(FieldKey.fromString("sourceFacility")) != null)
-            sb.append("Lab Transfer From: " + rs.getString(FieldKey.fromString("sourceFacility")));
+        sb.append(safeAppend(rs, "Lab Transfer From", "sourceFacility"));
 
         return sb.toString();
     }
