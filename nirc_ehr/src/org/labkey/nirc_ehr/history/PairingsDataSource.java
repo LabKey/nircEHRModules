@@ -14,6 +14,7 @@ public class PairingsDataSource extends AbstractDataSource
     public PairingsDataSource(Module module)
     {
         super("study", "Pairings", "Pairings", "Pairings", module);
+        setShowTime(true);
     }
 
     @Override

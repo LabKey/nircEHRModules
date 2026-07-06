@@ -15,6 +15,7 @@ public class DeathDataSource extends AbstractDataSource
     public DeathDataSource(Module module)
     {
         super("study", "Deaths", "Death", "Deaths", module);
+        setShowTime(true);
     }
 
     @Override

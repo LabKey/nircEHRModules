@@ -16,6 +16,7 @@ public class ExemptionsDataSource extends AbstractDataSource
     public ExemptionsDataSource(Module module)
     {
         super("study", "exemptions", "Exemptions", "Exemptions", module);
+        setShowTime(true);
     }
 
     @Override

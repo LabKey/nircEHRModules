@@ -23,6 +23,7 @@ public class NIRCCaseCloseDataSource extends AbstractDataSource
     public NIRCCaseCloseDataSource(Module module)
     {
         super("study", "Cases", "Case Closed", "Clinical", module);
+        setShowTime(true);
     }
 
     @Override

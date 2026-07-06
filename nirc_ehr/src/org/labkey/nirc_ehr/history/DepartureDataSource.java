@@ -15,6 +15,7 @@ public class DepartureDataSource extends AbstractDataSource
     public DepartureDataSource(Module module)
     {
         super("study", "Departure", "Departure", "Departure", module);
+        setShowTime(true);
     }
 
     @Override

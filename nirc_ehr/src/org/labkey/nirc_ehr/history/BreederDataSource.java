@@ -27,6 +27,7 @@ public class BreederDataSource extends AbstractDataSource
     public BreederDataSource(Module module)
     {
         super("study", "breeder", "Breeding", "Breeding", module);
+        setShowTime(true);
     }
 
     @Override

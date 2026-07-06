@@ -16,6 +16,7 @@ public class DrugAdminDataSource extends AbstractDataSource
     public DrugAdminDataSource(Module module)
     {
         super("study", "drug", "Drug Admin", "Drug Admin", module);
+        setShowTime(true);
     }
 
     @Override
