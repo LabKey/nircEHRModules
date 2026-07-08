@@ -115,7 +115,7 @@ public class NIRCObservationsDataSource extends AbstractDataSource
             }*/
 
             HistoryRow row = new HistoryRowImpl(this, categoryText, categoryGroup, categoryColor, subjectId, date, html.toString(), qcStateLabel, publicData, taskId, taskRowId, formType, objectId);
-            row.setShowTime(false);
+            row.setShowTime(true);
             rows.add(row);
         }
 

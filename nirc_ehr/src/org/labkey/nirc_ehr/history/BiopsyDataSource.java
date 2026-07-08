@@ -15,6 +15,7 @@ public class BiopsyDataSource extends AbstractDataSource
     public BiopsyDataSource(Module module)
     {
         super("study", "Biopsy", "Biopsy", "Biopsy", module);
+        setShowTime(true);
     }
 
     @Override

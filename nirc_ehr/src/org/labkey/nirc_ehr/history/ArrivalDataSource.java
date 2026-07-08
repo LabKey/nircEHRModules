@@ -14,6 +14,7 @@ public class ArrivalDataSource extends AbstractDataSource
     public ArrivalDataSource(Module module)
     {
         super("study", "Arrival", "Arrival", "Arrival", module);
+        setShowTime(true);
     }
 
     @Override

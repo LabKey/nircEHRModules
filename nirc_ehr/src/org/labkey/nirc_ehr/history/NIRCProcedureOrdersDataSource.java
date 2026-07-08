@@ -15,6 +15,7 @@ public class NIRCProcedureOrdersDataSource extends AbstractDataSource
     public NIRCProcedureOrdersDataSource(Module module)
     {
         super("study", "prc_order", "Procedure Orders", "Procedures", module);
+        setShowTime(true);
     }
 
     @Override

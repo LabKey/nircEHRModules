@@ -16,6 +16,7 @@ public class FlagsDataSource extends AbstractDataSource
     public FlagsDataSource(Module module)
     {
         super("study", "flags", "Flags", "Flags", module);
+        setShowTime(true);
     }
 
     @Override
