@@ -27,9 +27,7 @@ import org.labkey.api.ehr.demographics.ParentsDemographicsProvider;
 import org.labkey.api.ehr.demographics.SourceDemographicsProvider;
 import org.labkey.api.ehr.history.DefaultAlopeciaDataSource;
 import org.labkey.api.ehr.history.DefaultAnimalRecordFlagDataSource;
-import org.labkey.api.ehr.history.DefaultClinicalRemarksDataSource;
 import org.labkey.api.ehr.history.DefaultNotesDataSource;
-import org.labkey.api.ehr.history.DefaultVitalsDataSource;
 import org.labkey.api.ehr.security.EHRDataAdminPermission;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.ldk.buttons.ShowEditUIButton;
@@ -131,7 +129,6 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         ehrService.registerDemographicsProvider(new ProtocolAssignmentDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new HousingDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new CagematesDemographicsProvider(this));
-        ehrService.registerDemographicsProvider(new CagematesDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new ActiveCasesDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new ActiveTreatmentsDemographicsProvider(this));
         ehrService.registerDemographicsProvider(new SourceDemographicsProvider(this));
@@ -145,9 +142,7 @@ public class NIRC_EHRModule extends ExtendedSimpleModule
         EHRService.get().registerHistoryDataSource(new DeathDataSource(this));
         EHRService.get().registerHistoryDataSource(new DefaultAlopeciaDataSource(this));
         EHRService.get().registerHistoryDataSource(new DefaultAnimalRecordFlagDataSource(this));
-        EHRService.get().registerHistoryDataSource(new DefaultClinicalRemarksDataSource(this));
         EHRService.get().registerHistoryDataSource(new DefaultNotesDataSource(this));
-        EHRService.get().registerHistoryDataSource(new DefaultVitalsDataSource(this));
         EHRService.get().registerHistoryDataSource(new DepartureDataSource(this));
         EHRService.get().registerHistoryDataSource(new DrugAdminDataSource(this));
         EHRService.get().registerHistoryDataSource(new FlagsDataSource(this));
