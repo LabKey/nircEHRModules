@@ -79,6 +79,13 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
         //only allow death record to be created if the animal is in the demographics table
         if (idMap[row.Id]) {
 
+            // Do not allow a death record to be completed while other data for this animal is still in 'Review Required' state.
+            // Records belonging to this death's own task are excluded, since they move to Completed in the same save.
+            var reviewRequiredDatasets = null;
+            if (row.QCStateLabel && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
+                reviewRequiredDatasets = triggerHelper.getReviewRequiredDatasets(row.Id, row.taskid || null);
+            }
+
             // check if a death record already exists for this animal
             if (idMap[row.Id].calculated_status.toUpperCase() === 'DEAD' && deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'COMPLETED') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record already exists for this animal.', 'ERROR');
@@ -106,6 +113,9 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
                     deathIdMap[row.Id] && deathIdMap[row.Id].QCStateLabel &&
                     deathIdMap[row.Id].QCStateLabel.toUpperCase() === 'IN PROGRESS') {
                 EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death/Necropsy data entry is in progress for this animal', 'ERROR');
+            }
+            else if (reviewRequiredDatasets) {
+                EHR.Server.Utils.addError(scriptErrors, 'Id', 'Death record cannot be completed. There is still data in Review Required state for this animal in the following dataset(s): ' + reviewRequiredDatasets, 'ERROR');
             }
             else if (!helper.isValidateOnly() && row.Id && row.date && row.QCStateLabel.toUpperCase() === 'COMPLETED') {
 
