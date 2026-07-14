@@ -30,6 +30,7 @@ public class PhysicalExamDataSource extends AbstractDataSource
     public PhysicalExamDataSource(Module module)
     {
         super("study", "physicalExam", "Physical Exam", "Physical Exam", module);
+        setShowTime(true);
     }
 
     @Override

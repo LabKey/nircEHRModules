@@ -29,6 +29,7 @@ public class FosteringDataSource extends AbstractDataSource
     public FosteringDataSource(Module module)
     {
         super("study", "foster", "Fostering", "Fostering", module);
+        setShowTime(true);
     }
 
     @Override

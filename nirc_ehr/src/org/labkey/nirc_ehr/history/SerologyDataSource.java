@@ -31,6 +31,7 @@ public class SerologyDataSource extends AbstractDataSource
     public SerologyDataSource(Module module)
     {
         super("study", "Serology", "Serology", "Serology", module);
+        setShowTime(true);
     }
 
     @Override

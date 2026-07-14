@@ -30,6 +30,7 @@ public class PregnancyDataSource extends AbstractDataSource
     public PregnancyDataSource(Module module)
     {
         super("study", "pregnancy", "Pregnancy", "Pregnancy", module);
+        setShowTime(true);
     }
 
     @Override
