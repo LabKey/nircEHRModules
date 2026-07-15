@@ -29,6 +29,7 @@ public class HistopathologyDataSource extends AbstractDataSource
     public HistopathologyDataSource(Module module)
     {
         super("study", "histopathology", "Histopathology", "Histopathology", module);
+        setShowTime(true);
     }
 
     @Override

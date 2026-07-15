@@ -31,6 +31,7 @@ public class NIRCCaseOpenDataSource extends AbstractDataSource
     public NIRCCaseOpenDataSource(Module module)
     {
         super("study", "Cases", "Case Opened", "Clinical", module);
+        setShowTime(true);
     }
 
     @Override

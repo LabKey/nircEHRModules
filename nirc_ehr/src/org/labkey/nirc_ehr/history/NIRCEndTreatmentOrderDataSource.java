@@ -35,6 +35,7 @@ public class NIRCEndTreatmentOrderDataSource extends AbstractDataSource
     public NIRCEndTreatmentOrderDataSource(Module module)
     {
         super("study", "treatment_order", "End Treatment Orders", "Clinical", module);
+        setShowTime(true);
     }
 
     @Override
