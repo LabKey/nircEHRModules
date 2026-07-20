@@ -1226,6 +1226,61 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     }
 
     @Test
+    public void testDeathAndDepartureBlockedByReviewRequiredData() throws Exception
+    {
+        String animalId = "REVREQ1";
+        String taskId = UUID.randomUUID().toString();
+
+        goToEHRFolder();
+
+        log("Creating a live animal with a weight record in Review Required state");
+        getApiHelper().deleteAllRecords("study", "deaths", new Filter("Id", animalId));
+        getApiHelper().deleteAllRecords("study", "departure", new Filter("Id", animalId));
+        getApiHelper().deleteAllRecords("study", "weight", new Filter("Id", animalId));
+        getApiHelper().deleteAllRecords("study", "demographics", new Filter("Id", animalId));
+
+        String[] demographicsFields = {"Id", "Species", "Birth", "Gender", "date", "calculated_status", "objectid", "performedby"};
+        Object[][] demographicsData = {{animalId, "Rhesus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004}};
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "demographics", "lsid", demographicsFields, demographicsData), getExtraContext());
+
+        // The weight record carries the same taskid used by the death/departure rows below so the exclusion
+        // scenarios can prove that records belonging to the completing record's own task are excluded from
+        // the review-required check. Both scenarios are validate-only, so nothing persists between them.
+        String[] weightInsertFields = {"Id", "date", "weight", "taskid", FIELD_QCSTATELABEL, "performedby"};
+        Object[][] weightInsertData = {{animalId, new Date(), 8.5, taskId, EHRQCState.REVIEW_REQUIRED.label, 1004}};
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "weight", "lsid", weightInsertFields, weightInsertData), getExtraContext());
+
+        String[] deathFields = {"Id", "date", "reason", "deathWeight", "taskid", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
+        verifyCompletionBlockedByReviewRequired("deaths", "Death", deathFields,
+                new Object[]{animalId, new Date(), "4", 8.5, null, EHRQCState.COMPLETED.label, null, null, "recordID", 1004},
+                new Object[]{animalId, new Date(), "4", 8.5, taskId, EHRQCState.COMPLETED.label, null, null, "recordID", 1004});
+
+        String[] departureFields = {"Id", "date", "destination", "taskid", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
+        verifyCompletionBlockedByReviewRequired("departure", "Departure", departureFields,
+                new Object[]{animalId, new Date(), "Oregon NPRC", null, EHRQCState.COMPLETED.label, null, null, "recordID", 1004},
+                new Object[]{animalId, new Date(), "Oregon NPRC", taskId, EHRQCState.COMPLETED.label, null, null, "recordID", 1004});
+    }
+
+    // Asserts that completing a record (death, departure) is blocked while other data for the animal is in
+    // Review Required state, and that a record whose taskid matches the review-required data is NOT blocked
+    // (its records move to Completed in the same save). rowWithoutTaskId/rowWithTaskId differ only in taskid.
+    private void verifyCompletionBlockedByReviewRequired(String queryName, String recordNoun, String[] fields, Object[] rowWithoutTaskId, Object[] rowWithTaskId)
+    {
+        // testValidationMessage defaults extraContext.targetQC to 'In Progress', and the global targetQC always
+        // overrides row-level QCStateLabel (see ehr/security.js normalizeQCState), so it must be forced to
+        // 'Completed' for the trigger to see a completing record.
+        Map<String, Object> completedTargetQC = Map.of("targetQC", EHRQCState.COMPLETED.label);
+
+        log("Completing a " + queryName + " record while other data is in Review Required state should be blocked");
+        Map<String, List<String>> expected = new HashMap<>();
+        expected.put("Id", Collections.singletonList("ERROR: " + recordNoun + " record cannot be completed. There is still data in Review Required state for this animal in the following dataset(s): Weight"));
+        getApiHelper().testValidationMessage(DATA_ADMIN.getEmail(), "study", queryName, fields, new Object[][]{rowWithoutTaskId}, expected, completedTargetQC);
+
+        log("Review Required records on the " + queryName + " record's own task should not block completion");
+        getApiHelper().testValidationMessage(DATA_ADMIN.getEmail(), "study", queryName, fields, new Object[][]{rowWithTaskId}, new HashMap<>(), completedTargetQC);
+    }
+
+    @Test
     public void testClinicalCasesWorkflow()
     {
         String animalId = "8377984";
