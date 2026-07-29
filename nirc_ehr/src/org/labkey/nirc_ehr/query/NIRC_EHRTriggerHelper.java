@@ -20,6 +20,7 @@ import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
@@ -74,6 +75,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class NIRC_EHRTriggerHelper
 {
@@ -322,6 +324,23 @@ public class NIRC_EHRTriggerHelper
             return ts.exists();
         }
         return false;
+    }
+
+    /**
+     * Returns a comma-separated list of dataset labels that still have records in the 'Review Required'
+     * QC state for the given animal, or null if there are none. Records belonging to {@code taskId} are
+     * excluded, since they transition to Completed in the same save as the death record itself.
+     */
+    @Nullable
+    public String getReviewRequiredDatasets(String animalId, @Nullable String taskId)
+    {
+        TableInfo ti = getTableInfo("study", "studyDataReviewRequired");
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("Id"), animalId);
+        if (taskId != null)
+            filter.addCondition(FieldKey.fromString("taskid"), taskId, CompareType.NEQ_OR_NULL);
+
+        Set<String> datasets = new TreeSet<>(new TableSelector(ti, Collections.singleton("datasetLabel"), filter, null).getArrayList(String.class));
+        return datasets.isEmpty() ? null : String.join(", ", datasets);
     }
 
     public void upsertWeightRecord(Map<String, Object> row) throws QueryUpdateServiceException, DuplicateKeyException, SQLException, BatchValidationException, InvalidKeyException
@@ -693,7 +712,7 @@ public class NIRC_EHRTriggerHelper
         return ts.getRowCount();
     }
 
-    public boolean canCloseCase(String category)
+    public boolean canCloseCase()
     {
         if (_container.hasPermission(_user, EHRVeterinarianPermission.class))
             return true;

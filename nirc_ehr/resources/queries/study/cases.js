@@ -22,7 +22,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
                 error = true;
             }
 
-            if(!triggerHelper.canCloseCase(row.category)) {
+            if(!triggerHelper.canCloseCase()) {
                 EHR.Server.Utils.addError(errors, 'enddate', 'Veterinarian permission required to close a case.', 'ERROR');
                 error = true;
             }
