@@ -121,6 +121,7 @@ public class NIRCOrchardFileGenerator
 
                 new TableSelector(ti, PageFlowUtil.set("Id", "gender", "birth", "species", "protocol", "PI", "Vet", "cage", "alive"), filter, null).forEachResults(rs -> {
                     sb.append("PID|1|");
+
                     sb.append(rs.getString("Id")).append("|");
                     sb.append(rs.getString("Id")).append("||");
                     sb.append(rs.getString("Id")).append("^").append(rs.getString("species")).append("||");
@@ -130,11 +131,14 @@ public class NIRCOrchardFileGenerator
                     else if (Objects.equals(rs.getString("gender"), "3"))
                         sb.append("M");
                     else sb.append("U");
-                    sb.append("||NHP|"); //could change if more species
+                    sb.append("||NHP|"); //build out if other than non-human primate
                     sb.append(rs.getString("cage"));
                     sb.append("^New Iberia^LA^70506|||||||||||");
                     sb.append(rs.getString("species")).append("|");
-                    sb.append(rs.getString("protocol")).append("|||||||");
+                    if (Objects.equals(rs.getString("alive"),"Shipped"))
+                        sb.append("OFFSITE").append("|||||||");
+                    else
+                        sb.append(rs.getString("protocol")).append("|||||||");
                     if (Objects.equals(rs.getString("alive"), "Alive"))
                         sb.append("N");
                     else
