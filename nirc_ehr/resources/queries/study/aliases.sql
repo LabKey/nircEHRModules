@@ -11,4 +11,3 @@ UNION
 SELECT Id,
     Alias as alias
 FROM study.alias where Id.demographics.calculated_status != 'Alive - In Progress'
-'
