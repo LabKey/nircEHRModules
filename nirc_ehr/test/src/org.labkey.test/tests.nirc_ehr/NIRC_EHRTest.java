@@ -68,6 +68,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -1570,6 +1573,129 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         activeCase = animalHistoryPage.getActiveReportDataRegion();
         Assert.assertEquals("Case was not closed", 1, activeCase.getDataRowCount());
+    }
+
+    // Verifies the URL rendered by the treatment link display column on both tables that carry it. The category to
+    // form type routing, the treatmentid parameter name and the return report are all configuration declared in
+    // NIRC_EHRCustomizer, so a typo there is otherwise invisible until a user clicks the link. The presence of
+    // scheduledDate is what separates the two tables: the schedule's date is the slot being recorded, while a
+    // treatment order's date is the order's start date, so passing it would make every recording against an order
+    // look like the first one.
+    @Test
+    public void testTreatmentRecordLinks() throws Exception
+    {
+        String animalId = "TRTLINK1";
+        String behaviorCaseId = UUID.randomUUID().toString();
+        String clinicalCaseId = UUID.randomUUID().toString();
+
+        // objectids are supplied rather than server-generated so each rendered link can be matched back to the order
+        // it came from without depending on grid row order.
+        String behaviorWithCase = UUID.randomUUID().toString();
+        String behaviorNoCase = UUID.randomUUID().toString();
+        String clinicalWithCase = UUID.randomUUID().toString();
+        String surgicalNoCase = UUID.randomUUID().toString();
+
+        String orderStart = LocalDateTime.now().minusDays(1).format(_dateFormat);
+        String today = LocalDateTime.now().format(_dateFormat);
+
+        goToEHRFolder();
+
+        log("Creating a live animal with one active treatment order per routing case being verified");
+        getApiHelper().deleteAllRecords("study", "treatment_order", new Filter("Id", animalId));
+        getApiHelper().deleteAllRecords("study", "demographics", new Filter("Id", animalId));
+
+        String[] demographicsFields = {"Id", "Species", "Birth", "Gender", "date", "calculated_status", "objectid", "performedby"};
+        Object[][] demographicsData = {{animalId, "Rhesus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004}};
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "demographics", "lsid", demographicsFields, demographicsData), getExtraContext());
+
+        // SID yields exactly one scheduled slot per order per day, at the 8:00 AM hourofday in
+        // treatment_frequency_times, so each order below contributes exactly one row to the schedule.
+        // Surgical is included because it has no routing of its own: it must fall through to the same forms as
+        // Clinical, proving the fallback is not keyed to the Clinical category.
+        String[] orderFields = {"Id", "date", "code", "frequency", "route", "category", "caseid", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
+        Object[][] orderData = {
+                {animalId, orderStart, "NIRC-001", "SID", "IV", "Behavior", behaviorCaseId, EHRQCState.COMPLETED.label, behaviorWithCase, null, "recordID1", 1004},
+                {animalId, orderStart, "NIRC-001", "SID", "IV", "Behavior", null, EHRQCState.COMPLETED.label, behaviorNoCase, null, "recordID2", 1004},
+                {animalId, orderStart, "NIRC-001", "SID", "IV", "Clinical", clinicalCaseId, EHRQCState.COMPLETED.label, clinicalWithCase, null, "recordID3", 1004},
+                {animalId, orderStart, "NIRC-001", "SID", "IV", "Surgical", null, EHRQCState.COMPLETED.label, surgicalNoCase, null, "recordID4", 1004}
+        };
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "treatment_order", "lsid", orderFields, orderData), getExtraContext());
+
+        log("Verifying the treatment order links, which must not pass a scheduled date");
+        beginAt(String.format("%s/query-executeQuery.view?schemaName=study&query.queryName=treatment_order&query.columns=objectid,Id,category,caseid,treatmentRecord&query.Id~eq=%s",
+                getContainerPath(), animalId));
+        DataRegionTable orderTable = new DataRegionTable("query", this);
+        assertEquals("Incorrect number of treatment orders", 4, orderTable.getDataRowCount());
+
+        Map<String, Map<String, String>> orderLinks = readTreatmentLinkParams(orderTable);
+        verifyTreatmentLink(orderLinks, behaviorWithCase, "a Behavior order with a case", "Behavioral Rounds", behaviorCaseId, null);
+        verifyTreatmentLink(orderLinks, behaviorNoCase, "a Behavior order with no case", "Bulk Behavior Entry", null, null);
+        verifyTreatmentLink(orderLinks, clinicalWithCase, "a Clinical order with a case", "Clinical Rounds", clinicalCaseId, null);
+        verifyTreatmentLink(orderLinks, surgicalNoCase, "a Surgical order with no case", "medicationTreatment", null, null);
+
+        log("Verifying the treatment schedule links, which must pass the slot's own date as the scheduled date");
+        beginAt(String.format("%s/query-executeQuery.view?schemaName=study&query.queryName=treatmentSchedule&query.columns=objectid,Id,category,caseid,date,treatmentRecord&query.Id~eq=%s&query.param.StartDate=%s",
+                getContainerPath(), animalId, today));
+        DataRegionTable scheduleTable = new DataRegionTable("query", this);
+        assertEquals("Incorrect number of scheduled slots", 4, scheduleTable.getDataRowCount());
+
+        String expectedScheduledDate = today + " 08:00";
+        Map<String, Map<String, String>> scheduleLinks = readTreatmentLinkParams(scheduleTable);
+        verifyTreatmentLink(scheduleLinks, behaviorWithCase, "a Behavior slot with a case", "Behavioral Rounds", behaviorCaseId, expectedScheduledDate);
+        verifyTreatmentLink(scheduleLinks, behaviorNoCase, "a Behavior slot with no case", "Bulk Behavior Entry", null, expectedScheduledDate);
+        verifyTreatmentLink(scheduleLinks, clinicalWithCase, "a Clinical slot with a case", "Clinical Rounds", clinicalCaseId, expectedScheduledDate);
+        verifyTreatmentLink(scheduleLinks, surgicalNoCase, "a Surgical slot with no case", "medicationTreatment", null, expectedScheduledDate);
+
+        checker().screenShotIfNewError("treatmentRecordLinks");
+
+        // The URL assertions above cannot tell a correct form type name from a plausible misspelling, so open the one
+        // routing no other test reaches: a Behavior order with no case, which goes to the bulk entry form.
+        log("Verifying the Behavior no-case link opens the bulk entry form");
+        scheduleTable.link(scheduleRowForOrder(scheduleTable, behaviorNoCase), "treatmentRecord").click();
+        switchToWindow(1);
+        waitForText("Bulk Behavior Entry");
+        waitForText(animalId);
+        switchToMainWindow();
+    }
+
+    // Maps the URL parameters of each rendered treatmentRecord link, keyed by the objectid of the row it was
+    // rendered from.
+    private Map<String, Map<String, String>> readTreatmentLinkParams(DataRegionTable table)
+    {
+        Map<String, Map<String, String>> byOrderId = new HashMap<>();
+        for (int row = 0; row < table.getDataRowCount(); row++)
+        {
+            String href = table.link(row, "treatmentRecord").getAttribute("href");
+            Assert.assertNotNull("Treatment link in row " + row + " has no href", href);
+            Map<String, String> params = new HashMap<>();
+            WebTestHelper.parseUrlQueryString(URI.create(href).getRawQuery())
+                    .forEach((key, value) -> params.put(key, value == null ? null : URLDecoder.decode(value, StandardCharsets.UTF_8)));
+            byOrderId.put(table.getDataAsText(row, "objectid"), params);
+        }
+        return byOrderId;
+    }
+
+    private int scheduleRowForOrder(DataRegionTable table, String objectid)
+    {
+        int row = table.getColumnDataAsText("objectid").indexOf(objectid);
+        Assert.assertNotEquals("No schedule row for treatment order " + objectid, -1, row);
+        return row;
+    }
+
+    // expectedCaseId and expectedScheduledDate are null when the parameter must be absent entirely. An empty value is
+    // a failure, not a pass: the link is meant to omit the parameter rather than send it blank.
+    private void verifyTreatmentLink(Map<String, Map<String, String>> linksByOrderId, String objectid, String scenario,
+                                     String expectedFormType, @Nullable String expectedCaseId, @Nullable String expectedScheduledDate)
+    {
+        Map<String, String> params = linksByOrderId.get(objectid);
+        Assert.assertNotNull("No treatment link rendered for " + scenario, params);
+
+        checker().verifyEquals("Incorrect formType for " + scenario, expectedFormType, params.get("formType"));
+        checker().verifyEquals("Incorrect caseid for " + scenario, expectedCaseId, params.get("caseid"));
+        checker().verifyEquals("Incorrect scheduledDate for " + scenario, expectedScheduledDate, params.get("scheduledDate"));
+        checker().verifyEquals("Incorrect treatmentid for " + scenario, objectid, params.get("treatmentid"));
+        checker().verifyTrue("returnUrl should return to the medication schedule report for " + scenario + ": " + params.get("returnUrl"),
+                params.get("returnUrl") != null && params.get("returnUrl").endsWith("activeReport:clinMedicationSchedule"));
     }
 
     private int countLines(File file) throws Exception
