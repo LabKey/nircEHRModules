@@ -178,7 +178,7 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         if (!helper.isETL() &&
                 row && row.Id &&
                 row.QCStateLabel &&
-                row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' &&
+                (row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' || row.QCStateLabel.toUpperCase() === 'REVIEW REQUIRED') &&
                 (!oldRow || !oldRow.QCStateLabel || oldRow.QCStateLabel.toUpperCase() === 'IN PROGRESS')) {
             console.log("Sending NIRC Death Notification")
             triggerHelper.sendDeathNotification(row.Id);
