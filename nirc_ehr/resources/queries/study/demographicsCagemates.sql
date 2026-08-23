@@ -22,10 +22,15 @@ SELECT
 FROM study.housing h
 
 JOIN study.housing h2
-ON (h2.Id.demographics.calculated_status = 'Alive'
-        AND (h.cage = h2.cage))
+ON (h.cage = h2.cage
+        AND h2.Id.demographics.calculated_status = 'Alive'
+        AND h2.enddateTimeCoalesced >= now()
+        AND h2.qcstate.publicdata = true)
 
-WHERE h.enddateTimeCoalesced >= now()
+-- cage holds the ehr_lookups.cage location key, so a null means this row's location never resolved; such a row gets no cagemates rather than sharing one group with every other unresolved row
+WHERE h.cage IS NOT NULL
+AND h.enddateTimeCoalesced >= now()
+AND h.qcstate.publicdata = true
 GROUP BY h.id, h.room, h.cage
 
 ) t ON (t.id = d.id)
