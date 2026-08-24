@@ -24,6 +24,7 @@ FROM study.housing h
 JOIN study.housing h2
 ON (h.cage = h2.cage
         AND h2.Id.demographics.calculated_status = 'Alive'
+        AND h2.Id.demographics.qcstate.publicdata = true
         AND h2.enddateTimeCoalesced >= now()
         AND h2.qcstate.publicdata = true)
 
@@ -31,7 +32,7 @@ ON (h.cage = h2.cage
 WHERE h.cage IS NOT NULL
 AND h.enddateTimeCoalesced >= now()
 AND h.qcstate.publicdata = true
-GROUP BY h.id, h.room, h.cage
+GROUP BY h.id, h.cage
 
 ) t ON (t.id = d.id)
 
