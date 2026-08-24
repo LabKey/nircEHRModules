@@ -36,3 +36,4 @@ GROUP BY h.id, h.room, h.cage
 ) t ON (t.id = d.id)
 
 WHERE d.calculated_status = 'Alive'
+AND d.qcstate.publicdata = true
