@@ -30,7 +30,7 @@ FROM study.Demographics d1
          JOIN study.Demographics d2
               ON ((d2.id.parents.sire = d1.id.parents.sire OR d2.id.parents.dam = d1.id.parents.dam) AND d1.id != d2.id)
 
-WHERE d2.id is not null
+WHERE d2.id IS NOT NULL AND d1.qcstate.publicdata = true AND d2.qcstate.publicdata = true
 
 -- ) t
 
