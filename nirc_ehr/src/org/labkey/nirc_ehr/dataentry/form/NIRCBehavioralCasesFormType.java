@@ -50,7 +50,7 @@ public class NIRCBehavioralCasesFormType extends NIRCBaseTaskFormType
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
                 new NIRCCasesFormPanelSection("Behavior Case", ctx, true),
                 new NIRCClinicalRemarksFormPanelSection(true, "cases", "Behavior Assessment", ctx, true),
-                new NIRCClinicalObservationsFormSection(true, "cases"),
+                new NIRCClinicalObservationsFormSection(null, true, "cases"),
                 new NIRCObservationOrdersFormSection(null, true, "cases"),
                 new NIRCTreatmentGivenFormSection(true, "cases"),
                 new NIRCTreatmentOrderFormSection(true, "cases")

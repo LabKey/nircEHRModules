@@ -45,6 +45,12 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'Yes' for " + row.category + ", please explain in the Remark", "WARN");
         }
 
+        // The Observations form leaves the type blank; derive it from the observation type's category.
+        // Every other form sets it explicitly, so those rows pass through untouched.
+        if (!row.type) {
+            row.type = triggerHelper.getObservationTypeCategory(row.category) === 'Behavior' ? 'Behavior' : 'Clinical';
+        }
+
         // Handle scheduled observations
         if (!helper.isValidateOnly() && row.scheduledDate) {
             var qc;
