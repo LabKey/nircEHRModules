@@ -45,11 +45,12 @@ function onUpsert(helper, scriptErrors, row, oldRow) {
             EHR.Server.Utils.addError(scriptErrors, 'remark', "You selected 'Yes' for " + row.category + ", please explain in the Remark", "WARN");
         }
 
-        // The Observations form leaves the type blank; derive it from the observation type's category.
-        // Every other form sets it explicitly, so those rows pass through untouched.
-        if (!row.type) {
-            row.type = triggerHelper.getObservationTypeCategory(row.category) === 'Behavior' ? 'Behavior' : 'Clinical';
-        }
+        // Always derive the type from the observation type's category rather than trusting the incoming value.
+        // The Observations form leaves it blank because it offers every type; the other forms set it explicitly,
+        // but their type pickers are filtered to the categories that agree with the value they set, so deriving
+        // here gives them the same answer. Deriving unconditionally also re-derives when a re-opened draft or a
+        // saved template carries a type left over from a different category.
+        row.type = triggerHelper.getObservationTypeCategory(row.category) === 'Behavior' ? 'Behavior' : 'Clinical';
 
         // Handle scheduled observations
         if (!helper.isValidateOnly() && row.scheduledDate) {
