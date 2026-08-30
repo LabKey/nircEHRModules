@@ -172,14 +172,12 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
         var row = rows[i].row;
         var oldRow = rows[i].oldRow;
 
-        // Notification will get sent when:
-        // 1) a brand-new row saved directly as 'Request: Pending' (i.e., when a user clicks 'Submit Death'), or
-        // 2) a draft death record moving from 'In Progress' to 'Request: Pending'.
-        if (!helper.isETL() &&
-                row && row.Id &&
-                row.QCStateLabel &&
-                row.QCStateLabel.toUpperCase() === 'REQUEST: PENDING' &&
-                (!oldRow || !oldRow.QCStateLabel || oldRow.QCStateLabel.toUpperCase() === 'IN PROGRESS')) {
+        if (helper.isETL() || !row || !row.Id || !row.QCStateLabel)
+            continue;
+
+        // Notify once, on the first non-draft save: 'Submit Death' lands on 'Request: Pending', but a death entered alongside its necropsy goes straight to 'Review Required' or 'Completed'.
+        var wasDraft = !oldRow || !oldRow.QCStateLabel || oldRow.QCStateLabel.toUpperCase() === 'IN PROGRESS';
+        if (wasDraft && row.QCStateLabel.toUpperCase() !== 'IN PROGRESS') {
             console.log("Sending NIRC Death Notification")
             triggerHelper.sendDeathNotification(row.Id);
 
