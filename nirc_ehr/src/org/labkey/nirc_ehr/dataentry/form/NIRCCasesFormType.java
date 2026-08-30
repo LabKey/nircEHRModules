@@ -58,7 +58,7 @@ public class NIRCCasesFormType extends NIRCBaseTaskFormType
                 new NIRCCasesFormPanelSection("Clinical Case", ctx, false),
                 new NIRCClinicalRemarksFormPanelSection(true, "cases", "Clinical Remarks", ctx, false),
                 new NIRCWeightFormSection(true, false, true, "cases"),
-                new NIRCClinicalObservationsFormSection(true, "cases"),
+                new NIRCClinicalObservationsFormSection("NIRC_DAILY_CLINICAL_OBS", true, "cases"),
                 new NIRCObservationOrdersFormSection(null, true, "cases"),
                 new NIRCProcedureFormSection(true, "cases"),
                 new NIRCProcedureOrderFormSection(true, "cases"),
