@@ -167,6 +167,10 @@ EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Even
 });
 
 EHR.Server.TriggerManager.registerHandlerForQuery(EHR.Server.TriggerManager.Events.COMPLETE, 'study', 'Deaths', function(event, errors, helper){
+    // A delete arrives here as the deleted row with a null oldRow, which otherwise reads as a draft leaving draft.
+    if (event === 'delete')
+        return;
+
     var rows = helper.getRows() || [];
     for (var i = 0; i < rows.length; i++) {
         var row = rows[i].row;
