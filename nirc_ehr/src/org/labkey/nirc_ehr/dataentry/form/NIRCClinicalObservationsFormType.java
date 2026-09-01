@@ -37,7 +37,7 @@ public class NIRCClinicalObservationsFormType extends NIRCBaseTaskFormType
         super(ctx, owner, NAME, NAME, "Clinical", Arrays.asList(
                 new NIRCTaskFormSection(),
                 new NIRCAnimalDetailsFormSection(),
-                new NIRCClinicalObservationsFormSection(false, false),
+                new NIRCClinicalObservationsFormSection("NIRC_DAILY_CLINICAL_OBS", false),
                 new NIRCWeightFormSection(true, true)
         ));
 

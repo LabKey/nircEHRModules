@@ -46,7 +46,7 @@ public class NIRCBehaviorRoundsFormType extends NIRCBaseTaskFormType
                 new NIRCAnimalDetailsFormSection(),
                 new NIRCCaseTemplateFormSection("Case Template", "Case Template", "nirc_ehr-casetemplatepanel", Arrays.asList(ClientDependency.supplierFromPath("nirc_ehr/panel/CaseTemplatePanel.js"))),
                 new NIRCCasesFormPanelSection("Behavior Case", ctx, true),
-                new NIRCClinicalObservationsFormSection(true, "cases"),
+                new NIRCClinicalObservationsFormSection(null, true, "cases"),
                 new NIRCTreatmentGivenFormSection(true, "cases")
         ));
 

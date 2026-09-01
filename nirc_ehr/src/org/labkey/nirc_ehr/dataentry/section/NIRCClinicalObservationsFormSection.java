@@ -22,24 +22,23 @@ import java.util.List;
 public class NIRCClinicalObservationsFormSection extends BaseFormSection
 {
     public static final String LABEL = "Observations";
-    private boolean _autoPopulateDailyObs;
+    private final String _dailyObsOption;
 
-    public NIRCClinicalObservationsFormSection(boolean autoPopulateDailyObs, boolean initCollapsed)
+    public NIRCClinicalObservationsFormSection(String dailyObsOption, boolean initCollapsed)
     {
         super("study", "clinical_observations", LABEL, "ehr-clinicalobservationgridpanel", true, initCollapsed, true);
 
-        _autoPopulateDailyObs = autoPopulateDailyObs;
+        _dailyObsOption = dailyObsOption;
         addClientDependency(ClientDependency.supplierFromPath("ehr/plugin/ClinicalObservationsCellEditing.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/data/ClinicalObservationClientStore.js"));
         addClientDependency(ClientDependency.supplierFromPath("ehr/grid/ClinicalObservationGridPanel.js"));
-        addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/clinicalObsGridButton.js"));
         addClientDependency(ClientDependency.supplierFromPath("nirc_ehr/buttons/addClinicalObsButton.js"));
         setClientStoreClass("NIRC_EHR.data.ClinicalObservationsClientStore");
     }
 
-    public NIRCClinicalObservationsFormSection(boolean isChild, String parentQueryName)
+    public NIRCClinicalObservationsFormSection(String dailyObsOption, boolean isChild, String parentQueryName)
     {
-        this(false, true);
+        this(dailyObsOption, true);
 
         if (isChild && null != parentQueryName)
         {
@@ -57,12 +56,9 @@ public class NIRCClinicalObservationsFormSection extends BaseFormSection
     {
         List<String> defaults = super.getTbarButtons();
 
-        if (_autoPopulateDailyObs)
+        if (_dailyObsOption != null)
         {
-            defaults.add("NIRC_AUTO_POPULATE_DAILY_OBS");
-        }
-        else {
-            defaults.add("NIRC_DAILY_CLINICAL_OBS");
+            defaults.add(_dailyObsOption);
         }
 
         return defaults;
