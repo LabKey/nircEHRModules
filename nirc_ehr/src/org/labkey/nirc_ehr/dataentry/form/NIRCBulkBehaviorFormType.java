@@ -45,8 +45,8 @@ public class NIRCBulkBehaviorFormType extends NIRCBaseTaskFormType
                 new NIRCClinicalRemarksFormSection("Behavior Assessment", ctx.getContainer().hasPermission(ctx.getUser(), NIRCEHRVetTechPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), EHRVeterinarianPermission.class),
                         ctx.getContainer().hasPermission(ctx.getUser(), AdminPermission.class)),
-                new NIRCClinicalObservationsFormSection(false, null),
-                new NIRCObservationOrdersFormSection("NIRC_DAILY_CLINICAL_OBS_ORDERS", false, null),
+                new NIRCClinicalObservationsFormSection(null, false, null),
+                new NIRCObservationOrdersFormSection(null, false, null),
                 new NIRCTreatmentGivenFormSection(),
                 new NIRCTreatmentOrderFormSection()
         ));
