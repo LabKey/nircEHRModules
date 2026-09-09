@@ -30,11 +30,14 @@ EHR.model.DataModelManager.registerMetadata('Rearrival', {
                 },
             },
             acquisitionType: {
-                allowBlank: false,
-                columnConfig: {
-                    fixed: true,
-                    width: 150
-                },
+                allowBlank: true,
+                hidden: true,
+                showInGrid: false
+            },
+            CITES: {
+                allowBlank: true,
+                hidden: true,
+                showInGrid: false
             },
             arrivalType: {
                 allowBlank: false,
@@ -43,19 +46,39 @@ EHR.model.DataModelManager.registerMetadata('Rearrival', {
                 }
             },
             'cage': {
-                allowBlank: true,
-                hidden: true,
-                showInGrid: false
+                allowBlank: false,
+                columnConfig: {
+                    fixed: true,
+                    width: 200
+                },
             },
             project: {
-                allowBlank: true,
-                hidden: true,
-                showInGrid: false
+                xtype: 'combo',
+                columnConfig: {
+                    width: 150
+                },
+                lookup: {
+                    schemaName: 'ehr',
+                    queryName: 'project',
+                    keyColumn: 'project',
+                    columns: 'project,name',
+                    filterArray: [
+                        LABKEY.Filter.create('isActive', true, LABKEY.Filter.Types.EQUAL),
+                    ]
+                },
+                allowBlank: false
             },
             arrivalProtocol: {
-                allowBlank: true,
-                hidden: true,
-                showInGrid: false
+                allowBlank: false,
+                columnConfig: {
+                    width: 200
+                },
+                lookup: {
+                    schemaName: 'ehr',
+                    queryName: 'activeProtocols',
+                    keyColumn: 'protocol',
+                    columns: 'protocol,title'
+                },
             },
         }
     }
