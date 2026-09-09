@@ -12,6 +12,7 @@
                     </column>
                     <column columnName="date">
                         <columnTitle>Birth Date</columnTitle>
+                        <formatString>DateTime</formatString>
                     </column>
                     <column columnName="cage">
                         <columnTitle>Birth Location</columnTitle>
