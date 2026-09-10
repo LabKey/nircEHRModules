@@ -708,7 +708,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         verifyRowCreated("study", "housing", rearrivedAnimal, 1);
 
         log("The rearrived animal is alive again");
-        List<Map<String, Object>> rows = executeSelectRowCommand("study", "demographics", List.of(new Filter("Id", rearrivedAnimal))).getRows();
+        List<Map<String, Object>> rows = executeSelectRowCommand("study", "demographics", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", rearrivedAnimal))).getRows();
         assertEquals("Expected one demographics record for the rearrived animal", 1, rows.size());
         assertEquals("Rearrived animal should be alive", "Alive", rows.getFirst().get("calculated_status"));
     }
