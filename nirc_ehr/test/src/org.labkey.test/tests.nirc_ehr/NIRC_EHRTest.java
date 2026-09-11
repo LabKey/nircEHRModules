@@ -646,6 +646,74 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     }
 
     @Test
+    public void testRearrivalForm() throws Exception
+    {
+        String rearrivedAnimal = getExpectedAnimalIDCasing("R7373");
+        LocalDateTime now = LocalDateTime.now();
+
+        goToEHRFolder();
+
+        log("Seeding an animal that has left the center");
+        for (String query : List.of("arrival", "departure", "assignment", "protocolAssignment", "housing", "demographics"))
+            getApiHelper().deleteAllRecords("study", query, new Filter("Id", rearrivedAnimal));
+
+        // The departed status is seeded straight onto demographics because a departure does not recalculate
+        // calculated_status in this module, so inserting one alone would leave the animal alive.
+        String[] demographicsFields = {"Id", "Species", "Birth", "Gender", "date", "calculated_status", "objectid", "performedby"};
+        Object[][] demographicsData = {{rearrivedAnimal, "Rhesus", now.minusDays(30).toString(), getMale(), new Date(), "Shipped", UUID.randomUUID().toString(), 1004}};
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "demographics", "lsid", demographicsFields, demographicsData), getExtraContext());
+
+        InsertRowsCommand departure = new InsertRowsCommand("study", "departure");
+        departure.addRow(Map.of("Id", rearrivedAnimal, "date", now.minusDays(2), "destination", "Oregon NPRC", "performedby", 1004));
+        departure.execute(getApiHelper().getConnection(), getContainerPath());
+
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Rearrivals"));
+        lockForm();
+
+        Ext4GridRef rearrivals = _helper.getExt4GridForFormSection("Rearrivals");
+        _helper.addRecordToGrid(rearrivals);
+
+        log("A rearrival collects project, protocol and location, and does not collect acquisition type or CITES");
+        Assert.assertTrue("Project should be on the Rearrival form", rearrivals.isColumnPresent("project", true));
+        Assert.assertTrue("Protocol should be on the Rearrival form", rearrivals.isColumnPresent("arrivalProtocol", true));
+        Assert.assertTrue("Location should be on the Rearrival form", rearrivals.isColumnPresent("cage", true));
+        Assert.assertFalse("Acquisition type should not be on the Rearrival form", rearrivals.isColumnPresent("acquisitionType", true));
+        Assert.assertFalse("CITES should not be on the Rearrival form", rearrivals.isColumnPresent("CITES", true));
+
+        rearrivals.setGridCellJS(1, "date", now.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_STRING)));
+        rearrivals.setGridCell(1, "arrivalType", "Non-quarantine Arrival");
+        rearrivals.setGridCell(1, "Id", rearrivedAnimal);
+        rearrivals.setGridCell(1, "cage", "C1");
+        rearrivals.setGridCell(1, "project", "640991");
+        rearrivals.setGridCell(1, "arrivalProtocol", "dummyprotocol");
+        rearrivals.setGridCell(1, "sourceFacility", "BIOQUAL, Inc.");
+        submitForm("Submit Final", "Finalize");
+
+        goToSchemaBrowser();
+        DataRegionTable table = viewQueryData("study", "arrival");
+        table.setFilter("Id", "Equals", rearrivedAnimal);
+        CustomizeView view = table.openCustomizeGrid();
+        view.addColumn("cage");
+        view.addColumn("project");
+        view.addColumn("arrivalProtocol");
+        view.applyCustomView();
+        Assert.assertEquals("Invalid Rearrival record", Arrays.asList("C1"), table.getRowDataAsText(0, "cage"));
+        Assert.assertEquals("Invalid Rearrival record", Arrays.asList("640991"), table.getRowDataAsText(0, "project"));
+        Assert.assertEquals("Invalid Rearrival record", Arrays.asList("dummyprotocol"), table.getRowDataAsText(0, "arrivalProtocol"));
+
+        log("The rearrival opens the assignment, protocol assignment and housing records that the departure closed");
+        verifyRowCreated("study", "assignment", rearrivedAnimal, 1);
+        verifyRowCreated("study", "protocolAssignment", rearrivedAnimal, 1);
+        verifyRowCreated("study", "housing", rearrivedAnimal, 1);
+
+        log("The rearrived animal is alive again");
+        List<Map<String, Object>> rows = executeSelectRowCommand("study", "demographics", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", rearrivedAnimal))).getRows();
+        assertEquals("Expected one demographics record for the rearrived animal", 1, rows.size());
+        assertEquals("Rearrived animal should be alive", "Alive", rows.getFirst().get("calculated_status"));
+    }
+
+    @Test
     public void testBirthForm()
     {
         String bornAnimal = "80801";
