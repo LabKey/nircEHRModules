@@ -2032,9 +2032,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void submitForm(String buttonText, String windowTitle)
     {
-        //Give time for errors to disappear after validation
-        Locator.tagContainingText("div", "The form has the following errors and warnings:")
-                .waitForElementToDisappear(longWait());
+        waitForFormValidationToClear();
         Locator submitFinalBtn = Locator.linkWithText(buttonText);
         shortWait().until(ExpectedConditions.elementToBeClickable(submitFinalBtn));
         Window<?> msgWindow;
