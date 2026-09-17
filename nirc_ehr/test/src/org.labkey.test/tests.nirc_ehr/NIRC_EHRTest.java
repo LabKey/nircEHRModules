@@ -881,9 +881,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(2);
 
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationToClear("Id is required");
         _helper.setDataEntryField("s", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationToClear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
         _helper.getExt4FieldForFormSection("Clinical Case", "Close Date").setValue(LocalDateTime.now().format(_dateFormat));
         _helper.setDataEntryField("closeRemark", "Case closed.");
@@ -1585,7 +1585,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         _helper.setDataEntryField("remark", "Clinical Remarks - Test");
         if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
             _helper.setDataEntryField("remark", "Clinical Remarks - Test");
-        waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
+        waitForValidationToClear("Remark: WARN: Must enter at least one comment");
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
         _helper.addRecordToGrid(weight);
@@ -1625,7 +1625,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         waitForText("Diazepam");
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationToClear("Id is required");
         _helper.getExt4GridForFormSection("Medications/Treatments Given");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
@@ -1645,9 +1645,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         //Fill out Close Date
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationToClear("Id is required");
         _helper.setDataEntryField("s", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationToClear("Subjective: WARN: Must enter at least one comment");
 
         waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
         Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
@@ -1823,9 +1823,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         switchToWindow(2);
 
         waitForText(animalId1);
-        waitForTextToDisappear("Id is required");
+        waitForValidationToClear("Id is required");
         _helper.setDataEntryField("remark", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationToClear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
 
         // Verify close remark required
@@ -2032,9 +2032,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void submitForm(String buttonText, String windowTitle)
     {
-        //Give time for errors to disappear after validation
-        Locator.tagContainingText("div", "The form has the following errors and warnings:")
-                .waitForElementToDisappear(longWait());
+        waitForFormValidationToClear();
         Locator submitFinalBtn = Locator.linkWithText(buttonText);
         shortWait().until(ExpectedConditions.elementToBeClickable(submitFinalBtn));
         Window<?> msgWindow;
