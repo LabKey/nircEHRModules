@@ -38,7 +38,6 @@ import org.labkey.remoteapi.security.CreateUserResponse;
 import org.labkey.test.Locator;
 import org.labkey.test.TestFileUtils;
 import org.labkey.test.WebTestHelper;
-import org.labkey.test.categories.EHR;
 import org.labkey.test.components.CustomizeView;
 import org.labkey.test.components.dumbster.EmailRecordTable;
 import org.labkey.test.components.ext4.Window;
@@ -91,7 +90,7 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.labkey.test.components.html.Input.Input;
 
-@Category({EHR.class})
+@Category({})
 public class NIRC_EHRTest extends AbstractGenericEHRTest
 {
     private static final String PROJECT_NAME = "NIRC";
