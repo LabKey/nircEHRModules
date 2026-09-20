@@ -877,6 +877,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Active Clinical Cases"));
         DataRegionTable activeClinicalCases = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        // Other tests leave their cases open, so row 0 is this animal's case only once the report is scoped to it
+        activeClinicalCases.setFilter("Id", "Equals", animalId);
         activeClinicalCases.link(0, "caseCheck").click();
         switchToWindow(2);
 
@@ -1619,6 +1621,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClickAndWait(Locator.linkWithText("Today's Medication/Treatment Schedule"));
         AnimalHistoryPage<?> animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable scheduleTable = animalHistoryPage.getActiveReportDataRegion();
+        // The schedule covers every living animal in the folder, so any other test's active order lands here too
+        scheduleTable.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Incorrect number of rows", 4, scheduleTable.getDataRowCount());
         scheduleTable.link(0, "treatmentRecord").click();
         switchToWindow(1);
@@ -1640,6 +1644,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //Click on 'Case Update' link
         AnimalHistoryPage<?> historyPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
+        // Other tests leave their cases open, so row 0 is this animal's case only once the report is scoped to it
+        activeClinicalCases.setFilter("Id", "Equals", animalId);
         activeClinicalCases.link(0, "caseCheck").click();
         switchToWindow(2);
 
@@ -1670,6 +1676,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         //Verify that the case is no longer present/is closed
         historyPage = new AnimalHistoryPage<>(getDriver());
         activeClinicalCases = historyPage.getActiveReportDataRegion();
+        activeClinicalCases.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("No active cases", 0, activeClinicalCases.getDataRowCount());
         stopImpersonating();
     }
@@ -1783,6 +1790,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitAndClickAndWait(Locator.linkWithText("Active Behavior Medication Orders"));
         animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable medicationOrderTable = animalHistoryPage.getActiveReportDataRegion();
+        // The report lists every active Behavior order in the folder, not just this case's
+        medicationOrderTable.setFilter("Id", "Equals", animalId1);
         Assert.assertEquals("Medication order was not created for the behavioral case", 1, medicationOrderTable.getDataRowCount());
         Assert.assertEquals("Incorrect medication order", Arrays.asList(animalId1, drug1, "QID", "IV", NIRC_VET_NAME),
                 medicationOrderTable.getRowDataAsText(0, "Id", "code", "frequency", "route", "orderedby"));
