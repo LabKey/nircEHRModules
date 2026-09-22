@@ -112,6 +112,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
     // Dedicated animal for testObservationTypeDerivedFromCategory; provisioned the same way so the Observations
     // form can be submitted final in one step.
     private static final String obsTypeAnimalId = "TESTOBSTYPE9191";
+    // Dedicated pair for testScheduledObservationStaysWithItsAnimal; both get their observation order from the
+    // same entry form, so the two orders share a taskid. Provisioned the same way as the animals above.
+    private static final String sharedOrderAnimalId = "TESTSHARED8181";
+    private static final String sharedOrderOtherAnimalId = "TESTSHARED8282";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -535,7 +539,40 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         getApiHelper().deleteAllRecords("study", "Assignment", new Filter("Id", obsTypeAnimalId));
         getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
 
+        provisionTestSubject(sharedOrderAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(sharedOrderOtherAnimalId, CAGES[2], pastDate1);
+
         primeCaches();
+    }
+
+    // Fully provisions an animal (alive demographics, current housing, active assignment) so the clinical data
+    // entry forms raise no unknown-animal warnings that would keep the validation banner up.
+    private void provisionTestSubject(String animalId, String cage, Date housedSince) throws Exception
+    {
+        log("Creating test subject " + animalId);
+        String[] fields = new String[]{"Id", "Species", "Birth", "Gender", "date", "calculated_status", "objectid", "performedby"};
+        Object[][] data = new Object[][]{
+                {animalId, "Rhesus", (new Date()).toString(), getMale(), new Date(), "Alive", UUID.randomUUID().toString(), 1004}
+        };
+        SimplePostCommand insertCommand = getApiHelper().prepareInsertCommand("study", "demographics", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "demographics", new Filter("Id", animalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        fields = new String[]{"Id", "date", "enddate", "room", "cage", "performedby"};
+        data = new Object[][]{
+                {animalId, housedSince, null, getRooms()[0], cage, 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Housing", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Housing", new Filter("Id", animalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
+
+        fields = new String[]{"Id", "date", "enddate", "project", "performedby"};
+        data = new Object[][]{
+                {animalId, housedSince, null, PROJECTS[0], 1004}
+        };
+        insertCommand = getApiHelper().prepareInsertCommand("study", "Assignment", "lsid", fields, data);
+        getApiHelper().deleteAllRecords("study", "Assignment", new Filter("Id", animalId));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), insertCommand, getExtraContext());
     }
 
     @Override
@@ -838,13 +875,15 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         goToEHRFolder();
         waitAndClickAndWait(Locator.linkWithText("Active Clinical Cases"));
         DataRegionTable activeClinicalCases = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        // Other tests leave their cases open, so row 0 is this animal's case only once the report is scoped to it
+        activeClinicalCases.setFilter("Id", "Equals", animalId);
         activeClinicalCases.link(0, "caseCheck").click();
         switchToWindow(2);
 
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationToClear("Id is required");
         _helper.setDataEntryField("s", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationToClear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
         _helper.getExt4FieldForFormSection("Clinical Case", "Close Date").setValue(LocalDateTime.now().format(_dateFormat));
         _helper.setDataEntryField("closeRemark", "Case closed.");
@@ -962,6 +1001,83 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         Assert.assertEquals("Expected the six daily observation categories", NIRC_DAILY_OBS_VALUES.size(), entriesPerCategory.size());
         entriesPerCategory.forEach((category, count) ->
                 Assert.assertEquals("Expected two entries (one per matching order) for category " + category, Integer.valueOf(2), count));
+    }
+
+    // The observation ordered for both animals of the shared-order pair, and a valid Observation/Score for it.
+    private static final String SHARED_ORDER_CATEGORY = "Dental/Oral Observations";
+    private static final String SHARED_ORDER_OBSERVATION = "Fractured Tooth";
+
+    @Test
+    public void testScheduledObservationStaysWithItsAnimal()
+    {
+        // An observation order's taskid identifies the ordering session, not the animal, so ordering for
+        // several animals at once leaves them all with the same order taskid. Recording from the schedule
+        // opens the form for one animal and passes that taskid to the server, which must still confine the
+        // entry to the animal the form was opened for.
+        log("Ordering the same observation for two animals in one submission");
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Bulk Clinical Entry"));
+
+        Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
+        addObservationOrderRow(observationOrders, sharedOrderAnimalId);
+        addObservationOrderRow(observationOrders, sharedOrderOtherAnimalId);
+        submitForm("Submit Final", "Finalize");
+
+        List<Map<String, Object>> orders = getObservationOrders(sharedOrderAnimalId, sharedOrderOtherAnimalId);
+        Assert.assertEquals("Expected one observation order per animal", 2, orders.size());
+
+        Map<String, String> orderIdByAnimal = new HashMap<>();
+        Set<String> orderTaskIds = new HashSet<>();
+        for (Map<String, Object> order : orders)
+        {
+            orderIdByAnimal.put(String.valueOf(order.get("Id")), String.valueOf(order.get("objectid")));
+            orderTaskIds.add(String.valueOf(order.get("taskid")));
+        }
+        Assert.assertEquals("The two orders should share the submitting form's taskid, which is what puts the "
+                + "entry at risk of crossing animals", 1, orderTaskIds.size());
+
+        log("Recording the scheduled observation for " + sharedOrderAnimalId + " only");
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
+        DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", sharedOrderAnimalId);
+        Assert.assertEquals("Expected a single scheduled slot for " + sharedOrderAnimalId, 1, table.getDataRowCount());
+
+        table.link(0, "observationRecord").click();
+        switchToWindow(1);
+        waitForText(sharedOrderAnimalId);
+        Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
+        Assert.assertEquals("The form should open with only the animal it was launched for", 1, observation.getRowCount());
+        observation.setGridCell(1, "observation", SHARED_ORDER_OBSERVATION);
+        observation.setGridCellJS(1, "remark", "remark for " + sharedOrderAnimalId);
+        submitForm("Submit Final", "Finalize");
+
+        List<Map<String, Object>> entered = getClinicalObservations(sharedOrderAnimalId);
+        Assert.assertEquals("Expected the single entered observation for " + sharedOrderAnimalId, 1, entered.size());
+        Assert.assertEquals("Entered observation has the wrong category", SHARED_ORDER_CATEGORY, String.valueOf(entered.get(0).get("category")));
+        Assert.assertEquals("The entry should be filed against the animal's own observation order",
+                orderIdByAnimal.get(sharedOrderAnimalId), String.valueOf(entered.get(0).get("orderId")));
+
+        Assert.assertTrue("Recording an observation for " + sharedOrderAnimalId + " must not create one for "
+                + sharedOrderOtherAnimalId + ", whose order only shares the same taskid",
+                getClinicalObservations(sharedOrderOtherAnimalId).isEmpty());
+    }
+
+    // Appends an observation order row for the animal. SID puts the order on a single 8:00 AM slot, so each
+    // animal gets exactly one row on today's observation schedule.
+    private void addObservationOrderRow(Ext4GridRef observationOrders, String animalId)
+    {
+        _helper.addRecordToGrid(observationOrders);
+        int row = observationOrders.getRowCount();
+        observationOrders.setGridCell(row, "Id", animalId);
+        observationOrders.setGridCell(row, "category", SHARED_ORDER_CATEGORY);
+        observationOrders.setGridCell(row, "frequency", "SID");
+    }
+
+    private List<Map<String, Object>> getObservationOrders(String... animalIds)
+    {
+        return executeSelectRowCommand("study", "observation_order", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("Id", String.join(";", animalIds), Filter.Operator.IN))).getRows();
     }
 
     // Creates and finalizes a minimal clinical case for the animal. The case's open date is set to
@@ -1469,7 +1585,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         _helper.setDataEntryField("remark", "Clinical Remarks - Test");
         if (null == _helper.getExt4FieldForFormSection("Clinical Remarks", "Remark").getValue())
             _helper.setDataEntryField("remark", "Clinical Remarks - Test");
-        waitForTextToDisappear("Remark: WARN: Must enter at least one comment");
+        waitForValidationToClear("Remark: WARN: Must enter at least one comment");
 
         Ext4GridRef weight = _helper.getExt4GridForFormSection("Weights");
         _helper.addRecordToGrid(weight);
@@ -1503,13 +1619,15 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         waitAndClickAndWait(Locator.linkWithText("Today's Medication/Treatment Schedule"));
         AnimalHistoryPage<?> animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable scheduleTable = animalHistoryPage.getActiveReportDataRegion();
+        // The schedule covers every living animal in the folder, so any other test's active order lands here too
+        scheduleTable.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Incorrect number of rows", 4, scheduleTable.getDataRowCount());
         scheduleTable.link(0, "treatmentRecord").click();
         switchToWindow(1);
 
         waitForText("Diazepam");
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationToClear("Id is required");
         _helper.getExt4GridForFormSection("Medications/Treatments Given");
         submitForm("Submit Final", "Finalize");
         stopImpersonating();
@@ -1524,14 +1642,16 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         //Click on 'Case Update' link
         AnimalHistoryPage<?> historyPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable activeClinicalCases = historyPage.getActiveReportDataRegion();
+        // Other tests leave their cases open, so row 0 is this animal's case only once the report is scoped to it
+        activeClinicalCases.setFilter("Id", "Equals", animalId);
         activeClinicalCases.link(0, "caseCheck").click();
         switchToWindow(2);
 
         //Fill out Close Date
         waitForText(animalId);
-        waitForTextToDisappear("Id is required");
+        waitForValidationToClear("Id is required");
         _helper.setDataEntryField("s", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationToClear("Subjective: WARN: Must enter at least one comment");
 
         waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
         Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
@@ -1554,6 +1674,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         //Verify that the case is no longer present/is closed
         historyPage = new AnimalHistoryPage<>(getDriver());
         activeClinicalCases = historyPage.getActiveReportDataRegion();
+        activeClinicalCases.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("No active cases", 0, activeClinicalCases.getDataRowCount());
         stopImpersonating();
     }
@@ -1667,6 +1788,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         waitAndClickAndWait(Locator.linkWithText("Active Behavior Medication Orders"));
         animalHistoryPage = new AnimalHistoryPage<>(getDriver());
         DataRegionTable medicationOrderTable = animalHistoryPage.getActiveReportDataRegion();
+        // The report lists every active Behavior order in the folder, not just this case's
+        medicationOrderTable.setFilter("Id", "Equals", animalId1);
         Assert.assertEquals("Medication order was not created for the behavioral case", 1, medicationOrderTable.getDataRowCount());
         Assert.assertEquals("Incorrect medication order", Arrays.asList(animalId1, drug1, "QID", "IV", NIRC_VET_NAME),
                 medicationOrderTable.getRowDataAsText(0, "Id", "code", "frequency", "route", "orderedby"));
@@ -1707,9 +1830,9 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         switchToWindow(2);
 
         waitForText(animalId1);
-        waitForTextToDisappear("Id is required");
+        waitForValidationToClear("Id is required");
         _helper.setDataEntryField("remark", "Closing the case");
-        waitForTextToDisappear("Subjective: WARN: Must enter at least one comment");
+        waitForValidationToClear("Subjective: WARN: Must enter at least one comment");
         waitAndClick(Ext4Helper.Locators.ext4Button("Edit"));
 
         // Verify close remark required
@@ -1916,9 +2039,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
 
     private void submitForm(String buttonText, String windowTitle)
     {
-        //Give time for errors to disappear after validation
-        Locator.tagContainingText("div", "The form has the following errors and warnings:")
-                .waitForElementToDisappear(longWait());
+        waitForFormValidationToClear();
         Locator submitFinalBtn = Locator.linkWithText(buttonText);
         shortWait().until(ExpectedConditions.elementToBeClickable(submitFinalBtn));
         Window<?> msgWindow;
