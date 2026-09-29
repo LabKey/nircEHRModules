@@ -16,7 +16,11 @@
 package org.labkey.nirc_ehr.dataentry.section;
 
 import org.json.JSONObject;
+import org.labkey.api.data.TableInfo;
 import org.labkey.api.ehr.dataentry.DataEntryFormContext;
+import org.labkey.api.query.FieldKey;
+
+import java.util.List;
 
 public class NIRCRearrivalFormSection extends BaseFormSection
 {
@@ -31,5 +35,17 @@ public class NIRCRearrivalFormSection extends BaseFormSection
         JSONObject json = super.toJSON(ctx, includeFormElements);
         json.put("dataDependentCollapseHeader", true);
         return json;
+    }
+
+    @Override
+    protected List<FieldKey> getFieldKeys(TableInfo ti)
+    {
+        List<FieldKey> keys = super.getFieldKeys(ti);
+
+        FieldKey attachmentFile = FieldKey.fromString("attachmentFile");
+        if (keys.remove(attachmentFile))
+            keys.add(attachmentFile);
+
+        return keys;
     }
 }

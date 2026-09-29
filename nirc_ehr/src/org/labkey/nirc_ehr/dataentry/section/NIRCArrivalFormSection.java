@@ -49,6 +49,10 @@ public class NIRCArrivalFormSection extends BaseFormSection
         keys.add(10, FieldKey.fromString("Id/demographics/gender"));
         keys.add(12, FieldKey.fromString("Id/demographics/geographic_origin"));
 
+        FieldKey attachmentFile = FieldKey.fromString("attachmentFile");
+        if (keys.remove(attachmentFile))
+            keys.add(attachmentFile);
+
         return keys;
     }
 }

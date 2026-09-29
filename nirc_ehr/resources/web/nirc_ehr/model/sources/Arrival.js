@@ -39,7 +39,10 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                 allowBlank: false
             },
             'Id/demographics/birth': {
-                allowBlank: false
+                allowBlank: false,
+                columnConfig: {
+                    width: 150
+                }
             },
             'Id/demographics/gender': {
                 allowBlank: false
@@ -107,6 +110,11 @@ EHR.model.DataModelManager.registerMetadata('Arrival', {
                 allowBlank: true,
                 hidden: true,
                 showInGrid: false
+            },
+            attachmentFile: {
+                columnConfig: {
+                    width: 150
+                }
             }
         }
     }

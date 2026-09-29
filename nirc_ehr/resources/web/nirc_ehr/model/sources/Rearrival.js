@@ -80,6 +80,11 @@ EHR.model.DataModelManager.registerMetadata('Rearrival', {
                     columns: 'protocol,title'
                 },
             },
+            attachmentFile: {
+                columnConfig: {
+                    width: 150
+                }
+            },
         }
     }
 });
