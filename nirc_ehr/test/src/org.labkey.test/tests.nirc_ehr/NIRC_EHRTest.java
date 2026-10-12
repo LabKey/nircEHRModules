@@ -118,6 +118,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     // same entry form, so the two orders share a taskid. Provisioned the same way as the animals above.
     private static final String sharedOrderAnimalId = "TESTSHARED8181";
     private static final String sharedOrderOtherAnimalId = "TESTSHARED8282";
+    // Dedicated animal for testDailyObsOrdersNotDuplicatedOnCaseUpdate.
+    private static final String dailyOrderAnimalId = "TESTDAILY8383";
+    // Dedicated animal for testScheduledObservationsNotDuplicatedOnResave.
+    private static final String resaveAnimalId = "TESTRESAVE8484";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -543,6 +547,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         provisionTestSubject(sharedOrderAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(sharedOrderOtherAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(dailyOrderAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(resaveAnimalId, CAGES[2], pastDate1);
 
         primeCaches();
     }
@@ -1065,6 +1071,139 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 getClinicalObservations(sharedOrderOtherAnimalId).isEmpty());
     }
 
+    @Test
+    public void testDailyObsOrdersNotDuplicatedOnCaseUpdate()
+    {
+        String animalId = dailyOrderAnimalId;
+        submitClinicalCaseForReview(animalId);
+
+        Map<String, Object> clinicalCase = getClinicalCase(animalId);
+        String caseId = String.valueOf(clinicalCase.get("caseid"));
+        String taskId = String.valueOf(clinicalCase.get("taskid"));
+        Assert.assertEquals("Case should await review", EHRQCState.REVIEW_REQUIRED.label, String.valueOf(clinicalCase.get("QCState/Label")));
+        assertOneDailyObsOrderPerCategory(caseId, EHRQCState.REVIEW_REQUIRED.label);
+
+        log("Completing the reviewed case as the assigned vet");
+        impersonate(NIRC_FULL_SUBMITTER_VET);
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", "Clinical Cases", "taskid", taskId)));
+        submitForm("Submit Final", "Finalize");
+        stopImpersonating();
+
+        clinicalCase = getClinicalCase(animalId);
+        Assert.assertEquals("Reviewed case should be Completed", EHRQCState.COMPLETED.label, String.valueOf(clinicalCase.get("QCState/Label")));
+        assertOneDailyObsOrderPerCategory(caseId, EHRQCState.COMPLETED.label);
+
+        // The case form sends its loaded orders as ordersInTransaction, which masked orders the server failed to find
+        log("Updating the open case outside the case form");
+        String[] fields = {"lsid", "Id", "date", "category", "caseid", "performedby", "taskid", FIELD_QCSTATELABEL, "plan"};
+        Object[][] data = {{clinicalCase.get("lsid"), animalId, clinicalCase.get("date"), clinicalCase.get("category"), caseId,
+                clinicalCase.get("performedby"), taskId, EHRQCState.COMPLETED.label, "Updated plan for " + animalId}};
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareUpdateCommand("study", "cases", "lsid", fields, data, null), getExtraContext());
+
+        assertOneDailyObsOrderPerCategory(caseId, EHRQCState.COMPLETED.label);
+    }
+
+    @Test
+    public void testScheduledObservationsNotDuplicatedOnResave()
+    {
+        String animalId = resaveAnimalId;
+
+        // Two cases give each daily category two orders in the same slot, so every entry is copied to the second order
+        createClinicalCase(animalId, "Finalize");
+        createClinicalCase(animalId, "Similar Case Exists");
+        int expectedPerEntry = NIRC_DAILY_OBS_VALUES.size() * 2;
+
+        log("Saving the scheduled observations as a draft");
+        openScheduledObservationForm(animalId);
+        fillScheduledObservations();
+        waitForFormValidationToClear();
+        waitAndClick(Locator.linkWithText("Save Draft"));
+        waitFor(() -> getClinicalObservations(animalId).size() >= expectedPerEntry, "Draft observations were not saved", WAIT_FOR_PAGE);
+        Map<String, String> orderIdByObservation = getOrderIdByObservation(animalId);
+        Assert.assertEquals("Expected one draft observation per order", expectedPerEntry, orderIdByObservation.size());
+
+        log("Finalizing the draft from the same form");
+        submitForm("Submit Final", "Finalize");
+        // The draft's copies for the second order sit on their own task, outside the form being finalized
+        waitFor(() -> countCompletedObservations(animalId) >= expectedPerEntry, "Finalizing the draft did not complete every copy of its observations", WAIT_FOR_PAGE);
+        Assert.assertEquals("Finalizing the draft must not copy the observations again", orderIdByObservation, getOrderIdByObservation(animalId));
+        assertOneObservationPerOrder(animalId);
+        closeExtraWindows();
+
+        // Every order is already observed, so each later entry is filed once, against the first order. The third
+        // entry also covers the schedule view returning an order once per observation already recorded against it.
+        for (int entry = 2; entry <= 3; entry++)
+        {
+            log("Entering the same scheduled slot again (entry " + entry + ")");
+            openScheduledObservationForm(animalId);
+            enterScheduledObservations();
+            int expectedTotal = expectedPerEntry + (entry - 1) * NIRC_DAILY_OBS_VALUES.size();
+            waitFor(() -> getClinicalObservations(animalId).size() >= expectedTotal, "Re-entered observations were not saved", WAIT_FOR_PAGE);
+            Assert.assertEquals("Re-entering an observed slot should add one observation per category", expectedTotal, getClinicalObservations(animalId).size());
+            closeExtraWindows();
+        }
+    }
+
+    private Map<String, Object> getClinicalCase(String animalId)
+    {
+        List<Map<String, Object>> cases = executeSelectRowCommand("study", "cases", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId)),
+                List.of("lsid", "Id", "date", "category", "caseid", "performedby", "taskid", "QCState/Label")).getRows();
+        Assert.assertEquals("Expected a single case for " + animalId, 1, cases.size());
+        return cases.getFirst();
+    }
+
+    private void assertOneDailyObsOrderPerCategory(String caseId, String expectedQCState)
+    {
+        Map<String, Integer> ordersPerCategory = new HashMap<>();
+        for (Map<String, Object> order : executeSelectRowCommand("study", "observation_order", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("caseid", caseId)),
+                List.of("category", "frequency", "QCState/Label")).getRows())
+        {
+            Assert.assertEquals("Daily observation order for " + order.get("category") + " should be SID", "SID", String.valueOf(order.get("frequency")));
+            Assert.assertEquals("Daily observation order for " + order.get("category") + " should follow the case's QC state", expectedQCState, String.valueOf(order.get("QCState/Label")));
+            ordersPerCategory.merge(String.valueOf(order.get("category")), 1, Integer::sum);
+        }
+        Assert.assertEquals("Expected the daily observation categories for case " + caseId, NIRC_DAILY_OBS_VALUES.keySet(), ordersPerCategory.keySet());
+        ordersPerCategory.forEach((category, count) ->
+                Assert.assertEquals("Expected one daily order for category " + category, Integer.valueOf(1), count));
+    }
+
+    private void assertOneObservationPerOrder(String animalId)
+    {
+        Map<String, Integer> observationsPerOrder = new HashMap<>();
+        getOrderIdByObservation(animalId).values().forEach(orderId -> observationsPerOrder.merge(orderId, 1, Integer::sum));
+        observationsPerOrder.forEach((orderId, count) ->
+                Assert.assertEquals("Expected one observation for order " + orderId, Integer.valueOf(1), count));
+    }
+
+    private Map<String, String> getOrderIdByObservation(String animalId)
+    {
+        Map<String, String> orderIdByObservation = new HashMap<>();
+        for (Map<String, Object> row : getClinicalObservations(animalId))
+            orderIdByObservation.put(String.valueOf(row.get("objectid")), String.valueOf(row.get("orderId")));
+        return orderIdByObservation;
+    }
+
+    private long countCompletedObservations(String animalId)
+    {
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId)), List.of("objectid", "QCState/Label"))
+                .getRows().stream()
+                .filter(row -> EHRQCState.COMPLETED.label.equals(String.valueOf(row.get("QCState/Label"))))
+                .count();
+    }
+
+    // Opens the Observations form from the animal's single row on today's observation schedule.
+    private void openScheduledObservationForm(String animalId)
+    {
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
+        DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", animalId);
+        Assert.assertEquals("Expected a single scheduled slot for " + animalId, 1, table.getDataRowCount());
+        table.link(0, "observationRecord").click();
+        switchToWindow(1);
+        waitForText(animalId);
+    }
+
     // Appends an observation order row for the animal. SID puts the order on a single 8:00 AM slot, so each
     // animal gets exactly one row on today's observation schedule.
     private void addObservationOrderRow(Ext4GridRef observationOrders, String animalId)
@@ -1088,6 +1227,22 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     // new case, or "Similar Case Exists" when the animal already has an active case for the same problem.
     private void createClinicalCase(String animalId, String confirmWindowTitle)
     {
+        fillClinicalCase(animalId);
+        submitForm("Submit Final", confirmWindowTitle);
+    }
+
+    private void submitClinicalCaseForReview(String animalId)
+    {
+        fillClinicalCase(animalId);
+        waitForFormValidationToClear();
+        waitAndClick(_helper.getDataEntryButton("Submit for Review"));
+        Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
+        _ext4Helper.selectComboBoxItem("Assign To:", Ext4Helper.TextMatchTechnique.CONTAINS, NIRC_VET_NAME);
+        submitForReview.clickButton("Submit");
+    }
+
+    private void fillClinicalCase(String animalId)
+    {
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Clinical Cases"));
         Ext4FieldRef problem = _helper.getExt4FieldForFormSection("Clinical Case", "Problem Area");
@@ -1099,12 +1254,17 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         setFormElement(Locator.name("Id"), animalId);
         _helper.setDataEntryField("s", "Subjective for " + animalId);
         _helper.setDataEntryField("remark", "Remarks for " + animalId);
-        submitForm("Submit Final", confirmWindowTitle);
     }
 
-    // Fills in the Observations grid opened from the schedule, setting a valid value and remark for each
-    // category row regardless of the grid's row order, then submits.
+    // Fills in the Observations grid opened from the schedule, then submits.
     private void enterScheduledObservations()
+    {
+        fillScheduledObservations();
+        submitForm("Submit Final", "Finalize");
+    }
+
+    // Sets a valid value and remark for each category row of the Observations grid, regardless of row order.
+    private void fillScheduledObservations()
     {
         Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
         int rowCount = observation.getRowCount();
@@ -1116,7 +1276,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 observation.setGridCell(row, "observation", value);
             observation.setGridCellJS(row, "remark", "remark for " + category);
         }
-        submitForm("Submit Final", "Finalize");
     }
 
     // Asserts that the animal's scheduled observations are grouped under the expected number of distinct
