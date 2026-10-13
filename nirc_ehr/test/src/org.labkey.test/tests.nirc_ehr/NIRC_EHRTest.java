@@ -126,6 +126,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String resaveAnimalId = "TESTRESAVE8484";
     // Dedicated animal for testScheduledObservationGroupDeletedWithItsEntry.
     private static final String groupDeleteAnimalId = "TESTGROUPDEL8585";
+    // Dedicated animal for testScheduledObservationGroupEditSurvivesSharedTask.
+    private static final String sharedTaskGroupAnimalId = "TESTSHAREDGRP8686";
+    // Dedicated animal for testCopyTaskFinalizeLeavesFormTaskWithDrafts.
+    private static final String copyTaskDraftAnimalId = "TESTCOPYDRAFT8787";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -554,6 +558,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         provisionTestSubject(dailyOrderAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(resaveAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(groupDeleteAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(sharedTaskGroupAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(copyTaskDraftAnimalId, CAGES[2], pastDate1);
 
         primeCaches();
     }
@@ -1019,6 +1025,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     // The observation ordered for both animals of the shared-order pair, and a valid Observation/Score for it.
     private static final String SHARED_ORDER_CATEGORY = "Dental/Oral Observations";
     private static final String SHARED_ORDER_OBSERVATION = "Fractured Tooth";
+    private static final String EDITED_REMARK = "remark edited before finalizing";
 
     @Test
     public void testScheduledObservationStaysWithItsAnimal()
@@ -1125,11 +1132,18 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Reopening one draft task and finalizing it");
         String draftTaskId = draftTaskIds.iterator().next();
         beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", NIRC_OBSERVATIONS_FORM_TYPE, "taskid", draftTaskId)));
+        Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
+        String editedCategory = String.valueOf(observation.getFieldValue(1, "category"));
+        observation.setGridCellJS(1, "remark", EDITED_REMARK);
         submitForm("Submit Final", "Finalize");
         if (!waitFor(() -> countCompletedObservations(animalId) >= expectedPerEntry, WAIT_FOR_PAGE))
             Assert.fail("Finalizing one draft task did not complete the copies on the other: " + executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
                     List.of(new Filter("Id", animalId)), List.of("objectid", "taskid", "category", "QCState/Label", "date", "scheduledDate", "observation", "remark", "performedby", "orderId")).getRows());
         Assert.assertEquals("Finalizing the draft must not copy the observations again", orderIdByObservation, getOrderIdByObservation(animalId));
+        Assert.assertEquals("The remark edited before finalizing should reach the copy on the other task", List.of(EDITED_REMARK, EDITED_REMARK),
+                executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
+                        List.of(new Filter("Id", animalId), new Filter("category", editedCategory)), List.of("remark")).getRows().stream()
+                        .map(row -> String.valueOf(row.get("remark"))).toList());
         assertOneObservationPerOrder(animalId);
         Map<String, Long> groupSizes = executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
                 List.of(new Filter("Id", animalId)), List.of("observationGroupId")).getRows().stream()
@@ -1182,6 +1196,104 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         Assert.assertEquals("Deleting an entry should delete its copies on the other task", List.of(), getClinicalObservations(animalId));
         Assert.assertEquals("The task left empty by the deleted copies should be deleted", 0,
                 executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("taskid", copyTaskId))).getRowCount().intValue());
+    }
+
+    @Test
+    public void testScheduledObservationGroupEditSurvivesSharedTask()
+    {
+        String animalId = sharedTaskGroupAnimalId;
+
+        // Two orders from one submission share its taskid, so two of the group's observations land on one task
+        log("Ordering the same observation twice in one submission and once in another");
+        orderSharedCategoryObservations(animalId, 2);
+        orderSharedCategoryObservations(animalId, 1);
+
+        saveScheduledObservationDraft(animalId, 3);
+        Map<String, List<String>> objectIdsByTask = getClinicalObservations(animalId, "objectid", "taskid").stream()
+                .collect(Collectors.groupingBy(row -> String.valueOf(row.get("taskid")), Collectors.mapping(row -> String.valueOf(row.get("objectid")), Collectors.toList())));
+        String sharedTaskId = objectIdsByTask.entrySet().stream().filter(e -> e.getValue().size() == 2).map(Map.Entry::getKey).findFirst()
+                .orElseThrow(() -> new AssertionError("Expected two of the group's observations on one task: " + objectIdsByTask));
+        String otherTaskObjectId = objectIdsByTask.entrySet().stream().filter(e -> !e.getKey().equals(sharedTaskId)).map(e -> e.getValue().getFirst()).findFirst().orElseThrow();
+
+        log("Editing one of the two observations on the shared task and finalizing it");
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", NIRC_OBSERVATIONS_FORM_TYPE, "taskid", sharedTaskId)));
+        Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
+        Assert.assertEquals("Expected both of the shared task's observations in the form", 2, observation.getRowCount());
+        String editedObjectId = String.valueOf(observation.getFieldValue(1, "objectid"));
+        String untouchedObjectId = objectIdsByTask.get(sharedTaskId).stream().filter(id -> !id.equals(editedObjectId)).findFirst().orElseThrow();
+        observation.setGridCellJS(1, "remark", EDITED_REMARK);
+        submitForm("Submit Final", "Finalize");
+        waitFor(() -> countCompletedObservations(animalId) >= 3, "Finalizing the shared task did not complete the group", WAIT_FOR_PAGE);
+
+        // The untouched row is saved by the same batch, so it must neither revert the edit nor receive it
+        Map<String, String> remarkByObjectId = getClinicalObservations(animalId, "objectid", "remark").stream()
+                .collect(Collectors.toMap(row -> String.valueOf(row.get("objectid")), row -> String.valueOf(row.get("remark"))));
+        Assert.assertEquals("The edited observation lost its edit", EDITED_REMARK, remarkByObjectId.get(editedObjectId));
+        Assert.assertEquals("The edit should carry to the observation on the other task", EDITED_REMARK, remarkByObjectId.get(otherTaskObjectId));
+        Assert.assertEquals("The untouched observation on the edited task should keep its remark", "remark for " + SHARED_ORDER_CATEGORY, remarkByObjectId.get(untouchedObjectId));
+        assertTasksQCState(objectIdsByTask.keySet(), EHRQCState.COMPLETED.label);
+        closeExtraWindows();
+    }
+
+    @Test
+    public void testCopyTaskFinalizeLeavesFormTaskWithDrafts() throws Exception
+    {
+        String animalId = copyTaskDraftAnimalId;
+
+        createClinicalCase(animalId, "Finalize");
+        createClinicalCase(animalId, "Similar Case Exists");
+        int expectedObservations = NIRC_DAILY_OBS_VALUES.size() * 2;
+        Set<String> draftTaskIds = saveScheduledObservationDraft(animalId, expectedObservations);
+
+        // Each entry heads its own group, and the entries stay on the form's task
+        Set<String> formTaskIds = executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("Id", animalId)), List.of("objectid", "observationGroupId", "taskid")).getRows().stream()
+                .filter(row -> String.valueOf(row.get("objectid")).equals(String.valueOf(row.get("observationGroupId"))))
+                .map(row -> String.valueOf(row.get("taskid")))
+                .collect(Collectors.toSet());
+        Assert.assertEquals("Expected every entry on the form's task", 1, formTaskIds.size());
+        String formTaskId = formTaskIds.iterator().next();
+        String copyTaskId = draftTaskIds.stream().filter(taskId -> !taskId.equals(formTaskId)).findFirst().orElseThrow();
+
+        log("Adding a draft weight to the form's task");
+        String[] draftWeightFields = {"Id", "date", "weight", "taskid", FIELD_QCSTATELABEL, "performedby"};
+        Object[][] draftWeightData = {{animalId, new Date(), 7.5, formTaskId, EHRQCState.IN_PROGRESS.label, 1004}};
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "weight", "lsid", draftWeightFields, draftWeightData), getExtraContext());
+
+        log("Finalizing the copy task");
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", NIRC_OBSERVATIONS_FORM_TYPE, "taskid", copyTaskId)));
+        submitForm("Submit Final", "Finalize");
+        waitFor(() -> countCompletedObservations(animalId) >= expectedObservations, "Finalizing the copy task did not complete the entries on the form's task", WAIT_FOR_PAGE);
+
+        assertTasksQCState(Set.of(copyTaskId), EHRQCState.COMPLETED.label);
+        assertTasksQCState(Set.of(formTaskId), EHRQCState.IN_PROGRESS.label);
+        List<Map<String, Object>> weights = executeSelectRowCommand("study", "weight", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("Id", animalId)), List.of("taskid", "QCState/Label")).getRows();
+        Assert.assertEquals("Expected the single draft weight", 1, weights.size());
+        Assert.assertEquals("The draft weight should stay a draft", EHRQCState.IN_PROGRESS.label, String.valueOf(weights.getFirst().get("QCState/Label")));
+        closeExtraWindows();
+    }
+
+    // Orders SHARED_ORDER_CATEGORY for the animal count times in one Bulk Clinical Entry submission, so the orders share its taskid.
+    private void orderSharedCategoryObservations(String animalId, int count)
+    {
+        int ordersBefore = getObservationOrders(animalId).size();
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Bulk Clinical Entry"));
+        Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
+        for (int i = 0; i < count; i++)
+            addObservationOrderRow(observationOrders, animalId);
+        submitForm("Submit Final", "Finalize");
+        waitFor(() -> getObservationOrders(animalId).size() >= ordersBefore + count, "Observation orders were not saved", WAIT_FOR_PAGE);
+    }
+
+    private void assertTasksQCState(Set<String> taskIds, String expectedQCState)
+    {
+        List<Map<String, Object>> tasks = executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("taskid", String.join(";", taskIds), Filter.Operator.IN)), List.of("taskid", "QCState/Label")).getRows();
+        Assert.assertEquals("Expected every task to exist", taskIds.size(), tasks.size());
+        for (Map<String, Object> task : tasks)
+            Assert.assertEquals("Task " + task.get("taskid") + " has the wrong QC state", expectedQCState, String.valueOf(task.get("QCState/Label")));
     }
 
     private void assertOneDailyObsOrderPerCategory(String caseId, String expectedQCState)
@@ -1357,6 +1469,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         // study datasets and ehr.tasks are defined in the EHR study folder, not the project root, so query
         // that container explicitly rather than relying on the default project-scoped overload.
         return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId))).getRows();
+    }
+
+    private List<Map<String, Object>> getClinicalObservations(String animalId, String... columns)
+    {
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId)), List.of(columns)).getRows();
     }
 
     private Set<String> getTaskIds(String animalId)
