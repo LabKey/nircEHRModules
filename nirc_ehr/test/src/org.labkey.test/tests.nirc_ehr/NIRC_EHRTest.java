@@ -88,6 +88,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.labkey.test.components.html.Input.Input;
@@ -1118,16 +1119,26 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         fillScheduledObservations();
         waitForFormValidationToClear();
         waitAndClick(Locator.linkWithText("Save Draft"));
+        waitFor(() -> String.valueOf(getDriver().getCurrentUrl()).contains("enterData"), "Saving the draft did not return to Enter Data", WAIT_FOR_PAGE);
         waitFor(() -> getClinicalObservations(animalId).size() >= expectedPerEntry, "Draft observations were not saved", WAIT_FOR_PAGE);
         Map<String, String> orderIdByObservation = getOrderIdByObservation(animalId);
         Assert.assertEquals("Expected one draft observation per order", expectedPerEntry, orderIdByObservation.size());
+        Set<String> draftTaskIds = getTaskIds(animalId);
+        Assert.assertEquals("Expected the draft split across one task per case", 2, draftTaskIds.size());
 
-        log("Finalizing the draft from the same form");
+        // Either draft task shows up in My Tasks; finalizing one has to complete the copies on the other
+        log("Reopening one draft task and finalizing it");
+        String draftTaskId = draftTaskIds.iterator().next();
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", NIRC_OBSERVATIONS_FORM_TYPE, "taskid", draftTaskId)));
         submitForm("Submit Final", "Finalize");
-        // The draft's copies for the second order sit on their own task, outside the form being finalized
-        waitFor(() -> countCompletedObservations(animalId) >= expectedPerEntry, "Finalizing the draft did not complete every copy of its observations", WAIT_FOR_PAGE);
+        if (!waitFor(() -> countCompletedObservations(animalId) >= expectedPerEntry, WAIT_FOR_PAGE))
+            Assert.fail("Finalizing one draft task did not complete the copies on the other: " + executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
+                    List.of(new Filter("Id", animalId)), List.of("objectid", "taskid", "category", "QCState/Label", "date", "scheduledDate", "observation", "remark", "performedby", "orderId")).getRows());
         Assert.assertEquals("Finalizing the draft must not copy the observations again", orderIdByObservation, getOrderIdByObservation(animalId));
         assertOneObservationPerOrder(animalId);
+        for (Map<String, Object> task : executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("taskid", String.join(";", draftTaskIds), Filter.Operator.IN)), List.of("taskid", "QCState/Label")).getRows())
+            Assert.assertEquals("Draft task " + task.get("taskid") + " should be Completed", EHRQCState.COMPLETED.label, String.valueOf(task.get("QCState/Label")));
         closeExtraWindows();
 
         // Every order is already observed, so each later entry is filed once, against the first order. The third
@@ -1309,6 +1320,12 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         // study datasets and ehr.tasks are defined in the EHR study folder, not the project root, so query
         // that container explicitly rather than relying on the default project-scoped overload.
         return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId))).getRows();
+    }
+
+    private Set<String> getTaskIds(String animalId)
+    {
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId)), List.of("taskid"))
+                .getRows().stream().map(row -> String.valueOf(row.get("taskid"))).collect(Collectors.toSet());
     }
 
     private Set<String> getObservationFormTaskIds()
