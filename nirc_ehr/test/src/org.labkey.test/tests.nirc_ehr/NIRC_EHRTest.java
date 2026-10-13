@@ -84,6 +84,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -123,6 +124,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String dailyOrderAnimalId = "TESTDAILY8383";
     // Dedicated animal for testScheduledObservationsNotDuplicatedOnResave.
     private static final String resaveAnimalId = "TESTRESAVE8484";
+    // Dedicated animal for testScheduledObservationGroupDeletedWithItsEntry.
+    private static final String groupDeleteAnimalId = "TESTGROUPDEL8585";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -550,6 +553,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         provisionTestSubject(sharedOrderOtherAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(dailyOrderAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(resaveAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(groupDeleteAnimalId, CAGES[2], pastDate1);
 
         primeCaches();
     }
@@ -1114,17 +1118,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         createClinicalCase(animalId, "Similar Case Exists");
         int expectedPerEntry = NIRC_DAILY_OBS_VALUES.size() * 2;
 
-        log("Saving the scheduled observations as a draft");
-        openScheduledObservationForm(animalId);
-        fillScheduledObservations();
-        waitForFormValidationToClear();
-        waitAndClick(Locator.linkWithText("Save Draft"));
-        waitFor(() -> String.valueOf(getDriver().getCurrentUrl()).contains("enterData"), "Saving the draft did not return to Enter Data", WAIT_FOR_PAGE);
-        waitFor(() -> getClinicalObservations(animalId).size() >= expectedPerEntry, "Draft observations were not saved", WAIT_FOR_PAGE);
+        Set<String> draftTaskIds = saveScheduledObservationDraft(animalId, expectedPerEntry);
         Map<String, String> orderIdByObservation = getOrderIdByObservation(animalId);
-        Assert.assertEquals("Expected one draft observation per order", expectedPerEntry, orderIdByObservation.size());
-        Set<String> draftTaskIds = getTaskIds(animalId);
-        Assert.assertEquals("Expected the draft split across one task per case", 2, draftTaskIds.size());
 
         // Either draft task shows up in My Tasks; finalizing one has to complete the copies on the other
         log("Reopening one draft task and finalizing it");
@@ -1136,6 +1131,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                     List.of(new Filter("Id", animalId)), List.of("objectid", "taskid", "category", "QCState/Label", "date", "scheduledDate", "observation", "remark", "performedby", "orderId")).getRows());
         Assert.assertEquals("Finalizing the draft must not copy the observations again", orderIdByObservation, getOrderIdByObservation(animalId));
         assertOneObservationPerOrder(animalId);
+        Map<String, Long> groupSizes = executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("Id", animalId)), List.of("observationGroupId")).getRows().stream()
+                .collect(Collectors.groupingBy(row -> String.valueOf(row.get("observationGroupId")), Collectors.counting()));
+        Assert.assertFalse("Every scheduled observation should belong to a group", groupSizes.containsKey("null"));
+        Assert.assertEquals("Each entry should share one group with its copy for the other case", Collections.nCopies(NIRC_DAILY_OBS_VALUES.size(), 2L), new ArrayList<>(groupSizes.values()));
         for (Map<String, Object> task : executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(),
                 List.of(new Filter("taskid", String.join(";", draftTaskIds), Filter.Operator.IN)), List.of("taskid", "QCState/Label")).getRows())
             Assert.assertEquals("Draft task " + task.get("taskid") + " should be Completed", EHRQCState.COMPLETED.label, String.valueOf(task.get("QCState/Label")));
@@ -1161,6 +1161,27 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 List.of("lsid", "Id", "date", "category", "caseid", "performedby", "taskid", "QCState/Label")).getRows();
         Assert.assertEquals("Expected a single case for " + animalId, 1, cases.size());
         return cases.getFirst();
+    }
+
+    @Test
+    public void testScheduledObservationGroupDeletedWithItsEntry() throws Exception
+    {
+        String animalId = groupDeleteAnimalId;
+
+        createClinicalCase(animalId, "Finalize");
+        createClinicalCase(animalId, "Similar Case Exists");
+        Set<String> draftTaskIds = saveScheduledObservationDraft(animalId, NIRC_DAILY_OBS_VALUES.size() * 2);
+
+        // Deleting one task's observations must take the copies on the other task with them, and that task once it is empty
+        Iterator<String> tasks = draftTaskIds.iterator();
+        String deletedTaskId = tasks.next();
+        String copyTaskId = tasks.next();
+        log("Deleting the observations on one draft task");
+        getApiHelper().deleteAllRecords("study", "clinical_observations", new Filter("taskid", deletedTaskId));
+
+        Assert.assertEquals("Deleting an entry should delete its copies on the other task", List.of(), getClinicalObservations(animalId));
+        Assert.assertEquals("The task left empty by the deleted copies should be deleted", 0,
+                executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("taskid", copyTaskId))).getRowCount().intValue());
     }
 
     private void assertOneDailyObsOrderPerCategory(String caseId, String expectedQCState)
@@ -1200,6 +1221,22 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 .getRows().stream()
                 .filter(row -> EHRQCState.COMPLETED.label.equals(String.valueOf(row.get("QCState/Label"))))
                 .count();
+    }
+
+    // Saves the slot's observations as a draft from the schedule and returns the tasks they were saved to.
+    private Set<String> saveScheduledObservationDraft(String animalId, int expectedObservations)
+    {
+        log("Saving the scheduled observations as a draft");
+        openScheduledObservationForm(animalId);
+        fillScheduledObservations();
+        waitForFormValidationToClear();
+        waitAndClick(Locator.linkWithText("Save Draft"));
+        waitFor(() -> String.valueOf(getDriver().getCurrentUrl()).contains("enterData"), "Saving the draft did not return to Enter Data", WAIT_FOR_PAGE);
+        waitFor(() -> getClinicalObservations(animalId).size() >= expectedObservations, "Draft observations were not saved", WAIT_FOR_PAGE);
+        Assert.assertEquals("Expected one draft observation per order", expectedObservations, getClinicalObservations(animalId).size());
+        Set<String> draftTaskIds = getTaskIds(animalId);
+        Assert.assertEquals("Expected the draft split across one task per case", 2, draftTaskIds.size());
+        return draftTaskIds;
     }
 
     // Opens the Observations form from the animal's single row on today's observation schedule.
