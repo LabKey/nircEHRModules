@@ -130,19 +130,22 @@ public class NIRCOrchardFileGenerator
                     else if (Objects.equals(rs.getString("gender"), "3"))
                         sb.append("M");
                     else sb.append("U");
-                    sb.append("||NHP|"); //could change if more species
-                    sb.append(rs.getString("cage"));
+                    sb.append("||NHP|"); //build out if other than non-human primate
+                    sb.append(rs.getString("cage") == null ? "" : rs.getString("cage"));
                     sb.append("^New Iberia^LA^70506|||||||||||");
                     sb.append(rs.getString("species")).append("|");
-                    sb.append(rs.getString("protocol")).append("|||||||");
+                    if (Objects.equals(rs.getString("alive"),"Shipped"))
+                        sb.append("OFFSITE").append("|||||||");
+                    else
+                        sb.append(rs.getString("protocol") == null ? "" : rs.getString("protocol")).append("|||||||");
                     if (Objects.equals(rs.getString("alive"), "Alive"))
                         sb.append("N");
                     else
                         sb.append("Y");
                     sb.append(System.lineSeparator());
-                    sb.append("ZCP|Veterinarian|").append(rs.getString("Vet")).append("|");
+                    sb.append("ZCP|Veterinarian|").append(rs.getString("Vet") == null ? "" : rs.getString("Vet")).append("|");
                     sb.append(System.lineSeparator());
-                    sb.append("PD1||||").append(rs.getString("PI")).append("|");
+                    sb.append("PD1||||").append(rs.getString("PI") == null ? "" : rs.getString("PI")).append("|");
                     sb.append(System.lineSeparator());
                 });
 
