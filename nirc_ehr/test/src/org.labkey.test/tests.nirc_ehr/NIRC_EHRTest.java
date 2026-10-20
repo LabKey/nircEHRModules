@@ -82,10 +82,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.labkey.test.components.html.Input.Input;
@@ -116,6 +118,16 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
     // same entry form, so the two orders share a taskid. Provisioned the same way as the animals above.
     private static final String sharedOrderAnimalId = "TESTSHARED8181";
     private static final String sharedOrderOtherAnimalId = "TESTSHARED8282";
+    // Dedicated animal for testDailyObsOrdersNotDuplicatedOnCaseUpdate.
+    private static final String dailyOrderAnimalId = "TESTDAILY8383";
+    // Dedicated animal for testScheduledObservationsNotDuplicatedOnResave.
+    private static final String resaveAnimalId = "TESTRESAVE8484";
+    // Dedicated animal for testScheduledObservationGroupDeletedWithItsEntry.
+    private static final String groupDeleteAnimalId = "TESTGROUPDEL8585";
+    // Dedicated animal for testScheduledObservationGroupEditSurvivesSharedTask.
+    private static final String sharedTaskGroupAnimalId = "TESTSHAREDGRP8686";
+    // Dedicated animal for testCopyTaskFinalizeLeavesFormTaskWithDrafts.
+    private static final String copyTaskDraftAnimalId = "TESTCOPYDRAFT8787";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -541,6 +553,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
 
         provisionTestSubject(sharedOrderAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(sharedOrderOtherAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(dailyOrderAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(resaveAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(groupDeleteAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(sharedTaskGroupAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(copyTaskDraftAnimalId, CAGES[2], pastDate1);
 
         primeCaches();
     }
@@ -1006,6 +1023,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
     // The observation ordered for both animals of the shared-order pair, and a valid Observation/Score for it.
     private static final String SHARED_ORDER_CATEGORY = "Dental/Oral Observations";
     private static final String SHARED_ORDER_OBSERVATION = "Fractured Tooth";
+    private static final String EDITED_REMARK = "remark edited before finalizing";
 
     @Test
     public void testScheduledObservationStaysWithItsAnimal()
@@ -1063,6 +1081,287 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
                 getClinicalObservations(sharedOrderOtherAnimalId).isEmpty());
     }
 
+    @Test
+    public void testDailyObsOrdersNotDuplicatedOnCaseUpdate()
+    {
+        String animalId = dailyOrderAnimalId;
+        submitClinicalCaseForReview(animalId);
+
+        Map<String, Object> clinicalCase = getClinicalCase(animalId);
+        String caseId = String.valueOf(clinicalCase.get("caseid"));
+        String taskId = String.valueOf(clinicalCase.get("taskid"));
+        Assert.assertEquals("Case should await review", EHRQCState.REVIEW_REQUIRED.label, String.valueOf(clinicalCase.get("QCState/Label")));
+        assertOneDailyObsOrderPerCategory(caseId, EHRQCState.REVIEW_REQUIRED.label);
+
+        log("Completing the reviewed case as the assigned vet");
+        impersonate(NIRC_FULL_SUBMITTER_VET);
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", "Clinical Cases", "taskid", taskId)));
+        submitForm("Submit Final", "Finalize");
+        stopImpersonating();
+
+        clinicalCase = getClinicalCase(animalId);
+        Assert.assertEquals("Reviewed case should be Completed", EHRQCState.COMPLETED.label, String.valueOf(clinicalCase.get("QCState/Label")));
+        assertOneDailyObsOrderPerCategory(caseId, EHRQCState.COMPLETED.label);
+
+        // The case form sends its loaded orders as ordersInTransaction, which masked orders the server failed to find
+        log("Updating the open case outside the case form");
+        String[] fields = {"lsid", "Id", "date", "category", "caseid", "performedby", "taskid", FIELD_QCSTATELABEL, "plan"};
+        Object[][] data = {{clinicalCase.get("lsid"), animalId, clinicalCase.get("date"), clinicalCase.get("category"), caseId,
+                clinicalCase.get("performedby"), taskId, EHRQCState.COMPLETED.label, "Updated plan for " + animalId}};
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareUpdateCommand("study", "cases", "lsid", fields, data, null), getExtraContext());
+
+        assertOneDailyObsOrderPerCategory(caseId, EHRQCState.COMPLETED.label);
+    }
+
+    @Test
+    public void testScheduledObservationsNotDuplicatedOnResave()
+    {
+        String animalId = resaveAnimalId;
+
+        // Two cases give each daily category two orders in the same slot, so every entry is copied to the second order
+        createClinicalCase(animalId, "Finalize");
+        createClinicalCase(animalId, "Similar Case Exists");
+        int expectedPerEntry = NIRC_DAILY_OBS_VALUES.size() * 2;
+
+        Set<String> draftTaskIds = saveScheduledObservationDraft(animalId, expectedPerEntry);
+        Map<String, String> orderIdByObservation = getOrderIdByObservation(animalId);
+
+        // Either draft task shows up in My Tasks; finalizing one has to complete the copies on the other
+        log("Reopening one draft task and finalizing it");
+        String draftTaskId = draftTaskIds.iterator().next();
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", NIRC_OBSERVATIONS_FORM_TYPE, "taskid", draftTaskId)));
+        Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
+        String editedCategory = String.valueOf(observation.getFieldValue(1, "category"));
+        observation.setGridCellJS(1, "remark", EDITED_REMARK);
+        submitForm("Submit Final", "Finalize");
+        if (!waitFor(() -> countCompletedObservations(animalId) >= expectedPerEntry, WAIT_FOR_PAGE))
+            Assert.fail("Finalizing one draft task did not complete the copies on the other: " + executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
+                    List.of(new Filter("Id", animalId)), List.of("objectid", "taskid", "category", "QCState/Label", "date", "scheduledDate", "observation", "remark", "performedby", "orderId")).getRows());
+        Assert.assertEquals("Finalizing the draft must not copy the observations again", orderIdByObservation, getOrderIdByObservation(animalId));
+        Assert.assertEquals("The remark edited before finalizing should reach the copy on the other task", List.of(EDITED_REMARK, EDITED_REMARK),
+                executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
+                        List.of(new Filter("Id", animalId), new Filter("category", editedCategory)), List.of("remark")).getRows().stream()
+                        .map(row -> String.valueOf(row.get("remark"))).toList());
+        assertOneObservationPerOrder(animalId);
+        Map<String, Long> groupSizes = executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("Id", animalId)), List.of("observationGroupId")).getRows().stream()
+                .collect(Collectors.groupingBy(row -> String.valueOf(row.get("observationGroupId")), Collectors.counting()));
+        Assert.assertFalse("Every scheduled observation should belong to a group", groupSizes.containsKey("null"));
+        Assert.assertEquals("Each entry should share one group with its copy for the other case", Collections.nCopies(NIRC_DAILY_OBS_VALUES.size(), 2L), new ArrayList<>(groupSizes.values()));
+        for (Map<String, Object> task : executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("taskid", String.join(";", draftTaskIds), Filter.Operator.IN)), List.of("taskid", "QCState/Label")).getRows())
+            Assert.assertEquals("Draft task " + task.get("taskid") + " should be Completed", EHRQCState.COMPLETED.label, String.valueOf(task.get("QCState/Label")));
+        closeExtraWindows();
+
+        // Every order is already observed, so each later entry is filed once, against the first order. The third
+        // entry also covers the schedule view returning an order once per observation already recorded against it.
+        for (int entry = 2; entry <= 3; entry++)
+        {
+            log("Entering the same scheduled slot again (entry " + entry + ")");
+            openScheduledObservationForm(animalId);
+            enterScheduledObservations();
+            int expectedTotal = expectedPerEntry + (entry - 1) * NIRC_DAILY_OBS_VALUES.size();
+            waitFor(() -> getClinicalObservations(animalId).size() >= expectedTotal, "Re-entered observations were not saved", WAIT_FOR_PAGE);
+            Assert.assertEquals("Re-entering an observed slot should add one observation per category", expectedTotal, getClinicalObservations(animalId).size());
+            closeExtraWindows();
+        }
+    }
+
+    private Map<String, Object> getClinicalCase(String animalId)
+    {
+        List<Map<String, Object>> cases = executeSelectRowCommand("study", "cases", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId)),
+                List.of("lsid", "Id", "date", "category", "caseid", "performedby", "taskid", "QCState/Label")).getRows();
+        Assert.assertEquals("Expected a single case for " + animalId, 1, cases.size());
+        return cases.getFirst();
+    }
+
+    @Test
+    public void testScheduledObservationGroupDeletedWithItsEntry() throws Exception
+    {
+        String animalId = groupDeleteAnimalId;
+
+        createClinicalCase(animalId, "Finalize");
+        createClinicalCase(animalId, "Similar Case Exists");
+        Set<String> draftTaskIds = saveScheduledObservationDraft(animalId, NIRC_DAILY_OBS_VALUES.size() * 2);
+
+        // Deleting one task's observations must take the copies on the other task with them, and that task once it is empty
+        Iterator<String> tasks = draftTaskIds.iterator();
+        String deletedTaskId = tasks.next();
+        String copyTaskId = tasks.next();
+        log("Deleting the observations on one draft task");
+        getApiHelper().deleteAllRecords("study", "clinical_observations", new Filter("taskid", deletedTaskId));
+
+        Assert.assertEquals("Deleting an entry should delete its copies on the other task", List.of(), getClinicalObservations(animalId));
+        Assert.assertEquals("The task left empty by the deleted copies should be deleted", 0,
+                executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("taskid", copyTaskId))).getRowCount().intValue());
+    }
+
+    @Test
+    public void testScheduledObservationGroupEditSurvivesSharedTask()
+    {
+        String animalId = sharedTaskGroupAnimalId;
+
+        // Two orders from one submission share its taskid, so two of the group's observations land on one task
+        log("Ordering the same observation twice in one submission and once in another");
+        orderSharedCategoryObservations(animalId, 2);
+        orderSharedCategoryObservations(animalId, 1);
+
+        saveScheduledObservationDraft(animalId, 3);
+        Map<String, List<String>> objectIdsByTask = getClinicalObservations(animalId, "objectid", "taskid").stream()
+                .collect(Collectors.groupingBy(row -> String.valueOf(row.get("taskid")), Collectors.mapping(row -> String.valueOf(row.get("objectid")), Collectors.toList())));
+        String sharedTaskId = objectIdsByTask.entrySet().stream().filter(e -> e.getValue().size() == 2).map(Map.Entry::getKey).findFirst()
+                .orElseThrow(() -> new AssertionError("Expected two of the group's observations on one task: " + objectIdsByTask));
+        String otherTaskObjectId = objectIdsByTask.entrySet().stream().filter(e -> !e.getKey().equals(sharedTaskId)).map(e -> e.getValue().getFirst()).findFirst().orElseThrow();
+
+        log("Editing one of the two observations on the shared task and finalizing it");
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", NIRC_OBSERVATIONS_FORM_TYPE, "taskid", sharedTaskId)));
+        Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
+        Assert.assertEquals("Expected both of the shared task's observations in the form", 2, observation.getRowCount());
+        String editedObjectId = String.valueOf(observation.getFieldValue(1, "objectid"));
+        String untouchedObjectId = objectIdsByTask.get(sharedTaskId).stream().filter(id -> !id.equals(editedObjectId)).findFirst().orElseThrow();
+        observation.setGridCellJS(1, "remark", EDITED_REMARK);
+        submitForm("Submit Final", "Finalize");
+        waitFor(() -> countCompletedObservations(animalId) >= 3, "Finalizing the shared task did not complete the group", WAIT_FOR_PAGE);
+
+        // The untouched row is saved by the same batch, so it must neither revert the edit nor receive it
+        Map<String, String> remarkByObjectId = getClinicalObservations(animalId, "objectid", "remark").stream()
+                .collect(Collectors.toMap(row -> String.valueOf(row.get("objectid")), row -> String.valueOf(row.get("remark"))));
+        Assert.assertEquals("The edited observation lost its edit", EDITED_REMARK, remarkByObjectId.get(editedObjectId));
+        Assert.assertEquals("The edit should carry to the observation on the other task", EDITED_REMARK, remarkByObjectId.get(otherTaskObjectId));
+        Assert.assertEquals("The untouched observation on the edited task should keep its remark", "remark for " + SHARED_ORDER_CATEGORY, remarkByObjectId.get(untouchedObjectId));
+        assertTasksQCState(objectIdsByTask.keySet(), EHRQCState.COMPLETED.label);
+        closeExtraWindows();
+    }
+
+    @Test
+    public void testCopyTaskFinalizeLeavesFormTaskWithDrafts() throws Exception
+    {
+        String animalId = copyTaskDraftAnimalId;
+
+        createClinicalCase(animalId, "Finalize");
+        createClinicalCase(animalId, "Similar Case Exists");
+        int expectedObservations = NIRC_DAILY_OBS_VALUES.size() * 2;
+        Set<String> draftTaskIds = saveScheduledObservationDraft(animalId, expectedObservations);
+
+        // Each entry heads its own group, and the entries stay on the form's task
+        Set<String> formTaskIds = executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("Id", animalId)), List.of("objectid", "observationGroupId", "taskid")).getRows().stream()
+                .filter(row -> String.valueOf(row.get("objectid")).equals(String.valueOf(row.get("observationGroupId"))))
+                .map(row -> String.valueOf(row.get("taskid")))
+                .collect(Collectors.toSet());
+        Assert.assertEquals("Expected every entry on the form's task", 1, formTaskIds.size());
+        String formTaskId = formTaskIds.iterator().next();
+        String copyTaskId = draftTaskIds.stream().filter(taskId -> !taskId.equals(formTaskId)).findFirst().orElseThrow();
+
+        log("Adding a draft weight to the form's task");
+        String[] draftWeightFields = {"Id", "date", "weight", "taskid", FIELD_QCSTATELABEL, "performedby"};
+        Object[][] draftWeightData = {{animalId, new Date(), 7.5, formTaskId, EHRQCState.IN_PROGRESS.label, 1004}};
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "weight", "lsid", draftWeightFields, draftWeightData), getExtraContext());
+
+        log("Finalizing the copy task");
+        beginAt(WebTestHelper.buildURL("ehr", getContainerPath(), "dataEntryForm", Map.of("formType", NIRC_OBSERVATIONS_FORM_TYPE, "taskid", copyTaskId)));
+        submitForm("Submit Final", "Finalize");
+        waitFor(() -> countCompletedObservations(animalId) >= expectedObservations, "Finalizing the copy task did not complete the entries on the form's task", WAIT_FOR_PAGE);
+
+        assertTasksQCState(Set.of(copyTaskId), EHRQCState.COMPLETED.label);
+        assertTasksQCState(Set.of(formTaskId), EHRQCState.IN_PROGRESS.label);
+        List<Map<String, Object>> weights = executeSelectRowCommand("study", "weight", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("Id", animalId)), List.of("taskid", "QCState/Label")).getRows();
+        Assert.assertEquals("Expected the single draft weight", 1, weights.size());
+        Assert.assertEquals("The draft weight should stay a draft", EHRQCState.IN_PROGRESS.label, String.valueOf(weights.getFirst().get("QCState/Label")));
+        closeExtraWindows();
+    }
+
+    // Orders SHARED_ORDER_CATEGORY for the animal count times in one Bulk Clinical Entry submission, so the orders share its taskid.
+    private void orderSharedCategoryObservations(String animalId, int count)
+    {
+        int ordersBefore = getObservationOrders(animalId).size();
+        gotoEnterData();
+        waitAndClickAndWait(Locator.linkWithText("Bulk Clinical Entry"));
+        Ext4GridRef observationOrders = _helper.getExt4GridForFormSection("Observation Orders");
+        for (int i = 0; i < count; i++)
+            addObservationOrderRow(observationOrders, animalId);
+        submitForm("Submit Final", "Finalize");
+        waitFor(() -> getObservationOrders(animalId).size() >= ordersBefore + count, "Observation orders were not saved", WAIT_FOR_PAGE);
+    }
+
+    private void assertTasksQCState(Set<String> taskIds, String expectedQCState)
+    {
+        List<Map<String, Object>> tasks = executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("taskid", String.join(";", taskIds), Filter.Operator.IN)), List.of("taskid", "QCState/Label")).getRows();
+        Assert.assertEquals("Expected every task to exist", taskIds.size(), tasks.size());
+        for (Map<String, Object> task : tasks)
+            Assert.assertEquals("Task " + task.get("taskid") + " has the wrong QC state", expectedQCState, String.valueOf(task.get("QCState/Label")));
+    }
+
+    private void assertOneDailyObsOrderPerCategory(String caseId, String expectedQCState)
+    {
+        Map<String, Integer> ordersPerCategory = new HashMap<>();
+        for (Map<String, Object> order : executeSelectRowCommand("study", "observation_order", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("caseid", caseId)),
+                List.of("category", "frequency", "QCState/Label")).getRows())
+        {
+            Assert.assertEquals("Daily observation order for " + order.get("category") + " should be SID", "SID", String.valueOf(order.get("frequency")));
+            Assert.assertEquals("Daily observation order for " + order.get("category") + " should follow the case's QC state", expectedQCState, String.valueOf(order.get("QCState/Label")));
+            ordersPerCategory.merge(String.valueOf(order.get("category")), 1, Integer::sum);
+        }
+        Assert.assertEquals("Expected the daily observation categories for case " + caseId, NIRC_DAILY_OBS_VALUES.keySet(), ordersPerCategory.keySet());
+        ordersPerCategory.forEach((category, count) ->
+                Assert.assertEquals("Expected one daily order for category " + category, Integer.valueOf(1), count));
+    }
+
+    private void assertOneObservationPerOrder(String animalId)
+    {
+        Map<String, Integer> observationsPerOrder = new HashMap<>();
+        getOrderIdByObservation(animalId).values().forEach(orderId -> observationsPerOrder.merge(orderId, 1, Integer::sum));
+        observationsPerOrder.forEach((orderId, count) ->
+                Assert.assertEquals("Expected one observation for order " + orderId, Integer.valueOf(1), count));
+    }
+
+    private Map<String, String> getOrderIdByObservation(String animalId)
+    {
+        Map<String, String> orderIdByObservation = new HashMap<>();
+        for (Map<String, Object> row : getClinicalObservations(animalId))
+            orderIdByObservation.put(String.valueOf(row.get("objectid")), String.valueOf(row.get("orderId")));
+        return orderIdByObservation;
+    }
+
+    private long countCompletedObservations(String animalId)
+    {
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId)), List.of("objectid", "QCState/Label"))
+                .getRows().stream()
+                .filter(row -> EHRQCState.COMPLETED.label.equals(String.valueOf(row.get("QCState/Label"))))
+                .count();
+    }
+
+    // Saves the slot's observations as a draft from the schedule and returns the tasks they were saved to.
+    private Set<String> saveScheduledObservationDraft(String animalId, int expectedObservations)
+    {
+        log("Saving the scheduled observations as a draft");
+        openScheduledObservationForm(animalId);
+        fillScheduledObservations();
+        waitForFormValidationToClear();
+        waitAndClick(Locator.linkWithText("Save Draft"));
+        waitFor(() -> String.valueOf(getDriver().getCurrentUrl()).contains("enterData"), "Saving the draft did not return to Enter Data", WAIT_FOR_PAGE);
+        waitFor(() -> getClinicalObservations(animalId).size() >= expectedObservations, "Draft observations were not saved", WAIT_FOR_PAGE);
+        Assert.assertEquals("Expected one draft observation per order", expectedObservations, getClinicalObservations(animalId).size());
+        Set<String> draftTaskIds = getTaskIds(animalId);
+        Assert.assertEquals("Expected the draft split across one task per case", 2, draftTaskIds.size());
+        return draftTaskIds;
+    }
+
+    // Opens the Observations form from the animal's single row on today's observation schedule.
+    private void openScheduledObservationForm(String animalId)
+    {
+        goToEHRFolder();
+        waitAndClickAndWait(Locator.linkWithText("Today's Observation Schedule"));
+        DataRegionTable table = new AnimalHistoryPage<>(getDriver()).getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", animalId);
+        Assert.assertEquals("Expected a single scheduled slot for " + animalId, 1, table.getDataRowCount());
+        table.link(0, "observationRecord").click();
+        switchToWindow(1);
+        waitForText(animalId);
+    }
+
     // Appends an observation order row for the animal. SID puts the order on a single 8:00 AM slot, so each
     // animal gets exactly one row on today's observation schedule.
     private void addObservationOrderRow(Ext4GridRef observationOrders, String animalId)
@@ -1086,6 +1385,22 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
     // new case, or "Similar Case Exists" when the animal already has an active case for the same problem.
     private void createClinicalCase(String animalId, String confirmWindowTitle)
     {
+        fillClinicalCase(animalId);
+        submitForm("Submit Final", confirmWindowTitle);
+    }
+
+    private void submitClinicalCaseForReview(String animalId)
+    {
+        fillClinicalCase(animalId);
+        waitForFormValidationToClear();
+        waitAndClick(_helper.getDataEntryButton("Submit for Review"));
+        Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
+        _ext4Helper.selectComboBoxItem("Assign To:", Ext4Helper.TextMatchTechnique.CONTAINS, NIRC_VET_NAME);
+        submitForReview.clickButton("Submit");
+    }
+
+    private void fillClinicalCase(String animalId)
+    {
         gotoEnterData();
         waitAndClickAndWait(Locator.linkWithText("Clinical Cases"));
         Ext4FieldRef problem = _helper.getExt4FieldForFormSection("Clinical Case", "Problem Area");
@@ -1097,12 +1412,17 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         setFormElement(Locator.name("Id"), animalId);
         _helper.setDataEntryField("s", "Subjective for " + animalId);
         _helper.setDataEntryField("remark", "Remarks for " + animalId);
-        submitForm("Submit Final", confirmWindowTitle);
     }
 
-    // Fills in the Observations grid opened from the schedule, setting a valid value and remark for each
-    // category row regardless of the grid's row order, then submits.
+    // Fills in the Observations grid opened from the schedule, then submits.
     private void enterScheduledObservations()
+    {
+        fillScheduledObservations();
+        submitForm("Submit Final", "Finalize");
+    }
+
+    // Sets a valid value and remark for each category row of the Observations grid, regardless of row order.
+    private void fillScheduledObservations()
     {
         Ext4GridRef observation = _helper.getExt4GridForFormSection("Observations");
         int rowCount = observation.getRowCount();
@@ -1114,7 +1434,6 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
                 observation.setGridCell(row, "observation", value);
             observation.setGridCellJS(row, "remark", "remark for " + category);
         }
-        submitForm("Submit Final", "Finalize");
     }
 
     // Asserts that the animal's scheduled observations are grouped under the expected number of distinct
@@ -1148,6 +1467,17 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest
         // study datasets and ehr.tasks are defined in the EHR study folder, not the project root, so query
         // that container explicitly rather than relying on the default project-scoped overload.
         return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId))).getRows();
+    }
+
+    private List<Map<String, Object>> getClinicalObservations(String animalId, String... columns)
+    {
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId)), List.of(columns)).getRows();
+    }
+
+    private Set<String> getTaskIds(String animalId)
+    {
+        return executeSelectRowCommand("study", "clinical_observations", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId)), List.of("taskid"))
+                .getRows().stream().map(row -> String.valueOf(row.get("taskid"))).collect(Collectors.toSet());
     }
 
     private Set<String> getObservationFormTaskIds()
