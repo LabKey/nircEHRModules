@@ -10,6 +10,7 @@ ehr_lookups	alopecia_type	Behavior	Alopecia Type	Behavior observation fixed valu
 ehr_lookups	alopecia_regrowth	Behavior	Alopecia Regrowth	Behavior observation fixed values.
 ehr_lookups	amount_units	Clinical	Amount Units	"Used in drugs, treatments given and treatments ordered datasets."
 ehr_lookups	app_score	Behavior	Appetite Score	Behavior observation fixed values.
+ehr_lookups	areas	Housing	Areas	Top level of the housing location hierarchy.
 ehr_lookups	arrival_type	Colony Management	Arrival Type	Types of arrivals.
 ehr_lookups	arthritis_types	Clinical	Arthritis Types	Clinical observation fixed values.
 ehr_lookups	att_score	Behavior	Attitude Score	Behavior observation fixed values.
@@ -22,7 +23,9 @@ ehr_lookups	blood_draw_reason	Clinical	Blood Draw Reason	Used in blood draw data
 ehr_lookups	blood_draw_tube_type	Clinical	Blood Draw Tube Type	Used in blood draw datasets.
 ehr_lookups	blood_sample_type	Clinical	Blood Sample Types	Used in blood draw datasets.
 ehr_lookups	blood_tube_volumes	Clinical	Blood Tube Volumes	Used in blood draw datasets.
-ehr_lookups	cage_type	Colony Management	Cage Type	Used in cage details.
+ehr_lookups	buildings	Housing	Buildings	Buildings within an area.
+ehr_lookups	cage	Housing	Cages	Cage locations within a room.
+ehr_lookups	cage_type	Housing	Cage Type	Used in cage details.
 ehr_lookups	calculated_status_codes	Colony Management	Calculated Status	Animal status values.
 ehr_lookups	capillary_refill_time	Clinical	Capillary Refill Times	Used clinical observations.
 ehr_lookups	card_format	Colony Management	Card Format	
@@ -55,6 +58,7 @@ ehr_lookups	fecal_smear_score	Clinical	Fecal Smear Score	Clinical observation fi
 ehr_lookups	feed_assess_types	Behavior	Fecal Assessment Types	Behavior observation fixed values.
 ehr_lookups	flag_categories	Colony Management	Flag Categories	Used to specify flag behavior.
 ehr_lookups	flag_values	Colony Management	Flag Values	Animal flag values.
+ehr_lookups	floors	Housing	Floors	Floors within a building.
 ehr_lookups	gastro_types	Clinical	Gastrointestinal Types	Clinical observation fixed values.
 ehr_lookups	gender_codes	Colony Management	Sex Codes	Used in demographics dataset.
 ehr_lookups	general_obs	Clinical	General Observation Types	Clinical observation types.
@@ -110,18 +114,19 @@ ehr_lookups	regulatory_stress_levels	Colony Management	Regulatory Stress Levels
 ehr_lookups	req_order_state	Colony Management	Request Order State	
 ehr_lookups	req_order_type	Colony Management	Request Order Type	
 ehr_lookups	respiratory_observations	Clinical	Respiratory Observations	Used in clinical observations.
+ehr_lookups	rooms	Housing	Rooms	Rooms within a building and floor.
 ehr_lookups	routes	Clinical	Treatment Routes	Used in drug and treatment datasets.
 ehr_lookups	sib_score	Behavior	SIB Score	Behavior observation fixed values.
 ehr_lookups	skin_problem	Clinical	Skin Problems	Clinical observation fixed values.
 ehr_lookups	source	Colony Management	Source	
 ehr_lookups	species	Colony Management	Species	
-ehr_lookups	snomed	Research	Treatments	List of animal treatments.
+ehr_lookups	snomed	Research	Treatments	List of animal treatments and drugs.
 ehr_lookups	species_codes	Colony Management	Species Codes	
 ehr_lookups	stool_score	Clinical	Stool Score	
 ehr_lookups	stool_types	Clinical	Stool Types	
 ehr_lookups	tb_obs_score	Clinical	TB Observation Scores	Clinical observation fixed values.
 ehr_lookups	temperament	Behavior	Temperament	Behavior observation fixed values.
-ehr_lookups	testicular_volume    	Clinical	Testicular Volume   	Testicular volume values.
+ehr_lookups	testicular_volume	Clinical	Testicular Volume	Testicular volume values.
 ehr_lookups	termination_reason_codes	Clinical	Termination Reason Codes	Clinical observation fixed values.
 ehr_lookups	trauma_size	Clinical	Trauma Size	Clinical observation fixed values.
 ehr_lookups	treatment_frequency	Clinical	Treatment Frequency	Used in treatment and drug datasets.
