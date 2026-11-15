@@ -54,6 +54,7 @@ import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.LogMethod;
+import org.labkey.test.util.PasswordUtil;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 import org.labkey.test.util.ehr.EHRClientAPIHelper;
@@ -90,6 +91,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.labkey.test.components.html.Input.Input;
@@ -130,6 +132,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String sharedTaskGroupAnimalId = "TESTSHAREDGRP8686";
     // Dedicated animal for testCopyTaskFinalizeLeavesFormTaskWithDrafts.
     private static final String copyTaskDraftAnimalId = "TESTCOPYDRAFT8787";
+    // Dedicated animals for the review-required case tests.
+    private static final String caseLinkAnimalId = "TESTCASELINK8888";
+    private static final String caseGuardAnimalId = "TESTCASEGUARD8989";
+    private static final String caseCloseAnimalId = "TESTCASECLOSE9292";
+    private static final String caseRoundsAnimalId = "TESTCASEROUNDS9393";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -560,6 +567,10 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         provisionTestSubject(groupDeleteAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(sharedTaskGroupAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(copyTaskDraftAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(caseLinkAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(caseGuardAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(caseCloseAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(caseRoundsAnimalId, CAGES[2], pastDate1);
 
         primeCaches();
     }
@@ -1113,6 +1124,117 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareUpdateCommand("study", "cases", "lsid", fields, data, null), getExtraContext());
 
         assertOneDailyObsOrderPerCategory(caseId, EHRQCState.COMPLETED.label);
+    }
+
+    @Test
+    public void testCaseUpdateLinkFollowsReviewState()
+    {
+        String reviewCaseId = insertCaseOnTask(caseLinkAnimalId, EHRQCState.REVIEW_REQUIRED.label);
+        String completedCaseId = insertCaseOnTask(caseLinkAnimalId, EHRQCState.COMPLETED.label);
+        String reviewTaskId = String.valueOf(getCaseRow(reviewCaseId).get("taskid"));
+
+        String reviewHref = getCaseUpdateHref(reviewCaseId).toLowerCase();
+        Assert.assertTrue("A case in review should open its own task: " + reviewHref, reviewHref.contains("taskid=" + reviewTaskId.toLowerCase()));
+        Assert.assertFalse("A case in review should not open a new task: " + reviewHref, reviewHref.contains("caseid="));
+
+        String completedHref = getCaseUpdateHref(completedCaseId).toLowerCase();
+        Assert.assertTrue("A completed case should open a new task: " + completedHref, completedHref.contains("caseid=" + completedCaseId.toLowerCase()) && completedHref.contains("edit=true"));
+    }
+
+    @Test
+    public void testCaseInReviewOnlyFinalizedByOwnTask()
+    {
+        String caseId = insertCaseOnTask(caseGuardAnimalId, EHRQCState.REVIEW_REQUIRED.label);
+        String taskId = String.valueOf(getCaseRow(caseId).get("taskid"));
+
+        log("Saving the case from a form on another task");
+        saveCaseFromTask(caseId, UUID.randomUUID().toString(), new String[]{"plan"}, new Object[]{"Plan from another task"});
+        Map<String, Object> row = getCaseRow(caseId);
+        assertEquals("The edit should save", "Plan from another task", row.get("plan"));
+        assertEquals("Another task must not finalize the case's review", EHRQCState.REVIEW_REQUIRED.label, row.get("QCState/Label"));
+
+        log("Saving the case from its own task");
+        saveCaseFromTask(caseId, taskId, new String[]{"plan"}, new Object[]{"Plan from its own task"});
+        assertEquals("The case's own task should finalize it", EHRQCState.COMPLETED.label, getCaseRow(caseId).get("QCState/Label"));
+    }
+
+    @Test
+    public void testSameDayCaseCloseRemovesUnstartedOrders()
+    {
+        // Opening the case adds its daily orders starting tomorrow; this order has already started.
+        String caseId = insertCaseOnTask(caseCloseAnimalId, EHRQCState.REVIEW_REQUIRED.label);
+        String taskId = String.valueOf(getCaseRow(caseId).get("taskid"));
+        String startedOrderId = UUID.randomUUID().toString();
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "observation_order", "lsid",
+                new String[]{"Id", "date", "category", "frequency", "caseid", "taskid", FIELD_QCSTATELABEL, FIELD_OBJECTID, "performedby"},
+                new Object[][]{{caseCloseAnimalId, LocalDateTime.now().minusHours(1), SHARED_ORDER_CATEGORY, "SID", caseId, taskId, EHRQCState.REVIEW_REQUIRED.label, startedOrderId, 1004}}),
+                getExtraContext().put("targetQC", EHRQCState.REVIEW_REQUIRED.label));
+
+        log("Closing the case the day it opened");
+        saveCaseFromTask(caseId, taskId, new String[]{"enddate", "closeRemark"}, new Object[]{new Date(), "Closed the day it opened"});
+
+        List<Map<String, Object>> orders = executeSelectRowCommand("study", "observation_order", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("caseid", caseId)), List.of("objectid", "enddate")).getRows();
+        assertEquals("Only the started order should remain", List.of(startedOrderId), orders.stream().map(o -> String.valueOf(o.get("objectid"))).toList());
+        assertEquals("The started order should end when the case closed", getCaseRow(caseId).get("enddate"), orders.getFirst().get("enddate"));
+    }
+
+    @Test
+    public void testRecordProcedureLeavesCaseInReview()
+    {
+        String caseId = insertCaseOnTask(caseRoundsAnimalId, EHRQCState.REVIEW_REQUIRED.label);
+        String procedureOrderId = UUID.randomUUID().toString();
+        Object procedure = executeSelectRowCommand("ehr_lookups", "procedures", ContainerFilter.Current, "/" + getContainerPath(), List.of(), List.of("rowid"))
+                .getRows().getFirst().get("rowid");
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "prc_order", "lsid",
+                new String[]{"Id", "date", "windowStart", "windowEnd", "category", "procedure", "caseid", FIELD_QCSTATELABEL, FIELD_OBJECTID, "performedby"},
+                new Object[][]{{caseRoundsAnimalId, new Date(), new Date(), LocalDateTime.now().plusDays(1), "Clinical", procedure, caseId, EHRQCState.COMPLETED.label, procedureOrderId, 1004}}),
+                getExtraContext());
+
+        log("Recording the procedure through Clinical Rounds, a new task");
+        beginAt(String.format("%s/query-executeQuery.view?schemaName=study&query.queryName=prc_order&query.columns=objectid,procedureRecord&query.objectid~eq=%s", getContainerPath(), procedureOrderId));
+        beginAt(new DataRegionTable("query", this).link(0, "procedureRecord").getAttribute("href"));
+        submitForm("Submit Final", "Finalize");
+        waitFor(() -> !executeSelectRowCommand("study", "prc", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", caseRoundsAnimalId))).getRows().isEmpty(),
+                "The procedure was not saved", WAIT_FOR_PAGE);
+
+        assertEquals("Recording a procedure must not finalize the case's review", EHRQCState.REVIEW_REQUIRED.label, getCaseRow(caseId).get("QCState/Label"));
+    }
+
+    // Inserts a clinical case on a task of its own, as the case forms do.
+    private String insertCaseOnTask(String animalId, String qcLabel)
+    {
+        String taskId = UUID.randomUUID().toString().toUpperCase();
+        String caseId = UUID.randomUUID().toString().toUpperCase();
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("ehr", "tasks", "taskid",
+                new String[]{"taskid", "title", "formtype", "category", "caseid", FIELD_QCSTATELABEL},
+                new Object[][]{{taskId, "Clinical Cases", "Clinical Cases", "Task", caseId, qcLabel}}), getExtraContext().put("targetQC", qcLabel));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "cases", "lsid",
+                new String[]{"Id", "date", "category", "problemCategory", "openRemark", "performedby", "taskid", "caseid", FIELD_OBJECTID, FIELD_QCSTATELABEL},
+                new Object[][]{{animalId, new Date(), "Clinical", "General abnormality", "Case for " + animalId, 1004, taskId, caseId, caseId, qcLabel}}),
+                getExtraContext().put("targetQC", qcLabel));
+        return caseId;
+    }
+
+    // Saves the case the way a case form on formTaskId's task does. Runs as the site admin, since closing a case needs a veterinarian.
+    private void saveCaseFromTask(String caseId, String formTaskId, String[] fields, Object[] values)
+    {
+        String[] allFields = Stream.concat(Stream.of("lsid"), Arrays.stream(fields)).toArray(String[]::new);
+        Object[] allValues = Stream.concat(Stream.of(getCaseRow(caseId).get("lsid")), Arrays.stream(values)).toArray();
+        getApiHelper().doSaveRows(PasswordUtil.getUsername(), getApiHelper().prepareUpdateCommand("study", "cases", "lsid", allFields, new Object[][]{allValues}, null),
+                getExtraContext().put("formTaskId", formTaskId));
+    }
+
+    private Map<String, Object> getCaseRow(String caseId)
+    {
+        return executeSelectRowCommand("study", "cases", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("objectid", caseId)),
+                List.of("lsid", "taskid", "plan", "enddate", "QCState/Label")).getRows().getFirst();
+    }
+
+    private String getCaseUpdateHref(String caseId)
+    {
+        beginAt(String.format("%s/query-executeQuery.view?schemaName=study&query.queryName=cases&query.columns=objectid,caseCheck&query.objectid~eq=%s", getContainerPath(), caseId));
+        return new DataRegionTable("query", this).link(0, "caseCheck").getAttribute("href");
     }
 
     @Test
