@@ -1216,13 +1216,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         return caseId;
     }
 
-    // Saves the case the way a case form on formTaskId's task does. Runs as the site admin, since closing a case needs a veterinarian.
+    // Saves the case the way Submit Final on a case form on formTaskId's task does. Runs as the site admin, since closing a case needs a veterinarian.
     private void saveCaseFromTask(String caseId, String formTaskId, String[] fields, Object[] values)
     {
         String[] allFields = Stream.concat(Stream.of("lsid"), Arrays.stream(fields)).toArray(String[]::new);
         Object[] allValues = Stream.concat(Stream.of(getCaseRow(caseId).get("lsid")), Arrays.stream(values)).toArray();
         getApiHelper().doSaveRows(PasswordUtil.getUsername(), getApiHelper().prepareUpdateCommand("study", "cases", "lsid", allFields, new Object[][]{allValues}, null),
-                getExtraContext().put("formTaskId", formTaskId));
+                getExtraContext().put("formTaskId", formTaskId).put("targetQC", EHRQCState.COMPLETED.label));
     }
 
     private Map<String, Object> getCaseRow(String caseId)
