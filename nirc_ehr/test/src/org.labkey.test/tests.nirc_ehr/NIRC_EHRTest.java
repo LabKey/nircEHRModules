@@ -27,6 +27,7 @@ import org.junit.experimental.categories.Category;
 import org.labkey.api.reader.Readers;
 import org.labkey.api.util.FileUtil;
 import org.labkey.remoteapi.CommandException;
+import org.labkey.remoteapi.Connection;
 import org.labkey.remoteapi.SimplePostCommand;
 import org.labkey.remoteapi.core.SaveModulePropertiesCommand;
 import org.labkey.remoteapi.query.ContainerFilter;
@@ -54,7 +55,6 @@ import org.labkey.test.tests.ehr.AbstractGenericEHRTest;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.LogMethod;
-import org.labkey.test.util.PasswordUtil;
 import org.labkey.test.util.PortalHelper;
 import org.labkey.test.util.PostgresOnlyTest;
 import org.labkey.test.util.ehr.EHRClientAPIHelper;
@@ -77,6 +77,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -1161,22 +1162,36 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     @Test
     public void testSameDayCaseCloseRemovesUnstartedOrders()
     {
-        // Opening the case adds its daily orders starting tomorrow; this order has already started.
+        // Opening the case adds its daily orders starting tomorrow; one added order has already started, the other is unstarted but observed.
         String caseId = insertCaseOnTask(caseCloseAnimalId, EHRQCState.REVIEW_REQUIRED.label);
         String taskId = String.valueOf(getCaseRow(caseId).get("taskid"));
         String startedOrderId = UUID.randomUUID().toString();
+        String observedOrderId = UUID.randomUUID().toString();
         getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "observation_order", "lsid",
                 new String[]{"Id", "date", "category", "frequency", "caseid", "taskid", FIELD_QCSTATELABEL, FIELD_OBJECTID, "performedby"},
-                new Object[][]{{caseCloseAnimalId, LocalDateTime.now().minusHours(1), SHARED_ORDER_CATEGORY, "SID", caseId, taskId, EHRQCState.REVIEW_REQUIRED.label, startedOrderId, 1004}}),
+                new Object[][]{
+                        {caseCloseAnimalId, LocalDateTime.now().minusHours(1), SHARED_ORDER_CATEGORY, "SID", caseId, taskId, EHRQCState.REVIEW_REQUIRED.label, startedOrderId, 1004},
+                        {caseCloseAnimalId, LocalDate.now().plusDays(1).atTime(8, 0), SHARED_ORDER_CATEGORY, "SID", caseId, taskId, EHRQCState.REVIEW_REQUIRED.label, observedOrderId, 1004}}),
                 getExtraContext().put("targetQC", EHRQCState.REVIEW_REQUIRED.label));
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "clinical_observations", "lsid",
+                new String[]{"Id", "date", "category", "observation", "caseid", "orderId", "taskid", FIELD_QCSTATELABEL, FIELD_OBJECTID, "performedby"},
+                new Object[][]{{caseCloseAnimalId, new Date(), SHARED_ORDER_CATEGORY, "Normal", caseId, observedOrderId, taskId, EHRQCState.REVIEW_REQUIRED.label, UUID.randomUUID().toString(), 1004}}),
+                getExtraContext().put("targetQC", EHRQCState.REVIEW_REQUIRED.label));
+        Object observedOrderStart = getObservationOrders(caseId).stream().filter(o -> observedOrderId.equals(String.valueOf(o.get("objectid")))).findFirst().orElseThrow().get("date");
 
         log("Closing the case the day it opened");
         saveCaseFromTask(caseId, taskId, new String[]{"enddate", "closeRemark"}, new Object[]{new Date(), "Closed the day it opened"});
 
-        List<Map<String, Object>> orders = executeSelectRowCommand("study", "observation_order", ContainerFilter.Current, "/" + getContainerPath(),
-                List.of(new Filter("caseid", caseId)), List.of("objectid", "enddate")).getRows();
-        assertEquals("Only the started order should remain", List.of(startedOrderId), orders.stream().map(o -> String.valueOf(o.get("objectid"))).toList());
-        assertEquals("The started order should end when the case closed", getCaseRow(caseId).get("enddate"), orders.getFirst().get("enddate"));
+        Map<String, Map<String, Object>> orders = getObservationOrders(caseId).stream().collect(Collectors.toMap(o -> String.valueOf(o.get("objectid")), o -> o));
+        assertEquals("Only the started and observed orders should remain", Set.of(startedOrderId, observedOrderId), orders.keySet());
+        assertEquals("The started order should end when the case closed", getCaseRow(caseId).get("enddate"), orders.get(startedOrderId).get("enddate"));
+        assertEquals("The observed order should end on its start date", observedOrderStart, orders.get(observedOrderId).get("enddate"));
+    }
+
+    private List<Map<String, Object>> getObservationOrders(String caseId)
+    {
+        return executeSelectRowCommand("study", "observation_order", ContainerFilter.Current, "/" + getContainerPath(),
+                List.of(new Filter("caseid", caseId)), List.of("objectid", "date", "enddate")).getRows();
     }
 
     @Test
@@ -1216,13 +1231,32 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         return caseId;
     }
 
-    // Saves the case the way Submit Final on a case form on formTaskId's task does. Runs as the site admin, since closing a case needs a veterinarian.
+    // Saves the case the way Submit Final on a case form on formTaskId's task does. Runs as a vet, since closing a case needs one.
     private void saveCaseFromTask(String caseId, String formTaskId, String[] fields, Object[] values)
     {
         String[] allFields = Stream.concat(Stream.of("lsid"), Arrays.stream(fields)).toArray(String[]::new);
         Object[] allValues = Stream.concat(Stream.of(getCaseRow(caseId).get("lsid")), Arrays.stream(values)).toArray();
-        getApiHelper().doSaveRows(PasswordUtil.getUsername(), getApiHelper().prepareUpdateCommand("study", "cases", "lsid", allFields, new Object[][]{allValues}, null),
-                getExtraContext().put("formTaskId", formTaskId).put("targetQC", EHRQCState.COMPLETED.label));
+        SimplePostCommand command = getApiHelper().prepareUpdateCommand("study", "cases", "lsid", allFields, new Object[][]{allValues}, null);
+        command.setJsonObject(command.getJsonObject().put("extraContext",
+                getExtraContext().put("formTaskId", formTaskId).put("targetQC", EHRQCState.COMPLETED.label)));
+        // Shares the browser's session, so the impersonation must end here
+        Connection connection = createDefaultConnection();
+        try
+        {
+            connection.impersonate(NIRC_FULL_SUBMITTER_VET);
+            try
+            {
+                command.execute(connection, getContainerPath());
+            }
+            finally
+            {
+                connection.stopImpersonating();
+            }
+        }
+        catch (IOException | CommandException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     private Map<String, Object> getCaseRow(String caseId)
