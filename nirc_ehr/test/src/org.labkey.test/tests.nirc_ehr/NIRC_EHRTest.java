@@ -95,6 +95,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.labkey.test.components.html.Input.Input;
 
 @Category({EHR.class})
@@ -926,6 +927,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         ParticipantViewPage<?> reportPage = new AnimalHistoryPage<>(getDriver()).clickCategoryTab("Clinical")
                 .clickReportTab("All Clinical Cases");
         table = reportPage.getActiveReportDataRegion();
+        table.setFilter("Id", "Equals", animalId);
         Assert.assertEquals("Case not closed correctly ", LocalDateTime.now().format(_dateFormat) + " 00:00", table.getDataAsText(0, "enddate"));
     }
 
@@ -1143,20 +1145,42 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     }
 
     @Test
-    public void testCaseInReviewOnlyFinalizedByOwnTask()
+    public void testCaseStatusOnlyChangedByOwnTask()
     {
-        String caseId = insertCaseOnTask(caseGuardAnimalId, EHRQCState.REVIEW_REQUIRED.label);
+        String review = EHRQCState.REVIEW_REQUIRED.label;
+        String completed = EHRQCState.COMPLETED.label;
+        String caseId = insertCaseOnTask(caseGuardAnimalId, review);
         String taskId = String.valueOf(getCaseRow(caseId).get("taskid"));
+        String otherTaskId = UUID.randomUUID().toString().toUpperCase();
 
-        log("Saving the case from a form on another task");
-        saveCaseFromTask(caseId, UUID.randomUUID().toString(), new String[]{"plan"}, new Object[]{"Plan from another task"});
+        log("Another task's form can't finalize an unchanged case");
+        assertNull(saveCaseFromTask(caseId, otherTaskId, completed, new String[0], new Object[0]));
+        assertCaseState(caseId, taskId, review);
+
+        log("Another task's form can't change the case's status along with its fields");
+        String error = saveCaseFromTask(caseId, otherTaskId, completed, new String[]{"plan"}, new Object[]{"Plan finalized from another task"});
+        Assert.assertTrue("Unexpected error: " + error, error != null && error.contains("This case belongs to another task in " + review));
+        assertCaseState(caseId, taskId, review);
+
+        log("Another task's form can edit the case at its current status");
+        assertNull(saveCaseFromTask(caseId, otherTaskId, review, new String[]{"plan"}, new Object[]{"Plan from another task"}));
+        assertEquals("The edit should save", "Plan from another task", getCaseRow(caseId).get("plan"));
+        assertCaseState(caseId, taskId, review);
+
+        log("The case's own task finalizes it");
+        assertNull(saveCaseFromTask(caseId, taskId, completed, new String[]{"plan"}, new Object[]{"Plan from its own task"}));
+        assertCaseState(caseId, taskId, completed);
+
+        log("Another task's form can't send an unchanged completed case back to review");
+        assertNull(saveCaseFromTask(caseId, otherTaskId, review, new String[0], new Object[0]));
+        assertCaseState(caseId, taskId, completed);
+    }
+
+    private void assertCaseState(String caseId, String taskId, String qcLabel)
+    {
         Map<String, Object> row = getCaseRow(caseId);
-        assertEquals("The edit should save", "Plan from another task", row.get("plan"));
-        assertEquals("Another task must not finalize the case's review", EHRQCState.REVIEW_REQUIRED.label, row.get("QCState/Label"));
-
-        log("Saving the case from its own task");
-        saveCaseFromTask(caseId, taskId, new String[]{"plan"}, new Object[]{"Plan from its own task"});
-        assertEquals("The case's own task should finalize it", EHRQCState.COMPLETED.label, getCaseRow(caseId).get("QCState/Label"));
+        assertEquals("The case should stay on its own task", taskId, row.get("taskid"));
+        assertEquals("Unexpected case status", qcLabel, row.get("QCState/Label"));
     }
 
     @Test
@@ -1177,18 +1201,18 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 new String[]{"Id", "date", "category", "observation", "caseid", "orderId", "taskid", FIELD_QCSTATELABEL, FIELD_OBJECTID, "performedby"},
                 new Object[][]{{caseCloseAnimalId, new Date(), SHARED_ORDER_CATEGORY, "Normal", caseId, observedOrderId, taskId, EHRQCState.REVIEW_REQUIRED.label, UUID.randomUUID().toString(), 1004}}),
                 getExtraContext().put("targetQC", EHRQCState.REVIEW_REQUIRED.label));
-        Object observedOrderStart = getObservationOrders(caseId).stream().filter(o -> observedOrderId.equals(String.valueOf(o.get("objectid")))).findFirst().orElseThrow().get("date");
+        Object observedOrderStart = getCaseObservationOrders(caseId).stream().filter(o -> observedOrderId.equals(String.valueOf(o.get("objectid")))).findFirst().orElseThrow().get("date");
 
         log("Closing the case the day it opened");
-        saveCaseFromTask(caseId, taskId, new String[]{"enddate", "closeRemark"}, new Object[]{new Date(), "Closed the day it opened"});
+        assertNull(saveCaseFromTask(caseId, taskId, EHRQCState.COMPLETED.label, new String[]{"enddate", "closeRemark"}, new Object[]{new Date(), "Closed the day it opened"}));
 
-        Map<String, Map<String, Object>> orders = getObservationOrders(caseId).stream().collect(Collectors.toMap(o -> String.valueOf(o.get("objectid")), o -> o));
+        Map<String, Map<String, Object>> orders = getCaseObservationOrders(caseId).stream().collect(Collectors.toMap(o -> String.valueOf(o.get("objectid")), o -> o));
         assertEquals("Only the started and observed orders should remain", Set.of(startedOrderId, observedOrderId), orders.keySet());
         assertEquals("The started order should end when the case closed", getCaseRow(caseId).get("enddate"), orders.get(startedOrderId).get("enddate"));
         assertEquals("The observed order should end on its start date", observedOrderStart, orders.get(observedOrderId).get("enddate"));
     }
 
-    private List<Map<String, Object>> getObservationOrders(String caseId)
+    private List<Map<String, Object>> getCaseObservationOrders(String caseId)
     {
         return executeSelectRowCommand("study", "observation_order", ContainerFilter.Current, "/" + getContainerPath(),
                 List.of(new Filter("caseid", caseId)), List.of("objectid", "date", "enddate")).getRows();
@@ -1198,12 +1222,14 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     public void testRecordProcedureLeavesCaseInReview()
     {
         String caseId = insertCaseOnTask(caseRoundsAnimalId, EHRQCState.REVIEW_REQUIRED.label);
+        String caseTaskId = String.valueOf(getCaseRow(caseId).get("taskid"));
         String procedureOrderId = UUID.randomUUID().toString();
         Object procedure = executeSelectRowCommand("ehr_lookups", "procedures", ContainerFilter.Current, "/" + getContainerPath(), List.of(), List.of("rowid"))
                 .getRows().getFirst().get("rowid");
         getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("study", "prc_order", "lsid",
-                new String[]{"Id", "date", "windowStart", "windowEnd", "category", "procedure", "caseid", FIELD_QCSTATELABEL, FIELD_OBJECTID, "performedby"},
-                new Object[][]{{caseRoundsAnimalId, new Date(), new Date(), LocalDateTime.now().plusDays(1), "Clinical", procedure, caseId, EHRQCState.COMPLETED.label, procedureOrderId, 1004}}),
+                new String[]{"Id", "date", "windowStart", "windowEnd", "category", "procedure", "caseid", FIELD_QCSTATELABEL, FIELD_OBJECTID, "performedby", "orderedby"},
+                new Object[][]{{caseRoundsAnimalId, new Date(), new Date(), LocalDateTime.now().plusDays(1), "Clinical", procedure, caseId, EHRQCState.COMPLETED.label, procedureOrderId, 1004,
+                        String.valueOf(_userHelper.getUserId(NIRC_FULL_SUBMITTER_VET))}}),
                 getExtraContext());
 
         log("Recording the procedure through Clinical Rounds, a new task");
@@ -1213,7 +1239,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         waitFor(() -> !executeSelectRowCommand("study", "prc", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", caseRoundsAnimalId))).getRows().isEmpty(),
                 "The procedure was not saved", WAIT_FOR_PAGE);
 
-        assertEquals("Recording a procedure must not finalize the case's review", EHRQCState.REVIEW_REQUIRED.label, getCaseRow(caseId).get("QCState/Label"));
+        assertCaseState(caseId, caseTaskId, EHRQCState.REVIEW_REQUIRED.label);
     }
 
     // Inserts a clinical case on a task of its own, as the case forms do.
@@ -1231,14 +1257,13 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         return caseId;
     }
 
-    // Saves the case the way Submit Final on a case form on formTaskId's task does. Runs as a vet, since closing a case needs one.
-    private void saveCaseFromTask(String caseId, String formTaskId, String[] fields, Object[] values)
+    // Saves the case the way a form on taskId's task does. Runs as a vet, since closing a case needs one. Returns the save's error, if any.
+    private @Nullable String saveCaseFromTask(String caseId, String taskId, String targetQC, String[] fields, Object[] values)
     {
-        String[] allFields = Stream.concat(Stream.of("lsid"), Arrays.stream(fields)).toArray(String[]::new);
-        Object[] allValues = Stream.concat(Stream.of(getCaseRow(caseId).get("lsid")), Arrays.stream(values)).toArray();
+        String[] allFields = Stream.concat(Stream.of("lsid", "taskid"), Arrays.stream(fields)).toArray(String[]::new);
+        Object[] allValues = Stream.concat(Stream.of(getCaseRow(caseId).get("lsid"), taskId), Arrays.stream(values)).toArray();
         SimplePostCommand command = getApiHelper().prepareUpdateCommand("study", "cases", "lsid", allFields, new Object[][]{allValues}, null);
-        command.setJsonObject(command.getJsonObject().put("extraContext",
-                getExtraContext().put("formTaskId", formTaskId).put("targetQC", EHRQCState.COMPLETED.label)));
+        command.setJsonObject(command.getJsonObject().put("extraContext", getExtraContext().put("targetQC", targetQC)));
         // Shares the browser's session, so the impersonation must end here
         Connection connection = createDefaultConnection();
         try
@@ -1247,6 +1272,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
             try
             {
                 command.execute(connection, getContainerPath());
+                return null;
+            }
+            catch (CommandException e)
+            {
+                return e.getMessage();
             }
             finally
             {
