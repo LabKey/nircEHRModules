@@ -139,6 +139,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private static final String caseGuardAnimalId = "TESTCASEGUARD8989";
     private static final String caseCloseAnimalId = "TESTCASECLOSE9292";
     private static final String caseRoundsAnimalId = "TESTCASEROUNDS9393";
+    private static final String caseRoundTripAnimalId = "TESTCASETRIP9494";
 
     private final String[] weightFields = {"Id", "date", "enddate", "project", "weight", FIELD_QCSTATELABEL, FIELD_OBJECTID, FIELD_LSID, "_recordid", "performedby"};
     private final Object[] weightData1 = {getExpectedAnimalIDCasing("TESTSUBJECT1"), EHRClientAPIHelper.DATE_SUBSTITUTION, null, null, "12", EHRQCState.IN_PROGRESS.label, null, null, "_recordID", 1004};
@@ -573,6 +574,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         provisionTestSubject(caseGuardAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(caseCloseAnimalId, CAGES[2], pastDate1);
         provisionTestSubject(caseRoundsAnimalId, CAGES[2], pastDate1);
+        provisionTestSubject(caseRoundTripAnimalId, CAGES[2], pastDate1);
 
         primeCaches();
     }
@@ -1159,7 +1161,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         log("Another task's form can't change the case's status along with its fields");
         String error = saveCaseFromTask(caseId, otherTaskId, completed, new String[]{"plan"}, new Object[]{"Plan finalized from another task"});
-        Assert.assertTrue("Unexpected error: " + error, error != null && error.contains("This case belongs to another task in " + review));
+        Assert.assertTrue("Unexpected error: " + error, error != null && error.contains("This case belongs to another task with " + review + " status"));
         assertCaseState(caseId, taskId, review);
 
         log("Another task's form can edit the case at its current status");
@@ -1240,6 +1242,98 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
                 "The procedure was not saved", WAIT_FOR_PAGE);
 
         assertCaseState(caseId, caseTaskId, EHRQCState.REVIEW_REQUIRED.label);
+    }
+
+    @Test
+    public void testCaseReviewRoundTripKeepsTasksInSync()
+    {
+        String animalId = caseRoundTripAnimalId;
+        String review = EHRQCState.REVIEW_REQUIRED.label;
+        String completed = EHRQCState.COMPLETED.label;
+
+        log("Opening the case for review");
+        submitClinicalCaseForReview(animalId);
+        waitFor(() -> !executeSelectRowCommand("study", "cases", ContainerFilter.Current, "/" + getContainerPath(), List.of(new Filter("Id", animalId))).getRows().isEmpty(),
+                "The case was not saved", WAIT_FOR_PAGE);
+        String caseId = String.valueOf(getClinicalCase(animalId).get("caseid"));
+        String firstTaskId = waitForCaseStatus(caseId, review);
+        assertTaskInSync(firstTaskId, review);
+
+        log("The vet completes the case from its own task");
+        finalizeCaseAsVet(caseId, animalId, firstTaskId);
+        assertEquals("The case should stay on its own task", firstTaskId, waitForCaseStatus(caseId, completed));
+        assertTaskInSync(firstTaskId, completed);
+
+        log("Case Update sends the completed case back to review on a new task");
+        impersonate(NIRC_FULL_SUBMITTER_VET_TECH);
+        openCaseUpdate(caseId, animalId);
+        clickCaseEdit();
+        _helper.setDataEntryField("plan", "Plan revised for review of " + animalId);
+        _helper.setDataEntryField("remark", "Back to review for " + animalId);
+        submitForReviewToVet();
+        stopImpersonating();
+        String secondTaskId = waitForCaseStatus(caseId, review);
+        Assert.assertNotEquals("Case Update should move the case to its new task", firstTaskId, secondTaskId);
+        assertEquals("The case edit should save", "Plan revised for review of " + animalId, getCaseRow(caseId).get("plan"));
+        assertTaskInSync(secondTaskId, review);
+        assertTaskInSync(firstTaskId, completed);
+
+        log("The vet completes the case again from its new task");
+        finalizeCaseAsVet(caseId, animalId, secondTaskId);
+        assertEquals("The case should stay on its new task", secondTaskId, waitForCaseStatus(caseId, completed));
+        assertTaskInSync(secondTaskId, completed);
+        assertTaskInSync(firstTaskId, completed);
+        assertOneDailyObsOrderPerCategory(caseId, completed);
+    }
+
+    // Opens the case's Case Update link as the current user and waits for the form to load the case.
+    private void openCaseUpdate(String caseId, String animalId)
+    {
+        beginAt(getCaseUpdateHref(caseId));
+        waitForText(animalId);
+        waitForValidationToClear("Id is required");
+    }
+
+    private void clickCaseEdit()
+    {
+        waitForElement(Ext4Helper.Locators.ext4Button("Edit"));
+        Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
+        if (Boolean.TRUE.equals(_helper.getExt4FieldForFormSection("Clinical Case", "Case Plan").isDisabled()))
+            Ext4Helper.Locators.ext4Button("Edit").findElement(getDriver()).click();
+    }
+
+    // A case in review opens its own task from Case Update, so this also proves the link follows the case to the task the vet completes.
+    private void finalizeCaseAsVet(String caseId, String animalId, String taskId)
+    {
+        impersonate(NIRC_FULL_SUBMITTER_VET);
+        String href = getCaseUpdateHref(caseId);
+        Assert.assertTrue("Case Update should open the case's task " + taskId + ": " + href, href.toLowerCase().contains("taskid=" + taskId.toLowerCase()));
+        openCaseUpdate(caseId, animalId);
+        submitForm("Submit Final", "Finalize");
+        stopImpersonating();
+    }
+
+    // Waits for the case to reach qcLabel and returns the task that now holds it.
+    private String waitForCaseStatus(String caseId, String qcLabel)
+    {
+        waitFor(() -> qcLabel.equals(getCaseRow(caseId).get("QCState/Label")), "The case did not reach " + qcLabel, WAIT_FOR_PAGE);
+        return String.valueOf(getCaseRow(caseId).get("taskid"));
+    }
+
+    // The task and every record on it, including the case remarks that each form requires, share one status.
+    private void assertTaskInSync(String taskId, String qcLabel)
+    {
+        String containerPath = "/" + getContainerPath();
+        Map<String, Object> task = executeSelectRowCommand("ehr", "tasks", ContainerFilter.Current, containerPath, List.of(new Filter("taskid", taskId)), List.of("qcstate/Label")).getRows().getFirst();
+        assertEquals("Unexpected status for task " + taskId, qcLabel, task.get("qcstate/Label"));
+
+        Assert.assertFalse("Task " + taskId + " should hold the case's remarks",
+                executeSelectRowCommand("study", "clinremarks", ContainerFilter.Current, containerPath, List.of(new Filter("taskid", taskId))).getRows().isEmpty());
+        for (String dataset : List.of("cases", "clinremarks", "observation_order"))
+        {
+            for (Map<String, Object> row : executeSelectRowCommand("study", dataset, ContainerFilter.Current, containerPath, List.of(new Filter("taskid", taskId)), List.of("QCState/Label")).getRows())
+                assertEquals(dataset + " record is out of sync with task " + taskId, qcLabel, row.get("QCState/Label"));
+        }
     }
 
     // Inserts a clinical case on a task of its own, as the case forms do.
@@ -1580,6 +1674,11 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
     private void submitClinicalCaseForReview(String animalId)
     {
         fillClinicalCase(animalId);
+        submitForReviewToVet();
+    }
+
+    private void submitForReviewToVet()
+    {
         waitForFormValidationToClear();
         waitAndClick(_helper.getDataEntryButton("Submit for Review"));
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());

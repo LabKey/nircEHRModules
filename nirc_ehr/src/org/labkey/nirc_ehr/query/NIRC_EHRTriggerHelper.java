@@ -63,6 +63,7 @@ import org.labkey.nirc_ehr.notification.NIRCClinicalMoveNotification;
 import org.labkey.nirc_ehr.notification.NIRCDeathNotification;
 import org.labkey.nirc_ehr.notification.NIRCPregnancyOutcomeNotification;
 import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
+import org.labkey.nirc_ehr.table.NIRC_EHRSharedDatasetTrigger;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -723,6 +724,11 @@ public class NIRC_EHRTriggerHelper
         if (_container.hasPermission(_user, EHRVeterinarianPermission.class))
             return true;
         return false;
+    }
+
+    public boolean takesOverCompletedCase(String rowTaskId, String caseQcLabel)
+    {
+        return NIRC_EHRSharedDatasetTrigger.takesOverCompletedCase(_container, _user, rowTaskId, caseQcLabel);
     }
 
     public boolean isCaseClosed(String caseid)
