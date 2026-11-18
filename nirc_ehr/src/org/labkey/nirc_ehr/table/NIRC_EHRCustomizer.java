@@ -35,6 +35,7 @@ import org.labkey.api.ehr.security.EHRBehaviorEntryPermission;
 import org.labkey.api.ehr.security.EHRClinicalEntryPermission;
 import org.labkey.api.ehr.security.EHRDataEntryPermission;
 import org.labkey.api.ehr.security.EHRVeterinarianPermission;
+import org.labkey.api.ehr.table.AssignmentAtTimeColumns;
 import org.labkey.api.ehr.table.FixedWidthDisplayColumn;
 import org.labkey.api.ehr.table.TreatmentLinkConfig;
 import org.labkey.api.ehr.table.TreatmentLinkDisplayColumnFactory;
@@ -92,6 +93,12 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
             if (ti instanceof DatasetTable)
             {
                 ti.addTriggerFactory(new NIRC_EHRTriggerScriptFactory());
+                UserSchema ehrStudy = getEHRUserSchema(ti, "study");
+                if (ehrStudy != null)
+                {
+                    AssignmentAtTimeColumns.addProjectAtTimeCol(ti, ehrStudy);
+                    AssignmentAtTimeColumns.addProtocolAtTimeCol(ti, ehrStudy);
+                }
             }
 
             if (matches(ti, "ehr", "tasks") || matches(table, "ehr", "my_tasks"))
