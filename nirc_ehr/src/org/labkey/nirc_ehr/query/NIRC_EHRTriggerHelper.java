@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
+import org.labkey.api.collections.CaseInsensitiveHashSet;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
@@ -43,6 +44,7 @@ import org.labkey.api.query.DuplicateKeyException;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.InvalidKeyException;
 import org.labkey.api.query.QueryService;
+import org.labkey.api.query.QueryUpdateService;
 import org.labkey.api.query.QueryUpdateServiceException;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.security.User;
@@ -61,12 +63,14 @@ import org.labkey.nirc_ehr.notification.NIRCClinicalMoveNotification;
 import org.labkey.nirc_ehr.notification.NIRCDeathNotification;
 import org.labkey.nirc_ehr.notification.NIRCPregnancyOutcomeNotification;
 import org.labkey.nirc_ehr.notification.TriggerScriptNotification;
+import org.labkey.nirc_ehr.table.NIRC_EHRSharedDatasetTrigger;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -722,30 +726,118 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public void closeDailyClinicalObs(String caseid, String enddate)
+    public boolean takesOverCompletedCase(String rowTaskId, String caseQcLabel)
+    {
+        return NIRC_EHRSharedDatasetTrigger.takesOverCompletedCase(_container, _user, rowTaskId, caseQcLabel);
+    }
+
+    public boolean isCaseClosed(String caseid)
+    {
+        SimpleFilter filter = new SimpleFilter(FieldKey.fromString("objectid"), caseid);
+        filter.addCondition(FieldKey.fromString("enddate"), null, CompareType.NONBLANK);
+        return new TableSelector(getTableInfo("study", "cases"), filter, null).exists();
+    }
+
+    public void closeDailyClinicalObs(String caseid, Date enddate)
     {
         TableInfo ti = getTableInfo("study", "observation_order");
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("caseid"), caseid);
-        TableSelector ts = new TableSelector(ti, PageFlowUtil.set("objectid"), filter, null);
+        Collection<Map<String, Object>> orders = new TableSelector(ti, PageFlowUtil.set("objectid", "date", "enddate"), filter, null).getMapCollection();
 
-        Map<String, Object>[] orders = ts.getMapArray();
-        List<Map<String, Object>> rows = new ArrayList<>();
+        Map<String, Date> notStarted = new CaseInsensitiveHashMap<>();
+        List<Map<String, Object>> toEnd = new ArrayList<>();
         for (Map<String, Object> order : orders)
         {
-
-            Map<String, Object> row = new CaseInsensitiveHashMap<>();
-            row.put("objectid", order.get("objectid"));
-            row.put("enddate", enddate);
-            rows.add(row);
+            Date start = ConvertHelper.convert(order.get("date"), Date.class);
+            Date end = ConvertHelper.convert(order.get("enddate"), Date.class);
+            if (start != null && start.after(enddate))
+            {
+                notStarted.put((String) order.get("objectid"), start);
+            }
+            else if (end == null || end.after(enddate))
+            {
+                Map<String, Object> row = new CaseInsensitiveHashMap<>();
+                row.put("objectid", order.get("objectid"));
+                row.put("enddate", enddate);
+                toEnd.add(row);
+            }
         }
+
         try
         {
-            ti.getUpdateService().updateRows(_user, _container, rows, null, null, getExtraContext());
+            if (!toEnd.isEmpty())
+                Objects.requireNonNull(ti.getUpdateService()).updateRows(_user, _container, toEnd, null, null, getExtraContext());
         }
         catch (Exception e)
         {
             _log.error("Error closing daily clinical observation order", e);
         }
+
+        if (notStarted.isEmpty())
+            return;
+
+        // An end date before the start trips the shared EHR end-date WARN and blocks every later save of the case's task.
+        // Delete after commit, since the case's own form saves its copies of these orders later in the same transaction.
+        try (DbScope.Transaction transaction = ti.getSchema().getScope().ensureTransaction())
+        {
+            transaction.addCommitTask(() -> deleteUnstartedOrders(notStarted), DbScope.CommitTaskOption.POSTCOMMIT);
+            transaction.commit();
+        }
+    }
+
+    private void deleteUnstartedOrders(Map<String, Date> orderStarts)
+    {
+        // The closing vet may lack delete and update permission on Completed and Review Required orders
+        User user = Objects.requireNonNullElse(EHRService.get().getEHRUser(_container, false), _user);
+        QueryUpdateService qus = Objects.requireNonNull(getTableInfo("study", "observation_order").getUpdateService());
+
+        SimpleFilter observedFilter = new SimpleFilter(FieldKey.fromString("orderId"), orderStarts.keySet(), CompareType.IN);
+        Set<String> observed = new CaseInsensitiveHashSet(new TableSelector(getTableInfo("study", "clinical_observations"), Collections.singleton("orderId"), observedFilter, null).getArrayList(String.class));
+
+        List<String> toEnd = new ArrayList<>();
+        List<String> toDelete = new ArrayList<>();
+        orderStarts.keySet().forEach(id -> (observed.contains(id) ? toEnd : toDelete).add(id));
+
+        if (!toDelete.isEmpty())
+        {
+            List<Map<String, Object>> keys = toDelete.stream().map(id -> orderRow(id, null)).collect(Collectors.toList());
+            try
+            {
+                qus.deleteRows(user, _container, keys, null, getExtraContext());
+            }
+            catch (Exception e)
+            {
+                _log.error("Error deleting observation orders that had not started when their case closed", e);
+                toEnd.addAll(toDelete);
+            }
+        }
+
+        if (toEnd.isEmpty())
+            return;
+
+        // Ending on the start date schedules that one day but, unlike an earlier end date, avoids the end-date WARN
+        List<Map<String, Object>> rows = toEnd.stream().map(id -> orderRow(id, orderStarts.get(id))).collect(Collectors.toList());
+        List<Map<String, Object>> keys = toEnd.stream().map(id -> orderRow(id, null)).collect(Collectors.toList());
+        try
+        {
+            BatchValidationException errors = new BatchValidationException();
+            qus.updateRows(user, _container, rows, keys, errors, null, getExtraContext());
+            if (errors.hasErrors())
+                throw errors;
+        }
+        catch (Exception e)
+        {
+            _log.error("Error ending observation orders that had not started when their case closed", e);
+        }
+    }
+
+    private static Map<String, Object> orderRow(String objectId, @Nullable Date enddate)
+    {
+        Map<String, Object> row = new CaseInsensitiveHashMap<>();
+        row.put("objectid", objectId);
+        if (enddate != null)
+            row.put("enddate", enddate);
+        return row;
     }
 
     public void ensureDailyClinicalObservationOrders(String id, String caseid, final Date date, String performedby, String qcstate, String taskid, List<Map<String, Object>> ordersInTransaction)
