@@ -69,6 +69,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -725,9 +726,9 @@ public class NIRC_EHRTriggerHelper
         return false;
     }
 
-    public boolean takesOverCompletedCase(String rowTaskId, String caseQcLabel)
+    public boolean claimsCase(String rowTaskId, @Nullable String caseTaskId, String caseQcLabel)
     {
-        return NIRC_EHRSharedDatasetTrigger.takesOverCompletedCase(_container, _user, rowTaskId, caseQcLabel);
+        return NIRC_EHRSharedDatasetTrigger.claimsCase(_container, _user, rowTaskId, caseTaskId, caseQcLabel);
     }
 
     public boolean isCaseClosed(String caseid)
@@ -743,6 +744,9 @@ public class NIRC_EHRTriggerHelper
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("caseid"), caseid);
         Collection<Map<String, Object>> orders = new TableSelector(ti, PageFlowUtil.set("objectid", "date", "enddate"), filter, null).getMapCollection();
 
+        // A close entered without a time ends the whole day, so an order starting that day has already started
+        Date dayStart = DateUtils.truncate(enddate, Calendar.DATE);
+        Date startedBy = enddate.equals(dayStart) ? DateUtils.addMilliseconds(DateUtils.addDays(dayStart, 1), -1) : enddate;
         Set<String> notStarted = new CaseInsensitiveHashSet();
         List<Map<String, Object>> toEnd = new ArrayList<>();
         for (Map<String, Object> order : orders)
@@ -755,7 +759,8 @@ public class NIRC_EHRTriggerHelper
             Date newEnd = enddate;
             if (start != null && start.after(enddate))
             {
-                notStarted.add(objectId);
+                if (start.after(startedBy))
+                    notStarted.add(objectId);
                 newEnd = start;
             }
             if (end == null || end.after(newEnd))
