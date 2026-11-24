@@ -1161,7 +1161,7 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
         log("Another task's form can't change the case's status along with its fields");
         String error = saveCaseFromTask(caseId, otherTaskId, completed, new String[]{"plan"}, new Object[]{"Plan finalized from another task"});
-        Assert.assertTrue("Unexpected error: " + error, error != null && error.contains("This case belongs to another task with " + review + " status"));
+        Assert.assertTrue("Unexpected error: " + error, error != null && error.contains("belongs to another task with " + review + " status"));
         assertCaseState(caseId, taskId, review);
 
         log("Another task's form can edit the case at its current status");
