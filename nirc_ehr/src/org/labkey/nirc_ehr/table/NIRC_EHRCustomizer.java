@@ -48,7 +48,6 @@ import org.labkey.api.query.ExprColumn;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.FilteredTable;
 import org.labkey.api.query.QueryForeignKey;
-import org.labkey.api.query.UserIdQueryForeignKey;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.study.Dataset;
 import org.labkey.api.study.DatasetTable;
@@ -726,10 +725,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         {
             addIsActiveForProject(ti, EHRService.EndingOption.activeAfterMidnightTonight);
         }
-        if (matches(ti, "ehr", "protocolExemptions"))
-        {
-            customizeProtocolExemptions(ti);
-        }
         if (matches(ti, "study", "protocolAssignment"))
         {
             EHRService.get().addIsActiveCol(ti, false, EHRService.EndingOption.activeAfterMidnightTonight, EHRService.EndingOption.activeAfterMidnightTonight);
@@ -847,8 +842,10 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
                 UserSchema us = getEHRUserSchema(ti, "core");
                 if (us != null)
                 {
-                    // core.users omits inactive users, so historical performers wouldn't resolve
-                    col.setFk(new UserIdQueryForeignKey(ti.getUserSchema(), ti.getContainerFilter(), us.getUser(), us.getContainer(), true));
+                    col.setFk(new QueryForeignKey(QueryForeignKey.from(us, ti.getContainerFilter())
+                            .table("users")
+                            .key("UserId")
+                            .display("DisplayName")));
                 }
             }
             if ("orderedby".equalsIgnoreCase(col.getName()))
@@ -1043,13 +1040,6 @@ public class NIRC_EHRCustomizer extends AbstractTableCustomizer
         var descriptionCol = ti.getMutableColumn("description");
         if (null != descriptionCol)
             descriptionCol.setDisplayColumnFactory(new HtmlDisplayColumnFactory());
-    }
-
-    private void customizeProtocolExemptions(AbstractTableInfo ti)
-    {
-        // ehr's coalescedProtocol falls back to the row's project's protocol; exemptions here are keyed on protocol alone
-        if (ti.getMutableColumn("coalescedProtocol") instanceof ExprColumn col)
-            col.setValueSQL(new SQLFragment().append(ExprColumn.STR_TABLE_ALIAS).append(".protocol"));
     }
 
     private MutableColumnInfo getWrappedCol(UserSchema us, AbstractTableInfo ds, String name, String queryName, String colName, String targetCol)
