@@ -1176,6 +1176,28 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         log("Another task's form can't send an unchanged completed case back to review");
         assertNull(saveCaseFromTask(caseId, otherTaskId, review, new String[0], new Object[0]));
         assertCaseState(caseId, taskId, completed);
+
+        String caseFormTaskId = UUID.randomUUID().toString().toUpperCase();
+        getApiHelper().doSaveRows(DATA_ADMIN.getEmail(), getApiHelper().prepareInsertCommand("ehr", "tasks", "taskid",
+                new String[]{"taskid", "title", "formtype", "category", FIELD_QCSTATELABEL},
+                new Object[][]{{caseFormTaskId, "Clinical Cases", "Clinical Cases", "Task", review}}), getExtraContext().put("targetQC", review));
+
+        log("A case form keeps a completed case's status and task unless the user moves it");
+        assertNull(saveCaseFromTask(caseId, caseFormTaskId, review, new String[]{"plan"}, new Object[]{"Plan kept completed"}));
+        assertEquals("The edit should save", "Plan kept completed", getCaseRow(caseId).get("plan"));
+        assertCaseState(caseId, taskId, completed);
+
+        log("A draft can't take a completed case back to In Progress");
+        String draft = EHRQCState.IN_PROGRESS.label;
+        assertNull(saveCaseFromTask(caseId, taskId, draft, new String[0], new Object[0]));
+        assertCaseState(caseId, taskId, completed);
+        error = saveCaseFromTask(caseId, taskId, draft, new String[]{"plan"}, new Object[]{"Plan from a draft"});
+        Assert.assertTrue("Unexpected error: " + error, error != null && error.contains("A draft can't change the case"));
+        assertCaseState(caseId, taskId, completed);
+
+        log("Moving the case sends it to review on the case form's task");
+        assertNull(saveCaseFromTask(caseId, caseFormTaskId, review, new String[]{"plan"}, new Object[]{"Plan for review"}, true));
+        assertCaseState(caseId, caseFormTaskId, review);
     }
 
     private void assertCaseState(String caseId, String taskId, String qcLabel)
@@ -1270,7 +1292,8 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         clickCaseEdit();
         _helper.setDataEntryField("plan", "Plan revised for review of " + animalId);
         _helper.setDataEntryField("remark", "Back to review for " + animalId);
-        submitForReviewToVet();
+        submitForReviewToVet(false);
+        new Window.WindowFinder(getDriver()).withTitle("Case Status").waitFor().clickButton("Move Whole Case");
         stopImpersonating();
         String secondTaskId = waitForCaseStatus(caseId, review);
         Assert.assertNotEquals("Case Update should move the case to its new task", firstTaskId, secondTaskId);
@@ -1351,13 +1374,18 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
         return caseId;
     }
 
-    // Saves the case the way a form on taskId's task does. Runs as a vet, since closing a case needs one. Returns the save's error, if any.
     private @Nullable String saveCaseFromTask(String caseId, String taskId, String targetQC, String[] fields, Object[] values)
+    {
+        return saveCaseFromTask(caseId, taskId, targetQC, fields, values, false);
+    }
+
+    // Saves the case the way a form on taskId's task does, with moveCase as the status dialog's choice. Runs as a vet, since closing a case needs one. Returns the save's error, if any.
+    private @Nullable String saveCaseFromTask(String caseId, String taskId, String targetQC, String[] fields, Object[] values, boolean moveCase)
     {
         String[] allFields = Stream.concat(Stream.of("lsid", "taskid"), Arrays.stream(fields)).toArray(String[]::new);
         Object[] allValues = Stream.concat(Stream.of(getCaseRow(caseId).get("lsid"), taskId), Arrays.stream(values)).toArray();
         SimplePostCommand command = getApiHelper().prepareUpdateCommand("study", "cases", "lsid", allFields, new Object[][]{allValues}, null);
-        command.setJsonObject(command.getJsonObject().put("extraContext", getExtraContext().put("targetQC", targetQC)));
+        command.setJsonObject(command.getJsonObject().put("extraContext", getExtraContext().put("targetQC", targetQC).put("moveCase", moveCase)));
         // Shares the browser's session, so the impersonation must end here
         Connection connection = createDefaultConnection();
         try
@@ -1679,11 +1707,17 @@ public class NIRC_EHRTest extends AbstractGenericEHRTest implements PostgresOnly
 
     private void submitForReviewToVet()
     {
+        submitForReviewToVet(true);
+    }
+
+    // A case moving to review from another task asks first, so the page doesn't navigate until that dialog is answered
+    private void submitForReviewToVet(boolean waitForPage)
+    {
         waitForFormValidationToClear();
         waitAndClick(_helper.getDataEntryButton("Submit for Review"));
         Window<?> submitForReview = new Window<>("Submit For Review", getDriver());
         _ext4Helper.selectComboBoxItem("Assign To:", Ext4Helper.TextMatchTechnique.CONTAINS, NIRC_VET_NAME);
-        submitForReview.clickButton("Submit");
+        submitForReview.clickButton("Submit", waitForPage ? getDefaultWaitForPage() : 0);
     }
 
     private void fillClinicalCase(String animalId)
